@@ -5,8 +5,8 @@ void gameLoop(int level) {
 
     Texture2D shipSprite = LoadTexture("./assets/ship.png");
 
-    float shipPosX = (GetScreenWidth() / 2) - (shipSprite.width / 2);
-    float shipPosY = (GetScreenHeight() / 2) - (shipSprite.height / 2);
+    float shipPosX = GetScreenWidth() / 2;
+    float shipPosY = GetScreenHeight() / 2;
     float shipRot = 0;
 
     while(!WindowShouldClose())
