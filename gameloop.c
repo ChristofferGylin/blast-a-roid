@@ -1,15 +1,33 @@
 #include "raylib.h"
 #include "gameloop.h"
-
+#include <math.h>
 void gameLoop(int level) {
+
+    const float ROTATION_SPEED = 150.0f;
 
     Texture2D shipSprite = LoadTexture("./assets/ship.png");
 
     Vector2 shipPos = { GetScreenWidth() / 2, GetScreenHeight() / 2 };
-    float shipRot = 0;
+    float shipRot = 0.0f;
 
     while(!WindowShouldClose())
     {
+        if (IsKeyDown(KEY_A))
+        {
+            shipRot -= GetFrameTime() * ROTATION_SPEED;
+        }
+
+        if (IsKeyDown(KEY_D))
+        {
+            shipRot += GetFrameTime() * ROTATION_SPEED;
+        }
+
+        shipRot = fmodf(shipRot, 360.0f);
+
+        if (shipRot < 0.0f) {
+            shipRot += 360.0f;
+        }
+
         BeginDrawing();
             ClearBackground(BLACK);
             DrawTexturePro(
