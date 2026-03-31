@@ -1,6 +1,8 @@
 #include "raylib.h"
 #include "gameloop.h"
 #include <math.h>
+#include "utils.h"
+
 void gameLoop(int level) {
 
     const float ROTATION_SPEED = 150.0f;

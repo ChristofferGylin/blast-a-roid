@@ -1,0 +1,1 @@
+float scaleFloat(float oldMin, float oldMax, float newMin, float newMax, float value);
