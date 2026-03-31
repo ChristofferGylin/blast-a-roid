@@ -7,25 +7,25 @@ void gameLoop(int level) {
 
     Texture2D shipSprite = LoadTexture("./assets/ship.png");
 
-    Vector2 shipPos = { GetScreenWidth() / 2, GetScreenHeight() / 2 };
-    float shipRot = 0.0f;
+    Vector2 shipPosition = { GetScreenWidth() / 2, GetScreenHeight() / 2 };
+    float shipRotation = 0.0f;
 
     while(!WindowShouldClose())
     {
         if (IsKeyDown(KEY_A))
         {
-            shipRot -= GetFrameTime() * ROTATION_SPEED;
+            shipRotation -= GetFrameTime() * ROTATION_SPEED;
         }
 
         if (IsKeyDown(KEY_D))
         {
-            shipRot += GetFrameTime() * ROTATION_SPEED;
+            shipRotation += GetFrameTime() * ROTATION_SPEED;
         }
 
-        shipRot = fmodf(shipRot, 360.0f);
+        shipRotation = fmodf(shipRotation, 360.0f);
 
-        if (shipRot < 0.0f) {
-            shipRot += 360.0f;
+        if (shipRotation < 0.0f) {
+            shipRotation += 360.0f;
         }
 
         BeginDrawing();
@@ -33,9 +33,9 @@ void gameLoop(int level) {
             DrawTexturePro(
                 shipSprite,
                 (Rectangle){0, 0, shipSprite.width, shipSprite.height},
-                (Rectangle){shipPos.x, shipPos.y, shipSprite.width, shipSprite.height},
+                (Rectangle){shipPosition.x, shipPosition.y, shipSprite.width, shipSprite.height},
                 (Vector2){ shipSprite.width / 2.0f, shipSprite.height / 2.0f},
-                shipRot,
+                shipRotation,
                 WHITE
             );
         EndDrawing();
