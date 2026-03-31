@@ -10,12 +10,9 @@ int main(){
     InitAudioDevice();
     SetTargetFPS(144);
 
-    while(!WindowShouldClose())
-    {
-        BeginDrawing();
-            ClearBackground(BLACK);
-        EndDrawing();
-    }
+    int level = 0;
+
+    gameLoop(level);
 
     CloseAudioDevice();
     CloseWindow();
