@@ -23,4 +23,6 @@ void gameLoop(int level) {
             );
         EndDrawing();
     }
+
+    UnloadTexture(shipSprite);
 }
