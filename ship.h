@@ -10,4 +10,6 @@ typedef struct {
     float rotation;
 }Ship; 
 
+void handleShipMovement(Ship *ship);
+
 #endif
