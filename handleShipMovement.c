@@ -1,4 +1,5 @@
 #include "ship.h"
+#include "constants.h"
 
 void handleShipMovement(Ship ship) 
 {
