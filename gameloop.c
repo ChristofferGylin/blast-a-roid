@@ -1,6 +1,8 @@
 #include "raylib.h"
 #include "gameloop.h"
 #include <math.h>
+#include "ship.h"
+
 
 void gameLoop(int level) {
 
@@ -8,86 +10,87 @@ void gameLoop(int level) {
     const float THRUST_FACTOR = 2.5f;
     const float MAX_VELOCITY = 300.0f;
 
-    Texture2D shipSprite = LoadTexture("./assets/ship.png");
-
-    Vector2 shipPosition = { GetScreenWidth() / 2, GetScreenHeight() / 2 };
-    Vector2 shipVelocity = {0,0};
-    float shipRotation = 0.0f;
+    Ship ship = {
+        LoadTexture("./assets/ship.png"),
+        { GetScreenWidth() / 2, GetScreenHeight() / 2 },
+        {0.0f,0.0f},
+        0.0f
+    };
 
     while(!WindowShouldClose())
     {
         if (IsKeyDown(KEY_A))
         {
-            shipRotation -= GetFrameTime() * ROTATION_SPEED;
+            ship.rotation -= GetFrameTime() * ROTATION_SPEED;
         }
 
         if (IsKeyDown(KEY_D))
         {
-            shipRotation += GetFrameTime() * ROTATION_SPEED;
+            ship.rotation += GetFrameTime() * ROTATION_SPEED;
         }
 
-        shipRotation = fmodf(shipRotation, 360.0f);
+        ship.rotation = fmodf(ship.rotation, 360.0f);
 
-        if (shipRotation < 0.0f)
+        if (ship.rotation < 0.0f)
         {
-            shipRotation += 360.0f;
+            ship.rotation += 360.0f;
         }
 
         if (IsKeyDown(KEY_W))
         {
-            float radians = (shipRotation - 90.0f) * (PI / 180.0f);
+            float radians = (ship.rotation - 90.0f) * (PI / 180.0f);
 
-            shipVelocity.x += cosf(radians) * THRUST_FACTOR;
-            shipVelocity.y += sinf(radians) * THRUST_FACTOR;
+            ship.velocity.x += cosf(radians) * THRUST_FACTOR;
+            ship.velocity.y += sinf(radians) * THRUST_FACTOR;
 
-            if (shipVelocity.x < -MAX_VELOCITY)
+            if (ship.velocity.x < -MAX_VELOCITY)
             {
-                shipVelocity.x = -MAX_VELOCITY;
-            } else if (shipVelocity.x > MAX_VELOCITY)
+                ship.velocity.x = -MAX_VELOCITY;
+            } else if (ship.velocity.x > MAX_VELOCITY)
             {
-                shipVelocity.x = MAX_VELOCITY;
+                ship.velocity.x = MAX_VELOCITY;
             }
 
-            if (shipVelocity.y < -MAX_VELOCITY)
+            if (ship.velocity.y < -MAX_VELOCITY)
             {
-                shipVelocity.y = -MAX_VELOCITY;
-            } else if (shipVelocity.y > MAX_VELOCITY)
+                ship.velocity.y = -MAX_VELOCITY;
+            } else if (ship.velocity.y > MAX_VELOCITY)
             {
-                shipVelocity.y = MAX_VELOCITY;
+                ship.velocity.y = MAX_VELOCITY;
             }
         }
 
-        shipPosition.x += GetFrameTime() * shipVelocity.x;
-        shipPosition.y += GetFrameTime() * shipVelocity.y;
+        ship.position.x += GetFrameTime() * ship.velocity.x;
+        ship.position.y += GetFrameTime() * ship.velocity.y;
 
-        if (shipPosition.x < 0.0f - shipSprite.width)
+        if (ship.position.x < 0.0f - ship.sprite.width)
         {
-            shipPosition.x = GetScreenWidth() + shipSprite.width;
-        } else if (shipPosition.x > GetScreenWidth() + shipSprite.width)
+            ship.position.x = GetScreenWidth() + ship.sprite.width;
+        } else if (ship.position.x > GetScreenWidth() + ship.sprite.width)
         {
-            shipPosition.x = 0.0f - shipSprite.width; 
+            ship.position.x = 0.0f - ship.sprite.width; 
         }
 
-        if (shipPosition.y < 0.0f - shipSprite.height)
+        if (ship.position.y < 0.0f - ship.sprite.height)
         {
-            shipPosition.y = GetScreenHeight() + shipSprite.height;
-        } else if (shipPosition.y > GetScreenHeight() + shipSprite.height)
+            ship.position.y = GetScreenHeight() + ship.sprite.height;
+        } else if (ship.position.y > GetScreenHeight() + ship.sprite.height)
         {
-            shipPosition.y = 0.0f - shipSprite.height; 
+            ship.position.y = 0.0f - ship.sprite.height; 
         }
 
         BeginDrawing();
             ClearBackground(BLACK);
             DrawTexturePro(
-                shipSprite,
-                (Rectangle){0, 0, shipSprite.width, shipSprite.height},
-                (Rectangle){shipPosition.x, shipPosition.y, shipSprite.width, shipSprite.height},
-                (Vector2){ shipSprite.width / 2.0f, shipSprite.height / 2.0f},
-                shipRotation,
+                ship.sprite,
+                (Rectangle){0, 0, ship.sprite.width, ship.sprite.height},
+                (Rectangle){ship.position.x, ship.position.y, ship.sprite.width, ship.sprite.height},
+                (Vector2){ ship.sprite.width / 2.0f, ship.sprite.height / 2.0f},
+                ship.rotation,
                 WHITE
             );
         EndDrawing();
     }
 
-    UnloadTexture(shipSprite);
+    UnloadTexture(ship.sprite);
 }
