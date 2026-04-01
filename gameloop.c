@@ -1,13 +1,12 @@
 #include "raylib.h"
 #include "gameloop.h"
 #include <math.h>
-#include "utils.h"
 
 void gameLoop(int level) {
 
-    const float ROTATION_SPEED = 150.0f;
-    const float THRUST_FACTOR = 100.0f;
-    const float MAX_VELOCITY = 100.0f;
+    const float ROTATION_SPEED = 270.0f;
+    const float THRUST_FACTOR = 2.5f;
+    const float MAX_VELOCITY = 300.0f;
 
     Texture2D shipSprite = LoadTexture("./assets/ship.png");
 
@@ -33,6 +32,33 @@ void gameLoop(int level) {
         {
             shipRotation += 360.0f;
         }
+
+        if (IsKeyDown(KEY_W))
+        {
+            float radians = (shipRotation - 90.0f) * (PI / 180.0f);
+
+            shipVelocity.x += cosf(radians) * THRUST_FACTOR;
+            shipVelocity.y += sinf(radians) * THRUST_FACTOR;
+
+            if (shipVelocity.x < -MAX_VELOCITY)
+            {
+                shipVelocity.x = -MAX_VELOCITY;
+            } else if (shipVelocity.x > MAX_VELOCITY)
+            {
+                shipVelocity.x = MAX_VELOCITY;
+            }
+
+            if (shipVelocity.y < -MAX_VELOCITY)
+            {
+                shipVelocity.y = -MAX_VELOCITY;
+            } else if (shipVelocity.y > MAX_VELOCITY)
+            {
+                shipVelocity.y = MAX_VELOCITY;
+            }
+        }
+
+        shipPosition.x += GetFrameTime() * shipVelocity.x;
+        shipPosition.y += GetFrameTime() * shipVelocity.y;
 
         if (shipPosition.x < 0.0f - shipSprite.width)
         {
