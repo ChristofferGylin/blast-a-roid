@@ -1,4 +1,5 @@
 #include "raylib.h"
+#include "gameloop.h"
 
 int main(){
 
@@ -9,12 +10,9 @@ int main(){
     InitAudioDevice();
     SetTargetFPS(144);
 
-    while(!WindowShouldClose())
-    {
-        BeginDrawing();
-            ClearBackground(BLACK);
-        EndDrawing();
-    }
+    int level = 0;
+
+    gameLoop(level);
 
     CloseAudioDevice();
     CloseWindow();
