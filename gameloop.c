@@ -17,11 +17,13 @@ void gameLoop(int level) {
         LoadTexture("./assets/ship.png"),
         { GetScreenWidth() / 2, GetScreenHeight() / 2 },
         {0.0f,0.0f},
-        0.0f
+        0.0f,
+        false
     };
 
     while(!WindowShouldClose())
     {
+        handleCollisions(&asteroids, &ship);
         handleShipMovement(&ship);
         handleAsteroidsMovement(&asteroids);
 

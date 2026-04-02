@@ -1,4 +1,6 @@
 #include "raylib.h"
+#include "ship.h"
+#include <stdbool.h>
 
 #ifndef ASTEROID_H
 #define ASTEROID_H
@@ -9,6 +11,7 @@ typedef struct {
     float rotationSpeed;
     Vector2 velocity;
     Vector2 position;
+    bool destroyed;
 }Asteroid;
 
 typedef struct {
@@ -23,5 +26,6 @@ void addAsteroidToArray(AsteroidArray* arr, Asteroid ast);
 void removeAsteroidFromArray(AsteroidArray* arr, int index);
 void freeAsteroidArray(AsteroidArray* arr);
 void handleAsteroidsMovement(AsteroidArray* arr);
+void handleCollisions(AsteroidArray* astArr, Ship* ship);
 
 #endif

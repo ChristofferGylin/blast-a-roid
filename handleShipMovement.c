@@ -6,6 +6,9 @@
 
 void handleShipMovement(Ship *ship) 
 {
+
+    if (ship->destroyed) return;
+
     if (IsKeyDown(KEY_A))
     {
             ship->rotation -= GetFrameTime() * ROTATION_SPEED;
