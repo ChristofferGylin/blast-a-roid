@@ -1,8 +1,11 @@
 #ifndef CONSTANTS_H
 #define CONSTANTS_H
 
-const float ROTATION_SPEED = 270.0f;
-const float THRUST_FACTOR = 2.5f;
-const float MAX_VELOCITY = 300.0f;
-
+static const float ROTATION_SPEED = 270.0f;
+static const float THRUST_FACTOR = 2.5f;
+static const float MAX_VELOCITY = 300.0f;
+static const int SHIP_SIZE = 32;
+static const int ASTEROID_SIZE_1 = 32;
+static const int ASTEROID_SIZE_2 = 16;
+static const int ASTEROID_SIZE_3 = 8;
 #endif

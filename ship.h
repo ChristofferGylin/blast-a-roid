@@ -8,6 +8,7 @@ typedef struct {
     Vector2 position;
     Vector2 velocity;
     float rotation;
+    bool destroyed;
 }Ship; 
 
 void handleShipMovement(Ship *ship);

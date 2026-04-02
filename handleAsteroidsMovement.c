@@ -9,6 +9,9 @@ void handleAsteroidsMovement(AsteroidArray* arr)
 
     for (int i = 0; i < arr->size; i++) {
         Asteroid* ast = &arr->data[i];
+
+        if (ast->destroyed) continue;
+
         ast->rotation += GetFrameTime() * ast->rotationSpeed;
         ast->rotation = fmodf(ast->rotation, 360.0f);
 

@@ -18,11 +18,12 @@ void initAsteroids(AsteroidArray* arr, int number) {
         }
 
         Asteroid ast = {
-            0,
+            1,
             0,
             GetRandomValue(-100, 100),
             {GetRandomValue(-100, 100), GetRandomValue(-100, 100)},
-            position
+            position,
+            false
         };
 
         addAsteroidToArray(arr, ast);
