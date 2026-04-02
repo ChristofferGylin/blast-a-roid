@@ -12,17 +12,24 @@ void gameLoop(Player* player) {
     initAsteroids(&asteroids, 3);
 
     Texture2D asteroidSprite = LoadTexture("./assets/asteroid.png");
-
-    Ship ship = {
-        LoadTexture("./assets/ship.png"),
-        { GetScreenWidth() / 2, GetScreenHeight() / 2 },
-        {0.0f,0.0f},
-        0.0f,
-        false
-    };
+    
+    Ship ship;
+    ship.sprite = LoadTexture("./assets/ship.png");
+    resetShip(&ship);
 
     while(!WindowShouldClose())
     {
+
+        if (ship.destroyed) {
+            player->lives--;
+
+            if (player->lives < 0) {
+                // game over
+            } else {
+                resetShip(&ship);
+            }
+        }
+
         handleCollisions(&asteroids, &ship);
         handleShipMovement(&ship);
         handleAsteroidsMovement(&asteroids);
