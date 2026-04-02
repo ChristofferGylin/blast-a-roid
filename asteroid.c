@@ -1,6 +1,8 @@
 #include "raylib.h"
 #include "asteroid.h"
 #include <stdlib.h>
+#include <stdbool.h>
+#include <stdio.h>
 
 float spriteWidth = 32.0f;
 float spriteHeight = 32.0f;
@@ -16,10 +18,13 @@ void initAsteroids(AsteroidArray* arr, int number) {
 
 void resetAsteroids(AsteroidArray* arr) {
     for (int i = 0; i < arr->size; i++) {
-
+        bool directionX = GetRandomValue(0,1);
+        bool directionY = GetRandomValue(0,1);
+        int tempVelocityX = GetRandomValue(30, 100);
+        int tempVelocityY = GetRandomValue(30, 100);
+        Vector2 velocity = {directionX ? tempVelocityX : -tempVelocityX, directionY ? tempVelocityY : -tempVelocityY};
         Vector2 position;
-        Vector2 velocity = {GetRandomValue(-100, 100), GetRandomValue(-100, 100)};
-
+        
         if (i % 2 == 0) {
             position.x = -32.0f;
             position.y = GetRandomValue(0, GetScreenHeight());
