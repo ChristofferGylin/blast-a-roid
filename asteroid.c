@@ -7,27 +7,11 @@ float spriteHeight = 32.0f;
 
 void initAsteroids(AsteroidArray* arr, int number) {
     for (int i = 0; i < number; i++) {
-        Vector2 position;
-
-        if (i % 2 == 0) {
-            position.x = -32.0f;
-            position.y = GetRandomValue(0, GetScreenHeight());
-        } else {
-            position.x = GetRandomValue(0, GetScreenWidth());
-            position.y = -32.0f;
-        }
-
-        Asteroid ast = {
-            1,
-            0,
-            GetRandomValue(-100, 100),
-            {GetRandomValue(-100, 100), GetRandomValue(-100, 100)},
-            position,
-            false
-        };
-
+        Asteroid ast = {0};
         addAsteroidToArray(arr, ast);
     }
+
+    resetAsteroids(arr);
 }
 
 void resetAsteroids(AsteroidArray* arr) {
