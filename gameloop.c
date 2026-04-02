@@ -23,6 +23,7 @@ void gameLoop(int level) {
     while(!WindowShouldClose())
     {
         handleShipMovement(&ship);
+        handleAsteroidsMovement(&asteroids);
 
         BeginDrawing();
             ClearBackground(BLACK);

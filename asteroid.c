@@ -19,8 +19,9 @@ void initAsteroids(AsteroidArray* arr, int number) {
 
         Asteroid ast = {
             0,
-            GetRandomValue(50, 600),
-            {GetRandomValue(50, 400), GetRandomValue(50, 400)},
+            0,
+            GetRandomValue(-100, 100),
+            {GetRandomValue(-100, 100), GetRandomValue(-100, 100)},
             position
         };
 
