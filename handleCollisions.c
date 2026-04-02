@@ -2,7 +2,6 @@
 #include "ship.h"
 #include "asteroid.h"
 #include "constants.h"
-#include <stdio.h>
 
 void handleCollisions(AsteroidArray* astArr, Ship* ship) {
 
