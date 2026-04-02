@@ -10,17 +10,16 @@ void initAsteroids(AsteroidArray* arr, int number) {
         Vector2 position;
 
         if (i % 2 == 0) {
-            position.x = -spriteWidth;
+            position.x = -32.0f;
             position.y = GetRandomValue(0, GetScreenHeight());
         } else {
             position.x = GetRandomValue(0, GetScreenWidth());
-            position.y = -spriteHeight;
+            position.y = -32.0f;
         }
 
         Asteroid ast = {
             0,
             GetRandomValue(50, 600),
-            {GetRandomValue(50, 400), GetRandomValue(50, 400)},
             {GetRandomValue(50, 400), GetRandomValue(50, 400)},
             position
         };
