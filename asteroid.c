@@ -2,7 +2,6 @@
 #include "asteroid.h"
 #include <stdlib.h>
 #include <stdbool.h>
-#include <stdio.h>
 
 float spriteWidth = 32.0f;
 float spriteHeight = 32.0f;
@@ -10,6 +9,8 @@ float spriteHeight = 32.0f;
 void initAsteroids(AsteroidArray* arr, int number) {
     for (int i = 0; i < number; i++) {
         Asteroid ast = {0};
+        ast.level = 1;
+        ast.destroyed = false;
         addAsteroidToArray(arr, ast);
     }
 

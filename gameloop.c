@@ -3,6 +3,7 @@
 #include "asteroid.h"
 #include "ship.h"
 #include <math.h>
+#include "constants.h"
 
 void gameLoop(Player* player) {
 
@@ -37,6 +38,7 @@ void gameLoop(Player* player) {
 
         BeginDrawing();
             ClearBackground(BLACK);
+            DrawCircle(ship.position.x, ship.position.y, SHIP_SIZE / 2.0f, RAYWHITE);
             DrawTexturePro(
                 ship.sprite,
                 (Rectangle){0, 0, ship.sprite.width, ship.sprite.height},
@@ -48,6 +50,7 @@ void gameLoop(Player* player) {
 
             for (int i = 0; i < asteroids.size; i++) {
                 Asteroid* ast = &asteroids.data[i];
+
                 DrawTexturePro(
                     asteroidSprite,
                     (Rectangle){0, 0, asteroidSprite.width, asteroidSprite.height},
