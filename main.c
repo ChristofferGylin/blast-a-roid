@@ -12,9 +12,11 @@ int main(){
     SetTargetFPS(144);
     SetRandomSeed(time(NULL));
 
-    int level = 0;
+    Player player = {
+        2, 1, 0, 0, 2, 50, {0}
+    };
 
-    gameLoop(level);
+    gameLoop(&player);
 
     CloseAudioDevice();
     CloseWindow();

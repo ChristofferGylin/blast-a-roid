@@ -4,7 +4,7 @@
 #include "ship.h"
 #include <math.h>
 
-void gameLoop(int level) {
+void gameLoop(Player* player) {
 
     AsteroidArray asteroids;
 
