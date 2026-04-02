@@ -1,9 +1,15 @@
 #include "raylib.h"
 #include "gameloop.h"
+#include "asteroid.h"
 #include "ship.h"
 #include <math.h>
 
 void gameLoop(int level) {
+
+    AsteroidArray *asteroids;
+
+    initAsteroidArray(asteroids, 3);
+    initAsteroids(asteroids, 3);
 
     Ship ship = {
         LoadTexture("./assets/ship.png"),
@@ -30,4 +36,5 @@ void gameLoop(int level) {
     }
 
     UnloadTexture(ship.sprite);
+    freeAsteroidArray(&asteroids);
 }

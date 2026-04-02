@@ -16,4 +16,10 @@ typedef struct {
     int capacity;
 }AsteroidArray;
 
+void initAsteroids(AsteroidArray* arr, int number);
+void initAsteroidArray(AsteroidArray* arr, int capacity);
+void addAsteroidToArray(AsteroidArray* arr, Asteroid ast);
+void removeAsteroidFromArray(AsteroidArray* arr, int index);
+void freeAsteroidArray(AsteroidArray* arr);
+
 #endif
