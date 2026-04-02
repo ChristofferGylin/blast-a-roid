@@ -1,5 +1,6 @@
 #include "raylib.h"
 #include "gameloop.h"
+#include <time.h>
 
 int main(){
 
@@ -9,6 +10,7 @@ int main(){
     InitWindow(windowWidth, windowHeight, "basic window");
     InitAudioDevice();
     SetTargetFPS(144);
+    SetRandomSeed(time(NULL));
 
     int level = 0;
 

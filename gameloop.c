@@ -1,9 +1,17 @@
 #include "raylib.h"
 #include "gameloop.h"
+#include "asteroid.h"
 #include "ship.h"
 #include <math.h>
 
 void gameLoop(int level) {
+
+    AsteroidArray asteroids;
+
+    initAsteroidArray(&asteroids, 3);
+    initAsteroids(&asteroids, 3);
+
+    Texture2D asteroidSprite = LoadTexture("./assets/asteroid.png");
 
     Ship ship = {
         LoadTexture("./assets/ship.png"),
@@ -26,8 +34,21 @@ void gameLoop(int level) {
                 ship.rotation,
                 WHITE
             );
+
+            for (int i = 0; i < asteroids.size; i++) {
+                Asteroid* ast = &asteroids.data[i];
+                DrawTexturePro(
+                    asteroidSprite,
+                    (Rectangle){0, 0, asteroidSprite.width, asteroidSprite.height},
+                    (Rectangle){ast->position.x, ast->position.y, asteroidSprite.width, asteroidSprite.height},
+                    (Vector2){asteroidSprite.width / 2.0f, asteroidSprite.height / 2.0f},
+                    ast->rotation,
+                    WHITE  
+                );
+            }
         EndDrawing();
     }
 
     UnloadTexture(ship.sprite);
+    freeAsteroidArray(&asteroids);
 }
