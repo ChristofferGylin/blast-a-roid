@@ -12,5 +12,6 @@ typedef struct {
 }Ship; 
 
 void handleShipMovement(Ship *ship);
+void resetShip(Ship* ship);
 
 #endif
