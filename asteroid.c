@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include <stdbool.h>
 #include <stdio.h>
+#include "constants.h"
 
 float spriteWidth = 32.0f;
 float spriteHeight = 32.0f;
@@ -11,6 +12,13 @@ void initAsteroidsPool(AsteroidPool* pool) {
     pool->activeCount = 0;
 }
 
+void spawnAsteroid(AsteroidPool* pool, Asteroid ast) {
+    if (pool->activeCount >= MAX_ASTEROIDS) return;
+
+    int i = pool->activeCount++;
+    pool->asteroids[i] = ast;
+    pool->active[i] = i;
+}
 
 
 void initAsteroids(AsteroidArray* arr, int number) {
