@@ -3,12 +3,12 @@
 #include "asteroid.h"
 #include "constants.h"
 
-void handleCollisions(AsteroidArray* astArr, Ship* ship) {
+void handleCollisions(AsteroidPool* astPool, Ship* ship) {
 
     if (ship->destroyed) return; 
 
-    for (int i = 0; i < astArr->size; i++) {
-        Asteroid* ast = &astArr->data[i];
+    for (int i = 0; i < astPool->activeCount; i++) {
+        Asteroid* ast = &astPool->asteroids[astPool->active[i]];
         float asteroidRadius;
 
         switch (ast->level)
