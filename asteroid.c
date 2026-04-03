@@ -7,6 +7,12 @@
 float spriteWidth = 32.0f;
 float spriteHeight = 32.0f;
 
+void initAsteroidsPool(AsteroidPool* pool) {
+    pool->activeCount = 0;
+}
+
+
+
 void initAsteroids(AsteroidArray* arr, int number) {
     for (int i = 0; i < number; i++) {
         Asteroid ast = {0};
