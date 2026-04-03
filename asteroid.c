@@ -2,6 +2,7 @@
 #include "asteroid.h"
 #include <stdlib.h>
 #include <stdbool.h>
+#include <stdio.h>
 
 float spriteWidth = 32.0f;
 float spriteHeight = 32.0f;
@@ -14,30 +15,34 @@ void initAsteroids(AsteroidArray* arr, int number) {
         addAsteroidToArray(arr, ast);
     }
 
-    resetAsteroids(arr);
+    resetAllAsteroids(arr);
 }
 
-void resetAsteroids(AsteroidArray* arr) {
-    for (int i = 0; i < arr->size; i++) {
-        bool directionX = GetRandomValue(0,1);
-        bool directionY = GetRandomValue(0,1);
-        int tempVelocityX = GetRandomValue(30, 100);
-        int tempVelocityY = GetRandomValue(30, 100);
-        Vector2 velocity = {directionX ? tempVelocityX : -tempVelocityX, directionY ? tempVelocityY : -tempVelocityY};
-        Vector2 position;
+void resetAsteroid(Asteroid* ast) {
+    bool directionX = GetRandomValue(0,1);
+    bool directionY = GetRandomValue(0,1);
+    int tempVelocityX = GetRandomValue(30, 100);
+    int tempVelocityY = GetRandomValue(30, 100);
+    Vector2 velocity = {directionX ? tempVelocityX : -tempVelocityX, directionY ? tempVelocityY : -tempVelocityY};
+    Vector2 position;
         
-        if (i % 2 == 0) {
-            position.x = -32.0f;
-            position.y = GetRandomValue(0, GetScreenHeight());
-        } else {
-            position.x = GetRandomValue(0, GetScreenWidth());
-            position.y = -32.0f;
-        }
+    if (GetRandomValue(0,1) == 1) {
+        position.x = -32.0f;
+        position.y = GetRandomValue(0, GetScreenHeight());
+    } else {
+        position.x = GetRandomValue(0, GetScreenWidth());
+        position.y = -32.0f;
+    }
 
-        arr->data[i].position = position;
-        arr->data[i].rotation = 0;
-        arr->data[i].rotationSpeed = GetRandomValue(-100, 100);
-        arr->data[i].velocity = velocity;
+    ast->position = position;
+    ast->rotation = 0;
+    ast->rotationSpeed = GetRandomValue(-100, 100);
+    ast->velocity = velocity;
+}
+
+void resetAllAsteroids(AsteroidArray* arr) {
+    for (int i = 0; i < arr->size; i++) {
+        resetAsteroid(&arr->data[i]);
     }
 }
 
@@ -72,4 +77,43 @@ void freeAsteroidArray(AsteroidArray* arr) {
     arr->data = NULL;
     arr->size = 0;
     arr->capacity = 0;
+}
+
+void handleDestroyedAsteroids(AsteroidArray* arr) {
+    for (int i = arr->size; i >= 0; i--) {
+        Asteroid* ast = &arr->data[i];
+
+        if (!(ast->destroyed)) continue;
+
+        int numberOfNew = 0;
+
+        switch (ast->level)
+        {
+        case 1:
+            numberOfNew = 3;
+            break;
+        case 2:
+            numberOfNew = 2;
+            break;
+        case 3:
+            numberOfNew = 0;
+            break;
+        
+        default:
+            printf("Invalid asteroid level %d\n", ast->level);
+            break;
+        }
+
+        for (int j = 0; j < numberOfNew; j++) {
+            Asteroid newAsteroid = {0};
+            resetAsteroid(&newAsteroid);
+            newAsteroid.level = ast->level + 1;
+            newAsteroid.destroyed = false;
+            newAsteroid.position = ast->position;
+
+            addAsteroidToArray(arr, newAsteroid);
+        }
+
+        removeAsteroidFromArray(arr, i);
+    }
 }

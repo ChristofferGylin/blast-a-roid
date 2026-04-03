@@ -28,11 +28,12 @@ void gameLoop(Player* player) {
                 // game over
             } else {
                 resetShip(&ship);
-                resetAsteroids(&asteroids);
+                resetAllAsteroids(&asteroids);
             }
         }
 
         handleCollisions(&asteroids, &ship);
+        handleDestroyedAsteroids(&asteroids);
         handleShipMovement(&ship);
         handleAsteroidsMovement(&asteroids);
 
