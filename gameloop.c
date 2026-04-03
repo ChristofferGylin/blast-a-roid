@@ -4,6 +4,7 @@
 #include "ship.h"
 #include <math.h>
 #include "constants.h"
+#include <stdio.h>
 
 void gameLoop(Player* player) {
 
@@ -52,10 +53,29 @@ void gameLoop(Player* player) {
             for (int i = 0; i < asteroids.size; i++) {
                 Asteroid* ast = &asteroids.data[i];
 
+                int asteroidSize = 0;
+
+                switch (ast->level)
+                {
+                case 1:
+                    asteroidSize = ASTEROID_SIZE_1;
+                    break;
+                case 2:
+                    asteroidSize = ASTEROID_SIZE_2;
+                    break;
+                case 3:
+                    asteroidSize = ASTEROID_SIZE_3;
+                    break;
+                
+                default:
+                    printf("Invalid asteroid level %d\n", ast->level);
+                    break;
+                }
+
                 DrawTexturePro(
                     asteroidSprite,
                     (Rectangle){0, 0, asteroidSprite.width, asteroidSprite.height},
-                    (Rectangle){ast->position.x, ast->position.y, asteroidSprite.width, asteroidSprite.height},
+                    (Rectangle){ast->position.x, ast->position.y, asteroidSize, asteroidSize},
                     (Vector2){asteroidSprite.width / 2.0f, asteroidSprite.height / 2.0f},
                     ast->rotation,
                     WHITE  
