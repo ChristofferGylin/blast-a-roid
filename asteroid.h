@@ -26,15 +26,18 @@ typedef struct {
     int activeCount;
 }AsteroidPool;
 
-void initAsteroids(AsteroidArray* arr, int number);
-void initAsteroidArray(AsteroidArray* arr, int capacity);
+void initAsteroids(AsteroidPool* pool, int number);
+void initAsteroidPool(AsteroidPool* pool);
 void addAsteroidToArray(AsteroidArray* arr, Asteroid ast);
 void removeAsteroidFromArray(AsteroidArray* arr, int index);
 void freeAsteroidArray(AsteroidArray* arr);
 void handleAsteroidsMovement(AsteroidArray* arr);
 void handleCollisions(AsteroidArray* astArr, Ship* ship);
 void resetAsteroid(Asteroid* ast);
-void resetAllAsteroids(AsteroidArray* arr);
+void resetAllAsteroids(AsteroidPool* pool);
 void handleDestroyedAsteroids(AsteroidArray* arr);
+void spawnAsteroid(AsteroidPool* pool, Asteroid ast);
+void destroyAsteroid(AsteroidPool* pool, int index);
+void updateAsteroidsPool(AsteroidPool* pool);
 
 #endif

@@ -20,16 +20,46 @@ void spawnAsteroid(AsteroidPool* pool, Asteroid ast) {
     pool->active[i] = i;
 }
 
+void destroyAsteroid(AsteroidPool* pool, int index) {
+    pool->asteroids[index].destroyed = true;
+}
 
-void initAsteroids(AsteroidArray* arr, int number) {
-    for (int i = 0; i < number; i++) {
-        Asteroid ast = {0};
-        ast.level = 1;
-        ast.destroyed = false;
-        addAsteroidToArray(arr, ast);
+void updateAsteroidsPool(AsteroidPool* pool) {
+    int write = 0;
+
+    for (int read = 0; read < pool->activeCount; read++) {
+        int i = pool->active[read];
+        Asteroid* ast = &pool->asteroids[i];
+
+        if (ast->destroyed) {
+            int count = (ast->level == 1) ? 3 : (ast->level == 2) ? 2 : 0;
+
+            for (int j = 0; j < count; j++) {
+                Asteroid child = {0};
+                resetAsteroid(&child);
+                child.level = ast->level + 1;
+                child.position = ast->position;
+
+                spawnAsteroid(pool, child);
+            }
+
+            continue;
+        }
+
+        pool->active[write++] = 1;
     }
 
-    resetAllAsteroids(arr);
+    pool->activeCount = write;
+}
+
+void initAsteroids(AsteroidPool* pool, int number) {
+    for (int i = 0; i < number; i++) {
+        Asteroid ast = {0};
+        resetAsteroid(&ast);
+        ast.level = 1;
+        ast.destroyed = false;
+        spawnAsteroid(pool, ast);
+    }
 }
 
 void resetAsteroid(Asteroid* ast) {
@@ -54,9 +84,9 @@ void resetAsteroid(Asteroid* ast) {
     ast->velocity = velocity;
 }
 
-void resetAllAsteroids(AsteroidArray* arr) {
-    for (int i = 0; i < arr->size; i++) {
-        resetAsteroid(&arr->data[i]);
+void resetAllAsteroids(AsteroidPool* pool) {
+    for (int i = 0; i < pool->activeCount; i++) {
+        resetAsteroid(&pool->asteroids[pool->active[i]]);
     }
 }
 

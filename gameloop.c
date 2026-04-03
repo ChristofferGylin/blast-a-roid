@@ -10,7 +10,7 @@ void gameLoop(Player* player) {
 
     AsteroidArray asteroids;
 
-    initAsteroidArray(&asteroids, 3);
+    initAsteroidArray(&asteroids, MAX_ASTEROIDS);
     initAsteroids(&asteroids, 3);
 
     Texture2D asteroidSprite = LoadTexture("./assets/asteroid.png");
