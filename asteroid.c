@@ -14,7 +14,7 @@ void initAsteroids(AsteroidArray* arr, int number) {
         addAsteroidToArray(arr, ast);
     }
 
-    resetAsteroids(arr);
+    resetAllAsteroids(arr);
 }
 
 void resetAsteroid(Asteroid* ast) {
@@ -39,7 +39,7 @@ void resetAsteroid(Asteroid* ast) {
     ast->velocity = velocity;
 }
 
-void resetAsteroids(AsteroidArray* arr) {
+void resetAllAsteroids(AsteroidArray* arr) {
     for (int i = 0; i < arr->size; i++) {
         resetAsteroid(&arr->data[i]);
     }

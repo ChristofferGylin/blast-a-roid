@@ -28,7 +28,7 @@ void freeAsteroidArray(AsteroidArray* arr);
 void handleAsteroidsMovement(AsteroidArray* arr);
 void handleCollisions(AsteroidArray* astArr, Ship* ship);
 void resetAsteroid(Asteroid* ast);
-void resetAsteroids(AsteroidArray* arr);
+void resetAllAsteroids(AsteroidArray* arr);
 void handleDestroyedAsteroids(AsteroidArray* arr);
 
 #endif

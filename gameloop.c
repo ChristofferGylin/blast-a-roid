@@ -28,7 +28,7 @@ void gameLoop(Player* player) {
                 // game over
             } else {
                 resetShip(&ship);
-                resetAsteroids(&asteroids);
+                resetAllAsteroids(&asteroids);
             }
         }
 
