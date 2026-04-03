@@ -42,8 +42,8 @@ void gameLoop(Player* player) {
             DrawTexturePro(
                 ship.sprite,
                 (Rectangle){0, 0, ship.sprite.width, ship.sprite.height},
-                (Rectangle){ship.position.x, ship.position.y, ship.sprite.width, ship.sprite.height},
-                (Vector2){ ship.sprite.width / 2.0f, ship.sprite.height / 2.0f},
+                (Rectangle){ship.position.x, ship.position.y, SHIP_SIZE, SHIP_SIZE},
+                (Vector2){ SHIP_SIZE / 2.0f, SHIP_SIZE / 2.0f},
                 ship.rotation,
                 WHITE
             );
