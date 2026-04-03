@@ -33,6 +33,7 @@ void gameLoop(Player* player) {
         }
 
         handleCollisions(&asteroids, &ship);
+        handleDestroyedAsteroids(&asteroids);
         handleShipMovement(&ship);
         handleAsteroidsMovement(&asteroids);
 

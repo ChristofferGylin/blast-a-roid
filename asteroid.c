@@ -2,6 +2,7 @@
 #include "asteroid.h"
 #include <stdlib.h>
 #include <stdbool.h>
+#include <stdio.h>
 
 float spriteWidth = 32.0f;
 float spriteHeight = 32.0f;
@@ -79,7 +80,7 @@ void freeAsteroidArray(AsteroidArray* arr) {
 }
 
 void handleDestroyedAsteroids(AsteroidArray* arr) {
-    for (int i = 0; i < arr->size; i++) {
+    for (int i = arr->size; i >= 0; i--) {
         Asteroid* ast = &arr->data[i];
 
         if (!(ast->destroyed)) continue;
@@ -99,10 +100,11 @@ void handleDestroyedAsteroids(AsteroidArray* arr) {
             break;
         
         default:
+            printf("Invalid asteroid level %d\n", ast->level);
             break;
         }
 
-        for (int j = 0; j < numberOfNew; i++) {
+        for (int j = 0; j < numberOfNew; j++) {
             Asteroid newAsteroid = {0};
             resetAsteroid(&newAsteroid);
             newAsteroid.level = ast->level + 1;
