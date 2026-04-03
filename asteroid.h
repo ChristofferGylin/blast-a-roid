@@ -20,6 +20,12 @@ typedef struct {
     int capacity;
 }AsteroidArray;
 
+typedef struct {
+    Asteroid asteroids[MAX_ASTEROIDS];
+    int active[MAX_ASTEROIDS];
+    int activeCount;
+}AsteroidPool;
+
 void initAsteroids(AsteroidArray* arr, int number);
 void initAsteroidArray(AsteroidArray* arr, int capacity);
 void addAsteroidToArray(AsteroidArray* arr, Asteroid ast);
