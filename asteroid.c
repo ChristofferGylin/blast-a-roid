@@ -107,6 +107,7 @@ void handleDestroyedAsteroids(AsteroidArray* arr) {
             resetAsteroid(&newAsteroid);
             newAsteroid.level = ast->level + 1;
             newAsteroid.destroyed = false;
+            newAsteroid.position = ast->position;
 
             addAsteroidToArray(arr, newAsteroid);
         }
