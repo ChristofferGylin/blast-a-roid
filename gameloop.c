@@ -8,9 +8,9 @@
 
 void gameLoop(Player* player) {
 
-    AsteroidArray asteroids;
+    AsteroidPool* asteroids = malloc(sizeof(AsteroidPool));
 
-    initAsteroidArray(&asteroids, MAX_ASTEROIDS);
+    initAsteroidPool(&asteroids);    
     initAsteroids(&asteroids, 3);
 
     Texture2D asteroidSprite = LoadTexture("./assets/asteroid.png");
@@ -34,7 +34,7 @@ void gameLoop(Player* player) {
         }
 
         handleCollisions(&asteroids, &ship);
-        handleDestroyedAsteroids(&asteroids);
+        updateAsteroidsPool(&asteroids);
         handleShipMovement(&ship);
         handleAsteroidsMovement(&asteroids);
 
@@ -50,8 +50,8 @@ void gameLoop(Player* player) {
                 WHITE
             );
 
-            for (int i = 0; i < asteroids.size; i++) {
-                Asteroid* ast = &asteroids.data[i];
+            for (int i = 0; i < asteroids->activeCount; i++) {
+                Asteroid* ast = &asteroids->asteroids[asteroids->active[i]];
 
                 int asteroidSize = 0;
 

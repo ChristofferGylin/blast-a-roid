@@ -2,13 +2,13 @@
 #include <math.h>
 #include "asteroid.h"
 
-void handleAsteroidsMovement(AsteroidArray* arr) 
+void handleAsteroidsMovement(AsteroidPool* pool) 
 {
 
     int spriteWidth = 32;
 
-    for (int i = 0; i < arr->size; i++) {
-        Asteroid* ast = &arr->data[i];
+    for (int i = 0; i < pool->activeCount; i++) {
+        Asteroid* ast = &pool->asteroids[pool->active[i]];
 
         if (ast->destroyed) continue;
 
