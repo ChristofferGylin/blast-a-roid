@@ -118,78 +118,105 @@ void handleAsteroidsMovement(AsteroidPool* pool) {
         }
     }
 }
-void newhandleDestroyedAsteroids(AsteroidPool* pool, DestroyedAsteroidPool* destroyedPool) {
+void handleDestroyedAsteroids(AsteroidPool* pool, DestroyedAsteroidPool* destroyedPool) {
     if (destroyedPool->activeCount == 0) return;
 
+    for (int i = 0; i < destroyedPool->activeCount; i++) {
+        destroyedPool->asteroids[i]->active = false;
+    }
 
-}
+    compactAsteroidPool(pool);
 
-void handleDestroyedAsteroids(AsteroidPool* pool, DestroyedAsteroidPool* destroyedPool) {
-    
-    int asteroidsAdded = 0;
-    
-    for (int i = 0; i < pool->activeCount; i++) {
-        if (pool->asteroids[i].active && pool->asteroids[i].asteroid.destroyed) {
-            Asteroid* oldAst = &pool->asteroids[i].asteroid;
-            int numberOfNew = 0;
+    for (int i = 0; i < destroyedPool->activeCount; i++) {
+        int numberOfNew = 0;
+        int astLevel = destroyedPool->asteroids[i]->asteroid.level;
 
-            switch (oldAst->level)
-            {
+        switch (astLevel) {
             case 1: numberOfNew = 3; break;
             case 2: numberOfNew = 2; break;
-            case 3: numberOfNew = 0; break;
-            
-            default: printf("Error: Invalid asteroid level (%d) in handleDestroyedAsteroids\n", oldAst->level);
-            }
+            case 3: numberOfNew = 0; break; 
+            default: printf("Error: Invalid asteroid level (%d) in handleDestroyedAsteroids\n", astLevel);
+        }
 
-            for (int j = 0; j < numberOfNew; j++) {
-                Asteroid newAst = {0};
-                resetAsteroid(&newAst);
-                newAst.level = oldAst->level + 1;
-                newAst.position = oldAst->position;
+        for (int j = 0; j < numberOfNew; j++) {
+            Asteroid newAst = {0};
+            resetAsteroid(&newAst);
+            newAst.level = astLevel + 1;
+            newAst.position = destroyedPool->asteroids[i]->asteroid.position;
 
-                int index = pool->activeCount + asteroidsAdded;
-                
-                if (pool->activeCount >= MAX_ASTEROIDS) {
-                    printf("Error: Memory overflow in handleDestroyedAsteroids\n");
-                    return;
-                }
-
-                if (pool->asteroids[index].active) {
-                    printf("Error: Could not add new asteroid, index allready in use in handleDestroyedAsteroids\n");
-                    return;
-                }
-
-                pool->asteroids[index].asteroid = newAst;
-                pool->asteroids[index].active = true;
-
-                asteroidsAdded++;
-            }
-
-            
-            pool->asteroids[i].active = false;
+            addNewAsteroid(pool, newAst);
         }
     }
 
-    pool->activeCount += asteroidsAdded;
-
-    int write = 0;
-
-    for (int i = 0; i < pool->activeCount; i++) {
-        if (pool->asteroids[i].active) {
-            if (write != i) {
-                pool->asteroids[write] = pool->asteroids[i];
-            }
-            write++;
-        }
-    }
-
-    for (int i = write; i < pool->activeCount; i++) {
-        pool->asteroids[i].active = false;
-    }
-
-    pool->activeCount = write;
+    destroyedPool->activeCount = 0;
 }
+
+// void handleDestroyedAsteroids(AsteroidPool* pool, DestroyedAsteroidPool* destroyedPool) {
+    
+//     int asteroidsAdded = 0;
+    
+//     for (int i = 0; i < pool->activeCount; i++) {
+//         if (pool->asteroids[i].active && pool->asteroids[i].asteroid.destroyed) {
+//             Asteroid* oldAst = &pool->asteroids[i].asteroid;
+//             int numberOfNew = 0;
+
+//             switch (oldAst->level)
+//             {
+//             case 1: numberOfNew = 3; break;
+//             case 2: numberOfNew = 2; break;
+//             case 3: numberOfNew = 0; break;
+            
+//             default: printf("Error: Invalid asteroid level (%d) in handleDestroyedAsteroids\n", oldAst->level);
+//             }
+
+//             for (int j = 0; j < numberOfNew; j++) {
+//                 Asteroid newAst = {0};
+//                 resetAsteroid(&newAst);
+//                 newAst.level = oldAst->level + 1;
+//                 newAst.position = oldAst->position;
+
+//                 int index = pool->activeCount + asteroidsAdded;
+                
+//                 if (pool->activeCount >= MAX_ASTEROIDS) {
+//                     printf("Error: Memory overflow in handleDestroyedAsteroids\n");
+//                     return;
+//                 }
+
+//                 if (pool->asteroids[index].active) {
+//                     printf("Error: Could not add new asteroid, index allready in use in handleDestroyedAsteroids\n");
+//                     return;
+//                 }
+
+//                 pool->asteroids[index].asteroid = newAst;
+//                 pool->asteroids[index].active = true;
+
+//                 asteroidsAdded++;
+//             }
+
+            
+//             pool->asteroids[i].active = false;
+//         }
+//     }
+
+//     pool->activeCount += asteroidsAdded;
+
+//     int write = 0;
+
+//     for (int i = 0; i < pool->activeCount; i++) {
+//         if (pool->asteroids[i].active) {
+//             if (write != i) {
+//                 pool->asteroids[write] = pool->asteroids[i];
+//             }
+//             write++;
+//         }
+//     }
+
+//     for (int i = write; i < pool->activeCount; i++) {
+//         pool->asteroids[i].active = false;
+//     }
+
+//     pool->activeCount = write;
+// }
 
 void initAsteroids(AsteroidPool* pool, int gameLevel) {
     int numberOfAsteroids = getNumberOfAsteroids(gameLevel);
