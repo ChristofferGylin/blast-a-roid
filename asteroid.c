@@ -6,6 +6,7 @@
 #include <math.h>
 #include "constants.h"
 #include "utils.h"
+#include "ship.h"
 
 AsteroidPoolObject asteroidObjectPool[MAX_ASTEROIDS] = {0};
 
@@ -230,6 +231,36 @@ void handleAsteroidsMovement() {
         {
             ast->position.y = 0.0f - spriteWidth; 
         }
+    }
+}
+
+void handleAsteroidCollisions(Ship* ship) {
+
+    if (ship->destroyed) return; 
+
+    for (int i = 0; i < MAX_ASTEROIDS; i++) {
+
+        if (!asteroidObjectPool[i].active) continue;
+
+        Asteroid* ast = &asteroidObjectPool[i].asteroid;
+
+        if (ast->destroyed) continue;
+        
+        float asteroidRadius = 0.0f;
+
+        switch (ast->level)
+        {
+        case 1: asteroidRadius = ASTEROID_SIZE_1 / 2.0f; break;
+        case 2: asteroidRadius = ASTEROID_SIZE_2 / 2.0f; break;
+        case 3: asteroidRadius = ASTEROID_SIZE_3 / 2.0f; break;
+        default: printf("Error: Invalid asteroid level (%d) in handleAsteroidCollisions\n", ast->level);
+        }
+
+        if (CheckCollisionCircles(ship->position, SHIP_SIZE / 2.0f, ast->position, asteroidRadius)) {
+            ship->destroyed = true;
+            ast->destroyed = true;
+            return;
+        } 
     }
 }
 

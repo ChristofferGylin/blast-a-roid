@@ -38,12 +38,12 @@ void addAsteroidToArray(AsteroidArray* arr, Asteroid ast);
 void removeAsteroidFromArray(AsteroidArray* arr, int index);
 void freeAsteroidArray(AsteroidArray* arr);
 void handleAsteroidsMovement();
-void handleCollisions(AsteroidPool* astPool, Ship* ship);
 void resetAsteroid(Asteroid* ast);
 void resetAllAsteroids();
 void handleDestroyedAsteroids();
 void spawnAsteroid(AsteroidPool* pool, Asteroid ast);
 void destroyAsteroid(AsteroidPool* pool, int index);
 void updateAsteroidsPool(AsteroidPool* pool);
+void handleAsteroidCollisions(Ship* ship);
 
 #endif
