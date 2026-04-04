@@ -38,7 +38,7 @@ typedef struct {
 void addNewAsteroid(AsteroidPool* pool, Asteroid ast);
 void handleAsteroidCollisions(AsteroidPool* pool, Ship* ship);
 void handleAsteroidsMovement(AsteroidPool* pool);
-void handleDestroyedAsteroids(AsteroidPool* pool);
+void handleDestroyedAsteroids(AsteroidPool* pool, DestroyedAsteroidPool* destroyedPool);
 void initAsteroids(AsteroidPool* pool, int gameLevel);
 void renderAsteroids(AsteroidPool* pool, Texture2D* asteroidSprite);
 void resetAllAsteroids(AsteroidPool* pool);

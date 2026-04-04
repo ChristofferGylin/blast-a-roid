@@ -100,7 +100,7 @@ void handleAsteroidsMovement(AsteroidPool* pool) {
     }
 }
 
-void handleDestroyedAsteroids(AsteroidPool* pool) {
+void handleDestroyedAsteroids(AsteroidPool* pool, DestroyedAsteroidPool* destroyedPool) {
     
     int asteroidsAdded = 0;
     
