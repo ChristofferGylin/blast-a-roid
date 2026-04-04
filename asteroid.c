@@ -3,19 +3,167 @@
 #include <stdlib.h>
 #include <stdbool.h>
 #include <stdio.h>
+#include <math.h>
+#include "constants.h"
+#include "utils.h"
+#include "ship.h"
 
-float spriteWidth = 32.0f;
-float spriteHeight = 32.0f;
+AsteroidPoolObject asteroidObjectPool[MAX_ASTEROIDS] = {0};
 
-void initAsteroids(AsteroidArray* arr, int number) {
-    for (int i = 0; i < number; i++) {
+void addNewAsteroid(Asteroid ast) {
+    for (int i = 0; i < MAX_ASTEROIDS; i++) {
+        if (asteroidObjectPool[i].active == false) {
+            asteroidObjectPool[i].active = true;
+            asteroidObjectPool[i].asteroid = ast;
+            return;
+        }
+    }
+    printf("Error: Memory overflow in addNewAsteroid\n");
+}
+
+void handleAsteroidCollisions(Ship* ship) {
+
+    if (ship->destroyed) return; 
+
+    for (int i = 0; i < MAX_ASTEROIDS; i++) {
+
+        if (!asteroidObjectPool[i].active) continue;
+
+        Asteroid* ast = &asteroidObjectPool[i].asteroid;
+
+        if (ast->destroyed) continue;
+
+        float asteroidRadius = 0.0f;
+
+        switch (ast->level)
+        {
+        case 1: asteroidRadius = ASTEROID_SIZE_1 / 2.0f; break;
+        case 2: asteroidRadius = ASTEROID_SIZE_2 / 2.0f; break;
+        case 3: asteroidRadius = ASTEROID_SIZE_3 / 2.0f; break;
+        default: printf("Error: Invalid asteroid level (%d) in handleAsteroidCollisions\n", ast->level);
+        }
+
+        if (CheckCollisionCircles(ship->position, SHIP_SIZE / 2.0f, ast->position, asteroidRadius)) {
+            ship->destroyed = true;
+            ast->destroyed = true;
+            return;
+        } 
+    }
+}
+
+void handleAsteroidsMovement() {
+    int spriteWidth = 32;
+
+    for (int i = 0; i < MAX_ASTEROIDS; i++) {
+        if (!asteroidObjectPool[i].active) continue;
+
+        Asteroid* ast = &asteroidObjectPool[i].asteroid;
+
+        if (ast->destroyed) continue;
+
+        ast->rotation += GetFrameTime() * ast->rotationSpeed;
+        ast->rotation = fmodf(ast->rotation, 360.0f);
+
+        if (ast->rotation < 0.0f)
+        {
+            ast->rotation += 360.0f;
+        }
+        
+        ast->position.x += GetFrameTime() * ast->velocity.x;
+        ast->position.y += GetFrameTime() * ast->velocity.y;
+
+        if (ast->position.x < 0.0f - spriteWidth)
+        {
+            ast->position.x = GetScreenWidth() + spriteWidth;
+        } else if (ast->position.x > GetScreenWidth() + spriteWidth)
+        {
+            ast->position.x = 0.0f - spriteWidth; 
+        }
+
+        if (ast->position.y < 0.0f - spriteWidth)
+        {
+            ast->position.y = GetScreenHeight() + spriteWidth;
+        } else if (ast->position.y > GetScreenHeight() + spriteWidth)
+        {
+            ast->position.y = 0.0f - spriteWidth; 
+        }
+    }
+}
+
+void handleDestroyedAsteroids() {
+    for (int i = 0; i < MAX_ASTEROIDS; i++) {
+        if (asteroidObjectPool[i].active && asteroidObjectPool[i].asteroid.destroyed) {
+            Asteroid* oldAst = &asteroidObjectPool[i].asteroid;
+            int numberOfNew = 0;
+
+            switch (oldAst->level)
+            {
+            case 1: numberOfNew = 3; break;
+            case 2: numberOfNew = 2; break;
+            case 3: numberOfNew = 0; break;
+            
+            default: printf("Error: Invalid asteroid level (%d) in handleDestroyedAsteroids\n", oldAst->level);
+            }
+
+            for (int j = 0; j < numberOfNew; j++) {
+                Asteroid newAst = {0};
+                resetAsteroid(&newAst);
+                newAst.level = oldAst->level + 1;
+                newAst.position = oldAst->position;
+                addNewAsteroid(newAst);
+            }
+
+            asteroidObjectPool[i].active = false;
+        }
+    }
+}
+
+void initAsteroids(int gameLevel) {
+    int numberOfAsteroids = getNumberOfAsteroids(gameLevel);
+    for (int i = 0; i < numberOfAsteroids; i++) {
         Asteroid ast = {0};
+        resetAsteroid(&ast);
         ast.level = 1;
         ast.destroyed = false;
-        addAsteroidToArray(arr, ast);
+        addNewAsteroid(ast);
     }
+}
 
-    resetAllAsteroids(arr);
+void renderAsteroids(Texture2D* asteroidSprite) {
+    for (int i = 0; i < MAX_ASTEROIDS; i++) {
+
+        if (!asteroidObjectPool[i].active) continue;
+        Asteroid* ast = &asteroidObjectPool[i].asteroid;
+
+        if (ast->destroyed) continue;
+
+        int asteroidSize = 0;
+
+        switch (ast->level)
+        {
+            case 1: asteroidSize = ASTEROID_SIZE_1; break;
+            case 2: asteroidSize = ASTEROID_SIZE_2; break;
+            case 3: asteroidSize = ASTEROID_SIZE_3; break;
+            default: printf("Error: Invalid asteroid level (%d) in renderAsteroids\n", ast->level);
+        }
+
+        DrawTexturePro(
+            *asteroidSprite,
+            (Rectangle){0, 0, asteroidSprite->width, asteroidSprite->height},
+            (Rectangle){ast->position.x, ast->position.y, asteroidSize, asteroidSize},
+            (Vector2){asteroidSprite->width / 2.0f, asteroidSprite->height / 2.0f},
+            ast->rotation,
+            WHITE  
+        );
+    }
+}
+
+void resetAllAsteroids() {
+    for (int i = 0; i < MAX_ASTEROIDS; i++) {
+        if (!asteroidObjectPool[i].active) continue;
+        
+        resetAsteroid(&asteroidObjectPool[i].asteroid);
+    }
 }
 
 void resetAsteroid(Asteroid* ast) {
@@ -40,80 +188,7 @@ void resetAsteroid(Asteroid* ast) {
     ast->velocity = velocity;
 }
 
-void resetAllAsteroids(AsteroidArray* arr) {
-    for (int i = 0; i < arr->size; i++) {
-        resetAsteroid(&arr->data[i]);
-    }
-}
 
-void initAsteroidArray(AsteroidArray* arr, int capacity) {
-    arr->data = malloc(sizeof(Asteroid) * capacity);
-    arr->size = 0;
-    arr->capacity = capacity;
-}
 
-void addAsteroidToArray(AsteroidArray* arr, Asteroid ast) {
-    if (arr->size >= arr->capacity)
-    {
-        arr->capacity *= 2;
-        Asteroid* newData = realloc(arr->data, sizeof(Asteroid) * arr->capacity);
-        if (newData != NULL)
-        {
-            arr->data = newData;
-        }
-    }
-    arr->data[arr->size++] = ast;
-}
 
-void removeAsteroidFromArray(AsteroidArray* arr, int index) {
-    if (index < 0 || index >= arr->size) return;
 
-    arr->data[index] = arr->data[arr->size - 1];
-    arr->size--;
-}
-
-void freeAsteroidArray(AsteroidArray* arr) {
-    free(arr->data);
-    arr->data = NULL;
-    arr->size = 0;
-    arr->capacity = 0;
-}
-
-void handleDestroyedAsteroids(AsteroidArray* arr) {
-    for (int i = arr->size; i >= 0; i--) {
-        Asteroid* ast = &arr->data[i];
-
-        if (!(ast->destroyed)) continue;
-
-        int numberOfNew = 0;
-
-        switch (ast->level)
-        {
-        case 1:
-            numberOfNew = 3;
-            break;
-        case 2:
-            numberOfNew = 2;
-            break;
-        case 3:
-            numberOfNew = 0;
-            break;
-        
-        default:
-            printf("Invalid asteroid level %d\n", ast->level);
-            break;
-        }
-
-        for (int j = 0; j < numberOfNew; j++) {
-            Asteroid newAsteroid = {0};
-            resetAsteroid(&newAsteroid);
-            newAsteroid.level = ast->level + 1;
-            newAsteroid.destroyed = false;
-            newAsteroid.position = ast->position;
-
-            addAsteroidToArray(arr, newAsteroid);
-        }
-
-        removeAsteroidFromArray(arr, i);
-    }
-}

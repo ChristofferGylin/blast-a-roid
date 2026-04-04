@@ -5,13 +5,11 @@
 #include <math.h>
 #include "constants.h"
 #include <stdio.h>
+#include <stdlib.h>
 
 void gameLoop(Player* player) {
-
-    AsteroidArray asteroids;
-
-    initAsteroidArray(&asteroids, 3);
-    initAsteroids(&asteroids, 3);
+   
+    initAsteroids(player->level);
 
     Texture2D asteroidSprite = LoadTexture("./assets/asteroid.png");
     
@@ -29,18 +27,17 @@ void gameLoop(Player* player) {
                 // game over
             } else {
                 resetShip(&ship);
-                resetAllAsteroids(&asteroids);
+                resetAllAsteroids();
             }
         }
 
-        handleCollisions(&asteroids, &ship);
-        handleDestroyedAsteroids(&asteroids);
         handleShipMovement(&ship);
-        handleAsteroidsMovement(&asteroids);
+        handleAsteroidsMovement();
+        handleAsteroidCollisions(&ship);
+        handleDestroyedAsteroids();
 
         BeginDrawing();
             ClearBackground(BLACK);
-            DrawCircle(ship.position.x, ship.position.y, SHIP_SIZE / 2.0f, RAYWHITE);
             DrawTexturePro(
                 ship.sprite,
                 (Rectangle){0, 0, ship.sprite.width, ship.sprite.height},
@@ -49,41 +46,10 @@ void gameLoop(Player* player) {
                 ship.rotation,
                 WHITE
             );
-
-            for (int i = 0; i < asteroids.size; i++) {
-                Asteroid* ast = &asteroids.data[i];
-
-                int asteroidSize = 0;
-
-                switch (ast->level)
-                {
-                case 1:
-                    asteroidSize = ASTEROID_SIZE_1;
-                    break;
-                case 2:
-                    asteroidSize = ASTEROID_SIZE_2;
-                    break;
-                case 3:
-                    asteroidSize = ASTEROID_SIZE_3;
-                    break;
-                
-                default:
-                    printf("Invalid asteroid level %d\n", ast->level);
-                    break;
-                }
-
-                DrawTexturePro(
-                    asteroidSprite,
-                    (Rectangle){0, 0, asteroidSprite.width, asteroidSprite.height},
-                    (Rectangle){ast->position.x, ast->position.y, asteroidSize, asteroidSize},
-                    (Vector2){asteroidSprite.width / 2.0f, asteroidSprite.height / 2.0f},
-                    ast->rotation,
-                    WHITE  
-                );
-            }
+            renderAsteroids(&asteroidSprite);
+            
         EndDrawing();
     }
 
     UnloadTexture(ship.sprite);
-    freeAsteroidArray(&asteroids);
 }
