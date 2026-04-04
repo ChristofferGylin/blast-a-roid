@@ -44,8 +44,8 @@ void compactAsteroidPool(AsteroidPool* pool) {
     pool->activeCount = write;
 }
 
-void destroyAsteroid(DestroyedAsteroidPool* pool, Asteroid* ast) {
-    ast->destroyed = true;
+void destroyAsteroid(DestroyedAsteroidPool* pool, AsteroidPoolObject* ast) {
+    ast->asteroid.destroyed = true;
     pool->asteroids[pool->activeCount] = ast;
     pool->activeCount++;
 }
@@ -117,6 +117,11 @@ void handleAsteroidsMovement(AsteroidPool* pool) {
             ast->position.y = 0.0f - spriteWidth; 
         }
     }
+}
+void newhandleDestroyedAsteroids(AsteroidPool* pool, DestroyedAsteroidPool* destroyedPool) {
+    if (destroyedPool->activeCount == 0) return;
+
+
 }
 
 void handleDestroyedAsteroids(AsteroidPool* pool, DestroyedAsteroidPool* destroyedPool) {

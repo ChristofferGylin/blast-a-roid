@@ -31,7 +31,7 @@ typedef struct {
 }AsteroidPool;
 
 typedef struct {
-    Asteroid* asteroids[MAX_ASTEROIDS];
+    AsteroidPoolObject* asteroids[MAX_ASTEROIDS];
     int activeCount;
 }DestroyedAsteroidPool;
 
