@@ -21,72 +21,33 @@ void addNewAsteroid(Asteroid ast) {
     printf("Error: Memory overflow in addNewAsteroid\n");
 }
 
-void handleDestroyedAsteroids() {
+void handleAsteroidCollisions(Ship* ship) {
+
+    if (ship->destroyed) return; 
+
     for (int i = 0; i < MAX_ASTEROIDS; i++) {
-        if (asteroidObjectPool[i].active && asteroidObjectPool[i].asteroid.destroyed) {
-            Asteroid* oldAst = &asteroidObjectPool[i].asteroid;
-            int numberOfNew = 0;
 
-            switch (oldAst->level)
-            {
-            case 1: numberOfNew = 3; break;
-            case 2: numberOfNew = 2; break;
-            case 3: numberOfNew = 0; break;
-            
-            default: printf("Error: Invalid asteroid level (%d) in handleDestroyedAsteroids\n", oldAst->level);
-            }
-
-            for (int j = 0; j < numberOfNew; j++) {
-                Asteroid newAst = {0};
-                resetAsteroid(&newAst);
-                newAst.level = oldAst->level + 1;
-                newAst.position = oldAst->position;
-                addNewAsteroid(newAst);
-            }
-
-            asteroidObjectPool[i].active = false;
-        }
-    }
-}
-
-void initAsteroids(int gameLevel) {
-    int numberOfAsteroids = getNumberOfAsteroids(gameLevel);
-    for (int i = 0; i < numberOfAsteroids; i++) {
-        Asteroid ast = {0};
-        resetAsteroid(&ast);
-        ast.level = 1;
-        ast.destroyed = false;
-        addNewAsteroid(ast);
-    }
-}
-
-void resetAsteroid(Asteroid* ast) {
-    bool directionX = GetRandomValue(0,1);
-    bool directionY = GetRandomValue(0,1);
-    int tempVelocityX = GetRandomValue(30, 100);
-    int tempVelocityY = GetRandomValue(30, 100);
-    Vector2 velocity = {directionX ? tempVelocityX : -tempVelocityX, directionY ? tempVelocityY : -tempVelocityY};
-    Vector2 position;
-        
-    if (GetRandomValue(0,1) == 1) {
-        position.x = -32.0f;
-        position.y = GetRandomValue(0, GetScreenHeight());
-    } else {
-        position.x = GetRandomValue(0, GetScreenWidth());
-        position.y = -32.0f;
-    }
-
-    ast->position = position;
-    ast->rotation = 0;
-    ast->rotationSpeed = GetRandomValue(-100, 100);
-    ast->velocity = velocity;
-}
-
-void resetAllAsteroids() {
-    for (int i = 0; i < MAX_ASTEROIDS; i++) {
         if (!asteroidObjectPool[i].active) continue;
-        
-        resetAsteroid(&asteroidObjectPool[i].asteroid);
+
+        Asteroid* ast = &asteroidObjectPool[i].asteroid;
+
+        if (ast->destroyed) continue;
+
+        float asteroidRadius = 0.0f;
+
+        switch (ast->level)
+        {
+        case 1: asteroidRadius = ASTEROID_SIZE_1 / 2.0f; break;
+        case 2: asteroidRadius = ASTEROID_SIZE_2 / 2.0f; break;
+        case 3: asteroidRadius = ASTEROID_SIZE_3 / 2.0f; break;
+        default: printf("Error: Invalid asteroid level (%d) in handleAsteroidCollisions\n", ast->level);
+        }
+
+        if (CheckCollisionCircles(ship->position, SHIP_SIZE / 2.0f, ast->position, asteroidRadius)) {
+            ship->destroyed = true;
+            ast->destroyed = true;
+            return;
+        } 
     }
 }
 
@@ -129,33 +90,42 @@ void handleAsteroidsMovement() {
     }
 }
 
-void handleAsteroidCollisions(Ship* ship) {
-
-    if (ship->destroyed) return; 
-
+void handleDestroyedAsteroids() {
     for (int i = 0; i < MAX_ASTEROIDS; i++) {
+        if (asteroidObjectPool[i].active && asteroidObjectPool[i].asteroid.destroyed) {
+            Asteroid* oldAst = &asteroidObjectPool[i].asteroid;
+            int numberOfNew = 0;
 
-        if (!asteroidObjectPool[i].active) continue;
+            switch (oldAst->level)
+            {
+            case 1: numberOfNew = 3; break;
+            case 2: numberOfNew = 2; break;
+            case 3: numberOfNew = 0; break;
+            
+            default: printf("Error: Invalid asteroid level (%d) in handleDestroyedAsteroids\n", oldAst->level);
+            }
 
-        Asteroid* ast = &asteroidObjectPool[i].asteroid;
+            for (int j = 0; j < numberOfNew; j++) {
+                Asteroid newAst = {0};
+                resetAsteroid(&newAst);
+                newAst.level = oldAst->level + 1;
+                newAst.position = oldAst->position;
+                addNewAsteroid(newAst);
+            }
 
-        if (ast->destroyed) continue;
-
-        float asteroidRadius = 0.0f;
-
-        switch (ast->level)
-        {
-        case 1: asteroidRadius = ASTEROID_SIZE_1 / 2.0f; break;
-        case 2: asteroidRadius = ASTEROID_SIZE_2 / 2.0f; break;
-        case 3: asteroidRadius = ASTEROID_SIZE_3 / 2.0f; break;
-        default: printf("Error: Invalid asteroid level (%d) in handleAsteroidCollisions\n", ast->level);
+            asteroidObjectPool[i].active = false;
         }
+    }
+}
 
-        if (CheckCollisionCircles(ship->position, SHIP_SIZE / 2.0f, ast->position, asteroidRadius)) {
-            ship->destroyed = true;
-            ast->destroyed = true;
-            return;
-        } 
+void initAsteroids(int gameLevel) {
+    int numberOfAsteroids = getNumberOfAsteroids(gameLevel);
+    for (int i = 0; i < numberOfAsteroids; i++) {
+        Asteroid ast = {0};
+        resetAsteroid(&ast);
+        ast.level = 1;
+        ast.destroyed = false;
+        addNewAsteroid(ast);
     }
 }
 
@@ -187,3 +157,38 @@ void renderAsteroids(Texture2D* asteroidSprite) {
         );
     }
 }
+
+void resetAllAsteroids() {
+    for (int i = 0; i < MAX_ASTEROIDS; i++) {
+        if (!asteroidObjectPool[i].active) continue;
+        
+        resetAsteroid(&asteroidObjectPool[i].asteroid);
+    }
+}
+
+void resetAsteroid(Asteroid* ast) {
+    bool directionX = GetRandomValue(0,1);
+    bool directionY = GetRandomValue(0,1);
+    int tempVelocityX = GetRandomValue(30, 100);
+    int tempVelocityY = GetRandomValue(30, 100);
+    Vector2 velocity = {directionX ? tempVelocityX : -tempVelocityX, directionY ? tempVelocityY : -tempVelocityY};
+    Vector2 position;
+        
+    if (GetRandomValue(0,1) == 1) {
+        position.x = -32.0f;
+        position.y = GetRandomValue(0, GetScreenHeight());
+    } else {
+        position.x = GetRandomValue(0, GetScreenWidth());
+        position.y = -32.0f;
+    }
+
+    ast->position = position;
+    ast->rotation = 0;
+    ast->rotationSpeed = GetRandomValue(-100, 100);
+    ast->velocity = velocity;
+}
+
+
+
+
+

@@ -20,12 +20,13 @@ typedef struct {
     Asteroid asteroid; 
 }AsteroidPoolObject;
 
-void initAsteroids(int gameLevel);
-void handleAsteroidsMovement();
-void resetAsteroid(Asteroid* ast);
-void resetAllAsteroids();
-void handleDestroyedAsteroids();
+void addNewAsteroid(Asteroid ast);
 void handleAsteroidCollisions(Ship* ship);
+void handleAsteroidsMovement();
+void handleDestroyedAsteroids();
+void initAsteroids(int gameLevel);
 void renderAsteroids(Texture2D* asteroidSprite);
+void resetAllAsteroids();
+void resetAsteroid(Asteroid* ast);
 
 #endif
