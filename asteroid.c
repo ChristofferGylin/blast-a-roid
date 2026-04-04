@@ -96,10 +96,10 @@ void handleAsteroidsMovement(AsteroidPool* pool) {
     }
 }
 
-void handleDestroyedAsteroids() {
+void handleDestroyedAsteroids(AsteroidPool* pool) {
     for (int i = 0; i < MAX_ASTEROIDS; i++) {
-        if (asteroidObjectPool.asteroids[i].active && asteroidObjectPool.asteroids[i].asteroid.destroyed) {
-            Asteroid* oldAst = &asteroidObjectPool.asteroids[i].asteroid;
+        if (pool->asteroids[i].active && pool->asteroids[i].asteroid.destroyed) {
+            Asteroid* oldAst = &pool->asteroids[i].asteroid;
             int numberOfNew = 0;
 
             switch (oldAst->level)
@@ -116,10 +116,10 @@ void handleDestroyedAsteroids() {
                 resetAsteroid(&newAst);
                 newAst.level = oldAst->level + 1;
                 newAst.position = oldAst->position;
-                addNewAsteroid(newAst);
+                addNewAsteroid(pool, newAst);
             }
 
-            asteroidObjectPool.asteroids[i].active = false;
+            pool->asteroids[i].active = false;
         }
     }
 }
