@@ -8,17 +8,23 @@
 #include "utils.h"
 #include "ship.h"
 
-AsteroidPoolObject asteroidObjectPool[MAX_ASTEROIDS] = {0};
+AsteroidPool asteroidObjectPool = {0};
 
 void addNewAsteroid(Asteroid ast) {
-    for (int i = 0; i < MAX_ASTEROIDS; i++) {
-        if (asteroidObjectPool[i].active == false) {
-            asteroidObjectPool[i].active = true;
-            asteroidObjectPool[i].asteroid = ast;
-            return;
-        }
+    
+    if (asteroidObjectPool.activeCount >= asteroidObjectPool.capacity) {
+        printf("Error: Memory overflow in addNewAsteroid\n");
+        return;
     }
-    printf("Error: Memory overflow in addNewAsteroid\n");
+
+    if (asteroidObjectPool.asteroids[asteroidObjectPool.activeCount].active) {
+        printf("Error: Could not add new asteroid, index allrady in use in addNewAsteroid\n");
+        return;
+    }
+
+    asteroidObjectPool.asteroids[asteroidObjectPool.activeCount].asteroid = ast;
+    asteroidObjectPool.asteroids[asteroidObjectPool.activeCount].active = true;
+    asteroidObjectPool.activeCount++;
 }
 
 void handleAsteroidCollisions(Ship* ship) {
@@ -27,9 +33,9 @@ void handleAsteroidCollisions(Ship* ship) {
 
     for (int i = 0; i < MAX_ASTEROIDS; i++) {
 
-        if (!asteroidObjectPool[i].active) continue;
+        if (!asteroidObjectPool.asteroids[i].active) continue;
 
-        Asteroid* ast = &asteroidObjectPool[i].asteroid;
+        Asteroid* ast = &asteroidObjectPool.asteroids[i].asteroid;
 
         if (ast->destroyed) continue;
 
@@ -55,9 +61,9 @@ void handleAsteroidsMovement() {
     int spriteWidth = 32;
 
     for (int i = 0; i < MAX_ASTEROIDS; i++) {
-        if (!asteroidObjectPool[i].active) continue;
+        if (!asteroidObjectPool.asteroids[i].active) continue;
 
-        Asteroid* ast = &asteroidObjectPool[i].asteroid;
+        Asteroid* ast = &asteroidObjectPool.asteroids[i].asteroid;
 
         if (ast->destroyed) continue;
 
@@ -92,8 +98,8 @@ void handleAsteroidsMovement() {
 
 void handleDestroyedAsteroids() {
     for (int i = 0; i < MAX_ASTEROIDS; i++) {
-        if (asteroidObjectPool[i].active && asteroidObjectPool[i].asteroid.destroyed) {
-            Asteroid* oldAst = &asteroidObjectPool[i].asteroid;
+        if (asteroidObjectPool.asteroids[i].active && asteroidObjectPool.asteroids[i].asteroid.destroyed) {
+            Asteroid* oldAst = &asteroidObjectPool.asteroids[i].asteroid;
             int numberOfNew = 0;
 
             switch (oldAst->level)
@@ -113,7 +119,7 @@ void handleDestroyedAsteroids() {
                 addNewAsteroid(newAst);
             }
 
-            asteroidObjectPool[i].active = false;
+            asteroidObjectPool.asteroids[i].active = false;
         }
     }
 }
@@ -129,11 +135,16 @@ void initAsteroids(int gameLevel) {
     }
 }
 
+void initAsteroidPool(AsteroidPool* pool) {
+    pool->activeCount = 0;
+    pool->capacity = MAX_ASTEROIDS;
+}
+
 void renderAsteroids(Texture2D* asteroidSprite) {
     for (int i = 0; i < MAX_ASTEROIDS; i++) {
 
-        if (!asteroidObjectPool[i].active) continue;
-        Asteroid* ast = &asteroidObjectPool[i].asteroid;
+        if (!asteroidObjectPool.asteroids[i].active) continue;
+        Asteroid* ast = &asteroidObjectPool.asteroids[i].asteroid;
 
         if (ast->destroyed) continue;
 
@@ -160,9 +171,9 @@ void renderAsteroids(Texture2D* asteroidSprite) {
 
 void resetAllAsteroids() {
     for (int i = 0; i < MAX_ASTEROIDS; i++) {
-        if (!asteroidObjectPool[i].active) continue;
+        if (!asteroidObjectPool.asteroids[i].active) continue;
         
-        resetAsteroid(&asteroidObjectPool[i].asteroid);
+        resetAsteroid(&asteroidObjectPool.asteroids[i].asteroid);
     }
 }
 
