@@ -1,9 +1,10 @@
+#ifndef ASTEROID_H
+#define ASTEROID_H
+#define MAX_ASTEROIDS 128
+
 #include "raylib.h"
 #include "ship.h"
 #include <stdbool.h>
-
-#ifndef ASTEROID_H
-#define ASTEROID_H
 
 typedef struct {
     int level;
@@ -31,8 +32,8 @@ void initAsteroidPool(AsteroidPool* pool);
 void addAsteroidToArray(AsteroidArray* arr, Asteroid ast);
 void removeAsteroidFromArray(AsteroidArray* arr, int index);
 void freeAsteroidArray(AsteroidArray* arr);
-void handleAsteroidsMovement(AsteroidArray* arr);
-void handleCollisions(AsteroidArray* astArr, Ship* ship);
+void handleAsteroidsMovement(AsteroidPool* pool);
+void handleCollisions(AsteroidPool* astPool, Ship* ship);
 void resetAsteroid(Asteroid* ast);
 void resetAllAsteroids(AsteroidPool* pool);
 void handleDestroyedAsteroids(AsteroidArray* arr);

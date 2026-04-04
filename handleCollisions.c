@@ -30,6 +30,7 @@ void handleCollisions(AsteroidPool* astPool, Ship* ship) {
         if (CheckCollisionCircles(ship->position, SHIP_SIZE / 2.0f, ast->position, asteroidRadius)) {
             ship->destroyed = true;
             ast->destroyed = true;
+            return;
         } 
     }
 }

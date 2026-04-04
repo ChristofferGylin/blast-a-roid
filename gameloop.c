@@ -5,13 +5,14 @@
 #include <math.h>
 #include "constants.h"
 #include <stdio.h>
+#include <stdlib.h>
 
 void gameLoop(Player* player) {
 
     AsteroidPool* asteroids = malloc(sizeof(AsteroidPool));
 
-    initAsteroidPool(&asteroids);    
-    initAsteroids(&asteroids, 3);
+    initAsteroidPool(asteroids);    
+    initAsteroids(asteroids, 3);
 
     Texture2D asteroidSprite = LoadTexture("./assets/asteroid.png");
     
@@ -29,14 +30,14 @@ void gameLoop(Player* player) {
                 // game over
             } else {
                 resetShip(&ship);
-                resetAllAsteroids(&asteroids);
+                resetAllAsteroids(asteroids);
             }
         }
 
-        handleCollisions(&asteroids, &ship);
-        updateAsteroidsPool(&asteroids);
         handleShipMovement(&ship);
-        handleAsteroidsMovement(&asteroids);
+        handleAsteroidsMovement(asteroids);
+        handleCollisions(asteroids, &ship);
+        updateAsteroidsPool(asteroids);
 
         BeginDrawing();
             ClearBackground(BLACK);
@@ -85,5 +86,5 @@ void gameLoop(Player* player) {
     }
 
     UnloadTexture(ship.sprite);
-    freeAsteroidArray(&asteroids);
+    free(asteroids);
 }

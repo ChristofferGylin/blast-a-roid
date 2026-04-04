@@ -8,37 +8,60 @@
 float spriteWidth = 32.0f;
 float spriteHeight = 32.0f;
 
-void initAsteroidsPool(AsteroidPool* pool) {
+void initAsteroidPool(AsteroidPool* pool) {
     pool->activeCount = 0;
 }
 
-void spawnAsteroid(AsteroidPool* pool, Asteroid ast) {
+void spawnAsteroid(AsteroidPool* pool, Asteroid ast)
+{
     if (pool->activeCount >= MAX_ASTEROIDS) return;
 
-    int i = pool->activeCount++;
+    int i = pool->activeCount;
+
     pool->asteroids[i] = ast;
-    pool->active[i] = i;
+    pool->active[pool->activeCount] = i;
+
+    pool->activeCount++;
 }
 
 void destroyAsteroid(AsteroidPool* pool, int index) {
     pool->asteroids[index].destroyed = true;
 }
 
-void updateAsteroidsPool(AsteroidPool* pool) {
-    int write = 0;
+void updateAsteroidsPool(AsteroidPool* pool)
+{
+    int oldActive[MAX_ASTEROIDS];
+    int oldCount = pool->activeCount;
 
-    for (int read = 0; read < pool->activeCount; read++) {
-        int i = pool->active[read];
-        Asteroid* ast = &pool->asteroids[i];
+    for (int i = 0; i < oldCount; i++)
+        oldActive[i] = pool->active[i];
 
-        if (ast->destroyed) {
-            int count = (ast->level == 1) ? 3 : (ast->level == 2) ? 2 : 0;
+    int newActive[MAX_ASTEROIDS];
+    int newCount = 0;
 
-            for (int j = 0; j < count; j++) {
+    for (int i = 0; i < oldCount; i++)
+    {
+        int idx = oldActive[i];
+        Asteroid* a = &pool->asteroids[idx];
+
+        if (a->destroyed)
+        {
+            int count = 0;
+
+            switch (a->level)
+            {
+                case 1: count = 3; break;
+                case 2: count = 2; break;
+                case 3: count = 0; break;
+            }
+
+            for (int j = 0; j < count; j++)
+            {
                 Asteroid child = {0};
                 resetAsteroid(&child);
-                child.level = ast->level + 1;
-                child.position = ast->position;
+
+                child.level = a->level + 1;
+                child.position = a->position;
 
                 spawnAsteroid(pool, child);
             }
@@ -46,10 +69,13 @@ void updateAsteroidsPool(AsteroidPool* pool) {
             continue;
         }
 
-        pool->active[write++] = 1;
+        newActive[newCount++] = idx;
     }
 
-    pool->activeCount = write;
+    for (int i = 0; i < newCount; i++)
+        pool->active[i] = newActive[i];
+
+    pool->activeCount = newCount;
 }
 
 void initAsteroids(AsteroidPool* pool, int number) {
