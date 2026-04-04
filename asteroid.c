@@ -18,22 +18,29 @@ void addNewAsteroid(Asteroid ast) {
     printf("Error: Memory overflow in addNewAsteroid\n");
 }
 
-void destroyerOfAsteroids() {
+void handleDestroyedAsteroids() {
     for (int i = 0; i < MAX_ASTEROIDS; i++) {
-        if (asteroidObjectPool[i].active) {
-            if (asteroidObjectPool[i].asteroid.destroyed) {
-                Asteroid* oldAst = &asteroidObjectPool[i].asteroid;
-                int numberOfNew = (oldAst->level == 1) ? 3 : (oldAst->level == 2) ? 2 : 1;
+        if (asteroidObjectPool[i].active && asteroidObjectPool[i].asteroid.destroyed) {
+            Asteroid* oldAst = &asteroidObjectPool[i].asteroid;
+            int numberOfNew = 0;
 
-                for (int j = 0; j < numberOfNew; j++) {
-                    Asteroid newAst = {0};
-                    resetAsteroid(&newAst);
-                    newAst.level = oldAst->level + 1;
-                    addNewAsteroid(newAst);
-                }
-
-                asteroidObjectPool[i].active = false;
+            switch (oldAst->level)
+            {
+            case 1: numberOfNew = 3; break;
+            case 2: numberOfNew = 2; break;
+            case 3: numberOfNew = 0; break;
+            
+            default: printf("Error: Invalid asteroid level (%d) in handleDestroyedAsteroids\n", oldAst->level);
             }
+
+            for (int j = 0; j < numberOfNew; j++) {
+                Asteroid newAst = {0};
+                resetAsteroid(&newAst);
+                newAst.level = oldAst->level + 1;
+                addNewAsteroid(newAst);
+            }
+
+            asteroidObjectPool[i].active = false;
         }
     }
 }
@@ -182,41 +189,41 @@ void freeAsteroidArray(AsteroidArray* arr) {
     arr->capacity = 0;
 }
 
-void handleDestroyedAsteroids(AsteroidArray* arr) {
-    for (int i = arr->size; i >= 0; i--) {
-        Asteroid* ast = &arr->data[i];
+// void handleDestroyedAsteroids(AsteroidArray* arr) {
+//     for (int i = arr->size; i >= 0; i--) {
+//         Asteroid* ast = &arr->data[i];
 
-        if (!(ast->destroyed)) continue;
+//         if (!(ast->destroyed)) continue;
 
-        int numberOfNew = 0;
+//         int numberOfNew = 0;
 
-        switch (ast->level)
-        {
-        case 1:
-            numberOfNew = 3;
-            break;
-        case 2:
-            numberOfNew = 2;
-            break;
-        case 3:
-            numberOfNew = 0;
-            break;
+//         switch (ast->level)
+//         {
+//         case 1:
+//             numberOfNew = 3;
+//             break;
+//         case 2:
+//             numberOfNew = 2;
+//             break;
+//         case 3:
+//             numberOfNew = 0;
+//             break;
         
-        default:
-            printf("Invalid asteroid level %d\n", ast->level);
-            break;
-        }
+//         default:
+//             printf("Invalid asteroid level %d\n", ast->level);
+//             break;
+//         }
 
-        for (int j = 0; j < numberOfNew; j++) {
-            Asteroid newAsteroid = {0};
-            resetAsteroid(&newAsteroid);
-            newAsteroid.level = ast->level + 1;
-            newAsteroid.destroyed = false;
-            newAsteroid.position = ast->position;
+//         for (int j = 0; j < numberOfNew; j++) {
+//             Asteroid newAsteroid = {0};
+//             resetAsteroid(&newAsteroid);
+//             newAsteroid.level = ast->level + 1;
+//             newAsteroid.destroyed = false;
+//             newAsteroid.position = ast->position;
 
-            addAsteroidToArray(arr, newAsteroid);
-        }
+//             addAsteroidToArray(arr, newAsteroid);
+//         }
 
-        removeAsteroidFromArray(arr, i);
-    }
-}
+//         removeAsteroidFromArray(arr, i);
+//     }
+// }
