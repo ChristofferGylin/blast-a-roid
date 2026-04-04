@@ -40,6 +40,7 @@ void handleDestroyedAsteroids() {
                 Asteroid newAst = {0};
                 resetAsteroid(&newAst);
                 newAst.level = oldAst->level + 1;
+                newAst.position = oldAst->position;
                 addNewAsteroid(newAst);
             }
 
