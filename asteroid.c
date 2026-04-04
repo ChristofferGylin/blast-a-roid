@@ -27,15 +27,15 @@ void addNewAsteroid(AsteroidPool* pool, Asteroid ast) {
     pool->activeCount++;
 }
 
-void handleAsteroidCollisions(Ship* ship) {
+void handleAsteroidCollisions(AsteroidPool* pool, Ship* ship) {
 
     if (ship->destroyed) return; 
 
     for (int i = 0; i < MAX_ASTEROIDS; i++) {
 
-        if (!asteroidObjectPool.asteroids[i].active) continue;
+        if (!pool->asteroids[i].active) continue;
 
-        Asteroid* ast = &asteroidObjectPool.asteroids[i].asteroid;
+        Asteroid* ast = &pool->asteroids[i].asteroid;
 
         if (ast->destroyed) continue;
 
@@ -57,13 +57,13 @@ void handleAsteroidCollisions(Ship* ship) {
     }
 }
 
-void handleAsteroidsMovement() {
+void handleAsteroidsMovement(AsteroidPool* pool) {
     int spriteWidth = 32;
 
     for (int i = 0; i < MAX_ASTEROIDS; i++) {
-        if (!asteroidObjectPool.asteroids[i].active) continue;
+        if (!pool->asteroids[i].active) continue;
 
-        Asteroid* ast = &asteroidObjectPool.asteroids[i].asteroid;
+        Asteroid* ast = &pool->asteroids[i].asteroid;
 
         if (ast->destroyed) continue;
 
