@@ -37,7 +37,7 @@ void initAsteroidPool(AsteroidPool* pool);
 void addAsteroidToArray(AsteroidArray* arr, Asteroid ast);
 void removeAsteroidFromArray(AsteroidArray* arr, int index);
 void freeAsteroidArray(AsteroidArray* arr);
-void handleAsteroidsMovement(AsteroidPool* pool);
+void handleAsteroidsMovement();
 void handleCollisions(AsteroidPool* astPool, Ship* ship);
 void resetAsteroid(Asteroid* ast);
 void resetAllAsteroids(AsteroidPool* pool);

@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include <stdbool.h>
 #include <stdio.h>
+#include <math.h>
 #include "constants.h"
 
 AsteroidPoolObject asteroidObjectPool[MAX_ASTEROIDS] = {0};
@@ -187,6 +188,45 @@ void freeAsteroidArray(AsteroidArray* arr) {
     arr->data = NULL;
     arr->size = 0;
     arr->capacity = 0;
+}
+
+void handleAsteroidsMovement() {
+    int spriteWidth = 32;
+
+    for (int i = 0; i < MAX_ASTEROIDS; i++) {
+        if (!asteroidObjectPool[i].active) continue;
+
+        Asteroid* ast = &asteroidObjectPool[i].asteroid;
+
+        if (ast->destroyed) continue;
+
+        ast->rotation += GetFrameTime() * ast->rotationSpeed;
+        ast->rotation = fmodf(ast->rotation, 360.0f);
+
+        if (ast->rotation < 0.0f)
+        {
+            ast->rotation += 360.0f;
+        }
+        
+        ast->position.x += GetFrameTime() * ast->velocity.x;
+        ast->position.y += GetFrameTime() * ast->velocity.y;
+
+        if (ast->position.x < 0.0f - spriteWidth)
+        {
+            ast->position.x = GetScreenWidth() + spriteWidth;
+        } else if (ast->position.x > GetScreenWidth() + spriteWidth)
+        {
+            ast->position.x = 0.0f - spriteWidth; 
+        }
+
+        if (ast->position.y < 0.0f - spriteWidth)
+        {
+            ast->position.y = GetScreenHeight() + spriteWidth;
+        } else if (ast->position.y > GetScreenHeight() + spriteWidth)
+        {
+            ast->position.y = 0.0f - spriteWidth; 
+        }
+    }
 }
 
 // void handleDestroyedAsteroids(AsteroidArray* arr) {
