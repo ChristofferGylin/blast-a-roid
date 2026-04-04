@@ -20,30 +20,11 @@ typedef struct {
     Asteroid asteroid; 
 }AsteroidPoolObject;
 
-typedef struct {
-    Asteroid* data;
-    int size;
-    int capacity;
-}AsteroidArray;
-
-typedef struct {
-    Asteroid asteroids[MAX_ASTEROIDS];
-    int active[MAX_ASTEROIDS];
-    int activeCount;
-}AsteroidPool;
-
 void initAsteroids(int gameLevel);
-void initAsteroidPool(AsteroidPool* pool);
-void addAsteroidToArray(AsteroidArray* arr, Asteroid ast);
-void removeAsteroidFromArray(AsteroidArray* arr, int index);
-void freeAsteroidArray(AsteroidArray* arr);
 void handleAsteroidsMovement();
 void resetAsteroid(Asteroid* ast);
 void resetAllAsteroids();
 void handleDestroyedAsteroids();
-void spawnAsteroid(AsteroidPool* pool, Asteroid ast);
-void destroyAsteroid(AsteroidPool* pool, int index);
-void updateAsteroidsPool(AsteroidPool* pool);
 void handleAsteroidCollisions(Ship* ship);
 void renderAsteroids(Texture2D* asteroidSprite);
 

@@ -8,10 +8,7 @@
 #include <stdlib.h>
 
 void gameLoop(Player* player) {
-
-    // AsteroidPool* asteroids = malloc(sizeof(AsteroidPool));
-
-    // initAsteroidPool(asteroids);    
+   
     initAsteroids(player->level);
 
     Texture2D asteroidSprite = LoadTexture("./assets/asteroid.png");
