@@ -32,7 +32,7 @@ typedef struct {
     int activeCount;
 }AsteroidPool;
 
-void initAsteroids(AsteroidPool* pool, int number);
+void initAsteroids(int gameLevel);
 void initAsteroidPool(AsteroidPool* pool);
 void addAsteroidToArray(AsteroidArray* arr, Asteroid ast);
 void removeAsteroidFromArray(AsteroidArray* arr, int index);

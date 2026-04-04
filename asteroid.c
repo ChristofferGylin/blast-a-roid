@@ -5,6 +5,7 @@
 #include <stdio.h>
 #include <math.h>
 #include "constants.h"
+#include "utils.h"
 
 AsteroidPoolObject asteroidObjectPool[MAX_ASTEROIDS] = {0};
 
@@ -119,13 +120,14 @@ void updateAsteroidsPool(AsteroidPool* pool)
     pool->activeCount = newCount;
 }
 
-void initAsteroids(AsteroidPool* pool, int number) {
-    for (int i = 0; i < number; i++) {
+void initAsteroids(int gameLevel) {
+    int numberOfAsteroids = getNumberOfAsteroids(gameLevel);
+    for (int i = 0; i < numberOfAsteroids; i++) {
         Asteroid ast = {0};
         resetAsteroid(&ast);
         ast.level = 1;
         ast.destroyed = false;
-        spawnAsteroid(pool, ast);
+        addNewAsteroid(ast);
     }
 }
 
