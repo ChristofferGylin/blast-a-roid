@@ -25,6 +25,25 @@ void addNewAsteroid(AsteroidPool* pool, Asteroid ast) {
     pool->activeCount++;
 }
 
+void compactAsteroidPool(AsteroidPool* pool) {
+    int write = 0;
+
+    for (int i = 0; i < pool->activeCount; i++) {
+        if (pool->asteroids[i].active) {
+            if (write != i) {
+                pool->asteroids[write] = pool->asteroids[i];
+            }
+            write++;
+        }
+    }
+
+    for (int i = write; i < pool->activeCount; i++) {
+        pool->asteroids[i].active = false;
+    }
+
+    pool->activeCount = write;
+}
+
 void destroyAsteroid(DestroyedAsteroidPool* pool, Asteroid* ast) {
     ast->destroyed = true;
     pool->asteroids[pool->activeCount] = ast;
