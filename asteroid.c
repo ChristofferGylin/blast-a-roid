@@ -124,14 +124,14 @@ void handleDestroyedAsteroids(AsteroidPool* pool) {
     }
 }
 
-void initAsteroids(int gameLevel) {
+void initAsteroids(AsteroidPool* pool, int gameLevel) {
     int numberOfAsteroids = getNumberOfAsteroids(gameLevel);
     for (int i = 0; i < numberOfAsteroids; i++) {
         Asteroid ast = {0};
         resetAsteroid(&ast);
         ast.level = 1;
         ast.destroyed = false;
-        addNewAsteroid(ast);
+        addNewAsteroid(pool, ast);
     }
 }
 
