@@ -135,11 +135,11 @@ void initAsteroids(AsteroidPool* pool, int gameLevel) {
     }
 }
 
-void renderAsteroids(Texture2D* asteroidSprite) {
+void renderAsteroids(AsteroidPool* pool, Texture2D* asteroidSprite) {
     for (int i = 0; i < MAX_ASTEROIDS; i++) {
 
-        if (!asteroidObjectPool.asteroids[i].active) continue;
-        Asteroid* ast = &asteroidObjectPool.asteroids[i].asteroid;
+        if (!pool->asteroids[i].active) continue;
+        Asteroid* ast = &pool->asteroids[i].asteroid;
 
         if (ast->destroyed) continue;
 
