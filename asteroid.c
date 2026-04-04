@@ -164,11 +164,11 @@ void renderAsteroids(AsteroidPool* pool, Texture2D* asteroidSprite) {
     }
 }
 
-void resetAllAsteroids() {
+void resetAllAsteroids(AsteroidPool* pool) {
     for (int i = 0; i < MAX_ASTEROIDS; i++) {
-        if (!asteroidObjectPool.asteroids[i].active) continue;
+        if (!pool->asteroids[i].active) continue;
         
-        resetAsteroid(&asteroidObjectPool.asteroids[i].asteroid);
+        resetAsteroid(&pool->asteroids[i].asteroid);
     }
 }
 
