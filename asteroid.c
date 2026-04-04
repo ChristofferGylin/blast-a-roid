@@ -10,21 +10,21 @@
 
 AsteroidPool asteroidObjectPool = {0};
 
-void addNewAsteroid(Asteroid ast) {
+void addNewAsteroid(AsteroidPool* pool, Asteroid ast) {
     
-    if (asteroidObjectPool.activeCount >= asteroidObjectPool.capacity) {
+    if (pool->activeCount >= MAX_ASTEROIDS) {
         printf("Error: Memory overflow in addNewAsteroid\n");
         return;
     }
 
-    if (asteroidObjectPool.asteroids[asteroidObjectPool.activeCount].active) {
-        printf("Error: Could not add new asteroid, index allrady in use in addNewAsteroid\n");
+    if (pool->asteroids[pool->activeCount].active) {
+        printf("Error: Could not add new asteroid, index allready in use in addNewAsteroid\n");
         return;
     }
 
-    asteroidObjectPool.asteroids[asteroidObjectPool.activeCount].asteroid = ast;
-    asteroidObjectPool.asteroids[asteroidObjectPool.activeCount].active = true;
-    asteroidObjectPool.activeCount++;
+    pool->asteroids[pool->activeCount].asteroid = ast;
+    pool->asteroids[pool->activeCount].active = true;
+    pool->activeCount++;
 }
 
 void handleAsteroidCollisions(Ship* ship) {
@@ -133,11 +133,6 @@ void initAsteroids(int gameLevel) {
         ast.destroyed = false;
         addNewAsteroid(ast);
     }
-}
-
-void initAsteroidPool(AsteroidPool* pool) {
-    pool->activeCount = 0;
-    pool->capacity = MAX_ASTEROIDS;
 }
 
 void renderAsteroids(Texture2D* asteroidSprite) {

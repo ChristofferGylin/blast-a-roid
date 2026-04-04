@@ -22,11 +22,10 @@ typedef struct {
 
 typedef struct {
     AsteroidPoolObject asteroids[MAX_ASTEROIDS];
-    int capacity;
     int activeCount;
 }AsteroidPool;
 
-void addNewAsteroid(Asteroid ast);
+void addNewAsteroid(AsteroidPool* pool, Asteroid ast);
 void handleAsteroidCollisions(Ship* ship);
 void handleAsteroidsMovement();
 void handleDestroyedAsteroids();
