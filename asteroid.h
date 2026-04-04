@@ -45,5 +45,6 @@ void spawnAsteroid(AsteroidPool* pool, Asteroid ast);
 void destroyAsteroid(AsteroidPool* pool, int index);
 void updateAsteroidsPool(AsteroidPool* pool);
 void handleAsteroidCollisions(Ship* ship);
+void renderAsteroids(Texture2D* asteroidSprite);
 
 #endif

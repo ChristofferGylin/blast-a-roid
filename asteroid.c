@@ -245,7 +245,7 @@ void handleAsteroidCollisions(Ship* ship) {
         Asteroid* ast = &asteroidObjectPool[i].asteroid;
 
         if (ast->destroyed) continue;
-        
+
         float asteroidRadius = 0.0f;
 
         switch (ast->level)
@@ -261,6 +261,35 @@ void handleAsteroidCollisions(Ship* ship) {
             ast->destroyed = true;
             return;
         } 
+    }
+}
+
+void renderAsteroids(Texture2D* asteroidSprite) {
+    for (int i = 0; i < MAX_ASTEROIDS; i++) {
+
+        if (!asteroidObjectPool[i].active) continue;
+        Asteroid* ast = &asteroidObjectPool[i].asteroid;
+
+        if (ast->destroyed) continue;
+
+        int asteroidSize = 0;
+
+        switch (ast->level)
+        {
+            case 1: asteroidSize = ASTEROID_SIZE_1; break;
+            case 2: asteroidSize = ASTEROID_SIZE_2; break;
+            case 3: asteroidSize = ASTEROID_SIZE_3; break;
+            default: printf("Error: Invalid asteroid level (%d) in renderAsteroids\n", ast->level);
+        }
+
+        DrawTexturePro(
+            *asteroidSprite,
+            (Rectangle){0, 0, asteroidSprite->width, asteroidSprite->height},
+            (Rectangle){ast->position.x, ast->position.y, asteroidSize, asteroidSize},
+            (Vector2){asteroidSprite->width / 2.0f, asteroidSprite->height / 2.0f},
+            ast->rotation,
+            WHITE  
+        );
     }
 }
 

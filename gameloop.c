@@ -41,7 +41,6 @@ void gameLoop(Player* player) {
 
         BeginDrawing();
             ClearBackground(BLACK);
-            DrawCircle(ship.position.x, ship.position.y, SHIP_SIZE / 2.0f, RAYWHITE);
             DrawTexturePro(
                 ship.sprite,
                 (Rectangle){0, 0, ship.sprite.width, ship.sprite.height},
@@ -50,41 +49,10 @@ void gameLoop(Player* player) {
                 ship.rotation,
                 WHITE
             );
-
-            for (int i = 0; i < asteroids->activeCount; i++) {
-                Asteroid* ast = &asteroids->asteroids[asteroids->active[i]];
-
-                int asteroidSize = 0;
-
-                switch (ast->level)
-                {
-                case 1:
-                    asteroidSize = ASTEROID_SIZE_1;
-                    break;
-                case 2:
-                    asteroidSize = ASTEROID_SIZE_2;
-                    break;
-                case 3:
-                    asteroidSize = ASTEROID_SIZE_3;
-                    break;
-                
-                default:
-                    printf("Invalid asteroid level %d\n", ast->level);
-                    break;
-                }
-
-                DrawTexturePro(
-                    asteroidSprite,
-                    (Rectangle){0, 0, asteroidSprite.width, asteroidSprite.height},
-                    (Rectangle){ast->position.x, ast->position.y, asteroidSize, asteroidSize},
-                    (Vector2){asteroidSprite.width / 2.0f, asteroidSprite.height / 2.0f},
-                    ast->rotation,
-                    WHITE  
-                );
-            }
+            renderAsteroids(&asteroidSprite);
+            
         EndDrawing();
     }
 
     UnloadTexture(ship.sprite);
-    free(asteroids);
 }
