@@ -8,8 +8,6 @@
 #include "utils.h"
 #include "ship.h"
 
-AsteroidPool asteroidObjectPool = {0};
-
 void addNewAsteroid(AsteroidPool* pool, Asteroid ast) {
     
     if (pool->activeCount >= MAX_ASTEROIDS) {

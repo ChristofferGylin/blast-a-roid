@@ -7,9 +7,11 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+AsteroidPool asteroidObjectPool = {0};
+
 void gameLoop(Player* player) {
    
-    initAsteroids(player->level);
+    initAsteroids(&asteroidObjectPool, player->level);
 
     Texture2D asteroidSprite = LoadTexture("./assets/asteroid.png");
     
@@ -27,14 +29,14 @@ void gameLoop(Player* player) {
                 // game over
             } else {
                 resetShip(&ship);
-                resetAllAsteroids();
+                resetAllAsteroids(&asteroidObjectPool);
             }
         }
 
         handleShipMovement(&ship);
-        handleAsteroidsMovement();
-        handleAsteroidCollisions(&ship);
-        handleDestroyedAsteroids();
+        handleAsteroidsMovement(&asteroidObjectPool);
+        handleAsteroidCollisions(&asteroidObjectPool, &ship);
+        handleDestroyedAsteroids(&asteroidObjectPool);
 
         BeginDrawing();
             ClearBackground(BLACK);
@@ -46,7 +48,7 @@ void gameLoop(Player* player) {
                 ship.rotation,
                 WHITE
             );
-            renderAsteroids(&asteroidSprite);
+            renderAsteroids(&asteroidObjectPool, &asteroidSprite);
             
         EndDrawing();
     }
