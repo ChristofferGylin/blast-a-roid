@@ -21,9 +21,19 @@ typedef struct {
 }AsteroidPoolObject;
 
 typedef struct {
+    bool active;
+    Asteroid* asteroid; 
+}DestroyeAsteroidPoolObject;
+
+typedef struct {
     AsteroidPoolObject asteroids[MAX_ASTEROIDS];
     int activeCount;
 }AsteroidPool;
+
+typedef struct {
+    Asteroid* asteroids[MAX_ASTEROIDS];
+    int activeCount;
+}DestroyedAsteroidPool;
 
 void addNewAsteroid(AsteroidPool* pool, Asteroid ast);
 void handleAsteroidCollisions(AsteroidPool* pool, Ship* ship);

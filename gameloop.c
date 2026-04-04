@@ -8,6 +8,7 @@
 #include <stdlib.h>
 
 AsteroidPool asteroidObjectPool = {0};
+DestroyedAsteroidPool destroyedAsteroidsObjectPool = {0};
 
 void gameLoop(Player* player) {
    

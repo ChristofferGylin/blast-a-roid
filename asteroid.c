@@ -25,6 +25,12 @@ void addNewAsteroid(AsteroidPool* pool, Asteroid ast) {
     pool->activeCount++;
 }
 
+void destroyAsteroid(DestroyedAsteroidPool* pool, Asteroid* ast) {
+    ast->destroyed = true;
+    pool->asteroids[pool->activeCount] = ast;
+    pool->activeCount++;
+}
+
 void handleAsteroidCollisions(AsteroidPool* pool, Ship* ship) {
 
     if (ship->destroyed) return; 
