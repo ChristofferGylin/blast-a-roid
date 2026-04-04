@@ -153,9 +153,11 @@ void resetAsteroid(Asteroid* ast) {
     ast->velocity = velocity;
 }
 
-void resetAllAsteroids(AsteroidPool* pool) {
-    for (int i = 0; i < pool->activeCount; i++) {
-        resetAsteroid(&pool->asteroids[pool->active[i]]);
+void resetAllAsteroids() {
+    for (int i = 0; i < MAX_ASTEROIDS; i++) {
+        if (!asteroidObjectPool[i].active) continue;
+        
+        resetAsteroid(&asteroidObjectPool[i].asteroid);
     }
 }
 

@@ -40,7 +40,7 @@ void freeAsteroidArray(AsteroidArray* arr);
 void handleAsteroidsMovement();
 void handleCollisions(AsteroidPool* astPool, Ship* ship);
 void resetAsteroid(Asteroid* ast);
-void resetAllAsteroids(AsteroidPool* pool);
+void resetAllAsteroids();
 void handleDestroyedAsteroids();
 void spawnAsteroid(AsteroidPool* pool, Asteroid ast);
 void destroyAsteroid(AsteroidPool* pool, int index);
