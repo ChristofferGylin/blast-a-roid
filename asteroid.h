@@ -16,6 +16,11 @@ typedef struct {
 }Asteroid;
 
 typedef struct {
+    bool active;
+    Asteroid asteroid; 
+}AsteroidPoolObject;
+
+typedef struct {
     Asteroid* data;
     int size;
     int capacity;

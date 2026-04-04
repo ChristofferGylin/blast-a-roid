@@ -5,6 +5,39 @@
 #include <stdio.h>
 #include "constants.h"
 
+AsteroidPoolObject asteroidObjectPool[MAX_ASTEROIDS] = {0};
+
+void addNewAsteroid(Asteroid ast) {
+    for (int i = 0; i < MAX_ASTEROIDS; i++) {
+        if (asteroidObjectPool[i].active == false) {
+            asteroidObjectPool[i].active = true;
+            asteroidObjectPool[i].asteroid = ast;
+            return;
+        }
+    }
+    printf("Error: Memory overflow in addNewAsteroid\n");
+}
+
+void destroyerOfAsteroids() {
+    for (int i = 0; i < MAX_ASTEROIDS; i++) {
+        if (asteroidObjectPool[i].active) {
+            if (asteroidObjectPool[i].asteroid.destroyed) {
+                Asteroid* oldAst = &asteroidObjectPool[i].asteroid;
+                int numberOfNew = (oldAst->level == 1) ? 3 : (oldAst->level == 2) ? 2 : 1;
+
+                for (int j = 0; j < numberOfNew; j++) {
+                    Asteroid newAst = {0};
+                    resetAsteroid(&newAst);
+                    newAst.level = oldAst->level + 1;
+                    addNewAsteroid(newAst);
+                }
+
+                asteroidObjectPool[i].active = false;
+            }
+        }
+    }
+}
+
 float spriteWidth = 32.0f;
 float spriteHeight = 32.0f;
 
