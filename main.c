@@ -7,7 +7,7 @@ int main(){
     int windowWidth = 800;
     int windowHeight = 600;
 
-    InitWindow(windowWidth, windowHeight, "basic window");
+    InitWindow(windowWidth, windowHeight, "Blast-A-Roid");
     InitAudioDevice();
     SetTargetFPS(144);
     SetRandomSeed(time(NULL));
