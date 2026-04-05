@@ -50,7 +50,7 @@ void destroyAsteroid(DestroyedAsteroidPool* pool, AsteroidPoolObject* ast) {
     pool->activeCount++;
 }
 
-void handleAsteroidCollisions(AsteroidPool* pool, Ship* ship) {
+void handleAsteroidCollisions(AsteroidPool* pool, DestroyedAsteroidPool* destroyedPool, Ship* ship) {
 
     if (ship->destroyed) return; 
 
@@ -74,7 +74,7 @@ void handleAsteroidCollisions(AsteroidPool* pool, Ship* ship) {
 
         if (CheckCollisionCircles(ship->position, SHIP_SIZE / 2.0f, ast->position, asteroidRadius)) {
             ship->destroyed = true;
-            ast->destroyed = true;
+            destroyAsteroid(destroyedPool, &pool->asteroids[i]);
             return;
         } 
     }
@@ -125,8 +125,6 @@ void handleDestroyedAsteroids(AsteroidPool* pool, DestroyedAsteroidPool* destroy
         destroyedPool->asteroids[i]->active = false;
     }
 
-    compactAsteroidPool(pool);
-
     for (int i = 0; i < destroyedPool->activeCount; i++) {
         int numberOfNew = 0;
         int astLevel = destroyedPool->asteroids[i]->asteroid.level;
@@ -148,6 +146,7 @@ void handleDestroyedAsteroids(AsteroidPool* pool, DestroyedAsteroidPool* destroy
         }
     }
 
+    compactAsteroidPool(pool);
     destroyedPool->activeCount = 0;
 }
 
