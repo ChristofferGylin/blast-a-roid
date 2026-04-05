@@ -76,12 +76,14 @@ void handleAsteroidCollisions(AsteroidPool* pool, DestroyedAsteroidPool* destroy
         if (CheckCollisionCircles(ship->position, SHIP_SIZE / 2.0f, ast->position, asteroidRadius)) {
             ship->destroyed = true;
             destroyAsteroid(destroyedPool, &pool->asteroids[i]);
+            continue;
         }
 
         for (int i = 0; i < shotPool->activeCount; i++) {
             if (CheckCollisionCircles(shotPool->shots[i].shot.position, SHOT_SIZE / 2.0f, ast->position, asteroidRadius)) {
                 destroyShot(&shotPool->shots[i]);
                 destroyAsteroid(destroyedPool, &pool->asteroids[i]);
+                break;
             }
         }
     }
