@@ -9,8 +9,8 @@ static const int ASTEROID_SIZE_1 = 32;
 static const int ASTEROID_SIZE_2 = 24;
 static const int ASTEROID_SIZE_3 = 12;
 static const int SHOT_SIZE = 6;
-static const int SHOT_COOLDOWN_TIME = 200;
-static const int SHOT_LIFE_TIME = 1000;
+static const int SHOT_COOLDOWN_TIME = 140;
+static const int SHOT_LIFE_TIME = 800;
 static const int SHOT_VELOCITY = 600;
 
 #endif
