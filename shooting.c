@@ -73,7 +73,6 @@ void handleShooting(Ship* ship, ShotObjectPool* pool) {
     if (pool->activeCount >= MAX_SHOTS) return;
 
     if (IsKeyPressed(KEY_RIGHT_CONTROL) && GetTime() * 1000 > lastShot + SHOT_COOLDOWN_TIME) {
-        printf("Pew\n");
         float radians = (ship->rotation - 90.0f) * (PI / 180.0f);
 
         Shot newShot = {
@@ -84,6 +83,7 @@ void handleShooting(Ship* ship, ShotObjectPool* pool) {
         };
 
         addNewShot(pool, newShot);
+        lastShot = GetTime() * 1000;
     }
 }
 
