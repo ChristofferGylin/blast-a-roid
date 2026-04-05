@@ -7,8 +7,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-AsteroidPool asteroidObjectPool = {0};
-DestroyedAsteroidPool destroyedAsteroidsObjectPool = {0};
+static AsteroidPool asteroidObjectPool = {0};
+static DestroyedAsteroidPool destroyedAsteroidsObjectPool = {0};
 
 void gameLoop(Player* player) {
    
