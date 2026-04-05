@@ -7,6 +7,7 @@
 #include "constants.h"
 #include "utils.h"
 #include "ship.h"
+#include "shooting.h"
 
 void addNewAsteroid(AsteroidPool* pool, Asteroid ast) {
     
@@ -50,7 +51,7 @@ void destroyAsteroid(DestroyedAsteroidPool* pool, AsteroidPoolObject* ast) {
     pool->activeCount++;
 }
 
-void handleAsteroidCollisions(AsteroidPool* pool, DestroyedAsteroidPool* destroyedPool, Ship* ship) {
+void handleAsteroidCollisions(AsteroidPool* pool, DestroyedAsteroidPool* destroyedPool, ShotObjectPool* shotPool, Ship* ship) {
 
     if (ship->destroyed) return; 
 
@@ -75,8 +76,14 @@ void handleAsteroidCollisions(AsteroidPool* pool, DestroyedAsteroidPool* destroy
         if (CheckCollisionCircles(ship->position, SHIP_SIZE / 2.0f, ast->position, asteroidRadius)) {
             ship->destroyed = true;
             destroyAsteroid(destroyedPool, &pool->asteroids[i]);
-            return;
-        } 
+        }
+
+        for (int i = 0; i < shotPool->activeCount; i++) {
+            if (CheckCollisionCircles(shotPool->shots[i].shot.position, SHOT_SIZE / 2.0f, ast->position, asteroidRadius)) {
+                destroyShot(&shotPool->shots[i]);
+                destroyAsteroid(destroyedPool, &pool->asteroids[i]);
+            }
+        }
     }
 }
 

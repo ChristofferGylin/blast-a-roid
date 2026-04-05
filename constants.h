@@ -8,5 +8,6 @@ static const int SHIP_SIZE = 32;
 static const int ASTEROID_SIZE_1 = 32;
 static const int ASTEROID_SIZE_2 = 24;
 static const int ASTEROID_SIZE_3 = 12;
+static const int SHOT_SIZE = 6;
 
 #endif
