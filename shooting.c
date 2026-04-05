@@ -34,3 +34,7 @@ void compactShotPool(ShotObjectPool* pool) {
 
     pool->activeCount = write;
 }
+
+void destroyShot(ShotPoolObject* shot) {
+    shot->shot.destroyed = true;
+}
