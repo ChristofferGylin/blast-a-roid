@@ -4,7 +4,7 @@
 #define MAX_SHOTS 1024
 
 typedef struct {    
-    Vector2 posistion;
+    Vector2 position;
     Vector2 direction;
     double destroyTime;
     bool destroyed;
