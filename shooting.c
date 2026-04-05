@@ -38,3 +38,34 @@ void compactShotPool(ShotObjectPool* pool) {
 void destroyShot(ShotPoolObject* shot) {
     shot->shot.destroyed = true;
 }
+
+void handleShotsMovement(ShotObjectPool* pool) {
+    int spriteWidth = 32;
+
+    for (int i = 0; i < pool->activeCount; i++) {
+        if (!pool->shots[i].active) continue;
+
+        Shot* shot = &pool->shots[i].shot;
+
+        if (shot->destroyed) continue;
+        
+        shot->position.x += GetFrameTime() * shot->direction.x;
+        shot->position.y += GetFrameTime() * shot->direction.y;
+
+        if (shot->position.x < 0.0f - spriteWidth)
+        {
+            shot->position.x = GetScreenWidth() + spriteWidth;
+        } else if (shot->position.x > GetScreenWidth() + spriteWidth)
+        {
+            shot->position.x = 0.0f - spriteWidth; 
+        }
+
+        if (shot->position.y < 0.0f - spriteWidth)
+        {
+            shot->position.y = GetScreenHeight() + spriteWidth;
+        } else if (shot->position.y > GetScreenHeight() + spriteWidth)
+        {
+            shot->position.y = 0.0f - spriteWidth; 
+        }
+    }
+}

@@ -26,5 +26,6 @@ typedef struct {
 void addNewShot(ShotObjectPool* pool, Shot shot);
 void compactShotPool(ShotObjectPool* pool);
 void destroyShot(ShotPoolObject* shot);
+void handleShotsMovement(ShotObjectPool* pool);
 
 #endif

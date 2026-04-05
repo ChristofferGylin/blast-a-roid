@@ -125,6 +125,7 @@ void handleAsteroidsMovement(AsteroidPool* pool) {
         }
     }
 }
+
 void handleDestroyedAsteroids(AsteroidPool* pool, DestroyedAsteroidPool* destroyedPool) {
     if (destroyedPool->activeCount == 0) return;
 
