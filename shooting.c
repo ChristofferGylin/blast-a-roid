@@ -34,7 +34,7 @@ void clearShots(ShotObjectPool* pool) {
             isChanged = true;
         }
 
-        if (pool->shots[i].shot.destroyTime >= GetTime() * 1000.0) {
+        if (GetTime() * 1000.0 >= pool->shots[i].shot.destroyTime) {
             pool->shots[i].active = false;
             isChanged = true;
         }
@@ -72,18 +72,18 @@ void handleShooting(Ship* ship, ShotObjectPool* pool) {
     if (ship->destroyed) return;
     if (pool->activeCount >= MAX_SHOTS) return;
 
-    if (IsKeyPressed(KEY_RIGHT_CONTROL) && GetTime() * 1000 > lastShot + SHOT_COOLDOWN_TIME) {
+    if (IsKeyPressed(KEY_RIGHT_CONTROL) && GetTime() * 1000.0 > lastShot + SHOT_COOLDOWN_TIME) {
         float radians = (ship->rotation - 90.0f) * (PI / 180.0f);
 
         Shot newShot = {
             ship->position,
             {cosf(radians) * SHOT_VELOCITY, sinf(radians) * SHOT_VELOCITY},
-            GetTime() + SHOT_LIFE_TIME,
+            (GetTime() * 1000.0) + SHOT_LIFE_TIME,
             false
         };
 
         addNewShot(pool, newShot);
-        lastShot = GetTime() * 1000;
+        lastShot = GetTime() * 1000.0;
     }
 }
 
