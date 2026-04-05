@@ -79,9 +79,9 @@ void handleAsteroidCollisions(AsteroidPool* pool, DestroyedAsteroidPool* destroy
             continue;
         }
 
-        for (int i = 0; i < shotPool->activeCount; i++) {
-            if (CheckCollisionCircles(shotPool->shots[i].shot.position, SHOT_SIZE / 2.0f, ast->position, asteroidRadius)) {
-                destroyShot(&shotPool->shots[i]);
+        for (int j = 0; j < shotPool->activeCount; j++) {
+            if (CheckCollisionCircles(shotPool->shots[j].shot.position, SHOT_SIZE / 2.0f, ast->position, asteroidRadius)) {
+                destroyShot(&shotPool->shots[j]);
                 destroyAsteroid(destroyedPool, &pool->asteroids[i]);
                 break;
             }
