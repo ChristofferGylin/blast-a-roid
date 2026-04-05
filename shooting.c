@@ -1,4 +1,5 @@
 #include "shooting.h"
+#include "constants.h"
 
 void addNewShot(ShotObjectPool* pool, Shot shot) {
     if (pool->activeCount >= MAX_SHOTS) {
@@ -90,5 +91,24 @@ void handleShotsMovement(ShotObjectPool* pool) {
         {
             shot->position.y = 0.0f - spriteWidth; 
         }
+    }
+}
+
+void renderShots(ShotObjectPool* pool, Texture2D* shotSprite) {
+    for (int i = 0; i < pool->activeCount; i++) {
+
+        if (!pool->shots[i].active) continue;
+        Shot* shot = &pool->shots[i].shot;
+
+        if (shot->destroyed) continue;
+
+        DrawTexturePro(
+            *shotSprite,
+            (Rectangle){0, 0, shotSprite->width, shotSprite->height},
+            (Rectangle){shot->position.x, shot->position.y, SHOT_SIZE, SHOT_SIZE},
+            (Vector2){shotSprite->width / 2.0f, shotSprite->height / 2.0f},
+            0,
+            WHITE  
+        );
     }
 }

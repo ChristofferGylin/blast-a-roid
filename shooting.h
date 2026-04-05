@@ -24,8 +24,10 @@ typedef struct {
 }ShotObjectPool;
 
 void addNewShot(ShotObjectPool* pool, Shot shot);
+void clearShots(ShotObjectPool* pool);
 void compactShotPool(ShotObjectPool* pool);
 void destroyShot(ShotPoolObject* shot);
 void handleShotsMovement(ShotObjectPool* pool);
+void renderShots(ShotObjectPool* pool, Texture2D* shotSprite);
 
 #endif
