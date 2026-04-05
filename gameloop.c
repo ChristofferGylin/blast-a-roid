@@ -6,15 +6,19 @@
 #include "constants.h"
 #include <stdio.h>
 #include <stdlib.h>
+#include "shooting.h"
 
 static AsteroidPool asteroidObjectPool = {0};
 static DestroyedAsteroidPool destroyedAsteroidsObjectPool = {0};
+static ShotObjectPool shotsObjectPool = {0};
 
 void gameLoop(Player* player) {
    
+    initShotObjectPool(&shotsObjectPool);
     initAsteroids(&asteroidObjectPool, player->level);
 
     Texture2D asteroidSprite = LoadTexture("./assets/asteroid.png");
+    Texture2D shotSprite = LoadTexture("./assets/shot.png");
     
     Ship ship;
     ship.sprite = LoadTexture("./assets/ship.png");
@@ -34,10 +38,13 @@ void gameLoop(Player* player) {
             }
         }
 
+        clearShots(&shotsObjectPool);
         handleShipMovement(&ship);
         handleAsteroidsMovement(&asteroidObjectPool);
-        handleAsteroidCollisions(&asteroidObjectPool, &destroyedAsteroidsObjectPool, &ship);
+        handleShotsMovement(&shotsObjectPool);
+        handleAsteroidCollisions(&asteroidObjectPool, &destroyedAsteroidsObjectPool, &shotsObjectPool, &ship);
         handleDestroyedAsteroids(&asteroidObjectPool, &destroyedAsteroidsObjectPool);
+        
 
         BeginDrawing();
             ClearBackground(BLACK);
