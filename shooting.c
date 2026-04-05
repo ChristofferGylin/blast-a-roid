@@ -16,6 +16,29 @@ void addNewShot(ShotObjectPool* pool, Shot shot) {
     pool->activeCount++;
 }
 
+void clearShots(ShotObjectPool* pool) {
+    
+    bool isChanged = false;
+    
+    for (int i = 0; i < pool->activeCount; i++) {
+        if (!pool->shots[i].active) continue;
+
+        if (pool->shots[i].shot.destroyed) {
+            pool->shots[i].active = false;
+            isChanged = true;
+        }
+
+        if (pool->shots[i].shot.destroyTime >= GetTime() * 1000.0) {
+            pool->shots[i].active = false;
+            isChanged = true;
+        }
+    }
+
+    if (isChanged) {
+        compactShotPool(pool);
+    }
+}
+
 void compactShotPool(ShotObjectPool* pool) {
     int write = 0;
 
