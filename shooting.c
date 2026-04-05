@@ -94,6 +94,14 @@ void handleShotsMovement(ShotObjectPool* pool) {
     }
 }
 
+void initShotObjectPool(ShotObjectPool* pool) {
+    for (int i = 0; i < MAX_SHOTS; i++) {
+        pool->shots->active = false;
+    }
+
+    pool->activeCount = 0;
+}
+
 void renderShots(ShotObjectPool* pool, Texture2D* shotSprite) {
     for (int i = 0; i < pool->activeCount; i++) {
 
