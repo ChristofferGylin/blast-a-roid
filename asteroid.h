@@ -21,11 +21,6 @@ typedef struct {
 }AsteroidPoolObject;
 
 typedef struct {
-    bool active;
-    Asteroid* asteroid; 
-}DestroyeAsteroidPoolObject;
-
-typedef struct {
     AsteroidPoolObject asteroids[MAX_ASTEROIDS];
     int activeCount;
 }AsteroidPool;
