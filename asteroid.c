@@ -8,6 +8,7 @@
 #include "utils.h"
 #include "ship.h"
 #include "shooting.h"
+#include "player.h"
 
 void addNewAsteroid(AsteroidPool* pool, Asteroid ast) {
     
@@ -51,7 +52,7 @@ void destroyAsteroid(DestroyedAsteroidPool* pool, AsteroidPoolObject* ast) {
     pool->activeCount++;
 }
 
-void handleAsteroidCollisions(AsteroidPool* pool, DestroyedAsteroidPool* destroyedPool, ShotObjectPool* shotPool, Ship* ship) {
+void handleAsteroidCollisions(AsteroidPool* pool, DestroyedAsteroidPool* destroyedPool, ShotObjectPool* shotPool, Ship* ship, Player* player) {
 
     if (ship->destroyed) return; 
 
