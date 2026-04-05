@@ -23,4 +23,6 @@ typedef struct {
     int activeCount;
 }ShotObjectPool;
 
+void addNewShot(ShotObjectPool* pool, Shot shot);
+
 #endif
