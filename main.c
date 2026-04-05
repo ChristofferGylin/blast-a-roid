@@ -8,7 +8,6 @@ int main(){
     int windowHeight = 720;
 
     InitWindow(windowWidth, windowHeight, "Blast-A-Roid");
-    ToggleFullscreen();
     InitAudioDevice();
     SetTargetFPS(144);
     SetRandomSeed(time(NULL));
