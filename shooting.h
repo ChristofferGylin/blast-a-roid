@@ -24,5 +24,6 @@ typedef struct {
 }ShotObjectPool;
 
 void addNewShot(ShotObjectPool* pool, Shot shot);
+void compactShotPool(ShotObjectPool* pool);
 
 #endif
