@@ -23,4 +23,6 @@ typedef struct {
     Powerups powerups;
 }Player;
 
+void addScore(Player* player, Asteroid* ast);
+
 #endif
