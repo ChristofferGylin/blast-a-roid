@@ -7,3 +7,16 @@ void addScore(Player* player, Asteroid* ast) {
     player->score += score;
     player->levelBonus += score * player->timeBonusMultiplier;
 }
+
+void initPlayer(Player* player) {
+    Powerups initPowerups = {false, false, false, false, 1};
+    
+    player->bombs = 2;
+    player->level = 1;
+    player->levelBonus = 2000;
+    player->lives = 2;
+    player->powerups = initPowerups;
+    player->score = 0;
+    player->shieldPower = 50;
+    player->timeBonusMultiplier = 1;
+}

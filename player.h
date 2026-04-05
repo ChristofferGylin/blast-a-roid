@@ -24,5 +24,6 @@ typedef struct {
 }Player;
 
 void addScore(Player* player, Asteroid* ast);
+void initPlayer(Player* player);
 
 #endif
