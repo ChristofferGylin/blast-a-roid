@@ -1,3 +1,6 @@
+#ifndef SHOOTING_H
+#define SHOOTING_H
+
 #include "raylib.h"
 #include <stdbool.h>
 
@@ -19,3 +22,5 @@ typedef struct {
     ShotPoolObject shots[MAX_SHOTS];
     int activeCount;
 }ShotObjectPool;
+
+#endif
