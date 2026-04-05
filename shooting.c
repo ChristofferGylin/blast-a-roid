@@ -78,7 +78,7 @@ void handleShooting(Ship* ship, ShotObjectPool* pool) {
 
         Shot newShot = {
             ship->position,
-            {cosf(radians), sinf(radians)},
+            {cosf(radians) * SHOT_VELOCITY, sinf(radians) * SHOT_VELOCITY},
             GetTime() + SHOT_LIFE_TIME,
             false
         };

@@ -11,5 +11,6 @@ static const int ASTEROID_SIZE_3 = 12;
 static const int SHOT_SIZE = 6;
 static const int SHOT_COOLDOWN_TIME = 200;
 static const int SHOT_LIFE_TIME = 3000;
+static const int SHOT_VELOCITY = 600;
 
 #endif
