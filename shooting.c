@@ -1,5 +1,10 @@
 #include "shooting.h"
 #include "constants.h"
+#include "ship.h"
+#include <math.h>
+#include <stdio.h>
+
+double lastShot = 0;
 
 void addNewShot(ShotObjectPool* pool, Shot shot) {
     if (pool->activeCount >= MAX_SHOTS) {
@@ -61,6 +66,25 @@ void compactShotPool(ShotObjectPool* pool) {
 
 void destroyShot(ShotPoolObject* shot) {
     shot->shot.destroyed = true;
+}
+
+void handleShooting(Ship* ship, ShotObjectPool* pool) {
+    if (ship->destroyed) return;
+    if (pool->activeCount >= MAX_SHOTS) return;
+
+    if (IsKeyPressed(KEY_RIGHT_CONTROL) && GetTime() * 1000 > lastShot + SHOT_COOLDOWN_TIME) {
+        printf("Pew\n");
+        float radians = (ship->rotation - 90.0f) * (PI / 180.0f);
+
+        Shot newShot = {
+            ship->position,
+            {cosf(radians), sinf(radians)},
+            GetTime() + SHOT_LIFE_TIME,
+            false
+        };
+
+        addNewShot(pool, newShot);
+    }
 }
 
 void handleShotsMovement(ShotObjectPool* pool) {

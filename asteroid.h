@@ -4,6 +4,7 @@
 
 #include "raylib.h"
 #include "ship.h"
+#include "shooting.h"
 #include <stdbool.h>
 
 typedef struct {

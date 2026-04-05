@@ -39,6 +39,7 @@ void gameLoop(Player* player) {
         }
 
         clearShots(&shotsObjectPool);
+        handleShooting(&ship, &shotsObjectPool);
         handleShipMovement(&ship);
         handleAsteroidsMovement(&asteroidObjectPool);
         handleShotsMovement(&shotsObjectPool);
@@ -57,6 +58,7 @@ void gameLoop(Player* player) {
                 WHITE
             );
             renderAsteroids(&asteroidObjectPool, &asteroidSprite);
+            renderShots(&shotsObjectPool, &shotSprite);
             
         EndDrawing();
     }

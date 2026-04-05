@@ -2,6 +2,7 @@
 #define SHOOTING_H
 
 #include "raylib.h"
+#include "ship.h"
 #include <stdbool.h>
 
 #define MAX_SHOTS 1024
@@ -27,6 +28,7 @@ void addNewShot(ShotObjectPool* pool, Shot shot);
 void clearShots(ShotObjectPool* pool);
 void compactShotPool(ShotObjectPool* pool);
 void destroyShot(ShotPoolObject* shot);
+void handleShooting(Ship* ship, ShotObjectPool* pool);
 void handleShotsMovement(ShotObjectPool* pool);
 void initShotObjectPool(ShotObjectPool* pool);
 void renderShots(ShotObjectPool* pool, Texture2D* shotSprite);
