@@ -9,6 +9,7 @@ typedef struct {
     bool longShot;
     bool trippleShot;
     bool lock;
+    int levelBonusMultiplier;
 }Powerups;
 
 typedef struct {
@@ -16,6 +17,7 @@ typedef struct {
     int level;
     uint64_t score;
     uint64_t levelBonus;
+    int timeBonusMultiplier;
     int bombs;
     float shieldPower;
     Powerups powerups;

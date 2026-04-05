@@ -13,7 +13,7 @@ int main(){
     SetRandomSeed(time(NULL));
 
     Player player = {
-        2, 1, 0, 0, 2, 50, {0}
+        2, 1, 0, 0, 0, 2, 50, {0}
     };
 
     gameLoop(&player);
