@@ -6,7 +6,7 @@
 #include "ship.h"
 #include "shooting.h"
 #include <stdbool.h>
-#include "player.h"
+typedef struct Player Player;
 
 typedef struct {
     int level;

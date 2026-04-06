@@ -3,6 +3,7 @@
 
 #include <stdbool.h>
 #include <stdint.h>
+#include "asteroid.h"
 
 typedef struct {
     bool fullAuto;
@@ -12,7 +13,7 @@ typedef struct {
     int levelBonusMultiplier;
 }Powerups;
 
-typedef struct {
+typedef struct Player {
     int lives;
     int level;
     uint64_t score;
