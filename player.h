@@ -19,6 +19,7 @@ typedef struct Player {
     uint64_t score;
     uint64_t levelBonus;
     int timeBonusMultiplier;
+    double timeBonusTimer;
     int bombs;
     float shieldPower;
     Powerups powerups;
