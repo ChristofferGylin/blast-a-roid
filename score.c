@@ -25,6 +25,23 @@ void resetTimeBonusMultiplier(Player* player) {
     }
 }
 
+void updateLevelBonus(Player* player) {
+
+    if (player->levelBonus == 0) return;
+
+    if (GetTime() >= player->levelBonusTimer + 1) {
+        uint64_t newBonus = player->levelBonus - 10;
+
+        if (newBonus < 0) {
+            player->levelBonus = 0;
+        } else {
+            player->levelBonus = newBonus;
+        }
+
+        player->levelBonusTimer = GetTime();
+    }
+}
+
 void updateTimeBonusMultiplier(Player* player) {
     player->timeBonusTimer = GetTime() * 1000.0;
 
@@ -32,3 +49,4 @@ void updateTimeBonusMultiplier(Player* player) {
         player->timeBonusMultiplier++;
     }
 }
+

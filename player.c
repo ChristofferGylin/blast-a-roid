@@ -3,6 +3,7 @@
 #include "constants.h"
 #include <stdio.h>
 #include <inttypes.h>
+#include "raylib.h"
 
 void initPlayer(Player* player) {
     Powerups initPowerups = {false, false, false, false, 1};
@@ -10,6 +11,7 @@ void initPlayer(Player* player) {
     player->bombs = 2;
     player->level = 1;
     player->levelBonus = 2000;
+    player->levelBonusTimer = GetTime();
     player->lives = 2;
     player->powerups = initPowerups;
     player->score = 0;
