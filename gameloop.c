@@ -8,6 +8,7 @@
 #include <stdlib.h>
 #include "shooting.h"
 #include "score.h"
+#include "sidebars.h"
 
 static AsteroidPool asteroidObjectPool = {0};
 static DestroyedAsteroidPool destroyedAsteroidsObjectPool = {0};
@@ -62,9 +63,12 @@ void gameLoop(Player* player) {
             );
             renderAsteroids(&asteroidObjectPool, &asteroidSprite);
             renderShots(&shotsObjectPool, &shotSprite);
+            renderSidebars(player);
             
         EndDrawing();
     }
 
+    UnloadTexture(asteroidSprite);
     UnloadTexture(ship.sprite);
+    UnloadTexture(shotSprite);
 }
