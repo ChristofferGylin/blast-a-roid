@@ -1,13 +1,11 @@
 #include "raylib.h"
 #include "gameloop.h"
 #include <time.h>
+#include "constants.h"
 
 int main(){
 
-    int windowWidth = 1280;
-    int windowHeight = 720;
-
-    InitWindow(windowWidth, windowHeight, "Blast-A-Roid");
+    InitWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "Blast-A-Roid");
     InitAudioDevice();
     SetTargetFPS(144);
     SetRandomSeed(time(NULL));
