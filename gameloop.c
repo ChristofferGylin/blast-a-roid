@@ -41,7 +41,7 @@ void gameLoop(Player* player) {
             }
         }
         
-        updateTimeBonusMultiplier(player, &timeBonusTimer);
+        resetTimeBonusMultiplier(player, &timeBonusTimer);
         clearShots(&shotsObjectPool);
         handleShooting(&ship, &shotsObjectPool);
         handleShipMovement(&ship);

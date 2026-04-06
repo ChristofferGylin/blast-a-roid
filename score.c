@@ -13,7 +13,7 @@ void addScore(Player* player, Asteroid* ast) {
     printf("Time Bonus Multiplier: %d\n", player->timeBonusMultiplier);
 }
 
-void updateTimeBonusMultiplier(Player* player, double* timer) {
+void resetTimeBonusMultiplier(Player* player, double* timer) {
     if (timer == 0) return;
 
     if ((GetTime() * 1000) >= *timer + TIME_BONUS_LIMIT) {
