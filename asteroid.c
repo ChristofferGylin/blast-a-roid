@@ -10,6 +10,7 @@
 #include "shooting.h"
 #include "player.h"
 #include "score.h"
+#include "outOfBoundsCheck.h"
 
 void addNewAsteroid(AsteroidPool* pool, Asteroid ast) {
     
@@ -53,6 +54,21 @@ void destroyAsteroid(DestroyedAsteroidPool* pool, AsteroidPoolObject* ast) {
     pool->activeCount++;
 }
 
+int getAsteroidSize(int level) {
+    
+    int size = 0;
+    
+    switch (level)
+    {
+        case 1: size = ASTEROID_SIZE_1; break;
+        case 2: size = ASTEROID_SIZE_2; break;
+        case 3: size = ASTEROID_SIZE_3; break;
+        default: printf("Error: Invalid asteroid level (%d) in getAsteroidSize\n", level);
+    }
+
+    return size;
+}
+
 void handleAsteroidCollisions(AsteroidPool* pool, DestroyedAsteroidPool* destroyedPool, ShotObjectPool* shotPool, Ship* ship, Player* player) {
 
     if (ship->destroyed) return; 
@@ -65,15 +81,7 @@ void handleAsteroidCollisions(AsteroidPool* pool, DestroyedAsteroidPool* destroy
 
         if (ast->destroyed) continue;
 
-        float asteroidRadius = 0.0f;
-
-        switch (ast->level)
-        {
-        case 1: asteroidRadius = ASTEROID_SIZE_1 / 2.0f; break;
-        case 2: asteroidRadius = ASTEROID_SIZE_2 / 2.0f; break;
-        case 3: asteroidRadius = ASTEROID_SIZE_3 / 2.0f; break;
-        default: printf("Error: Invalid asteroid level (%d) in handleAsteroidCollisions\n", ast->level);
-        }
+        float asteroidRadius = getAsteroidSize(ast->level) / 2.0f;
 
         if (CheckCollisionCircles(ship->position, SHIP_SIZE / 2.0f, ast->position, asteroidRadius)) {
             ship->destroyed = true;
@@ -113,21 +121,9 @@ void handleAsteroidsMovement(AsteroidPool* pool) {
         ast->position.x += GetFrameTime() * ast->velocity.x;
         ast->position.y += GetFrameTime() * ast->velocity.y;
 
-        if (ast->position.x < 0.0f - spriteWidth)
-        {
-            ast->position.x = GetScreenWidth() + spriteWidth;
-        } else if (ast->position.x > GetScreenWidth() + spriteWidth)
-        {
-            ast->position.x = 0.0f - spriteWidth; 
-        }
+        int asteroidSize = getAsteroidSize(ast->level);
 
-        if (ast->position.y < 0.0f - spriteWidth)
-        {
-            ast->position.y = GetScreenHeight() + spriteWidth;
-        } else if (ast->position.y > GetScreenHeight() + spriteWidth)
-        {
-            ast->position.y = 0.0f - spriteWidth; 
-        }
+        outOfBoundsCheck(&ast->position, asteroidSize);
     }
 }
 
