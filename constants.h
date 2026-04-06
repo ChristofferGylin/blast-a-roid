@@ -16,5 +16,10 @@ static const int SHOT_COOLDOWN_TIME = 140;
 static const int SHOT_LIFE_TIME = 800;
 static const int SHOT_VELOCITY = 600;
 static const int TIME_BONUS_LIMIT = 1000;
+static const int SCREEN_WIDTH = 1280;
+static const int SCREEN_HEIGHT = 720;
+static const int ACTIVE_SCREEN_WIDTH = 960;
+static const int ACTIVE_SCREEN_HEIGHT = 720;
+static const int SIDEBAR_WIDTH = 160;
 
 #endif
