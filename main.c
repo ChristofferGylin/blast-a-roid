@@ -12,9 +12,8 @@ int main(){
     SetTargetFPS(144);
     SetRandomSeed(time(NULL));
 
-    Player player = {
-        2, 1, 0, 0, 2, 50, {0}
-    };
+    Player player = {0};
+    initPlayer(&player);
 
     gameLoop(&player);
 
