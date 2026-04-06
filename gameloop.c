@@ -68,5 +68,7 @@ void gameLoop(Player* player) {
         EndDrawing();
     }
 
+    UnloadTexture(asteroidSprite);
     UnloadTexture(ship.sprite);
+    UnloadTexture(shotSprite);
 }
