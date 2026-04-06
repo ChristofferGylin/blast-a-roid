@@ -24,6 +24,8 @@ void gameLoop(Player* player) {
     ship.sprite = LoadTexture("./assets/ship.png");
     resetShip(&ship);
 
+    double timeBonusTimer = GetTime() * 1000;
+
     while(!WindowShouldClose())
     {
 

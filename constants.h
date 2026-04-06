@@ -15,5 +15,6 @@ static const int SHOT_SIZE = 6;
 static const int SHOT_COOLDOWN_TIME = 140;
 static const int SHOT_LIFE_TIME = 800;
 static const int SHOT_VELOCITY = 600;
+static const int TIME_BONUS_LIMIT = 1000;
 
 #endif

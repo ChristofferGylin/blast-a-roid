@@ -8,7 +8,7 @@
 #include <stdbool.h>
 typedef struct Player Player;
 
-typedef struct {
+typedef struct Asteroid {
     int level;
     float rotation;
     float rotationSpeed;

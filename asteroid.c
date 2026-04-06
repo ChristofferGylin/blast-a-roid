@@ -9,6 +9,7 @@
 #include "ship.h"
 #include "shooting.h"
 #include "player.h"
+#include "score.h"
 
 void addNewAsteroid(AsteroidPool* pool, Asteroid ast) {
     
