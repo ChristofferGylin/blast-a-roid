@@ -1,19 +1,20 @@
 #include "raylib.h"
+#include "constants.h"
 
 void outOfBoundsCheck(Vector2* position, int size) {
-    if (position->x < 0.0f - size)
+    if (position->x < SIDEBAR_WIDTH - size / 2)
     {
-        position->x = GetScreenWidth() + size;
-    } else if (position->x > GetScreenWidth() + size)
+        position->x = SCREEN_WIDTH - SIDEBAR_WIDTH + size / 2;
+    } else if (position->x > SCREEN_WIDTH - SIDEBAR_WIDTH + size / 2)
     {
-        position->x = 0.0f - size; 
+        position->x = SIDEBAR_WIDTH - size / 2; 
     }
 
-    if (position->y < 0.0f - size)
+    if (position->y < 0.0f - size / 2)
     {
-        position->y = GetScreenHeight() + size;
-    } else if (position->y > GetScreenHeight() + size)
+        position->y = SCREEN_HEIGHT + size / 2;
+    } else if (position->y > SCREEN_HEIGHT + size / 2)
     {
-        position->y = 0.0f - size; 
+        position->y = 0.0f - size / 2; 
     }
 }

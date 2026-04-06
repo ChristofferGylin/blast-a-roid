@@ -2,6 +2,7 @@
 #include "ship.h"
 #include "constants.h"
 #include <math.h>
+#include "outOfBoundsCheck.h"
 
 
 void handleShipMovement(Ship *ship) 
@@ -53,19 +54,5 @@ void handleShipMovement(Ship *ship)
     ship->position.x += GetFrameTime() * ship->velocity.x;
     ship->position.y += GetFrameTime() * ship->velocity.y;
 
-    if (ship->position.x < 0.0f - ship->sprite.width)
-    {
-        ship->position.x = GetScreenWidth() + ship->sprite.width;
-    } else if (ship->position.x > GetScreenWidth() + ship->sprite.width)
-    {
-        ship->position.x = 0.0f - ship->sprite.width; 
-    }
-
-    if (ship->position.y < 0.0f - ship->sprite.height)
-    {
-        ship->position.y = GetScreenHeight() + ship->sprite.height;
-    } else if (ship->position.y > GetScreenHeight() + ship->sprite.height)
-    {
-        ship->position.y = 0.0f - ship->sprite.height; 
-    }
+    outOfBoundsCheck(&ship->position, SHIP_SIZE);
 }
