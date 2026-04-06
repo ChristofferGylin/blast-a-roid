@@ -7,6 +7,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "shooting.h"
+#include "score.h"
 
 static AsteroidPool asteroidObjectPool = {0};
 static DestroyedAsteroidPool destroyedAsteroidsObjectPool = {0};
@@ -39,7 +40,8 @@ void gameLoop(Player* player) {
                 resetAllAsteroids(&asteroidObjectPool);
             }
         }
-
+        
+        updateTimeBonusMultiplier(player, &timeBonusTimer);
         clearShots(&shotsObjectPool);
         handleShooting(&ship, &shotsObjectPool);
         handleShipMovement(&ship);

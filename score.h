@@ -7,4 +7,6 @@
 
 void addScore(Player* player, Asteroid* ast);
 
+void updateTimeBonusMultiplier(Player* player, double* timer);
+
 #endif
