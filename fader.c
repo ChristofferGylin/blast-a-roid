@@ -22,6 +22,7 @@ bool fader(bool fadeIn) {
 
         if (fadeValue < 0.0f) {
             fadeValue = 0.0f;
+            isComplete = true;
         }
     } else {
         if (fadeValue == 0.0f) {
