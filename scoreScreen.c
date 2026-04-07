@@ -60,7 +60,7 @@ void scoreScreen(Player* player) {
     bool exit = false;
     float lastUpdate = GetTime();
     const int WAIT_TIME = 5;
-    const float UPDATE_WAIT_TIME = 0.003f;
+    const float UPDATE_WAIT_TIME = 0.1f;
     double timer = GetTime();
 
     char text[] = "GAME OVER";
@@ -80,8 +80,18 @@ void scoreScreen(Player* player) {
 
              if ((currentTime >= lastUpdate + UPDATE_WAIT_TIME) && bonus > 0) {
                 lastUpdate = currentTime;
-                bonus--;
-                score++;
+
+                if (bonus > 100) {
+                    bonus -= 100;
+                    score += 100;
+                } else  if (bonus > 10) {
+                    bonus -= 10;
+                    score += 10;
+                } else {
+                    bonus--;
+                    score++;
+                }
+                
              }
 
              if (bonus <= 0) {
