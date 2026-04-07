@@ -9,6 +9,8 @@
 #include "shooting.h"
 #include "score.h"
 #include "sidebars.h"
+#include <stdbool.h>
+#include "fader.h"
 
 static AsteroidPool asteroidObjectPool = {0};
 static DestroyedAsteroidPool destroyedAsteroidsObjectPool = {0};
@@ -18,6 +20,9 @@ void gameLoop(Player* player) {
    
     initShotObjectPool(&shotsObjectPool);
     initAsteroids(&asteroidObjectPool, player->level);
+
+    bool fadeIn = true;
+    bool fadeComplete = false;
 
     Texture2D asteroidSprite = LoadTexture("./assets/asteroid.png");
     Texture2D shotSprite = LoadTexture("./assets/shot.png");
@@ -33,24 +38,26 @@ void gameLoop(Player* player) {
             player->lives--;
 
             if (player->lives < 0) {
-                // game over
+                fadeComplete = false;
+                fadeIn = false;
             } else {
                 resetShip(&ship);
                 resetAllAsteroids(&asteroidObjectPool);
             }
         }
-        
-        resetTimeBonusMultiplier(player);
-        updateLevelBonus(player);
-        clearShots(&shotsObjectPool);
-        handleShooting(&ship, &shotsObjectPool);
-        handleShipMovement(&ship);
-        handleAsteroidsMovement(&asteroidObjectPool);
-        handleShotsMovement(&shotsObjectPool);
-        handleAsteroidCollisions(&asteroidObjectPool, &destroyedAsteroidsObjectPool, &shotsObjectPool, &ship, player);
-        handleDestroyedAsteroids(&asteroidObjectPool, &destroyedAsteroidsObjectPool);
-        
 
+        if (fadeComplete) {
+            resetTimeBonusMultiplier(player);
+            updateLevelBonus(player);
+            clearShots(&shotsObjectPool);
+            handleShooting(&ship, &shotsObjectPool);
+            handleShipMovement(&ship);
+            handleAsteroidsMovement(&asteroidObjectPool);
+            handleShotsMovement(&shotsObjectPool);
+            handleAsteroidCollisions(&asteroidObjectPool, &destroyedAsteroidsObjectPool, &shotsObjectPool, &ship, player);
+            handleDestroyedAsteroids(&asteroidObjectPool, &destroyedAsteroidsObjectPool);
+        }
+        
         BeginDrawing();
             ClearBackground(BLACK);
             DrawTexturePro(
@@ -64,8 +71,11 @@ void gameLoop(Player* player) {
             renderAsteroids(&asteroidObjectPool, &asteroidSprite);
             renderShots(&shotsObjectPool, &shotSprite);
             renderSidebars(player);
+            fadeComplete = fader(fadeIn);
             
         EndDrawing();
+
+        if (fadeComplete && player->lives < 0) break;
     }
 
     UnloadTexture(asteroidSprite);
