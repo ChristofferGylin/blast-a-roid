@@ -38,7 +38,7 @@ int renderScoreLine(uint64_t value, char title[], int startY) {
     float underLineEndX = titlePosition.x + (titleSize.x / 2);
 
     DrawTextPro(GetFontDefault(), title, titlePosition, origin, 0, fontSize, fontSpacing, RAYWHITE);
-    DrawLine(underLineStartX, underlineY, underLineEndX, underlineY, RAYWHITE);
+    DrawLine(titlePosition.x, underlineY, valuePosition.x + valueSize.x, underlineY, RAYWHITE);
     DrawTextPro(GetFontDefault(), valueText, valuePosition, origin, 0, fontSize, fontSpacing, RAYWHITE);
 
     return valuePosition.y + valueSize.y;
@@ -49,13 +49,18 @@ void scoreScreen(Player* player) {
     uint64_t bonus = player->levelBonus;
     uint64_t score = player->score;
 
+    player->score += bonus;
+    player->level++;
+    player->timeBonusMultiplier = 1;
+    player->powerups.levelBonusMultiplier = 1;
+
     bool fadeIn = true;
     bool fadeComplete = false;
     bool waiting = false;
     bool exit = false;
-    float lastUpdate = GetFrameTime();
+    float lastUpdate = GetTime();
     const int WAIT_TIME = 5;
-    const float UPDATE_WAIT_TIME = 0.3f;
+    const float UPDATE_WAIT_TIME = 0.003f;
     double timer = GetTime();
 
     char text[] = "GAME OVER";
@@ -70,10 +75,11 @@ void scoreScreen(Player* player) {
         int yOffset = SCREEN_HEIGHT / 2;
 
         if (fadeComplete && fadeIn && !waiting) {
-            float frameTime = GetFrameTime();
+            
+            float currentTime = GetTime();
 
-             if (frameTime >= lastUpdate + UPDATE_WAIT_TIME && bonus > 0) {
-                lastUpdate = frameTime;
+             if ((currentTime >= lastUpdate + UPDATE_WAIT_TIME) && bonus > 0) {
+                lastUpdate = currentTime;
                 bonus--;
                 score++;
              }
@@ -92,14 +98,15 @@ void scoreScreen(Player* player) {
             }
             
         } else if (fadeComplete && !fadeIn) {
+            printf("fadeComplete && !fadeIn\n");
             exit = true;
         }
 
         BeginDrawing();
             ClearBackground(BLACK);
-            yOffset = renderScoreLine(player->levelBonus, "BONUS:", yOffset);
-            yOffset = renderScoreLine(player->score, "SCORE:", yOffset);
-            fadeComplete = fader(fadeIn);            
+            yOffset = renderScoreLine(bonus, "BONUS:", yOffset);
+            yOffset = renderScoreLine(score, "SCORE:", yOffset);
+            fadeComplete = fader(fadeIn);
         EndDrawing();
 
         if (exit) break;

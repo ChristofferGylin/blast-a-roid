@@ -17,6 +17,8 @@ static DestroyedAsteroidPool destroyedAsteroidsObjectPool = {0};
 static ShotObjectPool shotsObjectPool = {0};
 
 void gameLoop(Player* player) {
+
+    player->levelBonus = (player->level + 1) * 1000;
    
     initShotObjectPool(&shotsObjectPool);
     initAsteroids(&asteroidObjectPool, player->level);
@@ -31,7 +33,7 @@ void gameLoop(Player* player) {
     ship.sprite = LoadTexture("./assets/ship.png");
     resetShip(&ship);
 
-    while(!WindowShouldClose())
+    while(true)
     {
 
         if (ship.destroyed) {
@@ -75,7 +77,7 @@ void gameLoop(Player* player) {
             
         EndDrawing();
 
-        if (fadeComplete && player->lives < 0) break;
+        if (fadeComplete && player->lives < 0 || asteroidObjectPool.activeCount == 0) break;
     }
 
     UnloadTexture(asteroidSprite);

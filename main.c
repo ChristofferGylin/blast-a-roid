@@ -1,6 +1,7 @@
 #include "raylib.h"
 #include "gameloop.h"
 #include "gameOver.h"
+#include "scoreScreen.h"
 #include <time.h>
 #include "constants.h"
 
@@ -10,12 +11,22 @@ int main(){
     InitAudioDevice();
     SetTargetFPS(144);
     SetRandomSeed(time(NULL));
-
     Player player = {0};
-    initPlayer(&player);
+    
+    
 
-    gameLoop(&player);
-    gameOver(&player);
+        initPlayer(&player);
+
+        while (player.lives >= 0) {
+            gameLoop(&player);
+
+            if (player.lives < 0) {
+                gameOver(&player);
+            } else {
+                scoreScreen(&player);
+            }
+        }
+    
 
     CloseAudioDevice();
     CloseWindow();
