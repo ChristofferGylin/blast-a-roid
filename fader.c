@@ -3,13 +3,16 @@
 #include "utils.h"
 #include "constants.h"
 
-double timer = 0.0;
 const int FADE_TIME = 1;
+double timer = 0.0;
 float fadeValue = 1.0f;
 
-void fader(bool fadeIn) {
+bool fader(bool fadeIn) {
+    
+    bool isComplete = false;
+    
     if (fadeIn) {
-        if (fadeValue == 0.0f) return;
+        if (fadeValue == 0.0f) return true;
         if (fadeValue == 1.0f) {
             timer = GetTime();
         }
@@ -24,8 +27,13 @@ void fader(bool fadeIn) {
             timer = GetTime();
         }
 
-        fadeValue = scaleFloat(timer, timer + FADE_TIME, 1.0f, 0.0f, GetTime()); 
+        fadeValue = scaleFloat(timer, timer + FADE_TIME, 1.0f, 0.0f, GetTime());
+        if (fadeValue >= 1.0f) {
+            fadeValue = 1.0f;
+            isComplete = true;
+        }
     }
 
     DrawRectangle(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, Fade(BLACK, fadeValue));
+    return isComplete;
 }
