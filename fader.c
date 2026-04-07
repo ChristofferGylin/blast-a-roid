@@ -2,6 +2,7 @@
 #include "raylib.h"
 #include "utils.h"
 #include "constants.h"
+#include "fader.h"
 
 const int FADE_TIME = 1;
 double timer = 0.0;
