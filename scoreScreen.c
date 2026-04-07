@@ -7,13 +7,15 @@
 #include "constants.h"
 #include <inttypes.h>
 
-int renderScoreLine(uint64_t value, char title[], int startY) {
+int numberPrinted = 0;
+
+int renderScoreLine(uint64_t value, char title[], int startY, bool hasUnderline) {
     
     int sideOffset = 20;
-    int fontSize = 22;
-    int fontSpacing = 4;
-    int gap = 100;
-    int underlineGap = 2;
+    int fontSize = 32;
+    int fontSpacing = 6;
+    int gap = 200;
+    int underlineGap = 10;
 
     char valueText[32];
     snprintf(valueText, sizeof(valueText), "%" PRIu64, value);
@@ -27,19 +29,31 @@ int renderScoreLine(uint64_t value, char title[], int startY) {
     };
 
     Vector2 titlePosition = {
-        (SCREEN_WIDTH / 2) - titleSize.x,
+        (SCREEN_WIDTH / 2) - gap,
         startY
     };
 
+    if (numberPrinted < 2) {
+        numberPrinted++;
+        printf("Number %d top: %0f\n", numberPrinted, valuePosition.y);
+        printf("Number %d bottom: %0f\n", numberPrinted, valuePosition.y + valueSize.y);
+    }
+
+
+
     Vector2 origin = {0, 0};
 
-    float underlineY = titlePosition.y + titleSize.y + underlineGap;
-    float underLineStartX = titlePosition.x - (titleSize.x / 2);
-    float underLineEndX = titlePosition.x + (titleSize.x / 2);
-
     DrawTextPro(GetFontDefault(), title, titlePosition, origin, 0, fontSize, fontSpacing, RAYWHITE);
-    DrawLine(titlePosition.x, underlineY, valuePosition.x + valueSize.x, underlineY, RAYWHITE);
     DrawTextPro(GetFontDefault(), valueText, valuePosition, origin, 0, fontSize, fontSpacing, RAYWHITE);
+
+    if (hasUnderline) {
+        float underlineY = titlePosition.y + titleSize.y + underlineGap;
+        float underLineStartX = titlePosition.x - (titleSize.x / 2);
+        float underLineEndX = titlePosition.x + (titleSize.x / 2);
+        DrawLine(titlePosition.x, underlineY, valuePosition.x + valueSize.x, underlineY, RAYWHITE);
+
+        return underlineY;
+    }
 
     return valuePosition.y + valueSize.y;
 }
@@ -59,8 +73,10 @@ void scoreScreen(Player* player) {
     bool waiting = false;
     bool exit = false;
     float lastUpdate = GetTime();
-    const int WAIT_TIME = 5;
+    const int WAIT_TIME = 3;
     const float UPDATE_WAIT_TIME = 0.1f;
+    const int GAP = 10;
+    const int TEXT_BLOCK_HEIGHT = 84;
     double timer = GetTime();
 
     char text[] = "GAME OVER";
@@ -72,7 +88,7 @@ void scoreScreen(Player* player) {
     Vector2 textOrigin = {textSize.x / 2, textSize.y / 2}; 
     while(!WindowShouldClose())
     {
-        int yOffset = SCREEN_HEIGHT / 2;
+        int yOffset = (SCREEN_HEIGHT / 2) - (TEXT_BLOCK_HEIGHT / 2);
 
         if (fadeComplete && fadeIn && !waiting) {
             
@@ -80,8 +96,17 @@ void scoreScreen(Player* player) {
 
              if ((currentTime >= lastUpdate + UPDATE_WAIT_TIME) && bonus > 0) {
                 lastUpdate = currentTime;
-
-                if (bonus > 100) {
+                
+                if (bonus > 100000) {
+                    bonus -= 100000;
+                    score += 100000;
+                } else if (bonus > 10000) {
+                    bonus -= 10000;
+                    score += 10000;
+                } else if (bonus > 1000) {
+                    bonus -= 1000;
+                    score += 1000;
+                } else if (bonus > 100) {
                     bonus -= 100;
                     score += 100;
                 } else  if (bonus > 10) {
@@ -108,14 +133,14 @@ void scoreScreen(Player* player) {
             }
             
         } else if (fadeComplete && !fadeIn) {
-            printf("fadeComplete && !fadeIn\n");
             exit = true;
         }
 
         BeginDrawing();
             ClearBackground(BLACK);
-            yOffset = renderScoreLine(bonus, "BONUS:", yOffset);
-            yOffset = renderScoreLine(score, "SCORE:", yOffset);
+            yOffset = renderScoreLine(bonus, "BONUS:", yOffset, true);
+            yOffset = yOffset + GAP;
+            yOffset = renderScoreLine(score, "SCORE:", yOffset, false);
             fadeComplete = fader(fadeIn);
         EndDrawing();
 
