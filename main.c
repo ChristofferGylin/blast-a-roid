@@ -1,5 +1,6 @@
 #include "raylib.h"
 #include "gameloop.h"
+#include "gameOver.h"
 #include <time.h>
 #include "constants.h"
 
@@ -14,6 +15,7 @@ int main(){
     initPlayer(&player);
 
     gameLoop(&player);
+    gameOver(&player);
 
     CloseAudioDevice();
     CloseWindow();
