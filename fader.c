@@ -20,7 +20,7 @@ bool fader(bool fadeIn) {
 
         fadeValue = scaleFloat(timer, timer + FADE_TIME, 1.0f, 0.0f, GetTime());
 
-        if (fadeValue < 0.0f) {
+        if (fadeValue <= 0.0f) {
             fadeValue = 0.0f;
             isComplete = true;
         }
