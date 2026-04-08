@@ -33,14 +33,6 @@ int renderScoreLine(uint64_t value, char title[], int startY, bool hasUnderline)
         startY
     };
 
-    if (numberPrinted < 2) {
-        numberPrinted++;
-        printf("Number %d top: %0f\n", numberPrinted, valuePosition.y);
-        printf("Number %d bottom: %0f\n", numberPrinted, valuePosition.y + valueSize.y);
-    }
-
-
-
     Vector2 origin = {0, 0};
 
     DrawTextPro(GetFontDefault(), title, titlePosition, origin, 0, fontSize, fontSpacing, RAYWHITE);
