@@ -7,6 +7,6 @@ typedef struct FaderArgs {
     float fadeValue;
 }FaderArgs;
 
-bool fader(bool fadeIn);
+bool fader(FaderArgs* args);
 
 #endif
