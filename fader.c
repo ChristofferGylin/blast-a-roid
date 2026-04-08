@@ -37,3 +37,9 @@ bool fader(FaderArgs* args) {
     DrawRectangle(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, Fade(BLACK, args->fadeValue));
     return isComplete;
 }
+
+void initFaderArgs(FaderArgs* args) {
+    args->fadeIn = true;
+    args->fadeValue = 1.0f;
+    args->timer = 0;
+}
