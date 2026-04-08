@@ -107,7 +107,7 @@ void handleShotsMovement(ShotObjectPool* pool) {
 
 void initShotObjectPool(ShotObjectPool* pool) {
     for (int i = 0; i < MAX_SHOTS; i++) {
-        pool->shots->active = false;
+        pool->shots[i].active = false;
     }
 
     pool->activeCount = 0;

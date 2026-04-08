@@ -9,10 +9,6 @@ void addScore(Player* player, Asteroid* ast) {
     player->score += score;
     player->levelBonus += score * player->timeBonusMultiplier;
 
-    printf("Score: %" PRIu64 "\n", player->score);
-    printf("Level Bonus: %" PRIu64 "\n", player->levelBonus);
-    printf("Time Bonus Multiplier: %d\n", player->timeBonusMultiplier);
-
     updateTimeBonusMultiplier(player);
 }
 

@@ -17,12 +17,15 @@ static DestroyedAsteroidPool destroyedAsteroidsObjectPool = {0};
 static ShotObjectPool shotsObjectPool = {0};
 
 void gameLoop(Player* player) {
+
+    player->levelBonus = (player->level + 1) * 1000;
    
     initShotObjectPool(&shotsObjectPool);
     initAsteroids(&asteroidObjectPool, player->level);
 
     bool fadeIn = true;
     bool fadeComplete = false;
+    bool exit = false;
 
     Texture2D asteroidSprite = LoadTexture("./assets/asteroid.png");
     Texture2D shotSprite = LoadTexture("./assets/shot.png");
@@ -31,21 +34,15 @@ void gameLoop(Player* player) {
     ship.sprite = LoadTexture("./assets/ship.png");
     resetShip(&ship);
 
-    while(!WindowShouldClose())
+    while(true)
     {
 
-        if (ship.destroyed) {
-            player->lives--;
-
-            if (player->lives < 0) {
-                fadeComplete = false;
-                fadeIn = false;
-            } else {
-                resetShip(&ship);
-                resetAllAsteroids(&asteroidObjectPool);
-            }
+        if (IsKeyPressed(KEY_ESCAPE)) {
+            player->lives = -1;
+            fadeComplete = false;
+            fadeIn = false;
+            exit = true;
         }
-
         if (fadeComplete) {
             resetTimeBonusMultiplier(player);
             updateLevelBonus(player);
@@ -56,6 +53,23 @@ void gameLoop(Player* player) {
             handleShotsMovement(&shotsObjectPool);
             handleAsteroidCollisions(&asteroidObjectPool, &destroyedAsteroidsObjectPool, &shotsObjectPool, &ship, player);
             handleDestroyedAsteroids(&asteroidObjectPool, &destroyedAsteroidsObjectPool);
+        }
+
+        if (ship.destroyed) {
+            player->lives--;
+
+            if (player->lives < 0) {
+                fadeComplete = false;
+                fadeIn = false;
+                exit = true;
+            } else {
+                resetShip(&ship);
+                resetAllAsteroids(&asteroidObjectPool);
+            }
+        } else if (asteroidObjectPool.activeCount == 0) {
+            fadeComplete = false;
+            fadeIn = false;
+            exit = true;
         }
         
         BeginDrawing();
@@ -75,7 +89,7 @@ void gameLoop(Player* player) {
             
         EndDrawing();
 
-        if (fadeComplete && player->lives < 0) break;
+        if (fadeComplete && exit) break;
     }
 
     UnloadTexture(asteroidSprite);
