@@ -63,29 +63,32 @@ void scoreScreen(Player* player) {
     uint64_t bonus = player->levelBonus;
     uint64_t score = player->score;
 
-    player->score += bonus;
-    player->level++;
-    player->timeBonusMultiplier = 1;
-    player->powerups.levelBonusMultiplier = 1;
-
     bool fadeIn = true;
     bool fadeComplete = false;
     bool waiting = false;
     bool exit = false;
     float lastUpdate = GetTime();
-    const int WAIT_TIME = 3;
+    const int WAIT_TIME = 2;
     const float UPDATE_WAIT_TIME = 0.1f;
     const int GAP = 10;
     const int TEXT_BLOCK_HEIGHT = 84;
     double timer = GetTime();
 
-    char text[] = "GAME OVER";
-    int fontSize = 96;
-    int fontSpacing = 6;
+    char headingText[18];
+    snprintf(headingText, sizeof(headingText), "LEVEL %d CLEARED", player->level);
 
-    Vector2 textSize = MeasureTextEx(GetFontDefault(), text, fontSize, fontSpacing);
-    Vector2 textPosition = {SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2}; 
-    Vector2 textOrigin = {textSize.x / 2, textSize.y / 2}; 
+    int headingFontSize = 48;
+    int headingFontSpacing = 6;
+
+    Vector2 headingSize = MeasureTextEx(GetFontDefault(), headingText, headingFontSize, headingFontSpacing);
+    Vector2 headingPosition = {(SCREEN_WIDTH - headingSize.x) / 2, (SCREEN_HEIGHT / 2) - (TEXT_BLOCK_HEIGHT * 2)}; 
+    Vector2 headingOrigin = {0, 0};
+
+    player->score += bonus;
+    player->level++;
+    player->timeBonusMultiplier = 1;
+    player->powerups.levelBonusMultiplier = 1;
+
     while(!WindowShouldClose())
     {
         int yOffset = (SCREEN_HEIGHT / 2) - (TEXT_BLOCK_HEIGHT / 2);
@@ -138,6 +141,7 @@ void scoreScreen(Player* player) {
 
         BeginDrawing();
             ClearBackground(BLACK);
+            DrawTextPro(GetFontDefault(), headingText, headingPosition, headingOrigin, 0, headingFontSize, headingFontSpacing, RAYWHITE);
             yOffset = renderScoreLine(bonus, "BONUS:", yOffset, true);
             yOffset = yOffset + GAP;
             yOffset = renderScoreLine(score, "SCORE:", yOffset, false);
