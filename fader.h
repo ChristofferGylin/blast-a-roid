@@ -3,11 +3,12 @@
 
 typedef struct FaderArgs {
     bool fadeIn;
+    bool fadeComplete;
     double timer;
     float fadeValue;
 }FaderArgs;
 
-bool fader(FaderArgs* args);
-void initFaderArgs(FaderArgs* args)
+void fader(FaderArgs* args);
+void initFaderArgs(FaderArgs* args);
 
 #endif
