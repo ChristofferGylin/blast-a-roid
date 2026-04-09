@@ -23,8 +23,9 @@ void gameLoop(Player* player) {
     initShotObjectPool(&shotsObjectPool);
     initAsteroids(&asteroidObjectPool, player->level);
 
-    bool fadeIn = true;
-    bool fadeComplete = false;
+    FaderArgs faderArgs;
+    initFaderArgs(&faderArgs);
+
     bool exit = false;
 
     Texture2D asteroidSprite = LoadTexture("./assets/asteroid.png");
@@ -34,16 +35,9 @@ void gameLoop(Player* player) {
     ship.sprite = LoadTexture("./assets/ship.png");
     resetShip(&ship);
 
-    while(true)
+    while(!WindowShouldClose())
     {
-
-        if (IsKeyPressed(KEY_ESCAPE)) {
-            player->lives = -1;
-            fadeComplete = false;
-            fadeIn = false;
-            exit = true;
-        }
-        if (fadeComplete) {
+        if (faderArgs.fadeComplete) {
             resetTimeBonusMultiplier(player);
             updateLevelBonus(player);
             clearShots(&shotsObjectPool);
@@ -59,16 +53,14 @@ void gameLoop(Player* player) {
             player->lives--;
 
             if (player->lives < 0) {
-                fadeComplete = false;
-                fadeIn = false;
+                faderArgs.fadeIn = false;
                 exit = true;
             } else {
                 resetShip(&ship);
                 resetAllAsteroids(&asteroidObjectPool);
             }
         } else if (asteroidObjectPool.activeCount == 0) {
-            fadeComplete = false;
-            fadeIn = false;
+            faderArgs.fadeIn = false;
             exit = true;
         }
         
@@ -85,11 +77,11 @@ void gameLoop(Player* player) {
             renderAsteroids(&asteroidObjectPool, &asteroidSprite);
             renderShots(&shotsObjectPool, &shotSprite);
             renderSidebars(player);
-            fadeComplete = fader(fadeIn);
+            fader(&faderArgs);
             
         EndDrawing();
 
-        if (fadeComplete && exit) break;
+        if (faderArgs.fadeComplete && exit) break;
     }
 
     UnloadTexture(asteroidSprite);

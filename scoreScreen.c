@@ -55,8 +55,8 @@ void scoreScreen(Player* player) {
     uint64_t bonus = player->levelBonus;
     uint64_t score = player->score;
 
-    bool fadeIn = true;
-    bool fadeComplete = false;
+    FaderArgs faderArgs;
+    initFaderArgs(&faderArgs);
     bool waiting = false;
     bool exit = false;
     float lastUpdate = GetTime();
@@ -85,7 +85,7 @@ void scoreScreen(Player* player) {
     {
         int yOffset = (SCREEN_HEIGHT / 2) - (TEXT_BLOCK_HEIGHT / 2);
 
-        if (fadeComplete && fadeIn && !waiting) {
+        if (faderArgs.fadeComplete && faderArgs.fadeIn && !waiting) {
             
             float currentTime = GetTime();
 
@@ -122,12 +122,11 @@ void scoreScreen(Player* player) {
         }  else if (waiting) {
             
             if (GetTime() >= timer + WAIT_TIME) {
-                fadeIn = false;
-                fadeComplete = false;
+                faderArgs.fadeIn = false;
                 waiting = false;
             }
             
-        } else if (fadeComplete && !fadeIn) {
+        } else if (faderArgs.fadeComplete && !faderArgs.fadeIn) {
             exit = true;
         }
 
@@ -137,7 +136,7 @@ void scoreScreen(Player* player) {
             yOffset = renderScoreLine(bonus, "BONUS:", yOffset, true);
             yOffset = yOffset + GAP;
             yOffset = renderScoreLine(score, "SCORE:", yOffset, false);
-            fadeComplete = fader(fadeIn);
+            fader(&faderArgs);
         EndDrawing();
 
         if (exit) break;

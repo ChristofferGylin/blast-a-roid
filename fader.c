@@ -5,37 +5,40 @@
 #include "fader.h"
 
 const int FADE_TIME = 2;
-double timer = 0.0;
-float fadeValue = 1.0f;
 
-bool fader(bool fadeIn) {
-    
-    bool isComplete = false;
-    
-    if (fadeIn) {
-        if (fadeValue == 0.0f) return true;
-        if (fadeValue == 1.0f) {
-            timer = GetTime();
+void fader(FaderArgs* args) {
+    if (args->fadeIn) {
+        if (args->fadeValue == 0.0f) return;
+        if (args->fadeValue == 1.0f) {
+            args->timer = GetTime();
+            args->fadeComplete = false;
         }
 
-        fadeValue = scaleFloat(timer, timer + FADE_TIME, 1.0f, 0.0f, GetTime());
+        args->fadeValue = scaleFloat(args->timer, args->timer + FADE_TIME, 1.0f, 0.0f, GetTime());
 
-        if (fadeValue <= 0.0f) {
-            fadeValue = 0.0f;
-            isComplete = true;
+        if (args->fadeValue <= 0.0f) {
+            args->fadeValue = 0.0f;
+            args->fadeComplete = true;
         }
     } else {
-        if (fadeValue == 0.0f) {
-            timer = GetTime();
+        if (args->fadeValue == 0.0f) {
+            args->timer = GetTime();
+            args->fadeComplete = false;
         }
 
-        fadeValue = scaleFloat(timer, timer + FADE_TIME, 0.0f, 1.0f, GetTime());
-        if (fadeValue >= 1.0f) {
-            fadeValue = 1.0f;
-            isComplete = true;
+        args->fadeValue = scaleFloat(args->timer, args->timer + FADE_TIME, 0.0f, 1.0f, GetTime());
+        if (args->fadeValue >= 1.0f) {
+            args->fadeValue = 1.0f;
+            args->fadeComplete = true;
         }
     }
 
-    DrawRectangle(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, Fade(BLACK, fadeValue));
-    return isComplete;
+    DrawRectangle(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, Fade(BLACK, args->fadeValue));
+}
+
+void initFaderArgs(FaderArgs* args) {
+    args->fadeComplete = false;
+    args->fadeIn = true;
+    args->fadeValue = 1.0f;
+    args->timer = 0;
 }
