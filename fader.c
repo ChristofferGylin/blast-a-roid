@@ -8,7 +8,7 @@ const int FADE_TIME = 2;
 
 void fader(FaderArgs* args) {
     if (args->fadeIn) {
-        if (args->fadeValue == 0.0f) return true;
+        if (args->fadeValue == 0.0f) return;
         if (args->fadeValue == 1.0f) {
             args->timer = GetTime();
             args->fadeComplete = false;
