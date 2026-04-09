@@ -8,8 +8,8 @@
 
 void gameOver(Player* player) {
 
-    bool fadeIn = true;
-    bool fadeComplete = false;
+    FaderArgs faderArgs;
+    initFaderArgs(&faderArgs);
     bool exit = false;
     int waitTime = 5;
     double timer = GetTime();
@@ -23,19 +23,18 @@ void gameOver(Player* player) {
     Vector2 textOrigin = {textSize.x / 2, textSize.y / 2}; 
     while(!WindowShouldClose())
     {
-        if (fadeComplete && fadeIn) {
+        if (faderArgs.fadeComplete && faderArgs.fadeIn) {
             if (timer + waitTime <= GetTime()) {
-                fadeIn = false;
-                fadeComplete = false;
+                faderArgs.fadeIn = false;
             }
-        }  else if (fadeComplete && !fadeIn) {
+        }  else if (faderArgs.fadeComplete && !faderArgs.fadeIn) {
             exit = true;
         }
 
         BeginDrawing();
             ClearBackground(BLACK);
             DrawTextPro(GetFontDefault(), "GAME OVER", textPosition, textOrigin, 0, fontSize, fontSpacing, RAYWHITE);
-            fadeComplete = fader(fadeIn);            
+            fader(&faderArgs);            
         EndDrawing();
 
         if (exit) break;
