@@ -24,7 +24,7 @@ void mainMenu() {
         "EXIT"
     };
 
-    MenuItem items[4] = {0};
+    MenuItem items[sizeof(titles) / sizeof(titles[0])] = {0};
 
     int menuY = 0;
 
@@ -35,10 +35,31 @@ void mainMenu() {
     int menuHeight = items[sizeof(items) / sizeof(MenuItem) - 1].position.y + items[sizeof(items) / sizeof(MenuItem) - 1].height.y;
     int menuYOffset = (SCREEN_HEIGHT / 2) - (menuHeight / 2);
 
+    Rectangle collisionRects[sizeof(titles) / sizeof(titles[0])];
+
+    for (int i = 0; i < sizeof(collisionRects) / sizeof(Rectangle); i++) {
+        MenuItem* item = &items[i];
+        item->position.y += menuYOffset;
+        collisionRects[i] = (Rectangle) {
+            item->position.x,
+            item->position.y,
+            item->height.x,
+            item->height.y
+        };
+    }
+
     while (!WindowShouldClose()) {
 
         for (int i = 0; i < sizeof(items) / sizeof(MenuItem); i++) {
+            if (CheckCollisionPointRec(GetMousePosition(), collisionRects[i])) {
+                items[i].isUnderlined = true;
 
+                if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
+                    menuChoice = i;
+                }
+            } else {
+                items[i].isUnderlined = false;
+            }
         }
         
         switch (menuChoice)
@@ -80,7 +101,7 @@ void mainMenu() {
 
             for (int i = 0; i < sizeof(items) / sizeof(MenuItem); i++) {
                 MenuItem* item = &items[i];
-                DrawTextPro(GetFontDefault(), item->text, (Vector2){item->position.x, item->position.y + menuYOffset}, (Vector2){0, 0}, 0, fontSize, fontSpacing, RAYWHITE);
+                DrawTextPro(GetFontDefault(), item->text, (Vector2){item->position.x, item->position.y}, (Vector2){0, 0}, 0, fontSize, fontSpacing, RAYWHITE);
             }
         EndDrawing();
     }
