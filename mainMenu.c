@@ -79,6 +79,56 @@ void initMenu(Menu* menu) {
     menu->selected = -1;
 }
 
+void mainMenu() {
+    Menu menu;
+    initMenu(&menu);
+
+    Player player = {0};
+
+    while (!WindowShouldClose()) {
+        updateMenu(&menu);
+
+        switch (menu.selected) {
+            case -1: break;
+            case 0: 
+                menu.selected = -1;
+                initPlayer(&player);
+                while (player.lives >= 0) {
+                
+                    gameLoop(&player);
+
+                    if (player.lives < 0) {
+                        gameOver(&player);
+                    } else {
+                        scoreScreen(&player);
+                    }
+                }
+            break;
+
+            case 1:
+                // TODO: Options
+            break;
+
+            case 2: 
+                // TODO: About
+            break;
+
+            case 3:
+                CloseWindow();
+            break;
+        
+            default: 
+                printf("Error: Invalid menu choice (%d) in main menu\n", menu.selected);
+            break;
+        }
+
+        BeginDrawing();
+            ClearBackground(BLACK);
+            drawMenu(&menu);
+        EndDrawing();
+    }
+}
+
 void updateMenu(Menu* menu) {
     Vector2 mouse = GetMousePosition();
 
