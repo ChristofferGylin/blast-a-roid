@@ -15,6 +15,8 @@ int underLineHeight = 3;
 int underLineOffset = 3;
 int margin = 20;
 int roundnessRadius = 12.0f;
+int logoFontSize = 42;
+int logoFontSpacing = 8;
 
 void drawLayoutContainers() {
 
@@ -38,6 +40,41 @@ void drawLayoutContainers() {
         logoContainer.width,
         ((SCREEN_HEIGHT / 4) * 3) - (margin / 2) - margin
     };
+    
+    Vector2 logoSize = MeasureTextEx(GetFontDefault(), "BLAST-A-ROID", logoFontSize, logoFontSpacing);
+
+    Vector2 logoPosition = {
+        logoContainer.x + (logoContainer.width / 2) - logoSize.x / 2,
+        logoContainer.y + (logoContainer.height / 2) - logoSize.y / 2
+    };
+
+    Vector2 highScoreHeadingSize = MeasureTextEx(GetFontDefault(), "HIGHSCORES", logoFontSize, logoFontSpacing);
+
+    Vector2 highScoreHeadingPos = {
+        highScoreContainer.x + (highScoreContainer.width / 2) - highScoreHeadingSize.x / 2,
+        highScoreContainer.y + margin
+    };
+    
+    DrawTextPro(
+        GetFontDefault(),
+        "BLAST-A-ROID",
+        logoPosition,
+        (Vector2){0, 0},
+        0,
+        logoFontSize,
+        logoFontSpacing,
+        RAYWHITE
+    );
+
+    DrawTextPro(
+        GetFontDefault(),
+        "HIGHSCORES",
+        highScoreHeadingPos,
+        (Vector2){0, 0},
+        0,
+        logoFontSize,
+        logoFontSpacing,
+        RAYWHITE);
 
     DrawRectangleRoundedLinesEx(highScoreContainer, getRoundness(highScoreContainer, roundnessRadius), 10, 3, RAYWHITE);
     DrawRectangleRoundedLinesEx(logoContainer, getRoundness(logoContainer, roundnessRadius), 10, 3, RAYWHITE);
