@@ -20,8 +20,8 @@ typedef struct Menu {
 }Menu; 
 
 void initMenu(Menu* menu);
-
 void mainMenu();
+void updateMenu(Menu* menu);
 MenuItem generateMenuItem(int number, char title[], int* startY);
 
 #endif
