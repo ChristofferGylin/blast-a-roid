@@ -28,14 +28,14 @@ void drawLayoutContainers() {
         SCREEN_WIDTH - (SCREEN_WIDTH / 3) + (margin / 2),
         margin,
         SCREEN_WIDTH / 3 - (margin / 2) - margin,
-        (SCREEN_HEIGHT / 5) - (margin / 2) - margin
+        (SCREEN_HEIGHT / 4) - (margin / 2) - margin
     };
 
     Rectangle menuContainer = {
         logoContainer.x,
         logoContainer.y + logoContainer.height + margin,
         logoContainer.width,
-        ((SCREEN_HEIGHT / 5) * 4) - (margin / 2) - margin
+        ((SCREEN_HEIGHT / 4) * 3) - (margin / 2) - margin
     };
 
     DrawRectangleRoundedLinesEx(highScoreContainer, 0.2f, 10, 3, RAYWHITE);
@@ -89,7 +89,7 @@ void initMenu(Menu* menu) {
         Vector2 size = MeasureTextEx(GetFontDefault(), titles[i], fontSize, fontSpacing);
 
         menu->items[i].basePosition = (Vector2){
-            SCREEN_WIDTH - size.x - margin,
+            SCREEN_WIDTH - (SCREEN_WIDTH / 6) - size.x / 2,
             menuY
         };
 
@@ -103,7 +103,7 @@ void initMenu(Menu* menu) {
     menu->count = 4;
 
     int menuHeight = menuY - nextItemGap;
-    menu->menuOffset = (SCREEN_HEIGHT / 2) - (menuHeight / 2);
+    menu->menuOffset = ((SCREEN_HEIGHT / 8) * 5) - (menuHeight / 2);
 
     menu->selected = -1;
 }
