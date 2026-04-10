@@ -11,6 +11,7 @@
 int fontSize = 32;
 int fontSpacing = 6;
 int nextItemGap = 20;
+int underLineHeight = 3;
 
 void mainMenu() {
     Player player = {0};
@@ -32,7 +33,7 @@ void mainMenu() {
         items[i] = generateMenuItem(i, titles[i], &menuY);
     }
 
-    int menuHeight = items[sizeof(items) / sizeof(MenuItem) - 1].position.y + items[sizeof(items) / sizeof(MenuItem) - 1].height.y;
+    int menuHeight = items[sizeof(items) / sizeof(MenuItem) - 1].position.y + items[sizeof(items) / sizeof(MenuItem) - 1].size.y;
     int menuYOffset = (SCREEN_HEIGHT / 2) - (menuHeight / 2);
 
     Rectangle collisionRects[sizeof(titles) / sizeof(titles[0])];
@@ -43,8 +44,8 @@ void mainMenu() {
         collisionRects[i] = (Rectangle) {
             item->position.x,
             item->position.y,
-            item->height.x,
-            item->height.y
+            item->size.x,
+            item->size.y
         };
     }
 
@@ -102,6 +103,9 @@ void mainMenu() {
             for (int i = 0; i < sizeof(items) / sizeof(MenuItem); i++) {
                 MenuItem* item = &items[i];
                 DrawTextPro(GetFontDefault(), item->text, (Vector2){item->position.x, item->position.y}, (Vector2){0, 0}, 0, fontSize, fontSpacing, RAYWHITE);
+                if (item->isUnderlined) {
+                    DrawRectangle(item->position.x, item->position.y + item->size.y + underLineHeight, item->size.x, underLineHeight, RAYWHITE);
+                }
             }
         EndDrawing();
     }
@@ -119,7 +123,7 @@ MenuItem generateMenuItem(int number, char title[], int* startY) {
         *startY
     };
 
-    newMenuItem.height = (Vector2) {
+    newMenuItem.size = (Vector2) {
         titleSize.x,
         titleSize.y
     };

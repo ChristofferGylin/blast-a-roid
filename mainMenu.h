@@ -5,11 +5,21 @@
 #include <stdbool.h>
 
 typedef struct MenuItem {
-    Vector2 position;
-    Vector2 height;
     char text[32];
-    bool isUnderlined;
+    Vector2 basePosition;
+    Vector2 size;
+    
+    bool isHovered;
 }MenuItem;
+
+typedef struct Menu {
+    MenuItem items[4];
+    int count;
+    int selected;
+    int menuOffset;
+}Menu; 
+
+void initMenu(Menu* menu);
 
 void mainMenu();
 MenuItem generateMenuItem(int number, char title[], int* startY);
