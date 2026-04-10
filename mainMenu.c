@@ -47,7 +47,7 @@ void drawMenu(Menu* menu) {
 }
 
 void initMenu(Menu* menu) {
-    char titles[32] = {
+    char titles[][32] = {
         "START GAME",
         "OPTIONS",
         "ABOUT",
