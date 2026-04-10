@@ -14,6 +14,7 @@ int nextItemGap = 20;
 int underLineHeight = 3;
 int underLineOffset = 3;
 int margin = 20;
+int roundnessRadius = 12.0f;
 
 void drawLayoutContainers() {
 
@@ -38,9 +39,9 @@ void drawLayoutContainers() {
         ((SCREEN_HEIGHT / 4) * 3) - (margin / 2) - margin
     };
 
-    DrawRectangleRoundedLinesEx(highScoreContainer, 0.2f, 10, 3, RAYWHITE);
-    DrawRectangleRoundedLinesEx(logoContainer, 0.2f, 10, 3, RAYWHITE);
-    DrawRectangleRoundedLinesEx(menuContainer, 0.2f, 10, 3, RAYWHITE);
+    DrawRectangleRoundedLinesEx(highScoreContainer, getRoundness(highScoreContainer, roundnessRadius), 10, 3, RAYWHITE);
+    DrawRectangleRoundedLinesEx(logoContainer, getRoundness(logoContainer, roundnessRadius), 10, 3, RAYWHITE);
+    DrawRectangleRoundedLinesEx(menuContainer, getRoundness(menuContainer, roundnessRadius), 10, 3, RAYWHITE);
 }
 
 void drawMenu(Menu* menu) {
@@ -73,6 +74,11 @@ void drawMenu(Menu* menu) {
             );
         }
     }
+}
+
+float getRoundness(Rectangle rect, float radiusPx) {
+    float minDim = rect.width < rect.height ? rect.width : rect.height;
+    return (radiusPx * 2.0f) / minDim;
 }
 
 void initMenu(Menu* menu) {

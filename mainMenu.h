@@ -21,6 +21,7 @@ typedef struct Menu {
 
 void drawLayoutContainers();
 void drawMenu(Menu* menu);
+float getRoundness(Rectangle rect, float radiusPx);
 void initMenu(Menu* menu);
 void mainMenu();
 void updateMenu(Menu* menu);
