@@ -13,6 +13,35 @@ int fontSpacing = 6;
 int nextItemGap = 20;
 int underLineHeight = 3;
 int underLineOffset = 3;
+int margin = 20;
+
+void drawLayoutContainers() {
+
+    Rectangle highScoreContainer = {
+        margin,
+        margin,
+        ((SCREEN_WIDTH / 3) * 2) - (margin / 2) - margin,
+        SCREEN_HEIGHT - (margin * 2)
+    };
+
+    Rectangle logoContainer = {
+        SCREEN_WIDTH - (SCREEN_WIDTH / 3) + (margin / 2),
+        margin,
+        SCREEN_WIDTH / 3 - (margin / 2) - margin,
+        (SCREEN_HEIGHT / 5) - (margin / 2) - margin
+    };
+
+    Rectangle menuContainer = {
+        logoContainer.x,
+        logoContainer.y + logoContainer.height + margin,
+        logoContainer.width,
+        ((SCREEN_HEIGHT / 5) * 4) - (margin / 2) - margin
+    };
+
+    DrawRectangleRoundedLinesEx(highScoreContainer, 0.2f, 10, 3, RAYWHITE);
+    DrawRectangleRoundedLinesEx(logoContainer, 0.2f, 10, 3, RAYWHITE);
+    DrawRectangleRoundedLinesEx(menuContainer, 0.2f, 10, 3, RAYWHITE);
+}
 
 void drawMenu(Menu* menu) {
     for (int i = 0; i < menu->count; i++) {
@@ -60,7 +89,7 @@ void initMenu(Menu* menu) {
         Vector2 size = MeasureTextEx(GetFontDefault(), titles[i], fontSize, fontSpacing);
 
         menu->items[i].basePosition = (Vector2){
-            SCREEN_WIDTH / 2 - size.x / 2,
+            SCREEN_WIDTH - size.x - margin,
             menuY
         };
 
@@ -124,6 +153,7 @@ void mainMenu() {
 
         BeginDrawing();
             ClearBackground(BLACK);
+            drawLayoutContainers();
             drawMenu(&menu);
         EndDrawing();
     }

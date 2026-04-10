@@ -19,6 +19,7 @@ typedef struct Menu {
     int menuOffset;
 }Menu; 
 
+void drawLayoutContainers();
 void drawMenu(Menu* menu);
 void initMenu(Menu* menu);
 void mainMenu();
