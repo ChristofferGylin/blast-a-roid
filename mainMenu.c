@@ -13,122 +13,155 @@ int fontSpacing = 6;
 int nextItemGap = 20;
 int underLineHeight = 3;
 
-void mainMenu() {
-    Player player = {0};
-    
-    int menuChoice = -1;
-
-    char titles[][11] = {
+void initMenu(Menu* menu) {
+    char titles[32] = {
         "START GAME",
         "OPTIONS",
         "ABOUT",
         "EXIT"
     };
 
-    MenuItem items[sizeof(titles) / sizeof(titles[0])] = {0};
-
     int menuY = 0;
 
-    for (int i = 0; i < sizeof(items) / sizeof(MenuItem); i++) {
-        items[i] = generateMenuItem(i, titles[i], &menuY);
-    }
+    for (int i = 0; i < 4; i++) {
+        Vector2 size = MeasureTextEx(GetFontDefault(), titles[i], fontSize, fontSpacing);
 
-    int menuHeight = items[sizeof(items) / sizeof(MenuItem) - 1].position.y + items[sizeof(items) / sizeof(MenuItem) - 1].size.y;
-    int menuYOffset = (SCREEN_HEIGHT / 2) - (menuHeight / 2);
-
-    Rectangle collisionRects[sizeof(titles) / sizeof(titles[0])];
-
-    for (int i = 0; i < sizeof(collisionRects) / sizeof(Rectangle); i++) {
-        MenuItem* item = &items[i];
-        item->position.y += menuYOffset;
-        collisionRects[i] = (Rectangle) {
-            item->position.x,
-            item->position.y,
-            item->size.x,
-            item->size.y
+        menu->items[i].basePosition = (Vector2){
+            SCREEN_WIDTH / 2 - size.x / 2,
+            menuY
         };
+
+        strcpy(menu->items[i].text, titles[i]);
+        menu->items[i].size = size;
+        menu->items[i].isHovered = false;
+
+        menuY += size.y + nextItemGap;
     }
 
-    while (!WindowShouldClose()) {
+    menu->count = 4;
 
-        for (int i = 0; i < sizeof(items) / sizeof(MenuItem); i++) {
-            if (CheckCollisionPointRec(GetMousePosition(), collisionRects[i])) {
-                items[i].isUnderlined = true;
+    int menuHeight = menuY - nextItemGap;
+    menu->menuOffset = (SCREEN_HEIGHT / 2) - (menuHeight / 2);
 
-                if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
-                    menuChoice = i;
-                }
-            } else {
-                items[i].isUnderlined = false;
-            }
-        }
-        
-        switch (menuChoice)
-        {
-        case -1: break;
-        case 0: 
-            menuChoice = -1;
-            initPlayer(&player);
-            while (player.lives >= 0) {
-                
-                gameLoop(&player);
-
-                if (player.lives < 0) {
-                    gameOver(&player);
-                } else {
-                    scoreScreen(&player);
-                }
-            }
-            break;
-
-        case 1:
-            // TODO: Options
-            break;
-
-        case 2: 
-            // TODO: About
-            break;
-
-        case 3:
-            CloseWindow();
-            break;
-        
-        default: 
-            printf("Error: Invalid menu choice (%d) in main menu\n", menuChoice);
-            break;
-        }
-        
-        BeginDrawing();
-
-            for (int i = 0; i < sizeof(items) / sizeof(MenuItem); i++) {
-                MenuItem* item = &items[i];
-                DrawTextPro(GetFontDefault(), item->text, (Vector2){item->position.x, item->position.y}, (Vector2){0, 0}, 0, fontSize, fontSpacing, RAYWHITE);
-                if (item->isUnderlined) {
-                    DrawRectangle(item->position.x, item->position.y + item->size.y + underLineHeight, item->size.x, underLineHeight, RAYWHITE);
-                }
-            }
-        EndDrawing();
-    }
+    menu->selected = -1;
 }
 
-MenuItem generateMenuItem(int number, char title[], int* startY) {
-
-    MenuItem newMenuItem = {0};
-    strcpy(newMenuItem.text, title);
+// void mainMenu() {
+//     Player player = {0};
     
-    Vector2 titleSize = MeasureTextEx(GetFontDefault(), title, fontSize, fontSpacing);
+//     int menuChoice = -1;
 
-    newMenuItem.position = (Vector2){
-        SCREEN_WIDTH - (SCREEN_WIDTH / 4) - (titleSize.x / 2),
-        *startY
-    };
+//     char titles[][11] = {
+//         "START GAME",
+//         "OPTIONS",
+//         "ABOUT",
+//         "EXIT"
+//     };
 
-    newMenuItem.size = (Vector2) {
-        titleSize.x,
-        titleSize.y
-    };
+//     MenuItem items[sizeof(titles) / sizeof(titles[0])] = {0};
 
-    *startY = newMenuItem.position.y + titleSize.y + nextItemGap;
+//     int menuY = 0;
 
-    return newMenuItem;
-}
+//     for (int i = 0; i < sizeof(items) / sizeof(MenuItem); i++) {
+//         items[i] = generateMenuItem(i, titles[i], &menuY);
+//     }
+
+//     int menuHeight = items[sizeof(items) / sizeof(MenuItem) - 1].position.y + items[sizeof(items) / sizeof(MenuItem) - 1].size.y;
+//     int menuYOffset = (SCREEN_HEIGHT / 2) - (menuHeight / 2);
+
+//     Rectangle collisionRects[sizeof(titles) / sizeof(titles[0])];
+
+//     for (int i = 0; i < sizeof(collisionRects) / sizeof(Rectangle); i++) {
+//         MenuItem* item = &items[i];
+//         item->position.y += menuYOffset;
+//         collisionRects[i] = (Rectangle) {
+//             item->position.x,
+//             item->position.y,
+//             item->size.x,
+//             item->size.y
+//         };
+//     }
+
+//     while (!WindowShouldClose()) {
+
+//         for (int i = 0; i < sizeof(items) / sizeof(MenuItem); i++) {
+//             if (CheckCollisionPointRec(GetMousePosition(), collisionRects[i])) {
+//                 items[i].isUnderlined = true;
+
+//                 if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
+//                     menuChoice = i;
+//                 }
+//             } else {
+//                 items[i].isUnderlined = false;
+//             }
+//         }
+        
+//         switch (menuChoice)
+//         {
+//         case -1: break;
+//         case 0: 
+//             menuChoice = -1;
+//             initPlayer(&player);
+//             while (player.lives >= 0) {
+                
+//                 gameLoop(&player);
+
+//                 if (player.lives < 0) {
+//                     gameOver(&player);
+//                 } else {
+//                     scoreScreen(&player);
+//                 }
+//             }
+//             break;
+
+//         case 1:
+//             // TODO: Options
+//             break;
+
+//         case 2: 
+//             // TODO: About
+//             break;
+
+//         case 3:
+//             CloseWindow();
+//             break;
+        
+//         default: 
+//             printf("Error: Invalid menu choice (%d) in main menu\n", menuChoice);
+//             break;
+//         }
+        
+//         BeginDrawing();
+
+//             for (int i = 0; i < sizeof(items) / sizeof(MenuItem); i++) {
+//                 MenuItem* item = &items[i];
+//                 DrawTextPro(GetFontDefault(), item->text, (Vector2){item->position.x, item->position.y}, (Vector2){0, 0}, 0, fontSize, fontSpacing, RAYWHITE);
+//                 if (item->isUnderlined) {
+//                     DrawRectangle(item->position.x, item->position.y + item->size.y + underLineHeight, item->size.x, underLineHeight, RAYWHITE);
+//                 }
+//             }
+//         EndDrawing();
+//     }
+// }
+
+// MenuItem generateMenuItem(int number, char title[], int* startY) {
+
+//     MenuItem newMenuItem = {0};
+//     strcpy(newMenuItem.text, title);
+    
+//     Vector2 titleSize = MeasureTextEx(GetFontDefault(), title, fontSize, fontSpacing);
+
+//     newMenuItem.position = (Vector2){
+//         SCREEN_WIDTH - (SCREEN_WIDTH / 4) - (titleSize.x / 2),
+//         *startY
+//     };
+
+//     newMenuItem.size = (Vector2) {
+//         titleSize.x,
+//         titleSize.y
+//     };
+
+//     *startY = newMenuItem.position.y + titleSize.y + nextItemGap;
+
+//     return newMenuItem;
+// }
