@@ -12,6 +12,39 @@ int fontSize = 32;
 int fontSpacing = 6;
 int nextItemGap = 20;
 int underLineHeight = 3;
+int underLineOffset = 3;
+
+void drawMenu(Menu* menu) {
+    for (int i = 0; i < menu->count; i++) {
+        MenuItem* item = &menu->items[i];
+
+        Vector2 pos = {
+            item->basePosition.x,
+            item->basePosition.y + menu->menuOffset
+        };
+
+        DrawTextPro(
+            GetFontDefault(),
+            item->text,
+            pos,
+            (Vector2){0, 0},
+            0,
+            fontSize,
+            fontSpacing,
+            RAYWHITE
+        );
+
+        if (item->isHovered) {
+            DrawRectangle(
+                pos.x,
+                pos.y + item->size.y + underLineOffset,
+                item->size.x,
+                underLineHeight,
+                RAYWHITE
+            );
+        }
+    }
+}
 
 void initMenu(Menu* menu) {
     char titles[32] = {

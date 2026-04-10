@@ -19,9 +19,8 @@ typedef struct Menu {
     int menuOffset;
 }Menu; 
 
+void drawMenu(Menu* menu);
 void initMenu(Menu* menu);
-void mainMenu();
 void updateMenu(Menu* menu);
-MenuItem generateMenuItem(int number, char title[], int* startY);
 
 #endif
