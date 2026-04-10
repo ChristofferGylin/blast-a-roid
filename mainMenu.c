@@ -74,7 +74,20 @@ void drawLayoutContainers() {
         0,
         logoFontSize,
         logoFontSpacing,
-        RAYWHITE);
+        RAYWHITE
+    );
+
+    Vector2 highscoresLinePos = {
+        highScoreContainer.x + margin,
+        highScoreHeadingPos.y + highScoreHeadingSize.y + 10
+    };
+
+    Vector2 highscoresLineSize = {
+        highScoreContainer.width - (margin * 2),
+        3
+    };
+
+    DrawRectangle(highscoresLinePos.x, highscoresLinePos.y, highscoresLineSize.x, highscoresLineSize.y, RAYWHITE);
 
     DrawRectangleRoundedLinesEx(highScoreContainer, getRoundness(highScoreContainer, roundnessRadius), 10, 3, RAYWHITE);
     DrawRectangleRoundedLinesEx(logoContainer, getRoundness(logoContainer, roundnessRadius), 10, 3, RAYWHITE);
