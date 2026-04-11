@@ -7,6 +7,8 @@
 #include <stdio.h>
 #include "mainMenu.h"
 #include <string.h>
+#include "fader.h"
+#include "runGameSession.h"
 
 int fontSize = 32;
 int fontSpacing = 6;
@@ -167,27 +169,26 @@ void initMenu(Menu* menu) {
 void mainMenu() {
     Menu menu;
     initMenu(&menu);
+    FaderArgs faderArgs;
+    initFaderArgs(&faderArgs);
 
     Player player = {0};
 
     while (!WindowShouldClose()) {
         updateMenu(&menu);
 
-        switch (menu.selected) {
+        if (menu.selected != -1 && faderArgs.fadeIn) {
+            faderArgs.fadeIn = false;
+            faderArgs.fadeComplete = false;
+        }
+
+        if (faderArgs.fadeComplete) {
+            switch (menu.selected) {
             case -1: break;
             case 0: 
                 menu.selected = -1;
-                initPlayer(&player);
-                while (player.lives >= 0) {
-                
-                    gameLoop(&player);
-
-                    if (player.lives < 0) {
-                        gameOver(&player);
-                    } else {
-                        scoreScreen(&player);
-                    }
-                }
+                runGameSession();
+                faderArgs.fadeIn = true;
             break;
 
             case 1:
@@ -206,11 +207,13 @@ void mainMenu() {
                 printf("Error: Invalid menu choice (%d) in main menu\n", menu.selected);
             break;
         }
+        }
 
         BeginDrawing();
             ClearBackground(BLACK);
             drawLayoutContainers();
             drawMenu(&menu);
+            fader(&faderArgs);
         EndDrawing();
     }
 }
