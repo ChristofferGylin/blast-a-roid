@@ -20,6 +20,8 @@ void gameLoop(Player* player) {
 
     player->levelBonus = (player->level + 1) * 1000;
    
+    initAsteroidPool(&asteroidObjectPool);
+    initDestroyedAsteroidPool(&destroyedAsteroidsObjectPool);
     initShotObjectPool(&shotsObjectPool);
     initAsteroids(&asteroidObjectPool, player->level);
 
