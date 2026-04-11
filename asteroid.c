@@ -160,10 +160,17 @@ void handleDestroyedAsteroids(AsteroidPool* pool, DestroyedAsteroidPool* destroy
 }
 
 void initAsteroidPool(AsteroidPool* pool) {
-    AsteroidPoolObject* asteroids[MAX_ASTEROIDS] = &pool->asteroids;
-
     for (int i = 0; i < MAX_ASTEROIDS; i++) {
-        asteroids[i]->active = false;
+        pool->asteroids[i].active = false;
+    }
+
+    pool->activeCount = 0;
+}
+
+void initDestroyedAsteroidPool(DestroyedAsteroidPool* pool) {
+    for (int i = 0; i < pool->activeCount; i++) {
+        AsteroidPoolObject* poolObj = pool->asteroids[i];
+        poolObj->active = false;
     }
 
     pool->activeCount = 0;
