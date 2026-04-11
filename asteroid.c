@@ -159,6 +159,16 @@ void handleDestroyedAsteroids(AsteroidPool* pool, DestroyedAsteroidPool* destroy
     destroyedPool->activeCount = 0;
 }
 
+void initAsteroidPool(AsteroidPool* pool) {
+    AsteroidPoolObject* asteroids[MAX_ASTEROIDS] = &pool->asteroids;
+
+    for (int i = 0; i < MAX_ASTEROIDS; i++) {
+        asteroids[i]->active = false;
+    }
+
+    pool->activeCount = 0;
+}
+
 void initAsteroids(AsteroidPool* pool, int gameLevel) {
     int numberOfAsteroids = getNumberOfAsteroids(gameLevel);
     for (int i = 0; i < numberOfAsteroids; i++) {

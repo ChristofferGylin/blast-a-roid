@@ -37,6 +37,7 @@ int getAsteroidSize(int level);
 void handleAsteroidCollisions(AsteroidPool* pool, DestroyedAsteroidPool* destroyedPool, ShotObjectPool* shotPool, Ship* ship, Player* player);
 void handleAsteroidsMovement(AsteroidPool* pool);
 void handleDestroyedAsteroids(AsteroidPool* pool, DestroyedAsteroidPool* destroyedPool);
+void initAsteroidPool(AsteroidPool* pool);
 void initAsteroids(AsteroidPool* pool, int gameLevel);
 void renderAsteroids(AsteroidPool* pool, Texture2D* asteroidSprite);
 void resetAllAsteroids(AsteroidPool* pool);
