@@ -3,7 +3,7 @@
 #include "constants.h"
 #include <stdbool.h>
 
-void drawLayoutContainers() {
+void drawPausMenuBackground() {
 
     int menuWidth = 400;
     int menuHeight = 500;
