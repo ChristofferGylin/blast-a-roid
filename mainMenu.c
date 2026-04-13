@@ -171,8 +171,9 @@ void mainMenu() {
     initMenu(&menu);
     FaderArgs faderArgs;
     initFaderArgs(&faderArgs);
+    bool isRunning = true;
 
-    while (!WindowShouldClose()) {
+    while (!WindowShouldClose() && isRunning) {
         updateMenu(&menu);
 
         if (menu.selected != -1 && faderArgs.fadeIn) {
@@ -198,7 +199,7 @@ void mainMenu() {
                 break;
 
                 case 3:
-                    CloseWindow();
+                    isRunning = false;
                 break;
         
                 default: 
