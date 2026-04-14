@@ -1,6 +1,8 @@
 #ifndef RUNGAMESESSION_H
 #define RUNGAMESESSION_H
 
-void runGameSession();
+#include <stdbool.h>
+
+bool runGameSession();
 
 #endif

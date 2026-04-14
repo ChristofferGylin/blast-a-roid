@@ -186,7 +186,7 @@ void mainMenu() {
                 case -1: break;
                 case 0: 
                     menu.selected = -1;
-                    runGameSession();
+                    isRunning = runGameSession();
                     faderArgs.fadeIn = true;
                 break;
 

@@ -11,14 +11,24 @@
 #include "sidebars.h"
 #include <stdbool.h>
 #include "fader.h"
+#include "pauseMenu.h"
 
 static AsteroidPool asteroidObjectPool = {0};
 static DestroyedAsteroidPool destroyedAsteroidsObjectPool = {0};
 static ShotObjectPool shotsObjectPool = {0};
 
-void gameLoop(Player* player) {
+GameResult gameLoop(Player* player) {
+
+    GameResult result = GAME_CONTINUE;
+
+    bool isRunning = true;
+    bool isPaused = false;
+    bool exit = false;
 
     player->levelBonus = (player->level + 1) * 1000;
+
+    PausMenu pauseMenu;
+    initPausMenu(&pauseMenu);
    
     initAsteroidPool(&asteroidObjectPool);
     initDestroyedAsteroidPool(&destroyedAsteroidsObjectPool);
@@ -27,8 +37,6 @@ void gameLoop(Player* player) {
 
     FaderArgs faderArgs;
     initFaderArgs(&faderArgs);
-
-    bool exit = false;
 
     Texture2D asteroidSprite = LoadTexture("./assets/asteroid.png");
     Texture2D shotSprite = LoadTexture("./assets/shot.png");
@@ -39,7 +47,12 @@ void gameLoop(Player* player) {
 
     while(!WindowShouldClose())
     {
-        if (faderArgs.fadeComplete) {
+
+        if (IsKeyPressed(KEY_ESCAPE)) {
+            isPaused = !isPaused;
+        }
+
+        if (faderArgs.fadeComplete && !isPaused) {
             resetTimeBonusMultiplier(player);
             updateLevelBonus(player);
             clearShots(&shotsObjectPool);
@@ -49,6 +62,32 @@ void gameLoop(Player* player) {
             handleShotsMovement(&shotsObjectPool);
             handleAsteroidCollisions(&asteroidObjectPool, &destroyedAsteroidsObjectPool, &shotsObjectPool, &ship, player);
             handleDestroyedAsteroids(&asteroidObjectPool, &destroyedAsteroidsObjectPool);
+        }
+
+        if (isPaused) {
+            updatePausMenu(&pauseMenu);
+
+            if (pauseMenu.selected != -1) {
+                switch (pauseMenu.selected) {
+                    case 0: 
+                        isPaused = false;
+                        break;
+                    case 1:
+                        // TODO: Options
+                        break;
+                    case 2:
+                        faderArgs.fadeIn = false;
+                        exit = true;
+                        result = EXIT_TO_MENU;
+                        break;
+                    case 3:
+                        return EXIT_TO_DESKTOP;
+                    default:
+                        break;
+                }
+
+                pauseMenu.selected = -1;
+            }
         }
 
         if (ship.destroyed) {
@@ -79,6 +118,8 @@ void gameLoop(Player* player) {
             renderAsteroids(&asteroidObjectPool, &asteroidSprite);
             renderShots(&shotsObjectPool, &shotSprite);
             renderSidebars(player);
+            
+            if (isPaused) drawPausMenu(&pauseMenu);
             fader(&faderArgs);
             
         EndDrawing();
@@ -89,4 +130,6 @@ void gameLoop(Player* player) {
     UnloadTexture(asteroidSprite);
     UnloadTexture(ship.sprite);
     UnloadTexture(shotSprite);
+    if (WindowShouldClose()) result = EXIT_TO_DESKTOP;
+    return result;
 }

@@ -9,6 +9,7 @@ int main(){
     InitAudioDevice();
     SetTargetFPS(144);
     SetRandomSeed(time(NULL));
+    SetExitKey(KEY_NULL);
     
     mainMenu();
     

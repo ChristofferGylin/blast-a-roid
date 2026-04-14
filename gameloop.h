@@ -3,6 +3,12 @@
 
 #include "player.h"
 
-void gameLoop(Player* player);
+typedef enum {
+    GAME_CONTINUE,
+    EXIT_TO_MENU,
+    EXIT_TO_DESKTOP
+}GameResult;
+
+GameResult gameLoop(Player* player);
 
 #endif
