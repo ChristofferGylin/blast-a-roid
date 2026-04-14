@@ -9,6 +9,7 @@ typedef struct {
     Vector2 velocity;
     float rotation;
     bool destroyed;
+    bool isShieldActive;
 }Ship; 
 
 void handleShipMovement(Ship *ship);
