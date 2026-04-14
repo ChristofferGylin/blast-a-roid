@@ -31,4 +31,8 @@ typedef struct PausMenu {
     PauseMenuColors colors;
 }PausMenu; 
 
+void drawPausMenu(PausMenu* menu);
+void initPausMenu(PausMenu* menu);
+void updatePausMenu(PausMenu* menu);
+
 #endif
