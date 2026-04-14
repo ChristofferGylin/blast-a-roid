@@ -11,12 +11,13 @@ int fontSpacing = 6;
 int nextItemGap = 20;
 int underLineHeight = 3;
 int underLineOffset = 3;
+int roundnessRadius = 12.0f;
 
 void drawPausMenu(PausMenu* menu) {
     Vector2 origin = {0, 0};
 
     DrawRectanglePro(menu->rects.background, origin, 0, menu->colors.background);
-    DrawRectanglePro(menu->rects.menuContainer, origin, 0, menu->colors.menu);
+    DrawRectangleRounded(menu->rects.menuContainer, getRoundness(menu->rects.menuContainer, roundnessRadius), 10, menu->colors.menu);
 
     for (int i = 0; i < menu->count; i++) {
         PausMenuItem* item = &menu->items[i];
