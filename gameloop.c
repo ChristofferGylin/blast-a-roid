@@ -57,7 +57,7 @@ GameResult gameLoop(Player* player) {
             updateLevelBonus(player);
             clearShots(&shotsObjectPool);
             handleShooting(&ship, &shotsObjectPool);
-            handleShipMovement(&ship);
+            handleShipControls(&ship);
             handleAsteroidsMovement(&asteroidObjectPool);
             handleShotsMovement(&shotsObjectPool);
             handleAsteroidCollisions(&asteroidObjectPool, &destroyedAsteroidsObjectPool, &shotsObjectPool, &ship, player);

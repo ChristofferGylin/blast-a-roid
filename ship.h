@@ -12,7 +12,7 @@ typedef struct {
     bool isShieldActive;
 }Ship; 
 
-void handleShipMovement(Ship *ship);
+void handleShipControls(Ship *ship);
 void resetShip(Ship* ship);
 
 #endif
