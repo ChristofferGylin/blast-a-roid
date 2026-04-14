@@ -100,3 +100,24 @@ void initPausMenu(PausMenu* menu) {
 
     menu->selected = -1;
 }
+
+void updatePausMenu(PausMenu* menu) {
+    Vector2 mouse = GetMousePosition();
+
+    for (int i = 0; i < menu->count; i++) {
+        PausMenuItem* item = &menu->items[i];
+
+        Rectangle rect = {
+            item->basePosition.x,
+            item->basePosition.y + menu->menuOffset,
+            item->size.x,
+            item->size.y
+        };
+
+        item->isHovered = CheckCollisionPointRec(mouse, rect);
+
+        if (item->isHovered && IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
+            menu->selected = i;
+        }
+    }
+}
