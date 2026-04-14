@@ -4,22 +4,52 @@
 #include <stdbool.h>
 #include "mainMenu.h"
 
-void drawPausMenuBackground(PausMenu* menu) {
+int menuWidth = 400;
+int menuHeight = 500;
+int fontSize = 32;
+int fontSpacing = 6;
+int nextItemGap = 20;
+int underLineHeight = 3;
+int underLineOffset = 3;
 
+void drawPausMenu(PausMenu* menu) {
     Vector2 origin = {0, 0};
 
     DrawRectanglePro(menu->rects.background, origin, 0, menu->colors.background);
     DrawRectanglePro(menu->rects.menuContainer, origin, 0, menu->colors.menu);
+
+    for (int i = 0; i < menu->count; i++) {
+        PausMenuItem* item = &menu->items[i];
+
+        Vector2 pos = {
+            item->basePosition.x,
+            item->basePosition.y + menu->menuOffset
+        };
+
+        DrawTextPro(
+            GetFontDefault(),
+            item->text,
+            pos,
+            origin,
+            0,
+            fontSize,
+            fontSpacing,
+            menu->colors.text
+        );
+
+        if (item->isHovered) {
+            DrawRectangle(
+                pos.x,
+                pos.y + item->size.y + underLineOffset,
+                item->size.x,
+                underLineHeight,
+                menu->colors.text
+            );
+        }
+    }
 }
 
-void initPausMenu(PausMenu* menu) {
-
-    int menuWidth = 400;
-    int menuHeight = 500;
-    int fontSize = 32;
-    int fontSpacing = 6;
-    int nextItemGap = 20;
-    
+void initPausMenu(PausMenu* menu) {    
     char titles[][32] = {
         "RESUME GAME",
         "OPTIONS",
