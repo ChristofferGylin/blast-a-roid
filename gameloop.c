@@ -106,5 +106,6 @@ bool gameLoop(Player* player) {
     UnloadTexture(asteroidSprite);
     UnloadTexture(ship.sprite);
     UnloadTexture(shotSprite);
+    if (WindowShouldClose()) isRunning = false;
     return isRunning;
 }

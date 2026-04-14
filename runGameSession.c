@@ -12,6 +12,8 @@ bool runGameSession() {
     while (player.lives >= 0 || !isRunning) {            
         isRunning = gameLoop(&player);
 
+        if (!isRunning) return isRunning;
+
         if (player.lives < 0) {
             gameOver(&player);
         } else {
