@@ -11,6 +11,7 @@
 #include "sidebars.h"
 #include <stdbool.h>
 #include "fader.h"
+#include "pauseMenu.h"
 
 static AsteroidPool asteroidObjectPool = {0};
 static DestroyedAsteroidPool destroyedAsteroidsObjectPool = {0};
@@ -19,9 +20,13 @@ static ShotObjectPool shotsObjectPool = {0};
 bool gameLoop(Player* player) {
 
     bool isRunning = true;
+    bool isPaused = false;
     bool exit = false;
 
     player->levelBonus = (player->level + 1) * 1000;
+
+    PausMenu pauseMenu;
+    initPausMenu(&pauseMenu);
    
     initAsteroidPool(&asteroidObjectPool);
     initDestroyedAsteroidPool(&destroyedAsteroidsObjectPool);
@@ -40,7 +45,12 @@ bool gameLoop(Player* player) {
 
     while(!WindowShouldClose())
     {
-        if (faderArgs.fadeComplete) {
+
+        if (IsKeyPressed(KEY_ESCAPE)) {
+            isPaused = !isPaused;
+        }
+
+        if (faderArgs.fadeComplete && !isPaused) {
             resetTimeBonusMultiplier(player);
             updateLevelBonus(player);
             clearShots(&shotsObjectPool);
@@ -50,6 +60,10 @@ bool gameLoop(Player* player) {
             handleShotsMovement(&shotsObjectPool);
             handleAsteroidCollisions(&asteroidObjectPool, &destroyedAsteroidsObjectPool, &shotsObjectPool, &ship, player);
             handleDestroyedAsteroids(&asteroidObjectPool, &destroyedAsteroidsObjectPool);
+        }
+
+        if (isPaused) {
+            updatePausMenu(&pauseMenu);
         }
 
         if (ship.destroyed) {
@@ -80,6 +94,8 @@ bool gameLoop(Player* player) {
             renderAsteroids(&asteroidObjectPool, &asteroidSprite);
             renderShots(&shotsObjectPool, &shotSprite);
             renderSidebars(player);
+            
+            if (isPaused) drawPausMenu(&pauseMenu);
             fader(&faderArgs);
             
         EndDrawing();

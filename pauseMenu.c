@@ -3,21 +3,22 @@
 #include "constants.h"
 #include <stdbool.h>
 #include "mainMenu.h"
+#include <string.h>
 
 int menuWidth = 400;
 int menuHeight = 500;
-int fontSize = 32;
-int fontSpacing = 6;
-int nextItemGap = 20;
-int underLineHeight = 3;
-int underLineOffset = 3;
-int roundnessRadius = 12.0f;
+int pausMenuFontSize = 32;
+int pausMenuFontSpacing = 6;
+int pausMenuNextItemGap = 20;
+int pausMenuUnderlineHHeight = 3;
+int pausMenuUnderlineOffset = 3;
+int pausMenuRoundnessRadius = 12.0f;
 
 void drawPausMenu(PausMenu* menu) {
     Vector2 origin = {0, 0};
 
     DrawRectanglePro(menu->rects.background, origin, 0, menu->colors.background);
-    DrawRectangleRounded(menu->rects.menuContainer, getRoundness(menu->rects.menuContainer, roundnessRadius), 10, menu->colors.menu);
+    DrawRectangleRounded(menu->rects.menuContainer, getRoundness(menu->rects.menuContainer, pausMenuRoundnessRadius), 10, menu->colors.menu);
 
     for (int i = 0; i < menu->count; i++) {
         PausMenuItem* item = &menu->items[i];
@@ -33,17 +34,17 @@ void drawPausMenu(PausMenu* menu) {
             pos,
             origin,
             0,
-            fontSize,
-            fontSpacing,
+            pausMenuFontSize,
+            pausMenuFontSpacing,
             menu->colors.text
         );
 
         if (item->isHovered) {
             DrawRectangle(
                 pos.x,
-                pos.y + item->size.y + underLineOffset,
+                pos.y + item->size.y + pausMenuUnderlineOffset,
                 item->size.x,
-                underLineHeight,
+                pausMenuUnderlineHHeight,
                 menu->colors.text
             );
         }
@@ -79,7 +80,7 @@ void initPausMenu(PausMenu* menu) {
     menu->colors.text = (Color) RAYWHITE;
 
     for (int i = 0; i < 4; i++) {
-        Vector2 size = MeasureTextEx(GetFontDefault(), titles[i], fontSize, fontSpacing);
+        Vector2 size = MeasureTextEx(GetFontDefault(), titles[i], pausMenuFontSize, pausMenuFontSpacing);
 
         menu->items[i].basePosition = (Vector2){
             (SCREEN_WIDTH / 2) - (size.x / 2),
@@ -90,12 +91,12 @@ void initPausMenu(PausMenu* menu) {
         menu->items[i].size = size;
         menu->items[i].isHovered = false;
 
-        menuY += size.y + nextItemGap;
+        menuY += size.y + pausMenuNextItemGap;
     }
 
     menu->count = 4;
 
-    int menuHeight = menuY - nextItemGap;
+    int menuHeight = menuY - pausMenuNextItemGap;
     menu->menuOffset = (SCREEN_HEIGHT / 2) - (menuHeight / 2);
 
     menu->selected = -1;
