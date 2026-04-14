@@ -51,6 +51,12 @@ void handleShipMovement(Ship *ship)
         }
     }
 
+    if (IsKeyDown(KEY_SPACE)) {
+        ship->isShieldActive = true;
+    } else {
+        ship->isShieldActive = false;
+    }
+
     ship->position.x += GetFrameTime() * ship->velocity.x;
     ship->position.y += GetFrameTime() * ship->velocity.y;
 
