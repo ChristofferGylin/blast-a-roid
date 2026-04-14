@@ -17,7 +17,9 @@ static AsteroidPool asteroidObjectPool = {0};
 static DestroyedAsteroidPool destroyedAsteroidsObjectPool = {0};
 static ShotObjectPool shotsObjectPool = {0};
 
-bool gameLoop(Player* player) {
+GameResult gameLoop(Player* player) {
+
+    GameResult result = GAME_CONTINUE;
 
     bool isRunning = true;
     bool isPaused = false;
@@ -106,6 +108,6 @@ bool gameLoop(Player* player) {
     UnloadTexture(asteroidSprite);
     UnloadTexture(ship.sprite);
     UnloadTexture(shotSprite);
-    if (WindowShouldClose()) isRunning = false;
-    return isRunning;
+    if (WindowShouldClose()) result = EXIT_TO_DESKTOP;
+    return result;
 }

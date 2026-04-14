@@ -7,12 +7,16 @@
 bool runGameSession() {
     Player player = {0};
     initPlayer(&player);
-    bool isRunning = true;
+    GameResult gameLoopResult = GAME_CONTINUE;
 
-    while (player.lives >= 0 || !isRunning) {            
-        isRunning = gameLoop(&player);
+    while (player.lives >= 0) {            
+        gameLoopResult = gameLoop(&player);
 
-        if (!isRunning) return isRunning;
+        if (gameLoopResult == EXIT_TO_DESKTOP) {
+            return false;
+        } else if (gameLoopResult == EXIT_TO_MENU) {
+            return true;
+        }
 
         if (player.lives < 0) {
             gameOver(&player);
@@ -21,5 +25,5 @@ bool runGameSession() {
         }
     }
 
-    return isRunning;
+    return true;
 }

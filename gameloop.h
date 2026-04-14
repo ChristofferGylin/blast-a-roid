@@ -9,6 +9,6 @@ typedef enum {
     EXIT_TO_DESKTOP
 }GameResult;
 
-bool gameLoop(Player* player);
+GameResult gameLoop(Player* player);
 
 #endif
