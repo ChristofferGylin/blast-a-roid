@@ -66,6 +66,28 @@ GameResult gameLoop(Player* player) {
 
         if (isPaused) {
             updatePausMenu(&pauseMenu);
+
+            if (pauseMenu.selected != -1) {
+                switch (pauseMenu.selected) {
+                    case 0: 
+                        isPaused = false;
+                        break;
+                    case 1:
+                        // TODO: Options
+                        break;
+                    case 2:
+                        faderArgs.fadeIn = false;
+                        exit = true;
+                        result = EXIT_TO_MENU;
+                        break;
+                    case 3:
+                        return EXIT_TO_DESKTOP;
+                    default:
+                        break;
+                }
+
+                pauseMenu.selected = -1;
+            }
         }
 
         if (ship.destroyed) {
