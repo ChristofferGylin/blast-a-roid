@@ -3,6 +3,6 @@
 
 #include "player.h"
 
-void gameLoop(Player* player);
+bool gameLoop(Player* player);
 
 #endif

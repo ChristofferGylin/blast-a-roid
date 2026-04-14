@@ -16,7 +16,10 @@ static AsteroidPool asteroidObjectPool = {0};
 static DestroyedAsteroidPool destroyedAsteroidsObjectPool = {0};
 static ShotObjectPool shotsObjectPool = {0};
 
-void gameLoop(Player* player) {
+bool gameLoop(Player* player) {
+
+    bool isRunning = true;
+    bool exit = false;
 
     player->levelBonus = (player->level + 1) * 1000;
    
@@ -27,8 +30,6 @@ void gameLoop(Player* player) {
 
     FaderArgs faderArgs;
     initFaderArgs(&faderArgs);
-
-    bool exit = false;
 
     Texture2D asteroidSprite = LoadTexture("./assets/asteroid.png");
     Texture2D shotSprite = LoadTexture("./assets/shot.png");
@@ -89,4 +90,5 @@ void gameLoop(Player* player) {
     UnloadTexture(asteroidSprite);
     UnloadTexture(ship.sprite);
     UnloadTexture(shotSprite);
+    return isRunning;
 }

@@ -4,12 +4,13 @@
 #include "gameloop.h"
 #include "scoreScreen.h"
 
-void runGameSession() {
+bool runGameSession() {
     Player player = {0};
     initPlayer(&player);
+    bool isRunning = true;
 
-    while (player.lives >= 0) {            
-        gameLoop(&player);
+    while (player.lives >= 0 || !isRunning) {            
+        isRunning = gameLoop(&player);
 
         if (player.lives < 0) {
             gameOver(&player);
@@ -17,4 +18,6 @@ void runGameSession() {
             scoreScreen(&player);
         }
     }
+
+    return isRunning;
 }
