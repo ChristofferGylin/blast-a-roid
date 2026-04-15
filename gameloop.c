@@ -64,6 +64,10 @@ GameResult gameLoop(Player* player) {
             handleShotsMovement(&shotsObjectPool);
             handleAsteroidCollisions(&asteroidObjectPool, &destroyedAsteroidsObjectPool, &shotsObjectPool, &ship, player);
             handleDestroyedAsteroids(&asteroidObjectPool, &destroyedAsteroidsObjectPool);
+
+            if (ship.isShieldActive) {
+                updateShieldAnimation();
+            }
         }
 
         if (isPaused) {
