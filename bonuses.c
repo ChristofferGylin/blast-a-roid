@@ -61,7 +61,7 @@ void handleBonuses(Bonuses* bonuses, Player* player) {
 
 void handleBonusesCollisions(ShotObjectPool* shotPool, Bonuses* bonuses, Player* player) {
     for (int i = 0; i < shotPool->activeCount; i++) {
-        if (CheckCollisionCircles(shotPool->shots[i].shot.position, SHOT_SIZE / 2.0f, bonuses->bonusMultiplier.base.position, BONUS_MULTIPLIER_RADIUS)) {
+        if (bonuses->bonusMultiplier.base.isActive && CheckCollisionCircles(shotPool->shots[i].shot.position, SHOT_SIZE / 2.0f, bonuses->bonusMultiplier.base.position, BONUS_MULTIPLIER_RADIUS)) {
             player->powerups.levelBonusMultiplier = round(bonuses->bonusMultiplier.level);
             bonuses->bonusMultiplier.base.isActive = false;
             destroyShot(&shotPool[i]);
@@ -71,7 +71,7 @@ void handleBonusesCollisions(ShotObjectPool* shotPool, Bonuses* bonuses, Player*
 
 void initBonuses(Bonuses* bonuses) {
     bonuses->nextSpawnTime = getNextSpawnTime();
-    
+
     bonuses->bonusMultiplier.base.isActive = false;
     bonuses->bonusMultiplier.base.position = (Vector2){0, 0};
     bonuses->bonusMultiplier.base.spawnTime = 0.0;
