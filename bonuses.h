@@ -4,6 +4,8 @@
 #include <stdbool.h>
 #include "raylib.h"
 
+typedef struct Player Player;
+
 typedef struct BonusBase {
     bool isActive;
     double spawnTime;
@@ -21,4 +23,7 @@ typedef struct Bonuses {
 }Bonuses; 
 
 double getNextSpawnTime();
+Vector2 getRandomPosition();
+void handleBonuses(Bonuses* bonuses, Player* player);
+
 #endif
