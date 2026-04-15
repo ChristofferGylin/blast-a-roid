@@ -20,22 +20,22 @@ void handleBonuses(Bonuses* bonuses, Player* player) {
     
     double now = GetTime();
 
+    if (bonuses->bonusMultiplier.base.isActive) {
+            
+        if (bonuses->bonusMultiplier.base.spawnTime + BONUS_LIFE_TIME < now) {
+            bonuses->bonusMultiplier.base.isActive = false;
+        } else {
+            bonuses->bonusMultiplier.level += GetFrameTime() * BONUS_MULTIPLIER_ROLL_RATE;
+            if (bonuses->bonusMultiplier.level > 5.4f) {
+                bonuses->bonusMultiplier.level = 2.0f;
+            }
+        }
+    }
+
     if (bonuses->nextSpawnTime < now) {
 
         bonuses->nextSpawnTime = getNextSpawnTime();
         int randomSelect = GetRandomValue(1, 100);
-
-        if (bonuses->bonusMultiplier.base.isActive) {
-            
-            if (bonuses->bonusMultiplier.base.spawnTime + BONUS_LIFE_TIME < now) {
-                bonuses->bonusMultiplier.base.isActive = false;
-            } else {
-                bonuses->bonusMultiplier.level += GetFrameTime() * BONUS_MULTIPLIER_ROLL_RATE;
-                if (bonuses->bonusMultiplier.level > 5.4f) {
-                    bonuses->bonusMultiplier.level = 2.0f;
-                }
-            }
-        }
 
         if (randomSelect < 70) {
             return;
