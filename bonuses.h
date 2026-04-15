@@ -3,6 +3,7 @@
 
 #include <stdbool.h>
 #include "raylib.h"
+#include "shooting.h"
 
 typedef struct Player Player;
 
@@ -25,5 +26,6 @@ typedef struct Bonuses {
 double getNextSpawnTime();
 Vector2 getRandomPosition();
 void handleBonuses(Bonuses* bonuses, Player* player);
+void handleBonusesCollisions(ShotObjectPool* shotPool, Bonuses* bonuses, Player* player);
 
 #endif
