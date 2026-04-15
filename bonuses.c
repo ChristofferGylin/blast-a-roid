@@ -2,11 +2,14 @@
 #include "raylib.h"
 #include "player.h"
 #include "constants.h"
+#include "shooting.h"
+#include <math.h>
 
 const int MIN_BONUS_SPAWN_TIME = 10;
 const int MAX_BONUS_SPAWN_TIME = 30;
 const int BONUS_LIFE_TIME = 30;
 const float BONUS_MULTIPLIER_ROLL_RATE = 0.5f;
+const int BONUS_MULTIPLIER_RADIUS = 6;
 
 double getNextSpawnTime() {
     return GetTime() + GetRandomValue(MIN_BONUS_SPAWN_TIME, MAX_BONUS_SPAWN_TIME);
@@ -40,7 +43,7 @@ void handleBonuses(Bonuses* bonuses, Player* player) {
         if (randomSelect < 70) {
             return;
         } else if (randomSelect < 85) {
-            if (bonuses->bonusMultiplier.base.isActive || player->timeBonusMultiplier > 1) return;
+            if (bonuses->bonusMultiplier.base.isActive || player->powerups.levelBonusMultiplier > 2) return;
 
             bonuses->bonusMultiplier.base.isActive = true;
             bonuses->bonusMultiplier.base.spawnTime = now;
@@ -53,5 +56,15 @@ void handleBonuses(Bonuses* bonuses, Player* player) {
             // spawn extra life or extra shield
         }
 
+    }
+}
+
+void handleBonusesCollisions(ShotObjectPool* shotPool, Bonuses* bonuses, Player* player) {
+    for (int i = 0; i < shotPool->activeCount; i++) {
+        if (CheckCollisionCircles(shotPool->shots[i].shot.position, SHOT_SIZE / 2.0f, bonuses->bonusMultiplier.base.position, BONUS_MULTIPLIER_RADIUS)) {
+            player->powerups.levelBonusMultiplier = round(bonuses->bonusMultiplier.level);
+            bonuses->bonusMultiplier.base.isActive = false;
+            destroyShot(&shotPool[i]);
+        }
     }
 }
