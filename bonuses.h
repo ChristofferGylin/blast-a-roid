@@ -12,7 +12,7 @@ typedef struct BonusBase {
 
 typedef struct BonusMultiplier {
     BonusBase base;
-    int level;
+    float level;
 }BonusMultiplier;
 
 typedef struct Bonuses {
