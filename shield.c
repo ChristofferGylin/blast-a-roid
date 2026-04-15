@@ -11,8 +11,8 @@ void handleShield(Ship* ship, Player* player) {
 
         player->shieldPower -= GetFrameTime() * SHIELD_DRAIN_RATE;
 
-        if (player->shieldPower <= 0) {
-            player->shieldPower = 0;
+        if (player->shieldPower <= 0.0f) {
+            player->shieldPower = 0.0f;
             ship->isShieldActive = false;
         } else {
             ship->isShieldActive = true;

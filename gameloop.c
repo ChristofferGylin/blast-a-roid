@@ -12,6 +12,7 @@
 #include <stdbool.h>
 #include "fader.h"
 #include "pauseMenu.h"
+#include "shield.h"
 
 static AsteroidPool asteroidObjectPool = {0};
 static DestroyedAsteroidPool destroyedAsteroidsObjectPool = {0};
@@ -58,7 +59,7 @@ GameResult gameLoop(Player* player) {
             clearShots(&shotsObjectPool);
             handleShooting(&ship, &shotsObjectPool);
             handleShipControls(&ship);
-            
+            handleShield(&ship, player);
             handleAsteroidsMovement(&asteroidObjectPool);
             handleShotsMovement(&shotsObjectPool);
             handleAsteroidCollisions(&asteroidObjectPool, &destroyedAsteroidsObjectPool, &shotsObjectPool, &ship, player);
@@ -116,6 +117,7 @@ GameResult gameLoop(Player* player) {
                 ship.rotation,
                 WHITE
             );
+            renderShield(&ship);
             renderAsteroids(&asteroidObjectPool, &asteroidSprite);
             renderShots(&shotsObjectPool, &shotSprite);
             renderSidebars(player);
