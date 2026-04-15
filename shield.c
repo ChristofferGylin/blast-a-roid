@@ -1,5 +1,7 @@
 #include "ship.h"
 #include "player.h"
+#include "raylib.h"
+#include "constants.h"
 
 static const float SHIELD_DRAIN_RATE = 0.1f;
 
@@ -19,4 +21,10 @@ void updateShield(Ship* ship, Player* player) {
     } else {
         ship->isShieldActive = false;
     }
+}
+
+void renderShield(Ship* ship) {
+    if (!ship->isShieldActive) return;
+
+    DrawCircleLinesV(ship->position, SHIELD_SIZE /2, BLUE);
 }
