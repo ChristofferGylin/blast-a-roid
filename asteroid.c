@@ -83,10 +83,17 @@ void handleAsteroidCollisions(AsteroidPool* pool, DestroyedAsteroidPool* destroy
 
         float asteroidRadius = getAsteroidSize(ast->level) / 2.0f;
 
-        if (CheckCollisionCircles(ship->position, SHIP_SIZE / 2.0f, ast->position, asteroidRadius)) {
-            ship->destroyed = true;
-            destroyAsteroid(destroyedPool, &pool->asteroids[i]);
-            continue;
+        if (ship->isShieldActive) {
+            if (CheckCollisionCircles(ship->position, SHIELD_SIZE / 2.0f, ast->position, asteroidRadius)) {
+                destroyAsteroid(destroyedPool, &pool->asteroids[i]);
+                continue;
+            }
+        } else {
+            if (CheckCollisionCircles(ship->position, SHIP_SIZE / 2.0f, ast->position, asteroidRadius)) {
+                ship->destroyed = true;
+                destroyAsteroid(destroyedPool, &pool->asteroids[i]);
+                continue;
+            }
         }
 
         for (int j = 0; j < shotPool->activeCount; j++) {

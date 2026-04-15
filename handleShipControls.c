@@ -5,7 +5,7 @@
 #include "outOfBoundsCheck.h"
 
 
-void handleShipMovement(Ship *ship) 
+void handleShipControls(Ship *ship) 
 {
 
     if (ship->destroyed) return;

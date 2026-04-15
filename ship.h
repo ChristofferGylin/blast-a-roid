@@ -9,9 +9,10 @@ typedef struct {
     Vector2 velocity;
     float rotation;
     bool destroyed;
+    bool isShieldActive;
 }Ship; 
 
-void handleShipMovement(Ship *ship);
+void handleShipControls(Ship *ship);
 void resetShip(Ship* ship);
 
 #endif

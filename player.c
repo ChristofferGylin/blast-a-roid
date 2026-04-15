@@ -15,7 +15,7 @@ void initPlayer(Player* player) {
     player->lives = 2;
     player->powerups = initPowerups;
     player->score = 0;
-    player->shieldPower = 50;
+    player->shieldPower = 0.5f;
     player->timeBonusMultiplier = 1;
     player->timeBonusTimer = 0.0;
 }

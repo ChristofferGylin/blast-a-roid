@@ -12,6 +12,7 @@
 #include <stdbool.h>
 #include "fader.h"
 #include "pauseMenu.h"
+#include "shield.h"
 
 static AsteroidPool asteroidObjectPool = {0};
 static DestroyedAsteroidPool destroyedAsteroidsObjectPool = {0};
@@ -57,11 +58,16 @@ GameResult gameLoop(Player* player) {
             updateLevelBonus(player);
             clearShots(&shotsObjectPool);
             handleShooting(&ship, &shotsObjectPool);
-            handleShipMovement(&ship);
+            handleShipControls(&ship);
+            handleShield(&ship, player);
             handleAsteroidsMovement(&asteroidObjectPool);
             handleShotsMovement(&shotsObjectPool);
             handleAsteroidCollisions(&asteroidObjectPool, &destroyedAsteroidsObjectPool, &shotsObjectPool, &ship, player);
             handleDestroyedAsteroids(&asteroidObjectPool, &destroyedAsteroidsObjectPool);
+
+            if (ship.isShieldActive) {
+                updateShieldAnimation();
+            }
         }
 
         if (isPaused) {
@@ -115,6 +121,7 @@ GameResult gameLoop(Player* player) {
                 ship.rotation,
                 WHITE
             );
+            renderShield(&ship);
             renderAsteroids(&asteroidObjectPool, &asteroidSprite);
             renderShots(&shotsObjectPool, &shotSprite);
             renderSidebars(player);
