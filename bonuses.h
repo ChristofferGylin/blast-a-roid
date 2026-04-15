@@ -6,7 +6,7 @@
 
 typedef struct BonusBase {
     bool isActive;
-    float spawnTime;
+    double spawnTime;
     Vector2 position;
 }BonusBase;
 
@@ -16,8 +16,9 @@ typedef struct BonusMultiplier {
 }BonusMultiplier;
 
 typedef struct Bonuses {
-    float nextSpawnTime;
+    double nextSpawnTime;
     BonusMultiplier bonusMultiplier;
 }Bonuses; 
 
+double getNextSpawnTime();
 #endif
