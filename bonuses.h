@@ -18,6 +18,11 @@ typedef struct BonusMultiplier {
     float level;
 }BonusMultiplier;
 
+typedef struct BonusMultiplierIcon {
+    char text[3];
+    Color color;
+}BonusMultiplierIcon;
+
 typedef struct Bonuses {
     double nextSpawnTime;
     BonusMultiplier bonusMultiplier;
