@@ -27,5 +27,6 @@ double getNextSpawnTime();
 Vector2 getRandomPosition();
 void handleBonuses(Bonuses* bonuses, Player* player);
 void handleBonusesCollisions(ShotObjectPool* shotPool, Bonuses* bonuses, Player* player);
+void initBonuses(Bonuses* bonuses);
 
 #endif

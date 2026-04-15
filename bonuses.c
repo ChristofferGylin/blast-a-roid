@@ -68,3 +68,12 @@ void handleBonusesCollisions(ShotObjectPool* shotPool, Bonuses* bonuses, Player*
         }
     }
 }
+
+void initBonuses(Bonuses* bonuses) {
+    bonuses->nextSpawnTime = getNextSpawnTime();
+    
+    bonuses->bonusMultiplier.base.isActive = false;
+    bonuses->bonusMultiplier.base.position = (Vector2){0, 0};
+    bonuses->bonusMultiplier.base.spawnTime = 0.0;
+    bonuses->bonusMultiplier.level = 2;
+}
