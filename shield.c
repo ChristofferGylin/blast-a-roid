@@ -5,7 +5,7 @@
 
 static const float SHIELD_DRAIN_RATE = 0.1f;
 
-void updateShield(Ship* ship, Player* player) {
+void handleShield(Ship* ship, Player* player) {
 
     if (IsKeyDown(KEY_SPACE)) {
 

@@ -58,6 +58,7 @@ GameResult gameLoop(Player* player) {
             clearShots(&shotsObjectPool);
             handleShooting(&ship, &shotsObjectPool);
             handleShipControls(&ship);
+            
             handleAsteroidsMovement(&asteroidObjectPool);
             handleShotsMovement(&shotsObjectPool);
             handleAsteroidCollisions(&asteroidObjectPool, &destroyedAsteroidsObjectPool, &shotsObjectPool, &ship, player);

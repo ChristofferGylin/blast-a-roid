@@ -4,7 +4,7 @@
 typedef struct Player Player;
 typedef struct Ship Ship;
 
-void updateShield(Ship* ship, Player* player);
+void handleShield(Ship* ship, Player* player);
 void renderShield(Ship* ship);
 
 #endif
