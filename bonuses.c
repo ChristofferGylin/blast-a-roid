@@ -38,7 +38,7 @@ BonusMultiplierIcon getBonusMultiplierIcon(float level) {
             break;
 
         default:
-            printf("Error: Invalid level (%s) in getBonusMultiplierIcon\n");
+            printf("Error: Invalid level (%d) in getBonusMultiplierIcon\n", roundedLevel);
             break;
     }
     return icon;
@@ -97,7 +97,7 @@ void handleBonusesCollisions(ShotObjectPool* shotPool, Bonuses* bonuses, Player*
         if (bonuses->bonusMultiplier.base.isActive && CheckCollisionCircles(shotPool->shots[i].shot.position, SHOT_SIZE / 2.0f, bonuses->bonusMultiplier.base.position, BONUS_MULTIPLIER_RADIUS)) {
             player->powerups.levelBonusMultiplier = round(bonuses->bonusMultiplier.level);
             bonuses->bonusMultiplier.base.isActive = false;
-            destroyShot(&shotPool[i]);
+            destroyShot(&shotPool->shots[i]);
         }
     }
 }
