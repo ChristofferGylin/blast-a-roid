@@ -4,12 +4,45 @@
 #include "constants.h"
 #include "shooting.h"
 #include <math.h>
+#include <string.h>
+#include <stdio.h>
 
 const int MIN_BONUS_SPAWN_TIME = 10;
 const int MAX_BONUS_SPAWN_TIME = 30;
 const int BONUS_LIFE_TIME = 30;
 const float BONUS_MULTIPLIER_ROLL_RATE = 0.5f;
 const int BONUS_MULTIPLIER_RADIUS = 6;
+
+BonusMultiplierIcon getBonusMultiplierIcon(float level) {
+    int roundedLevel = round(level);
+    BonusMultiplierIcon icon = {0};
+    switch (roundedLevel) {
+        case 2:
+            strcpy(icon.text, "x2");
+            icon.color = GREEN;
+            break;
+
+        case 3:
+            strcpy(icon.text, "x3");
+            icon.color = BLUE;
+            break;
+
+        case 4:
+            strcpy(icon.text, "x4");
+            icon.color = RED;
+            break;
+
+        case 5:
+            strcpy(icon.text, "x5");
+            icon.color = PURPLE;
+            break;
+
+        default:
+            printf("Error: Invalid level (%s) in getBonusMultiplierIcon\n");
+            break;
+    }
+    return icon;
+}
 
 double getNextSpawnTime() {
     return GetTime() + GetRandomValue(MIN_BONUS_SPAWN_TIME, MAX_BONUS_SPAWN_TIME);
