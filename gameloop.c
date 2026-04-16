@@ -13,10 +13,12 @@
 #include "fader.h"
 #include "pauseMenu.h"
 #include "shield.h"
+#include "bonuses.h"
 
 static AsteroidPool asteroidObjectPool = {0};
 static DestroyedAsteroidPool destroyedAsteroidsObjectPool = {0};
 static ShotObjectPool shotsObjectPool = {0};
+static Bonuses bonuses = {0}; 
 
 GameResult gameLoop(Player* player) {
 
@@ -35,6 +37,7 @@ GameResult gameLoop(Player* player) {
     initDestroyedAsteroidPool(&destroyedAsteroidsObjectPool);
     initShotObjectPool(&shotsObjectPool);
     initAsteroids(&asteroidObjectPool, player->level);
+    initBonuses(&bonuses);
 
     FaderArgs faderArgs;
     initFaderArgs(&faderArgs);
@@ -56,6 +59,7 @@ GameResult gameLoop(Player* player) {
         if (faderArgs.fadeComplete && !isPaused) {
             resetTimeBonusMultiplier(player);
             updateLevelBonus(player);
+            handleBonuses(&bonuses, player);
             clearShots(&shotsObjectPool);
             handleShooting(&ship, &shotsObjectPool);
             handleShipControls(&ship);
@@ -64,6 +68,7 @@ GameResult gameLoop(Player* player) {
             handleShotsMovement(&shotsObjectPool);
             handleAsteroidCollisions(&asteroidObjectPool, &destroyedAsteroidsObjectPool, &shotsObjectPool, &ship, player);
             handleDestroyedAsteroids(&asteroidObjectPool, &destroyedAsteroidsObjectPool);
+            handleBonusesCollisions(&shotsObjectPool, &bonuses, player);
 
             if (ship.isShieldActive) {
                 updateShieldAnimation();
@@ -124,6 +129,7 @@ GameResult gameLoop(Player* player) {
             renderShield(&ship);
             renderAsteroids(&asteroidObjectPool, &asteroidSprite);
             renderShots(&shotsObjectPool, &shotSprite);
+            renderBonuses(&bonuses);
             renderSidebars(player);
             
             if (isPaused) drawPausMenu(&pauseMenu);
