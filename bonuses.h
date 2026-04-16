@@ -34,5 +34,6 @@ Vector2 getRandomPosition();
 void handleBonuses(Bonuses* bonuses, Player* player);
 void handleBonusesCollisions(ShotObjectPool* shotPool, Bonuses* bonuses, Player* player);
 void initBonuses(Bonuses* bonuses);
+void renderBonuses(Bonuses* bonuses);
 
 #endif
