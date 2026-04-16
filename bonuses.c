@@ -49,7 +49,7 @@ double getNextSpawnTime() {
 }
 
 Vector2 getRandomPosition() {
-    return (Vector2){GetRandomValue(10, SCREEN_WIDTH - 10), GetRandomValue(10, SCREEN_HEIGHT - 10)};
+    return (Vector2){GetRandomValue(SIDEBAR_WIDTH + 10, SCREEN_WIDTH - 10 - SIDEBAR_WIDTH), GetRandomValue(10, SCREEN_HEIGHT - 10)};
 }
 
 void handleBonuses(Bonuses* bonuses, Player* player) {
