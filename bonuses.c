@@ -7,11 +7,11 @@
 #include <string.h>
 #include <stdio.h>
 
-const int MIN_BONUS_SPAWN_TIME = 10;
+const int MIN_BONUS_SPAWN_TIME = 5;
 const int MAX_BONUS_SPAWN_TIME = 30;
 const int BONUS_LIFE_TIME = 30;
-const float BONUS_MULTIPLIER_ROLL_RATE = 0.5f;
-const int BONUS_MULTIPLIER_RADIUS = 6;
+const float BONUS_MULTIPLIER_ROLL_RATE = 2.0f;
+const int BONUS_MULTIPLIER_RADIUS = 8;
 
 BonusMultiplierIcon getBonusMultiplierIcon(float level) {
     int roundedLevel = round(level);
@@ -73,20 +73,20 @@ void handleBonuses(Bonuses* bonuses, Player* player) {
         bonuses->nextSpawnTime = getNextSpawnTime();
         int randomSelect = GetRandomValue(1, 100);
 
-        if (randomSelect < 70) {
+        if (randomSelect < 50) {
             return;
-        } else if (randomSelect < 85) {
-            if (bonuses->bonusMultiplier.base.isActive || player->powerups.levelBonusMultiplier > 2) return;
+        } else if (randomSelect < 70) {
+            if (bonuses->bonusMultiplier.base.isActive || player->powerups.levelBonusMultiplier > 1) return;
 
             bonuses->bonusMultiplier.base.isActive = true;
             bonuses->bonusMultiplier.base.spawnTime = now;
             bonuses->bonusMultiplier.base.position = getRandomPosition();
             bonuses->bonusMultiplier.level = 2.0f;
 
-        } else if (randomSelect < 95) {
+        } else if (randomSelect < 85) {
             // spawn powerup or shield
         } else {
-            // spawn extra life or extra shield
+            // spawn extra life or extra ship
         }
 
     }
