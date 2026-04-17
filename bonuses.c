@@ -113,12 +113,16 @@ void initBonuses(Bonuses* bonuses) {
 
 void renderBonuses(Bonuses* bonuses) {
     if (bonuses->bonusMultiplier.base.isActive) {
-        BonusMultiplierIcon icon = getBonusMultiplierIcon(bonuses->bonusMultiplier.level);
-
-        Vector2 textSize = MeasureTextEx(GetFontDefault(), icon.text, 12, 2);
-        Vector2 textPos = {bonuses->bonusMultiplier.base.position.x - (textSize.x / 2), bonuses->bonusMultiplier.base.position.y - (textSize.y / 2)};
-
-        DrawCircleV(bonuses->bonusMultiplier.base.position, BONUS_MULTIPLIER_RADIUS, icon.color);
-        DrawTextPro(GetFontDefault(), icon.text, textPos, (Vector2){0, 0}, 0, 12, 2, RAYWHITE);
+        renderBonusMultiplier(bonuses->bonusMultiplier.level, bonuses->bonusMultiplier.base.position);
     }
+}
+
+void renderBonusMultiplier(int level, Vector2 position) {
+    BonusMultiplierIcon icon = getBonusMultiplierIcon(level);
+
+    Vector2 textSize = MeasureTextEx(GetFontDefault(), icon.text, 12, 2);
+    Vector2 textPos = {position.x - (textSize.x / 2), position.y - (textSize.y / 2)};
+
+    DrawCircleV(position, BONUS_MULTIPLIER_RADIUS, icon.color);
+    DrawTextPro(GetFontDefault(), icon.text, textPos, (Vector2){0, 0}, 0, 12, 2, RAYWHITE);
 }
