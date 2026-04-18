@@ -11,7 +11,6 @@ const int MIN_BONUS_SPAWN_TIME = 5;
 const int MAX_BONUS_SPAWN_TIME = 30;
 const int BONUS_LIFE_TIME = 30;
 const float BONUS_MULTIPLIER_ROLL_RATE = 2.0f;
-const int BONUS_MULTIPLIER_RADIUS = 9;
 
 BonusMultiplierIcon getBonusMultiplierIcon(float level) {
     int roundedLevel = round(level);
