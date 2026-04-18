@@ -13,7 +13,7 @@ Color lineColor = {156, 192, 255, 128};
 
 int renderStats(uint64_t value, char title[], int startY, int bonusMultiplierLevel, bool isMultiplierRendered) {
     
-    int sideOffset = 20;
+    int sideOffset = 30;
     int fontSize = 22;
     int fontSpacing = 4;
     int gap = 12;
