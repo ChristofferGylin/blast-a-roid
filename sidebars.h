@@ -6,6 +6,6 @@
 typedef struct Player Player;
 
 void renderSidebars(Player* player);
-int renderStats(uint64_t value, char title[], int startY);
+int renderStats(uint64_t value, char title[], int startY, int bonusMultiplierLevel, bool renderMultiplierIcon);
 
 #endif
