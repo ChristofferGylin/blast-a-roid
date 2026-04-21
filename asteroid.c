@@ -202,21 +202,13 @@ void renderAsteroids(AsteroidPool* pool, Texture2D* asteroidSprite) {
 
         if (ast->destroyed) continue;
 
-        int asteroidSize = 0;
-
-        switch (ast->level)
-        {
-            case 1: asteroidSize = ASTEROID_SIZE_1; break;
-            case 2: asteroidSize = ASTEROID_SIZE_2; break;
-            case 3: asteroidSize = ASTEROID_SIZE_3; break;
-            default: printf("Error: Invalid asteroid level (%d) in renderAsteroids\n", ast->level);
-        }
+        int asteroidSize = getAsteroidSize(ast->level);
 
         DrawTexturePro(
             *asteroidSprite,
             (Rectangle){0, 0, asteroidSprite->width, asteroidSprite->height},
             (Rectangle){ast->position.x, ast->position.y, asteroidSize, asteroidSize},
-            (Vector2){asteroidSprite->width / 2.0f, asteroidSprite->height / 2.0f},
+            (Vector2){asteroidSize / 2.0f, asteroidSize / 2.0f},
             ast->rotation,
             WHITE  
         );

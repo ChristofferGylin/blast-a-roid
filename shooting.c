@@ -125,7 +125,7 @@ void renderShots(ShotObjectPool* pool, Texture2D* shotSprite) {
             *shotSprite,
             (Rectangle){0, 0, shotSprite->width, shotSprite->height},
             (Rectangle){shot->position.x, shot->position.y, SHOT_SIZE, SHOT_SIZE},
-            (Vector2){shotSprite->width / 2.0f, shotSprite->height / 2.0f},
+            (Vector2){SHOT_SIZE / 2.0f, SHOT_SIZE / 2.0f},
             0,
             WHITE  
         );
