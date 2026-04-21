@@ -1,27 +1,82 @@
 #include "raylib.h"
-#include <stdio.h>
-#include <stdlib.h>
 #include <stdbool.h>
 #include "fader.h"
 #include "player.h"
 #include "constants.h"
 #include <inttypes.h>
+#include "bonuses.h"
+#include <math.h>
+#include <stdio.h>
+#include <string.h>
+#include "scoreScreen.h"
 
-int numberPrinted = 0;
+#define HEADING_FONT_SIZE 48
+#define FONT_SPACING 6
+#define SCORE_FONT_SIZE 32
+#define GAP 10
+#define TEXT_BLOCK_HEIGHT 84
+#define STEP_DELAY 0.1f
+#define MULTIPLY_DELAY 0.5f
+#define NEXT_PHASE_DELAY 1
+#define EXIT_DELAY 1
 
-int renderScoreLine(uint64_t value, char title[], int startY, bool hasUnderline) {
+void bonusCountUp(uint64_t* src, uint64_t* target, BonusCountUpState* state) {
     
-    int sideOffset = 20;
-    int fontSize = 32;
-    int fontSpacing = 6;
+    state->isZeroPadded = false;
+    
+    if (state->bonusBuffer == 0) {
+
+        if (state->bonusBufferMultiplier == 0) {
+            state->bonusBufferMultiplier = 1;
+        } else {
+            state->bonusBufferMultiplier = state->bonusBufferMultiplier * 10;
+        }
+
+        state->bonusBuffer = *src % 10;
+        *src = *src / 10;
+
+        if (state->bonusBuffer == 0) {
+            state->isZeroPadded = true;
+            return;
+        }
+    }
+
+    *target += state->bonusBufferMultiplier;
+    state->bonusBuffer--;
+}
+
+void bonusCountDown(uint64_t* src, uint64_t* target) {
+
+    int scoreCountSteps[] = {100000, 10000, 1000, 100, 10, 1};
+    int stepCount = sizeof(scoreCountSteps) / sizeof(scoreCountSteps[0]);
+    
+    for (int i = 0; i < stepCount; i++) {
+        if (*src >= scoreCountSteps[i]) {
+
+            int step = scoreCountSteps[i];
+
+            *target += step;
+            *src -= step;
+            break;
+        }
+    }
+}
+
+int renderScoreLine(uint64_t value, char title[], int startY, bool hasUnderline, int bonusMultiplierLevel, bool isZeroPadded) {
+    
     int gap = 200;
     int underlineGap = 10;
 
     char valueText[32];
-    snprintf(valueText, sizeof(valueText), "%" PRIu64, value);
 
-    Vector2 valueSize = MeasureTextEx(GetFontDefault(), valueText, fontSize, fontSpacing);
-    Vector2 titleSize = MeasureTextEx(GetFontDefault(), title, fontSize, fontSpacing);
+    if (isZeroPadded) {
+        snprintf(valueText, sizeof(valueText), "%01" PRIu64, value);
+    } else {
+        snprintf(valueText, sizeof(valueText), "%" PRIu64, value);
+    }
+
+    Vector2 valueSize = MeasureTextEx(GetFontDefault(), valueText, SCORE_FONT_SIZE, FONT_SPACING);
+    Vector2 titleSize = MeasureTextEx(GetFontDefault(), title, SCORE_FONT_SIZE, FONT_SPACING);
 
     Vector2 valuePosition = {
         (SCREEN_WIDTH / 2) + gap - valueSize.x,
@@ -35,14 +90,23 @@ int renderScoreLine(uint64_t value, char title[], int startY, bool hasUnderline)
 
     Vector2 origin = {0, 0};
 
-    DrawTextPro(GetFontDefault(), title, titlePosition, origin, 0, fontSize, fontSpacing, RAYWHITE);
-    DrawTextPro(GetFontDefault(), valueText, valuePosition, origin, 0, fontSize, fontSpacing, RAYWHITE);
+    DrawTextPro(GetFontDefault(), title, titlePosition, origin, 0, SCORE_FONT_SIZE, FONT_SPACING, RAYWHITE);
+    DrawTextPro(GetFontDefault(), valueText, valuePosition, origin, 0, SCORE_FONT_SIZE, FONT_SPACING, RAYWHITE);
+
+    if (bonusMultiplierLevel > 1) {
+        Vector2 multiplierIconPosition = {
+            valuePosition.x + valueSize.x + 15,
+            valuePosition.y + BONUS_MULTIPLIER_RADIUS
+        };
+
+        renderBonusMultiplier(bonusMultiplierLevel, multiplierIconPosition);
+    }
 
     if (hasUnderline) {
         float underlineY = titlePosition.y + titleSize.y + underlineGap;
-        float underLineStartX = titlePosition.x - (titleSize.x / 2);
-        float underLineEndX = titlePosition.x + (titleSize.x / 2);
-        DrawLine(titlePosition.x, underlineY, valuePosition.x + valueSize.x, underlineY, RAYWHITE);
+        float underLineStartX = titlePosition.x;
+        float underLineEndX = valuePosition.x + valueSize.x;
+        DrawLine(underLineStartX, underlineY, underLineEndX, underlineY, RAYWHITE);
 
         return underlineY;
     }
@@ -51,94 +115,110 @@ int renderScoreLine(uint64_t value, char title[], int startY, bool hasUnderline)
 }
 
 void scoreScreen(Player* player) {
-
-    uint64_t bonus = player->levelBonus;
-    uint64_t score = player->score;
-
+    
     FaderArgs faderArgs;
     initFaderArgs(&faderArgs);
-    bool waiting = false;
+
+    uint64_t displayBonus = 0;
+    uint64_t levelBonus = player->levelBonus;
+    uint64_t levelBonusMultiplied = player->levelBonus * player->powerups.levelBonusMultiplier;
+    uint64_t displayScore = player->score;
+
+    double lastUpdate = GetTime();
+    float delayTime = 0.1f;
+    int levelBonusMultiplier = player->powerups.levelBonusMultiplier;
+    int currentMultiplier = 1;
+
+    BonusCountUpState bonusCountUpState = {0};
+
+    bool isWaiting = false;
+    bool isCountUpFinished = false;
+    bool isMultiplyFinished = false;
+    bool isCountDownFinished = false;
     bool exit = false;
-    float lastUpdate = GetTime();
-    const int WAIT_TIME = 2;
-    const float UPDATE_WAIT_TIME = 0.1f;
-    const int GAP = 10;
-    const int TEXT_BLOCK_HEIGHT = 84;
-    double timer = GetTime();
 
     char headingText[18];
     snprintf(headingText, sizeof(headingText), "LEVEL %d CLEARED", player->level);
 
-    int headingFontSize = 48;
-    int headingFontSpacing = 6;
-
-    Vector2 headingSize = MeasureTextEx(GetFontDefault(), headingText, headingFontSize, headingFontSpacing);
+    Vector2 headingSize = MeasureTextEx(GetFontDefault(), headingText, HEADING_FONT_SIZE, FONT_SPACING);
     Vector2 headingPosition = {(SCREEN_WIDTH - headingSize.x) / 2, (SCREEN_HEIGHT / 2) - (TEXT_BLOCK_HEIGHT * 2)}; 
     Vector2 headingOrigin = {0, 0};
 
-    player->score += bonus;
+    player->score += levelBonusMultiplied;
     player->level++;
     player->timeBonusMultiplier = 1;
     player->powerups.levelBonusMultiplier = 1;
 
-    while(!WindowShouldClose())
-    {
-        int yOffset = (SCREEN_HEIGHT / 2) - (TEXT_BLOCK_HEIGHT / 2);
+    while (!WindowShouldClose()) {
 
-        if (faderArgs.fadeComplete && faderArgs.fadeIn && !waiting) {
-            
-            float currentTime = GetTime();
+        if (faderArgs.fadeComplete && faderArgs.fadeIn && !isWaiting) {
 
-             if ((currentTime >= lastUpdate + UPDATE_WAIT_TIME) && bonus > 0) {
-                lastUpdate = currentTime;
-                
-                if (bonus > 100000) {
-                    bonus -= 100000;
-                    score += 100000;
-                } else if (bonus > 10000) {
-                    bonus -= 10000;
-                    score += 10000;
-                } else if (bonus > 1000) {
-                    bonus -= 1000;
-                    score += 1000;
-                } else if (bonus > 100) {
-                    bonus -= 100;
-                    score += 100;
-                } else  if (bonus > 10) {
-                    bonus -= 10;
-                    score += 10;
-                } else {
-                    bonus--;
-                    score++;
+            if (!isCountUpFinished) {
+
+                delayTime = STEP_DELAY;
+                isWaiting = true;
+                lastUpdate = GetTime();
+
+                bonusCountUp(&levelBonus, &displayBonus, &bonusCountUpState);
+
+                if (displayBonus == player->levelBonus) {
+                    isCountUpFinished = true;
+                    bonusCountUpState.bonusBufferMultiplier = 0;
+                    delayTime = NEXT_PHASE_DELAY;
                 }
-                
-             }
 
-             if (bonus <= 0) {
-                bonus = 0;
-                timer = GetTime();
-                waiting = true;
-             }
-        }  else if (waiting) {
-            
-            if (GetTime() >= timer + WAIT_TIME) {
+            } else if (!isMultiplyFinished) {
+                delayTime = MULTIPLY_DELAY;
+                isWaiting = true;
+                lastUpdate = GetTime();
+
+                if (levelBonusMultiplier == 1) {
+                    isMultiplyFinished = true;
+                } else {
+                    currentMultiplier++;
+                    displayBonus = player->levelBonus * currentMultiplier;
+
+                    if (currentMultiplier == levelBonusMultiplier) {
+                        isMultiplyFinished = true;
+                        delayTime = NEXT_PHASE_DELAY;
+                    }
+                }
+            } else if (!isCountDownFinished) {
+                delayTime = STEP_DELAY;
+                isWaiting = true;
+                lastUpdate = GetTime();
+
+                bonusCountDown(&displayBonus, &displayScore);
+
+                if (displayBonus == 0) {
+                    isCountDownFinished = true;
+                    delayTime = EXIT_DELAY;
+                }
+            } else {
                 faderArgs.fadeIn = false;
-                waiting = false;
             }
+
+        } else if (isWaiting) {
             
+            if (GetTime() >= lastUpdate + delayTime) {
+                isWaiting = false;
+            }
+
         } else if (faderArgs.fadeComplete && !faderArgs.fadeIn) {
             exit = true;
         }
 
+        int yOffset = (SCREEN_HEIGHT / 2) - (TEXT_BLOCK_HEIGHT / 2);
+
         BeginDrawing();
             ClearBackground(BLACK);
-            DrawTextPro(GetFontDefault(), headingText, headingPosition, headingOrigin, 0, headingFontSize, headingFontSpacing, RAYWHITE);
-            yOffset = renderScoreLine(bonus, "BONUS:", yOffset, true);
+            DrawTextPro(GetFontDefault(), headingText, headingPosition, headingOrigin, 0, HEADING_FONT_SIZE, FONT_SPACING, RAYWHITE);
+            yOffset = renderScoreLine(displayBonus, "BONUS:", yOffset, true, currentMultiplier, bonusCountUpState.isZeroPadded);
             yOffset = yOffset + GAP;
-            yOffset = renderScoreLine(score, "SCORE:", yOffset, false);
+            yOffset = renderScoreLine(displayScore, "SCORE:", yOffset, false, 0, false);
             fader(&faderArgs);
         EndDrawing();
 
         if (exit) break;
     }
-}
+}   
