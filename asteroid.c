@@ -216,7 +216,7 @@ void renderAsteroids(AsteroidPool* pool, Texture2D* asteroidSprite) {
             *asteroidSprite,
             (Rectangle){0, 0, asteroidSprite->width, asteroidSprite->height},
             (Rectangle){ast->position.x, ast->position.y, asteroidSize, asteroidSize},
-            (Vector2){asteroidSprite->width / 2.0f, asteroidSprite->height / 2.0f},
+            (Vector2){asteroidSize / 2.0f, asteroidSize / 2.0f},
             ast->rotation,
             WHITE  
         );
