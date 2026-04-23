@@ -31,8 +31,10 @@ typedef struct AnimationPoolObject {
 typedef struct AnimationPool {
     AnimationPoolObject animations[MAX_FRAMES];
     int activeCount;
+    int capacity;
 }AnimationPool;
 
+void addNewAnimation(AnimationPool* pool, Animation* animation, Vector2 position, Vector2 size);
 void initAnimation(Animation* animation, char* spritesheetPath, const char* jsonPath, float fps, Vector2 size, bool isLoop);
 void renderAnimation(AnimationInstance* aniInst);
 void updateAnimation(AnimationInstance* aniInst);
