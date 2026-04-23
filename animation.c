@@ -12,19 +12,19 @@ void initAnimation(Animation* animation, char* spritesheetPath, const char* json
 
     cJSON* frameEntry = NULL;
 
-    Frame frames[MAX_FRAMES];
+    Rectangle frames[MAX_FRAMES];
 
     cJSON_ArrayForEach(frameEntry, framesObj) {
         cJSON* frame = cJSON_GetObjectItem(frameEntry, "frame");
 
         if (!frame) continue;
 
-        Frame f;
+        Rectangle f;
 
-        f.rect.x = (float)cJSON_GetObjectItem(frame, "x")->valuedouble;
-        f.rect.y = (float)cJSON_GetObjectItem(frame, "y")->valuedouble;
-        f.rect.width = (float)cJSON_GetObjectItem(frame, "w")->valuedouble;
-        f.rect.height = (float)cJSON_GetObjectItem(frame, "h")->valuedouble;
+        f.x = (float)cJSON_GetObjectItem(frame, "x")->valuedouble;
+        f.y = (float)cJSON_GetObjectItem(frame, "y")->valuedouble;
+        f.width = (float)cJSON_GetObjectItem(frame, "w")->valuedouble;
+        f.height = (float)cJSON_GetObjectItem(frame, "h")->valuedouble;
 
         if (animation->frameCount < MAX_FRAMES) {
             frames[animation->frameCount++] = f;
@@ -45,7 +45,7 @@ void initAnimation(Animation* animation, char* spritesheetPath, const char* json
 void renderAnimation(AnimationInstance* aniInst) {
     DrawTexturePro(
         aniInst->animation->texture,
-        aniInst->animation->frames[aniInst->currentFrame].rect,
+        aniInst->animation->frames[aniInst->currentFrame],
         (Rectangle){aniInst->position.x, aniInst->position.y, aniInst->animation->size.x, aniInst->animation->size.y},
         (Vector2){aniInst->animation->size.x / 2, aniInst->animation->size.y / 2},
         0,

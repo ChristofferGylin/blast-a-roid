@@ -4,14 +4,10 @@
 #include "raylib.h"
 #include "stdbool.h"
 
-typedef struct Frame {
-    Rectangle rect;
-}Frame;
-
 typedef struct Animation {
     Texture2D texture;
     Vector2 size;
-    Frame* frames;
+    Rectangle* frames;
     int frameCount;
     float fps;
     bool isLoop;
