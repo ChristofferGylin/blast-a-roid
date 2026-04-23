@@ -145,3 +145,14 @@ void updateAnimation(AnimationInstance* aniInst) {
         }
     }
 }
+
+void updateAnimationPool(AnimationPool* pool) {
+    
+    if (pool->activeCount == 0) return;
+    
+    for (int i = 0; i < pool->activeCount; i++) {
+        if (!pool->animations[i].active || pool->animations[i].aniInstance.isFinished) continue;
+
+        updateAnimation(&pool->animations[i].aniInstance);
+    }
+}

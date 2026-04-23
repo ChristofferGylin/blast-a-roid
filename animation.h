@@ -44,5 +44,6 @@ void renderAnimation(AnimationInstance* aniInst);
 void renderAnimationPool(AnimationPool* pool);
 void unloadAnimation(Animation* animation);
 void updateAnimation(AnimationInstance* aniInst);
+void updateAnimationPool(AnimationPool* pool);
 
 #endif
