@@ -103,6 +103,10 @@ void renderAnimation(AnimationInstance* aniInst) {
     );
 }
 
+void unloadAnimation(Animation* animation) {
+    UnloadTexture(animation->texture);
+}
+
 void updateAnimation(AnimationInstance* aniInst) {
     aniInst->currentFrame = round((GetTime() - aniInst->startTime) * aniInst->animation->fps);
 
