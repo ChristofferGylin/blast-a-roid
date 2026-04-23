@@ -2,8 +2,6 @@
 #include "cjson/cJSON.h"
 #include "animation.h"
 
-#define MAX_FRAMES 128
-
 void initAnimation(Animation* animation, char* spritesheetPath, const char* jsonPath, float fps, Vector2 size, bool isLoop) {
     char* jsonText = LoadFileText(jsonPath);
 

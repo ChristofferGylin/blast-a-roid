@@ -4,6 +4,8 @@
 #include "raylib.h"
 #include "stdbool.h"
 
+#define MAX_FRAMES 128
+
 typedef struct Animation {
     Texture2D texture;
     Vector2 size;
@@ -20,6 +22,16 @@ typedef struct AnimationInstance {
     double startTime;
     bool isFinished;
 }AnimationInstance;
+
+typedef struct AnimationPoolObject {
+    bool active;
+    AnimationInstance aniInstance; 
+}AnimationPoolObject;
+
+typedef struct AnimationPool {
+    AnimationPoolObject animations[MAX_FRAMES];
+    int activeCount;
+}AnimationPool;
 
 void initAnimation(Animation* animation, char* spritesheetPath, const char* jsonPath, float fps, Vector2 size, bool isLoop);
 void renderAnimation(AnimationInstance* aniInst);
