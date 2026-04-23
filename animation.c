@@ -4,7 +4,7 @@
 
 #define MAX_FRAMES 128
 
-void initAnimation(Animation* animation, char* spritesheetPath, const char* jsonPath, float fps, bool isLoop) {
+void initAnimation(Animation* animation, char* spritesheetPath, const char* jsonPath, float fps, Vector2 size, bool isLoop) {
     char* jsonText = LoadFileText(jsonPath);
 
     cJSON* root = cJSON_Parse(jsonText);
@@ -31,11 +31,10 @@ void initAnimation(Animation* animation, char* spritesheetPath, const char* json
         }
     }
 
-    animation->currentFrame = 0;
+    animation->texture = LoadTexture(spritesheetPath);
+    animation->size = size;
     animation->frames = frames;
     animation->fps = fps;
-    animation->startTime = 0.0;
-    animation->texture = LoadTexture(spritesheetPath);
     animation->isLoop = isLoop;
 
     cJSON_Delete(root);
@@ -43,27 +42,27 @@ void initAnimation(Animation* animation, char* spritesheetPath, const char* json
 
 }
 
-void renderAnimation(Animation* animation) {
+void renderAnimation(AnimationInstance* aniInst) {
     DrawTexturePro(
-        animation->texture,
-        animation->frames[animation->currentFrame].rect,
-        (Rectangle){animation->position.x, animation->position.y, animation->size.x, animation->size.y},
-        (Vector2){animation->size.x / 2, animation->size.y / 2},
+        aniInst->animation->texture,
+        aniInst->animation->frames[aniInst->currentFrame].rect,
+        (Rectangle){aniInst->position.x, aniInst->position.y, aniInst->animation->size.x, aniInst->animation->size.y},
+        (Vector2){aniInst->animation->size.x / 2, aniInst->animation->size.y / 2},
         0,
         RAYWHITE
     );
 }
 
-void updateAnimation(Animation* animation) {
-    animation->currentFrame = round((GetTime() - animation->startTime) * animation->fps);
+void updateAnimation(AnimationInstance* aniInst) {
+    aniInst->currentFrame = round((GetTime() - aniInst->startTime) * aniInst->animation->fps);
 
-    if (animation->currentFrame > animation->frameCount) {
+    if (aniInst->currentFrame > aniInst->animation->frameCount) {
 
-        if (animation->isLoop) {
-            animation->currentFrame = 0;
+        if (aniInst->animation->isLoop) {
+            aniInst->currentFrame = 0;
         } else {
-            animation->currentFrame = 0;
-            animation->isFinished = true;
+            aniInst->currentFrame = 0;
+            aniInst->isFinished = true;
         }
     }
 }
