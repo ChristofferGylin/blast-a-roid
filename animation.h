@@ -5,6 +5,7 @@
 #include "stdbool.h"
 
 #define MAX_FRAMES 128
+#define MAX_ANIMATIONS 128
 
 typedef struct Animation {
     Texture2D texture;
@@ -29,13 +30,13 @@ typedef struct AnimationPoolObject {
 }AnimationPoolObject;
 
 typedef struct AnimationPool {
-    AnimationPoolObject animations[MAX_FRAMES];
+    AnimationPoolObject animations[MAX_ANIMATIONS];
     int activeCount;
-    int capacity;
 }AnimationPool;
 
 void addNewAnimation(AnimationPool* pool, Animation* animation, Vector2 position, Vector2 size);
 void initAnimation(Animation* animation, char* spritesheetPath, const char* jsonPath, float fps, Vector2 size, bool isLoop);
+void initAnimationPool(AnimationPool* pool);
 void renderAnimation(AnimationInstance* aniInst);
 void updateAnimation(AnimationInstance* aniInst);
 

@@ -2,6 +2,31 @@
 #include "cjson/cJSON.h"
 #include "animation.h"
 
+void addNewAnimation(AnimationPool* pool, Animation* animation, Vector2 position, Vector2 size) {
+    
+    if (pool->activeCount >= MAX_ANIMATIONS) {
+        printf("Error: Memory overflow in addNewAnimation\n");
+        return;        
+    }
+
+    if (pool->animations[pool->activeCount].active) {
+        printf("Error: Could not add new animation, index already in use in addNewAnimation\n");
+        return;
+    }
+    
+    AnimationInstance aniInstance;
+
+    aniInstance.animation = animation;
+    aniInstance.currentFrame = 0;
+    aniInstance.isFinished = false;
+    aniInstance.position = position;
+    aniInstance.startTime = GetTime();
+
+    pool->animations[pool->activeCount].aniInstance = aniInstance;
+    pool->animations[pool->activeCount].active = true;
+    pool->activeCount++;
+} 
+
 void initAnimation(Animation* animation, char* spritesheetPath, const char* jsonPath, float fps, Vector2 size, bool isLoop) {
     char* jsonText = LoadFileText(jsonPath);
 
@@ -40,6 +65,14 @@ void initAnimation(Animation* animation, char* spritesheetPath, const char* json
 
 }
 
+void initAnimationPool(AnimationPool* pool) {
+    for (int i = 0; i < MAX_ANIMATIONS; i++) {
+        pool->animations[i].active = false;
+    }
+
+    pool->activeCount = 0;
+}
+
 void renderAnimation(AnimationInstance* aniInst) {
     DrawTexturePro(
         aniInst->animation->texture,
@@ -50,31 +83,6 @@ void renderAnimation(AnimationInstance* aniInst) {
         RAYWHITE
     );
 }
-
-void addNewAnimation(AnimationPool* pool, Animation* animation, Vector2 position, Vector2 size) {
-    
-    if (pool->activeCount >= pool->capacity) {
-        printf("Error: Memory overflow in addNewAnimation\n");
-        return;        
-    }
-
-    if (pool->animations[pool->activeCount].active) {
-        printf("Error: Could not add new animation, index already in use in addNewAnimation\n");
-        return;
-    }
-    
-    AnimationInstance aniInstance;
-
-    aniInstance.animation = animation;
-    aniInstance.currentFrame = 0;
-    aniInstance.isFinished = false;
-    aniInstance.position = position;
-    aniInstance.startTime = GetTime();
-
-    pool->animations[pool->activeCount].aniInstance = aniInstance;
-    pool->animations[pool->activeCount].active = true;
-    pool->activeCount++;
-} 
 
 void updateAnimation(AnimationInstance* aniInst) {
     aniInst->currentFrame = round((GetTime() - aniInst->startTime) * aniInst->animation->fps);
