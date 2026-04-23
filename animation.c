@@ -2,7 +2,7 @@
 #include "cjson/cJSON.h"
 #include "animation.h"
 
-void addNewAnimation(AnimationPool* pool, Animation* animation, Vector2 position, Vector2 size) {
+void addNewAnimation(AnimationPool* pool, Animation* animation, Vector2 position, Vector2 size, float rotation) {
     
     if (pool->activeCount >= MAX_ANIMATIONS) {
         printf("Error: Memory overflow in addNewAnimation\n");
@@ -20,6 +20,7 @@ void addNewAnimation(AnimationPool* pool, Animation* animation, Vector2 position
     aniInstance.currentFrame = 0;
     aniInstance.isFinished = false;
     aniInstance.position = position;
+    aniInstance.rotation = rotation;
     aniInstance.startTime = GetTime();
 
     pool->animations[pool->activeCount].aniInstance = aniInstance;
@@ -114,7 +115,7 @@ void renderAnimation(AnimationInstance* aniInst) {
         aniInst->animation->frames[aniInst->currentFrame],
         (Rectangle){aniInst->position.x, aniInst->position.y, aniInst->animation->size.x, aniInst->animation->size.y},
         (Vector2){aniInst->animation->size.x / 2, aniInst->animation->size.y / 2},
-        0,
+        aniInst->rotation,
         RAYWHITE
     );
 }

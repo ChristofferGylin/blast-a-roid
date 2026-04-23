@@ -19,6 +19,7 @@ typedef struct Animation {
 typedef struct AnimationInstance {
     Animation* animation;
     Vector2 position;
+    float rotation;
     int currentFrame;
     double startTime;
     bool isFinished;
@@ -34,12 +35,13 @@ typedef struct AnimationPool {
     int activeCount;
 }AnimationPool;
 
-void addNewAnimation(AnimationPool* pool, Animation* animation, Vector2 position, Vector2 size);
+void addNewAnimation(AnimationPool* pool, Animation* animation, Vector2 position, Vector2 size, float rotation);
 void compactAnimationPool(AnimationPool* pool);
 void handleFinishedAnimations(AnimationPool* pool);
 void initAnimation(Animation* animation, char* spritesheetPath, const char* jsonPath, float fps, Vector2 size, bool isLoop);
 void initAnimationPool(AnimationPool* pool);
 void renderAnimation(AnimationInstance* aniInst);
+void renderAnimationPool(AnimationPool* pool);
 void unloadAnimation(Animation* animation);
 void updateAnimation(AnimationInstance* aniInst);
 
