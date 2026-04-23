@@ -1,3 +1,4 @@
+#include <math.h>
 #include "cjson/cJSON.h"
 #include "animation.h"
 
@@ -35,8 +36,12 @@ void initAnimation(Animation* animation, Texture2D spritesheet, const char* json
     animation->fps = fps;
     animation->startTime = 0.0;
     animation->texture = spritesheet;
-    
+
     cJSON_Delete(root);
     UnloadFileText(jsonText);
 
+}
+
+void updateAnimation(Animation* animation) {
+    animation->currentFrame = round((GetTime() - animation->startTime) * animation->fps);
 }

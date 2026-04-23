@@ -17,5 +17,6 @@ typedef struct Animation {
 }Animation;
 
 void initAnimation(Animation* animation, Texture2D spritesheet, const char* jsonPath, float fps);
+void updateAnimation(Animation* animation);
 
 #endif
