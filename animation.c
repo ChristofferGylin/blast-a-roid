@@ -46,6 +46,22 @@ void compactAnimationPool(AnimationPool* pool) {
     pool->activeCount = write;
 }
 
+void handleFinishedAnimations(AnimationPool* pool) {
+
+    if (pool->activeCount == 0) return;
+    
+    bool hasChanges = false;
+    
+    for (int i = 0; i < pool->activeCount; i++) {
+        if (pool->animations[i].aniInstance.isFinished) {
+            pool->animations[i].active = false;
+            hasChanges = true;
+        }
+    }
+
+    if (hasChanges) compactAnimationPool(pool);
+}
+
 void initAnimation(Animation* animation, char* spritesheetPath, const char* jsonPath, float fps, Vector2 size, bool isLoop) {
     char* jsonText = LoadFileText(jsonPath);
 
