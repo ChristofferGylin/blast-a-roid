@@ -119,6 +119,14 @@ void renderAnimation(AnimationInstance* aniInst) {
     );
 }
 
+void renderAnimationPool(AnimationPool* pool) {
+    for (int i = 0; i < pool->activeCount; i++) {
+        if (!pool->animations[i].active || pool->animations[i].aniInstance.isFinished) continue;
+
+        renderAnimation(&pool->animations[i].aniInstance);
+    }
+}
+
 void unloadAnimation(Animation* animation) {
     UnloadTexture(animation->texture);
 }
