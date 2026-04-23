@@ -4,7 +4,7 @@
 
 #define MAX_FRAMES 128
 
-void initAnimation(Animation* animation, Texture2D spritesheet, const char* jsonPath, float fps) {
+void initAnimation(Animation* animation, char* spritesheetPath, const char* jsonPath, float fps, bool isLoop) {
     char* jsonText = LoadFileText(jsonPath);
 
     cJSON* root = cJSON_Parse(jsonText);
@@ -35,7 +35,8 @@ void initAnimation(Animation* animation, Texture2D spritesheet, const char* json
     animation->frames = frames;
     animation->fps = fps;
     animation->startTime = 0.0;
-    animation->texture = spritesheet;
+    animation->texture = LoadTexture(spritesheetPath);
+    animation->isLoop = isLoop;
 
     cJSON_Delete(root);
     UnloadFileText(jsonText);

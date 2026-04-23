@@ -21,7 +21,7 @@ typedef struct Animation {
     bool isFinished;
 }Animation;
 
-void initAnimation(Animation* animation, Texture2D spritesheet, const char* jsonPath, float fps);
+void initAnimation(Animation* animation, char* spritesheetPath, const char* jsonPath, float fps, bool isLoop);
 void renderAnimation(Animation* animation);
 void updateAnimation(Animation* animation);
 
