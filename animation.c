@@ -2,7 +2,7 @@
 #include "cjson/cJSON.h"
 #include "animation.h"
 
-void addNewAnimation(AnimationPool* pool, Animation* animation, Vector2 position, Vector2 size, float rotation) {
+void addNewAnimation(AnimationPool* pool, Animation* animation, Vector2 position, float rotation) {
     
     if (pool->activeCount >= MAX_ANIMATIONS) {
         printf("Error: Memory overflow in addNewAnimation\n");

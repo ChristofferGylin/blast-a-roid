@@ -35,7 +35,7 @@ typedef struct AnimationPool {
     int activeCount;
 }AnimationPool;
 
-void addNewAnimation(AnimationPool* pool, Animation* animation, Vector2 position, Vector2 size, float rotation);
+void addNewAnimation(AnimationPool* pool, Animation* animation, Vector2 position, float rotation);
 void compactAnimationPool(AnimationPool* pool);
 void handleFinishedAnimations(AnimationPool* pool);
 void initAnimation(Animation* animation, char* spritesheetPath, const char* jsonPath, float fps, Vector2 size, bool isLoop);
