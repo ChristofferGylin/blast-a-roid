@@ -34,7 +34,7 @@ typedef struct {
 
 void addNewAsteroid(AsteroidPool* pool, Asteroid ast);
 int getAsteroidSize(int level);
-void handleAsteroidCollisions(AsteroidPool* pool, DestroyedAsteroidPool* destroyedPool, ShotObjectPool* shotPool, Ship* ship, Player* player);
+void handleAsteroidCollisions(AsteroidPool* pool, DestroyedAsteroidPool* destroyedPool, ShotObjectPool* shotPool, AnimationPool* explosionPool, Animation* explosion, Ship* ship, Player* player);
 void handleAsteroidsMovement(AsteroidPool* pool);
 void handleDestroyedAsteroids(AsteroidPool* pool, DestroyedAsteroidPool* destroyedPool);
 void initAsteroidPool(AsteroidPool* pool);
