@@ -11,6 +11,7 @@ typedef struct Frame {
 typedef struct Animation {
     Texture2D texture;
     Vector2 position;
+    Vector2 size;
     Frame* frames;
     int frameCount;
     int currentFrame;
@@ -21,6 +22,7 @@ typedef struct Animation {
 }Animation;
 
 void initAnimation(Animation* animation, Texture2D spritesheet, const char* jsonPath, float fps);
+void renderAnimation(Animation* animation);
 void updateAnimation(Animation* animation);
 
 #endif

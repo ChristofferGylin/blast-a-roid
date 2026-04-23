@@ -42,6 +42,17 @@ void initAnimation(Animation* animation, Texture2D spritesheet, const char* json
 
 }
 
+void renderAnimation(Animation* animation) {
+    DrawTexturePro(
+        animation->texture,
+        animation->frames[animation->currentFrame].rect,
+        (Rectangle){animation->position.x, animation->position.y, animation->size.x, animation->size.y},
+        (Vector2){animation->size.x / 2, animation->size.y / 2},
+        0,
+        RAYWHITE
+    );
+}
+
 void updateAnimation(Animation* animation) {
     animation->currentFrame = round((GetTime() - animation->startTime) * animation->fps);
 
