@@ -25,7 +25,26 @@ void addNewAnimation(AnimationPool* pool, Animation* animation, Vector2 position
     pool->animations[pool->activeCount].aniInstance = aniInstance;
     pool->animations[pool->activeCount].active = true;
     pool->activeCount++;
-} 
+}
+
+void compactAnimationPool(AnimationPool* pool) {
+    int write = 0;
+
+    for (int i = 0; i < pool->activeCount; i++) {
+        if (pool->animations[i].active) {
+            if (write != i) {
+                pool->animations[write] = pool->animations[i];
+            }
+            write++;
+        }
+    }
+
+    for (int i = write; i < pool->activeCount; i++) {
+        pool->animations[i].active = false;
+    }
+
+    pool->activeCount = write;
+}
 
 void initAnimation(Animation* animation, char* spritesheetPath, const char* jsonPath, float fps, Vector2 size, bool isLoop) {
     char* jsonText = LoadFileText(jsonPath);
