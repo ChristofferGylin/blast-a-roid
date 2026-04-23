@@ -44,4 +44,14 @@ void initAnimation(Animation* animation, Texture2D spritesheet, const char* json
 
 void updateAnimation(Animation* animation) {
     animation->currentFrame = round((GetTime() - animation->startTime) * animation->fps);
+
+    if (animation->currentFrame > animation->frameCount) {
+
+        if (animation->isLoop) {
+            animation->currentFrame = 0;
+        } else {
+            animation->currentFrame = 0;
+            animation->isFinished = true;
+        }
+    }
 }
