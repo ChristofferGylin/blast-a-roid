@@ -157,6 +157,7 @@ GameResult gameLoop(Player* player) {
     UnloadTexture(shotSprite);
     unloadAnimation(&explosion);
     UnloadSound(explosionSample);
+    UnloadSound(shotSample);
 
     if (WindowShouldClose()) result = EXIT_TO_DESKTOP;
     return result;
