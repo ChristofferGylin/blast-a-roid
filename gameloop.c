@@ -52,6 +52,7 @@ GameResult gameLoop(Player* player) {
     initAnimation(&explosion, "./assets/explosion.png", "./assets/explosion.json", 24.0f, (Vector2){EXPLOSION_SIZE, EXPLOSION_SIZE}, false);
 
     Sound explosionSample = LoadSound("./assets/samples/explosion.wav");
+    Sound shotSample = LoadSound("./assets/samples/laser_pew.wav");
     
     Ship ship;
     ship.sprite = LoadTexture("./assets/ship.png");
@@ -69,7 +70,7 @@ GameResult gameLoop(Player* player) {
             updateLevelBonus(player);
             handleBonuses(&bonuses, player);
             clearShots(&shotsObjectPool);
-            handleShooting(&ship, &shotsObjectPool);
+            handleShooting(&ship, &shotsObjectPool, &shotSample);
             handleShipControls(&ship);
             handleShield(&ship, player);
             handleAsteroidsMovement(&asteroidObjectPool);
@@ -156,6 +157,7 @@ GameResult gameLoop(Player* player) {
     UnloadTexture(shotSprite);
     unloadAnimation(&explosion);
     UnloadSound(explosionSample);
+    UnloadSound(shotSample);
 
     if (WindowShouldClose()) result = EXIT_TO_DESKTOP;
     return result;

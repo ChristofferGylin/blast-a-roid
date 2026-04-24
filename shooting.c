@@ -69,7 +69,7 @@ void destroyShot(ShotPoolObject* shot) {
     shot->shot.destroyed = true;
 }
 
-void handleShooting(Ship* ship, ShotObjectPool* pool) {
+void handleShooting(Ship* ship, ShotObjectPool* pool, Sound* shotSample) {
     if (ship->destroyed) return;
     if (pool->activeCount >= MAX_SHOTS) return;
 
@@ -84,6 +84,7 @@ void handleShooting(Ship* ship, ShotObjectPool* pool) {
         };
 
         addNewShot(pool, newShot);
+        PlaySound(*shotSample);
         lastShot = GetTime() * 1000.0;
     }
 }
