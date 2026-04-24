@@ -6,6 +6,6 @@
 typedef struct Animation Animation;
 typedef struct AnimationPool AnimationPool;
 
-void newExplosion(Animation* animation, AnimationPool* pool, Vector2 position);
+void newExplosion(Animation* animation, AnimationPool* pool, Sound* sample, Vector2 position);
 
 #endif
