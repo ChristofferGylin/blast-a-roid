@@ -87,12 +87,14 @@ void handleAsteroidCollisions(AsteroidPool* pool, DestroyedAsteroidPool* destroy
 
         if (ship->isShieldActive) {
             if (CheckCollisionCircles(ship->position, SHIELD_SIZE / 2.0f, ast->position, asteroidRadius)) {
+                newExplosion(explosion, explosionPool, explosionSample, ast->position);
                 destroyAsteroid(destroyedPool, &pool->asteroids[i]);
                 continue;
             }
         } else {
             if (CheckCollisionCircles(ship->position, SHIP_SIZE / 2.0f, ast->position, asteroidRadius)) {
                 ship->destroyed = true;
+                newExplosion(explosion, explosionPool, explosionSample, ship->position);
                 destroyAsteroid(destroyedPool, &pool->asteroids[i]);
                 continue;
             }
