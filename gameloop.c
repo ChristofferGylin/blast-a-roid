@@ -20,7 +20,7 @@ static AsteroidPool asteroidObjectPool = {0};
 static DestroyedAsteroidPool destroyedAsteroidsObjectPool = {0};
 static ShotObjectPool shotsObjectPool = {0};
 static AnimationPool explosionPool = {0};
-static Bonuses bonuses = {0}; 
+static Bonuses bonuses = {0};
 
 GameResult gameLoop(Player* player) {
 
@@ -50,6 +50,8 @@ GameResult gameLoop(Player* player) {
 
     Animation explosion;
     initAnimation(&explosion, "./assets/explosion.png", "./assets/explosion.json", 24.0f, (Vector2){EXPLOSION_SIZE, EXPLOSION_SIZE}, false);
+
+    Sound explosionSample = LoadSound("./assets/samples/explosion.wav");
     
     Ship ship;
     ship.sprite = LoadTexture("./assets/ship.png");
@@ -72,7 +74,7 @@ GameResult gameLoop(Player* player) {
             handleShield(&ship, player);
             handleAsteroidsMovement(&asteroidObjectPool);
             handleShotsMovement(&shotsObjectPool);
-            handleAsteroidCollisions(&asteroidObjectPool, &destroyedAsteroidsObjectPool, &shotsObjectPool, &explosionPool, &explosion, &ship, player);
+            handleAsteroidCollisions(&asteroidObjectPool, &destroyedAsteroidsObjectPool, &shotsObjectPool, &explosionPool, &explosion, &explosionSample, &ship, player);
             handleDestroyedAsteroids(&asteroidObjectPool, &destroyedAsteroidsObjectPool);
             handleBonusesCollisions(&shotsObjectPool, &bonuses, player);
             handleFinishedAnimations(&explosionPool);
@@ -153,6 +155,8 @@ GameResult gameLoop(Player* player) {
     UnloadTexture(ship.sprite);
     UnloadTexture(shotSprite);
     unloadAnimation(&explosion);
+    UnloadSound(explosionSample);
+
     if (WindowShouldClose()) result = EXIT_TO_DESKTOP;
     return result;
 }

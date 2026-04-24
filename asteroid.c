@@ -12,6 +12,7 @@
 #include "score.h"
 #include "outOfBoundsCheck.h"
 #include "animation.h"
+#include "explosion.h"
 
 void addNewAsteroid(AsteroidPool* pool, Asteroid ast) {
     
@@ -70,7 +71,7 @@ int getAsteroidSize(int level) {
     return size;
 }
 
-void handleAsteroidCollisions(AsteroidPool* pool, DestroyedAsteroidPool* destroyedPool, ShotObjectPool* shotPool, AnimationPool* explosionPool, Animation* explosion, Ship* ship, Player* player) {
+void handleAsteroidCollisions(AsteroidPool* pool, DestroyedAsteroidPool* destroyedPool, ShotObjectPool* shotPool, AnimationPool* explosionPool, Animation* explosion, Sound* explosionSample, Ship* ship, Player* player) {
 
     if (ship->destroyed) return; 
 
@@ -100,7 +101,7 @@ void handleAsteroidCollisions(AsteroidPool* pool, DestroyedAsteroidPool* destroy
         for (int j = 0; j < shotPool->activeCount; j++) {
             if (CheckCollisionCircles(shotPool->shots[j].shot.position, SHOT_SIZE / 2.0f, ast->position, asteroidRadius)) {
                 addScore(player, ast);
-                addNewAnimation(explosionPool, explosion, ast->position, 0);
+                newExplosion(explosion, explosionPool, explosionSample, ast->position);
                 destroyShot(&shotPool->shots[j]);
                 destroyAsteroid(destroyedPool, &pool->asteroids[i]);
             
