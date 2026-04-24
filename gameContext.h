@@ -10,11 +10,17 @@ typedef struct Animations {
     Texture2D explosion;
 }Animations;
 
+typedef struct Assets {
+    Animations animations;
+    Samples samples;
+    Sprites sprites;
+}Assets;
+
 typedef struct ObjectPools {
     AsteroidPool asteroids;
     DestroyedAsteroidPool destroyedAsteroids;
-    ShotObjectPool shots;
     AnimationPool explosions;
+    ShotObjectPool shots;
 }ObjectPools;
 
 typedef struct Samples {
