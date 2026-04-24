@@ -14,10 +14,12 @@
 #include "pauseMenu.h"
 #include "shield.h"
 #include "bonuses.h"
+#include "animation.h"
 
 static AsteroidPool asteroidObjectPool = {0};
 static DestroyedAsteroidPool destroyedAsteroidsObjectPool = {0};
 static ShotObjectPool shotsObjectPool = {0};
+static AnimationPool explosionPool = {0};
 static Bonuses bonuses = {0}; 
 
 GameResult gameLoop(Player* player) {
@@ -36,6 +38,7 @@ GameResult gameLoop(Player* player) {
     initAsteroidPool(&asteroidObjectPool);
     initDestroyedAsteroidPool(&destroyedAsteroidsObjectPool);
     initShotObjectPool(&shotsObjectPool);
+    initAnimationPool(&explosionPool);
     initAsteroids(&asteroidObjectPool, player->level);
     initBonuses(&bonuses);
 
@@ -44,6 +47,9 @@ GameResult gameLoop(Player* player) {
 
     Texture2D asteroidSprite = LoadTexture("./assets/asteroid.png");
     Texture2D shotSprite = LoadTexture("./assets/shot.png");
+
+    Animation explosion;
+    initAnimation(&explosion, "./assets/explosion.png", "./assets/explosion.json", 24.0f, (Vector2){EXPLOSION_SIZE, EXPLOSION_SIZE}, false);
     
     Ship ship;
     ship.sprite = LoadTexture("./assets/ship.png");
@@ -66,9 +72,11 @@ GameResult gameLoop(Player* player) {
             handleShield(&ship, player);
             handleAsteroidsMovement(&asteroidObjectPool);
             handleShotsMovement(&shotsObjectPool);
-            handleAsteroidCollisions(&asteroidObjectPool, &destroyedAsteroidsObjectPool, &shotsObjectPool, &ship, player);
+            handleAsteroidCollisions(&asteroidObjectPool, &destroyedAsteroidsObjectPool, &shotsObjectPool, &explosionPool, &explosion, &ship, player);
             handleDestroyedAsteroids(&asteroidObjectPool, &destroyedAsteroidsObjectPool);
             handleBonusesCollisions(&shotsObjectPool, &bonuses, player);
+            handleFinishedAnimations(&explosionPool);
+            updateAnimationPool(&explosionPool);
 
             if (ship.isShieldActive) {
                 updateShieldAnimation();
@@ -130,6 +138,7 @@ GameResult gameLoop(Player* player) {
             renderAsteroids(&asteroidObjectPool, &asteroidSprite);
             renderShots(&shotsObjectPool, &shotSprite);
             renderBonuses(&bonuses);
+            renderAnimationPool(&explosionPool);
             renderSidebars(player);
             
             if (isPaused) drawPausMenu(&pauseMenu);
@@ -143,6 +152,7 @@ GameResult gameLoop(Player* player) {
     UnloadTexture(asteroidSprite);
     UnloadTexture(ship.sprite);
     UnloadTexture(shotSprite);
+    unloadAnimation(&explosion);
     if (WindowShouldClose()) result = EXIT_TO_DESKTOP;
     return result;
 }
