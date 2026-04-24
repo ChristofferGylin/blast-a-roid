@@ -3,6 +3,10 @@
 
 #include "raylib.h"
 
+typedef struct Animations {
+    Texture2D explosion;
+}Animations;
+
 typedef struct Sprites {
     Texture2D asteroid;
     Texture2D ship;
