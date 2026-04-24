@@ -50,6 +50,9 @@ GameResult gameLoop(Player* player) {
 
     Animation explosion;
     initAnimation(&explosion, "./assets/explosion.png", "./assets/explosion.json", 24.0f, (Vector2){EXPLOSION_SIZE, EXPLOSION_SIZE}, false);
+
+    Sound explosionSample = LoadSound("./assets/sample/explosion.wav");
+
     
     Ship ship;
     ship.sprite = LoadTexture("./assets/ship.png");
@@ -153,6 +156,8 @@ GameResult gameLoop(Player* player) {
     UnloadTexture(ship.sprite);
     UnloadTexture(shotSprite);
     unloadAnimation(&explosion);
+    UnloadSound(explosionSample);
+    
     if (WindowShouldClose()) result = EXIT_TO_DESKTOP;
     return result;
 }
