@@ -21,7 +21,7 @@ typedef struct AnimationInstance {
     Vector2 position;
     float rotation;
     int currentFrame;
-    double startTime;
+    float frameTimer;
     bool isFinished;
 }AnimationInstance;
 

@@ -1,4 +1,6 @@
 #include <math.h>
+#include <stdio.h>
+#include <stdlib.h>
 #include "cjson/cJSON.h"
 #include "animation.h"
 
@@ -21,7 +23,6 @@ void addNewAnimation(AnimationPool* pool, Animation* animation, Vector2 position
     aniInstance.isFinished = false;
     aniInstance.position = position;
     aniInstance.rotation = rotation;
-    aniInstance.startTime = GetTime();
 
     pool->animations[pool->activeCount].aniInstance = aniInstance;
     pool->animations[pool->activeCount].active = true;
@@ -71,7 +72,8 @@ void initAnimation(Animation* animation, char* spritesheetPath, const char* json
 
     cJSON* frameEntry = NULL;
 
-    Rectangle frames[MAX_FRAMES];
+    animation->frames = malloc(sizeof(Rectangle) * MAX_FRAMES);
+    animation->frameCount = 0;
 
     cJSON_ArrayForEach(frameEntry, framesObj) {
         cJSON* frame = cJSON_GetObjectItem(frameEntry, "frame");
@@ -86,13 +88,13 @@ void initAnimation(Animation* animation, char* spritesheetPath, const char* json
         f.height = (float)cJSON_GetObjectItem(frame, "h")->valuedouble;
 
         if (animation->frameCount < MAX_FRAMES) {
-            frames[animation->frameCount++] = f;
+            animation->frames[animation->frameCount++] = f;
         }
     }
 
     animation->texture = LoadTexture(spritesheetPath);
+    SetTextureFilter(animation->texture, TEXTURE_FILTER_POINT);
     animation->size = size;
-    animation->frames = frames;
     animation->fps = fps;
     animation->isLoop = isLoop;
 
@@ -130,17 +132,19 @@ void renderAnimationPool(AnimationPool* pool) {
 
 void unloadAnimation(Animation* animation) {
     UnloadTexture(animation->texture);
+    free(animation->frames);
 }
 
 void updateAnimation(AnimationInstance* aniInst) {
-    aniInst->currentFrame = round((GetTime() - aniInst->startTime) * aniInst->animation->fps);
 
-    if (aniInst->currentFrame > aniInst->animation->frameCount) {
+    aniInst->frameTimer += GetFrameTime();
 
-        if (aniInst->animation->isLoop) {
-            aniInst->currentFrame = 0;
-        } else {
-            aniInst->currentFrame = 0;
+    if (aniInst->frameTimer >= (1.0f / aniInst->animation->fps)) {
+        aniInst->frameTimer = 0.0f;
+        aniInst->currentFrame++;
+
+        if ((aniInst->currentFrame >= aniInst->animation->frameCount) && !aniInst->animation->isLoop) {
+
             aniInst->isFinished = true;
         }
     }

@@ -7,6 +7,8 @@
 #include "shooting.h"
 #include <stdbool.h>
 typedef struct Player Player;
+typedef struct AnimationPool AnimationPool;
+typedef struct Animation Animation;
 
 typedef struct Asteroid {
     int level;

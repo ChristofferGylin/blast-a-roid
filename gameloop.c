@@ -49,7 +49,7 @@ GameResult gameLoop(Player* player) {
     Texture2D shotSprite = LoadTexture("./assets/shot.png");
 
     Animation explosion;
-    initAnimation(&explosion, "./assets/explosion.png", "./assets/explosion.json", 12.0f, (Vector2){EXPLOSION_SIZE, EXPLOSION_SIZE}, false);
+    initAnimation(&explosion, "./assets/explosion.png", "./assets/explosion.json", 24.0f, (Vector2){EXPLOSION_SIZE, EXPLOSION_SIZE}, false);
     
     Ship ship;
     ship.sprite = LoadTexture("./assets/ship.png");
@@ -72,7 +72,7 @@ GameResult gameLoop(Player* player) {
             handleShield(&ship, player);
             handleAsteroidsMovement(&asteroidObjectPool);
             handleShotsMovement(&shotsObjectPool);
-            handleAsteroidCollisions(&asteroidObjectPool, &destroyedAsteroidsObjectPool, &shotsObjectPool, &ship, player);
+            handleAsteroidCollisions(&asteroidObjectPool, &destroyedAsteroidsObjectPool, &shotsObjectPool, &explosionPool, &explosion, &ship, player);
             handleDestroyedAsteroids(&asteroidObjectPool, &destroyedAsteroidsObjectPool);
             handleBonusesCollisions(&shotsObjectPool, &bonuses, player);
             handleFinishedAnimations(&explosionPool);

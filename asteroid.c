@@ -100,9 +100,9 @@ void handleAsteroidCollisions(AsteroidPool* pool, DestroyedAsteroidPool* destroy
         for (int j = 0; j < shotPool->activeCount; j++) {
             if (CheckCollisionCircles(shotPool->shots[j].shot.position, SHOT_SIZE / 2.0f, ast->position, asteroidRadius)) {
                 addScore(player, ast);
+                addNewAnimation(explosionPool, explosion, ast->position, 0);
                 destroyShot(&shotPool->shots[j]);
                 destroyAsteroid(destroyedPool, &pool->asteroids[i]);
-                addNewAnimation(explosionPool, explosion, ast->position, 0);
             
                 break;
             }
