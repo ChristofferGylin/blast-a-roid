@@ -1,4 +1,5 @@
 #include "raylib.h"
+#include "gameContext.h"
 #include "gameloop.h"
 #include "asteroid.h"
 #include "ship.h"
@@ -16,13 +17,9 @@
 #include "bonuses.h"
 #include "animation.h"
 
-static AsteroidPool asteroidObjectPool = {0};
-static DestroyedAsteroidPool destroyedAsteroidsObjectPool = {0};
-static ShotObjectPool shotsObjectPool = {0};
-static AnimationPool explosionPool = {0};
 static Bonuses bonuses = {0};
 
-GameResult gameLoop(Player* player) {
+GameResult gameLoop(GameContext* ctx) {
 
     GameResult result = GAME_CONTINUE;
 
@@ -30,32 +27,19 @@ GameResult gameLoop(Player* player) {
     bool isPaused = false;
     bool exit = false;
 
-    player->levelBonus = (player->level + 1) * 1000;
+    ctx->player.levelBonus = (ctx->player.level + 1) * 1000;
 
     PausMenu pauseMenu;
     initPausMenu(&pauseMenu);
    
-    initAsteroidPool(&asteroidObjectPool);
-    initDestroyedAsteroidPool(&destroyedAsteroidsObjectPool);
-    initShotObjectPool(&shotsObjectPool);
-    initAnimationPool(&explosionPool);
-    initAsteroids(&asteroidObjectPool, player->level);
+    initObjectPools(ctx);
+    initAsteroids(ctx);
     initBonuses(&bonuses);
 
     FaderArgs faderArgs;
     initFaderArgs(&faderArgs);
-
-    Texture2D asteroidSprite = LoadTexture("./assets/asteroid.png");
-    Texture2D shotSprite = LoadTexture("./assets/shot.png");
-
-    Animation explosion;
-    initAnimation(&explosion, "./assets/explosion.png", "./assets/explosion.json", 24.0f, (Vector2){EXPLOSION_SIZE, EXPLOSION_SIZE}, false);
-
-    Sound explosionSample = LoadSound("./assets/samples/explosion.wav");
-    Sound shotSample = LoadSound("./assets/samples/laser_pew.wav");
     
     Ship ship;
-    ship.sprite = LoadTexture("./assets/ship.png");
     resetShip(&ship);
 
     while(!WindowShouldClose())

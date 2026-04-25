@@ -13,6 +13,7 @@
 #include "outOfBoundsCheck.h"
 #include "animation.h"
 #include "explosion.h"
+#include "gameContext.h"
 
 void addNewAsteroid(AsteroidPool* pool, Asteroid ast) {
     
@@ -189,14 +190,14 @@ void initDestroyedAsteroidPool(DestroyedAsteroidPool* pool) {
     pool->activeCount = 0;
 }
 
-void initAsteroids(AsteroidPool* pool, int gameLevel) {
-    int numberOfAsteroids = getNumberOfAsteroids(gameLevel);
+void initAsteroids(GameContext* ctx) {
+    int numberOfAsteroids = getNumberOfAsteroids(ctx->player.level);
     for (int i = 0; i < numberOfAsteroids; i++) {
         Asteroid ast = {0};
         resetAsteroid(&ast);
         ast.level = 1;
         ast.destroyed = false;
-        addNewAsteroid(pool, ast);
+        addNewAsteroid(&ctx->objectPools.asteroids, ast);
     }
 }
 

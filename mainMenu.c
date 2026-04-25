@@ -187,7 +187,7 @@ void mainMenu(GameContext* ctx) {
                 case -1: break;
                 case 0: 
                     menu.selected = -1;
-                    isRunning = runGameSession();
+                    isRunning = runGameSession(ctx);
                     faderArgs.fadeIn = true;
                 break;
 

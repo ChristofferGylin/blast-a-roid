@@ -10,7 +10,7 @@ bool runGameSession(GameContext* ctx) {
     GameResult gameLoopResult = GAME_CONTINUE;
 
     while (ctx->player.lives >= 0) {            
-        gameLoopResult = gameLoop(&ctx->player);
+        gameLoopResult = gameLoop(ctx);
 
         if (gameLoopResult == EXIT_TO_DESKTOP) {
             return false;
