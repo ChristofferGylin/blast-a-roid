@@ -72,41 +72,41 @@ int getAsteroidSize(int level) {
     return size;
 }
 
-void handleAsteroidCollisions(AsteroidPool* pool, DestroyedAsteroidPool* destroyedPool, ShotObjectPool* shotPool, AnimationPool* explosionPool, Animation* explosion, Sound* explosionSample, Ship* ship, Player* player) {
+void handleAsteroidCollisions(GameContext* ctx) {
 
-    if (ship->destroyed) return; 
+    if (ctx->ship.destroyed) return; 
 
-    for (int i = 0; i < pool->activeCount; i++) {
+    for (int i = 0; i < ctx->objectPools.asteroids.activeCount; i++) {
 
-        if (!pool->asteroids[i].active) continue;
+        if (!ctx->objectPools.asteroids.asteroids[i].active) continue;
 
-        Asteroid* ast = &pool->asteroids[i].asteroid;
+        Asteroid* ast = &ctx->objectPools.asteroids.asteroids[i].asteroid;
 
         if (ast->destroyed) continue;
 
         float asteroidRadius = getAsteroidSize(ast->level) / 2.0f;
 
-        if (ship->isShieldActive) {
-            if (CheckCollisionCircles(ship->position, SHIELD_SIZE / 2.0f, ast->position, asteroidRadius)) {
-                newExplosion(explosion, explosionPool, explosionSample, ast->position);
-                destroyAsteroid(destroyedPool, &pool->asteroids[i]);
+        if (ctx->ship.isShieldActive) {
+            if (CheckCollisionCircles(ctx->ship.position, SHIELD_SIZE / 2.0f, ast->position, asteroidRadius)) {
+                newExplosion(ctx, ast->position);
+                destroyAsteroid(&ctx->objectPools.destroyedAsteroids, &ctx->objectPools.asteroids.asteroids[i]);
                 continue;
             }
         } else {
-            if (CheckCollisionCircles(ship->position, SHIP_SIZE / 2.0f, ast->position, asteroidRadius)) {
-                ship->destroyed = true;
-                newExplosion(explosion, explosionPool, explosionSample, ship->position);
-                destroyAsteroid(destroyedPool, &pool->asteroids[i]);
+            if (CheckCollisionCircles(ctx->ship.position, SHIP_SIZE / 2.0f, ast->position, asteroidRadius)) {
+                ctx->ship.destroyed = true;
+                newExplosion(ctx, ctx->ship.position);
+                destroyAsteroid(&ctx->objectPools.destroyedAsteroids, &ctx->objectPools.asteroids.asteroids[i]);
                 continue;
             }
         }
 
-        for (int j = 0; j < shotPool->activeCount; j++) {
-            if (CheckCollisionCircles(shotPool->shots[j].shot.position, SHOT_SIZE / 2.0f, ast->position, asteroidRadius)) {
-                addScore(player, ast);
-                newExplosion(explosion, explosionPool, explosionSample, ast->position);
-                destroyShot(&shotPool->shots[j]);
-                destroyAsteroid(destroyedPool, &pool->asteroids[i]);
+        for (int j = 0; j < ctx->objectPools.shots.activeCount; j++) {
+            if (CheckCollisionCircles(ctx->objectPools.shots.shots[j].shot.position, SHOT_SIZE / 2.0f, ast->position, asteroidRadius)) {
+                addScore(&ctx->player, ast);
+                newExplosion(ctx, ast->position);
+                destroyShot(&ctx->objectPools.shots.shots[j]);
+                destroyAsteroid(&ctx->objectPools.destroyedAsteroids, &ctx->objectPools.asteroids.asteroids[i]);
             
                 break;
             }
