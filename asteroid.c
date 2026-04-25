@@ -201,19 +201,19 @@ void initAsteroids(GameContext* ctx) {
     }
 }
 
-void renderAsteroids(AsteroidPool* pool, Texture2D* asteroidSprite) {
-    for (int i = 0; i < pool->activeCount; i++) {
+void renderAsteroids(GameContext* ctx) {
+    for (int i = 0; i < ctx->objectPools.asteroids.activeCount; i++) {
 
-        if (!pool->asteroids[i].active) continue;
-        Asteroid* ast = &pool->asteroids[i].asteroid;
+        if (!ctx->objectPools.asteroids.asteroids[i].active) continue;
+        Asteroid* ast = &ctx->objectPools.asteroids.asteroids[i].asteroid;
 
         if (ast->destroyed) continue;
 
         int asteroidSize = getAsteroidSize(ast->level);
 
         DrawTexturePro(
-            *asteroidSprite,
-            (Rectangle){0, 0, asteroidSprite->width, asteroidSprite->height},
+            ctx->assets.sprites.asteroid,
+            (Rectangle){0, 0, ctx->assets.sprites.asteroid.width, ctx->assets.sprites.asteroid.height},
             (Rectangle){ast->position.x, ast->position.y, asteroidSize, asteroidSize},
             (Vector2){asteroidSize / 2.0f, asteroidSize / 2.0f},
             ast->rotation,

@@ -42,7 +42,7 @@ void handleDestroyedAsteroids(GameContext* ctx);
 void initAsteroidPool(AsteroidPool* pool);
 void initDestroyedAsteroidPool(DestroyedAsteroidPool* pool);
 void initAsteroids(GameContext* ctx);
-void renderAsteroids(AsteroidPool* pool, Texture2D* asteroidSprite);
+void renderAsteroids(GameContext* ctx);
 void resetAllAsteroids(AsteroidPool* pool);
 void resetAsteroid(Asteroid* ast);
 

@@ -64,7 +64,7 @@ GameResult gameLoop(GameContext* ctx) {
             handleFinishedAnimations(&ctx->objectPools.explosions);
             updateAnimationPool(&ctx->objectPools.explosions);
 
-            if (ship.isShieldActive) {
+            if (ctx->ship.isShieldActive) {
                 updateShieldAnimation();
             }
         }
@@ -95,17 +95,17 @@ GameResult gameLoop(GameContext* ctx) {
             }
         }
 
-        if (ship.destroyed) {
-            player->lives--;
+        if (ctx->ship.destroyed) {
+            ctx->player.lives--;
 
-            if (player->lives < 0) {
+            if (ctx->player.lives < 0) {
                 faderArgs.fadeIn = false;
                 exit = true;
             } else {
-                resetShip(&ship);
-                resetAllAsteroids(&asteroidObjectPool);
+                resetShip(&ctx->ship);
+                resetAllAsteroids(&ctx->objectPools.asteroids);
             }
-        } else if (asteroidObjectPool.activeCount == 0) {
+        } else if (ctx->objectPools.asteroids.activeCount == 0) {
             faderArgs.fadeIn = false;
             exit = true;
         }
@@ -113,15 +113,15 @@ GameResult gameLoop(GameContext* ctx) {
         BeginDrawing();
             ClearBackground(BLACK);
             DrawTexturePro(
-                ship.sprite,
-                (Rectangle){0, 0, ship.sprite.width, ship.sprite.height},
-                (Rectangle){ship.position.x, ship.position.y, SHIP_SIZE, SHIP_SIZE},
+                ctx->assets.sprites.ship,
+                (Rectangle){0, 0, ctx->assets.sprites.ship.width, ctx->assets.sprites.ship.height},
+                (Rectangle){ctx->ship.position.x, ctx->ship.position.y, SHIP_SIZE, SHIP_SIZE},
                 (Vector2){ SHIP_SIZE / 2.0f, SHIP_SIZE / 2.0f},
-                ship.rotation,
+                ctx->ship.rotation,
                 WHITE
             );
-            renderShield(&ship);
-            renderAsteroids(&asteroidObjectPool, &asteroidSprite);
+            renderShield(&ctx->ship);
+            renderAsteroids(ctx);
             renderShots(&shotsObjectPool, &shotSprite);
             renderBonuses(&bonuses);
             renderAnimationPool(&explosionPool);
@@ -134,13 +134,6 @@ GameResult gameLoop(GameContext* ctx) {
 
         if (faderArgs.fadeComplete && exit) break;
     }
-
-    UnloadTexture(asteroidSprite);
-    UnloadTexture(ship.sprite);
-    UnloadTexture(shotSprite);
-    unloadAnimation(&explosion);
-    UnloadSound(explosionSample);
-    UnloadSound(shotSample);
 
     if (WindowShouldClose()) result = EXIT_TO_DESKTOP;
     return result;
