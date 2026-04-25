@@ -38,7 +38,7 @@ void addNewAsteroid(AsteroidPool* pool, Asteroid ast);
 int getAsteroidSize(int level);
 void handleAsteroidCollisions(GameContext* ctx);
 void handleAsteroidsMovement(AsteroidPool* pool);
-void handleDestroyedAsteroids(AsteroidPool* pool, DestroyedAsteroidPool* destroyedPool);
+void handleDestroyedAsteroids(GameContext* ctx);
 void initAsteroidPool(AsteroidPool* pool);
 void initDestroyedAsteroidPool(DestroyedAsteroidPool* pool);
 void initAsteroids(GameContext* ctx);

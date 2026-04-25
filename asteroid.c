@@ -141,16 +141,16 @@ void handleAsteroidsMovement(AsteroidPool* pool) {
     }
 }
 
-void handleDestroyedAsteroids(AsteroidPool* pool, DestroyedAsteroidPool* destroyedPool) {
-    if (destroyedPool->activeCount == 0) return;
+void handleDestroyedAsteroids(GameContext* ctx) {
+    if (ctx->objectPools.destroyedAsteroids.activeCount == 0) return;
 
-    for (int i = 0; i < destroyedPool->activeCount; i++) {
-        destroyedPool->asteroids[i]->active = false;
+    for (int i = 0; i < ctx->objectPools.destroyedAsteroids.activeCount; i++) {
+        ctx->objectPools.destroyedAsteroids.asteroids[i]->active = false;
     }
 
-    for (int i = 0; i < destroyedPool->activeCount; i++) {
+    for (int i = 0; i < ctx->objectPools.destroyedAsteroids.activeCount; i++) {
         int numberOfNew = 0;
-        int astLevel = destroyedPool->asteroids[i]->asteroid.level;
+        int astLevel = ctx->objectPools.destroyedAsteroids.asteroids[i]->asteroid.level;
 
         switch (astLevel) {
             case 1: numberOfNew = 3; break;
@@ -163,14 +163,14 @@ void handleDestroyedAsteroids(AsteroidPool* pool, DestroyedAsteroidPool* destroy
             Asteroid newAst = {0};
             resetAsteroid(&newAst);
             newAst.level = astLevel + 1;
-            newAst.position = destroyedPool->asteroids[i]->asteroid.position;
+            newAst.position = ctx->objectPools.destroyedAsteroids.asteroids[i]->asteroid.position;
 
-            addNewAsteroid(pool, newAst);
+            addNewAsteroid(&ctx->objectPools.asteroids, newAst);
         }
     }
 
-    compactAsteroidPool(pool);
-    destroyedPool->activeCount = 0;
+    compactAsteroidPool(&ctx->objectPools.asteroids);
+    ctx->objectPools.destroyedAsteroids.activeCount = 0;
 }
 
 void initAsteroidPool(AsteroidPool* pool) {

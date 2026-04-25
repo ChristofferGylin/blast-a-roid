@@ -59,7 +59,7 @@ GameResult gameLoop(GameContext* ctx) {
             handleAsteroidsMovement(&ctx->objectPools.asteroids);
             handleShotsMovement(&ctx->objectPools.shots);
             handleAsteroidCollisions(ctx);
-            handleDestroyedAsteroids(&asteroidObjectPool, &destroyedAsteroidsObjectPool);
+            handleDestroyedAsteroids(ctx);
             handleBonusesCollisions(&shotsObjectPool, &bonuses, player);
             handleFinishedAnimations(&explosionPool);
             updateAnimationPool(&explosionPool);
