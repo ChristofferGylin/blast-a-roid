@@ -20,6 +20,7 @@ void addNewAnimation(AnimationPool* pool, Animation* animation, Vector2 position
 
     aniInstance.animation = animation;
     aniInstance.currentFrame = 0;
+    aniInstance.frameTimer = 0.0f;
     aniInstance.isFinished = false;
     aniInstance.position = position;
     aniInstance.rotation = rotation;
