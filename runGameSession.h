@@ -3,6 +3,8 @@
 
 #include <stdbool.h>
 
-bool runGameSession();
+typedef struct GameContext GameContext;
+
+bool runGameSession(GameContext* ctx);
 
 #endif
