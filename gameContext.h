@@ -44,5 +44,6 @@ typedef struct Sprites {
 void initGameContext(GameContext* ctx);
 void initObjectPools(GameContext* ctx);
 void loadAssets(GameContext* ctx);
+void unloadAssets(GameContext* ctx);
 
 #endif
