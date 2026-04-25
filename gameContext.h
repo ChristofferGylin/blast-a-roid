@@ -12,26 +12,6 @@ typedef struct Animations {
     Texture2D explosion;
 }Animations;
 
-typedef struct Assets {
-    Animations animations;
-    Samples samples;
-    Sprites sprites;
-}Assets;
-
-typedef struct GameContext {
-    Assets assets;
-    ObjectPools objectPools;
-    Player player;
-    Ship ship;
-}GameContext;
-
-typedef struct ObjectPools {
-    AsteroidPool asteroids;
-    DestroyedAsteroidPool destroyedAsteroids;
-    AnimationPool explosions;
-    ShotObjectPool shots;
-}ObjectPools;
-
 typedef struct Samples {
     Sound explosion;
     Sound shot;
@@ -42,6 +22,28 @@ typedef struct Sprites {
     Texture2D ship;
     Texture2D shot;
 }Sprites;
+
+typedef struct Assets {
+    Animations animations;
+    Samples samples;
+    Sprites sprites;
+}Assets;
+
+typedef struct ObjectPools {
+    AsteroidPool asteroids;
+    DestroyedAsteroidPool destroyedAsteroids;
+    AnimationPool explosions;
+    ShotObjectPool shots;
+}ObjectPools;
+
+typedef struct GameContext {
+    Assets assets;
+    ObjectPools objectPools;
+    Player player;
+    Ship ship;
+}GameContext;
+
+
 
 void initGameContext(GameContext* ctx);
 void initObjectPools(GameContext* ctx);
