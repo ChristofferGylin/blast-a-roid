@@ -115,17 +115,17 @@ void initShotObjectPool(ShotObjectPool* pool) {
     pool->activeCount = 0;
 }
 
-void renderShots(ShotObjectPool* pool, Texture2D* shotSprite) {
-    for (int i = 0; i < pool->activeCount; i++) {
+void renderShots(GameContext* ctx) {
+    for (int i = 0; i < ctx->objectPools.shots.activeCount; i++) {
 
-        if (!pool->shots[i].active) continue;
-        Shot* shot = &pool->shots[i].shot;
+        if (!ctx->objectPools.shots.shots[i].active) continue;
+        Shot* shot = &ctx->objectPools.shots.shots[i].shot;
 
         if (shot->destroyed) continue;
 
         DrawTexturePro(
-            *shotSprite,
-            (Rectangle){0, 0, shotSprite->width, shotSprite->height},
+            ctx->assets.sprites.shot,
+            (Rectangle){0, 0, ctx->assets.sprites.shot.width, ctx->assets.sprites.shot.height},
             (Rectangle){shot->position.x, shot->position.y, SHOT_SIZE, SHOT_SIZE},
             (Vector2){SHOT_SIZE / 2.0f, SHOT_SIZE / 2.0f},
             0,

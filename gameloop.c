@@ -122,10 +122,10 @@ GameResult gameLoop(GameContext* ctx) {
             );
             renderShield(&ctx->ship);
             renderAsteroids(ctx);
-            renderShots(&shotsObjectPool, &shotSprite);
+            renderShots(ctx);
             renderBonuses(&bonuses);
-            renderAnimationPool(&explosionPool);
-            renderSidebars(player);
+            renderAnimationPool(&ctx->objectPools.explosions);
+            renderSidebars(&ctx->player);
             
             if (isPaused) drawPausMenu(&pauseMenu);
             fader(&faderArgs);
