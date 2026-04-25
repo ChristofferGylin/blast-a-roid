@@ -28,7 +28,7 @@ void addNewShot(ShotObjectPool* pool, Shot shot);
 void clearShots(ShotObjectPool* pool);
 void compactShotPool(ShotObjectPool* pool);
 void destroyShot(ShotPoolObject* shot);
-void handleShooting(Ship* ship, ShotObjectPool* pool, Sound* shotSample);
+void handleShooting(GameContext* ctx);
 void handleShotsMovement(ShotObjectPool* pool);
 void initShotObjectPool(ShotObjectPool* pool);
 void renderShots(ShotObjectPool* pool, Texture2D* shotSprite);

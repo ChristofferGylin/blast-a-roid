@@ -39,8 +39,7 @@ GameResult gameLoop(GameContext* ctx) {
     FaderArgs faderArgs;
     initFaderArgs(&faderArgs);
     
-    Ship ship;
-    resetShip(&ship);
+    resetShip(&ctx->ship);
 
     while(!WindowShouldClose())
     {
@@ -50,11 +49,11 @@ GameResult gameLoop(GameContext* ctx) {
         }
 
         if (faderArgs.fadeComplete && !isPaused) {
-            resetTimeBonusMultiplier(player);
-            updateLevelBonus(player);
-            handleBonuses(&bonuses, player);
-            clearShots(&shotsObjectPool);
-            handleShooting(&ship, &shotsObjectPool, &shotSample);
+            resetTimeBonusMultiplier(&ctx->player);
+            updateLevelBonus(&ctx->player);
+            handleBonuses(&bonuses, &ctx->player);
+            clearShots(&ctx->objectPools.shots);
+            handleShooting(ctx);
             handleShipControls(&ship);
             handleShield(&ship, player);
             handleAsteroidsMovement(&asteroidObjectPool);

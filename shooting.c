@@ -4,6 +4,7 @@
 #include <math.h>
 #include <stdio.h>
 #include "outOfBoundsCheck.h"
+#include "gameContext.h"
 
 double lastShot = 0;
 
@@ -69,22 +70,22 @@ void destroyShot(ShotPoolObject* shot) {
     shot->shot.destroyed = true;
 }
 
-void handleShooting(Ship* ship, ShotObjectPool* pool, Sound* shotSample) {
-    if (ship->destroyed) return;
-    if (pool->activeCount >= MAX_SHOTS) return;
+void handleShooting(GameContext* ctx) {
+    if (ctx->ship.destroyed) return;
+    if (ctx->objectPools.shots.activeCount >= MAX_SHOTS) return;
 
     if (IsKeyPressed(KEY_RIGHT_CONTROL) && GetTime() * 1000.0 > lastShot + SHOT_COOLDOWN_TIME) {
-        float radians = (ship->rotation - 90.0f) * (PI / 180.0f);
+        float radians = (ctx->ship.rotation - 90.0f) * (PI / 180.0f);
 
         Shot newShot = {
-            ship->position,
+            ctx->ship.position,
             {cosf(radians) * SHOT_VELOCITY, sinf(radians) * SHOT_VELOCITY},
             (GetTime() * 1000.0) + SHOT_LIFE_TIME,
             false
         };
 
-        addNewShot(pool, newShot);
-        PlaySound(*shotSample);
+        addNewShot(&ctx->objectPools.shots, newShot);
+        PlaySound(ctx->assets.samples.shot);
         lastShot = GetTime() * 1000.0;
     }
 }
