@@ -41,4 +41,8 @@ typedef struct Sprites {
     Texture2D shot;
 }Sprites;
 
+void initGameContext(GameContext* ctx);
+void initObjectPools(GameContext* ctx);
+void loadAssets(GameContext* ctx);
+
 #endif
