@@ -5,6 +5,7 @@
 #include "asteroid.h"
 #include "shooting.h"
 #include "animation.h"
+#include "player.h"
 
 typedef struct Animations {
     Texture2D explosion;
@@ -15,6 +16,12 @@ typedef struct Assets {
     Samples samples;
     Sprites sprites;
 }Assets;
+
+typedef struct GameContext {
+    Assets assets;
+    ObjectPools objectPools;
+    Player player;
+}GameContext;
 
 typedef struct ObjectPools {
     AsteroidPool asteroids;
