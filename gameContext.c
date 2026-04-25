@@ -5,11 +5,13 @@
 #include "player.h"
 #include "raylib.h"
 #include "shooting.h"
+#include "ship.h"
 
 void initGameContext(GameContext* ctx) {
     initPlayer(&ctx->player);
     initObjectPools(ctx);
     loadAssets(ctx);
+    resetShip(&ctx->ship);
 }
 
 void initObjectPools(GameContext* ctx) {

@@ -6,6 +6,7 @@
 #include "shooting.h"
 #include "animation.h"
 #include "player.h"
+#include "ship.h"
 
 typedef struct Animations {
     Texture2D explosion;
@@ -21,6 +22,7 @@ typedef struct GameContext {
     Assets assets;
     ObjectPools objectPools;
     Player player;
+    Ship ship;
 }GameContext;
 
 typedef struct ObjectPools {
