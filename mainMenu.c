@@ -1,6 +1,7 @@
 #include "constants.h"
 #include "raylib.h"
 #include "player.h"
+#include "gameContext.h"
 #include "gameloop.h"
 #include "gameOver.h"
 #include "scoreScreen.h"
@@ -166,7 +167,7 @@ void initMenu(Menu* menu) {
     menu->selected = -1;
 }
 
-void mainMenu() {
+void mainMenu(GameContext* ctx) {
     Menu menu;
     initMenu(&menu);
     FaderArgs faderArgs;
