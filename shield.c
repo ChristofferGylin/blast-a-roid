@@ -2,6 +2,7 @@
 #include "player.h"
 #include "raylib.h"
 #include "constants.h"
+#include "gameContext.h"
 #include <math.h>
 
 static const float SHIELD_DRAIN_RATE = 0.05f;
@@ -14,21 +15,21 @@ Color color2 = SHIELD_GRADIENT_COLOR_2;
 
 float shieldLerpT = 0.0f;
 
-void handleShield(Ship* ship, Player* player) {
+void handleShield(GameContext* ctx) {
 
     if (IsKeyDown(KEY_SPACE)) {
 
-        player->shieldPower -= GetFrameTime() * SHIELD_DRAIN_RATE;
+        ctx->player.shieldPower -= GetFrameTime() * SHIELD_DRAIN_RATE;
 
-        if (player->shieldPower <= 0.0f) {
-            player->shieldPower = 0.0f;
-            ship->isShieldActive = false;
+        if (ctx->player.shieldPower <= 0.0f) {
+            ctx->player.shieldPower = 0.0f;
+            ctx->ship.isShieldActive = false;
         } else {
-            ship->isShieldActive = true;
+            ctx->ship.isShieldActive = true;
         }
 
     } else {
-        ship->isShieldActive = false;
+        ctx->ship.isShieldActive = false;
     }
 }
 

@@ -5,7 +5,7 @@
 #include "raylib.h"
 typedef struct Player Player;
 
-void handleShield(Ship* ship, Player* player);
+void handleShield(GameContext* ctx);
 Color lerpColor(Color a, Color b, float t);
 void renderShield(Ship* ship);
 void updateShieldAnimation();

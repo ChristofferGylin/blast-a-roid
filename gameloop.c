@@ -54,8 +54,8 @@ GameResult gameLoop(GameContext* ctx) {
             handleBonuses(&bonuses, &ctx->player);
             clearShots(&ctx->objectPools.shots);
             handleShooting(ctx);
-            handleShipControls(&ship);
-            handleShield(&ship, player);
+            handleShipControls(&ctx->ship);
+            handleShield(ctx);
             handleAsteroidsMovement(&asteroidObjectPool);
             handleShotsMovement(&shotsObjectPool);
             handleAsteroidCollisions(&asteroidObjectPool, &destroyedAsteroidsObjectPool, &shotsObjectPool, &explosionPool, &explosion, &explosionSample, &ship, player);
