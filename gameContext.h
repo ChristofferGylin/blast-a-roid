@@ -9,7 +9,7 @@
 #include "ship.h"
 
 typedef struct Animations {
-    Texture2D explosion;
+    Animation explosion;
 }Animations;
 
 typedef struct Samples {

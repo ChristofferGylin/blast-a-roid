@@ -15,7 +15,7 @@ int main(){
     SetExitKey(KEY_NULL);
     initGameContext(&ctx);
     
-    mainMenu();
+    mainMenu(&ctx);
     
     unloadAssets(&ctx);
     CloseAudioDevice();

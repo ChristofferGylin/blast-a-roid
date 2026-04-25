@@ -3,8 +3,7 @@
 
 #include "raylib.h"
 
-typedef struct Animation Animation;
-typedef struct AnimationPool AnimationPool;
+typedef struct GameContext GameContext;
 
 void newExplosion(GameContext* ctx, Vector2 position);
 
