@@ -29,3 +29,14 @@ void loadAssets(GameContext* ctx) {
     ctx->assets.sprites.ship = LoadTexture("./assets/ship.png");
     ctx->assets.sprites.shot = LoadTexture("./assets/shot.png");
 }
+
+void unloadAssets(GameContext* ctx) {
+    unloadAnimation(&ctx->assets.animations.explosion);
+
+    UnloadSound(ctx->assets.samples.explosion);
+    UnloadSound(ctx->assets.samples.shot);
+
+    UnloadTexture(ctx->assets.sprites.asteroid);
+    UnloadTexture(ctx->assets.sprites.ship);
+    UnloadTexture(ctx->assets.sprites.shot);
+}
