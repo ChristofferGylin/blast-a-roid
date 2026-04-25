@@ -60,9 +60,9 @@ GameResult gameLoop(GameContext* ctx) {
             handleShotsMovement(&ctx->objectPools.shots);
             handleAsteroidCollisions(ctx);
             handleDestroyedAsteroids(ctx);
-            handleBonusesCollisions(&shotsObjectPool, &bonuses, player);
-            handleFinishedAnimations(&explosionPool);
-            updateAnimationPool(&explosionPool);
+            handleBonusesCollisions(ctx, &bonuses);
+            handleFinishedAnimations(&ctx->objectPools.explosions);
+            updateAnimationPool(&ctx->objectPools.explosions);
 
             if (ship.isShieldActive) {
                 updateShieldAnimation();
