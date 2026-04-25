@@ -4,6 +4,7 @@
 #include <math.h>
 #include <stdio.h>
 #include "outOfBoundsCheck.h"
+#include "gameContext.h"
 
 double lastShot = 0;
 
@@ -69,22 +70,22 @@ void destroyShot(ShotPoolObject* shot) {
     shot->shot.destroyed = true;
 }
 
-void handleShooting(Ship* ship, ShotObjectPool* pool, Sound* shotSample) {
-    if (ship->destroyed) return;
-    if (pool->activeCount >= MAX_SHOTS) return;
+void handleShooting(GameContext* ctx) {
+    if (ctx->ship.destroyed) return;
+    if (ctx->objectPools.shots.activeCount >= MAX_SHOTS) return;
 
     if (IsKeyPressed(KEY_RIGHT_CONTROL) && GetTime() * 1000.0 > lastShot + SHOT_COOLDOWN_TIME) {
-        float radians = (ship->rotation - 90.0f) * (PI / 180.0f);
+        float radians = (ctx->ship.rotation - 90.0f) * (PI / 180.0f);
 
         Shot newShot = {
-            ship->position,
+            ctx->ship.position,
             {cosf(radians) * SHOT_VELOCITY, sinf(radians) * SHOT_VELOCITY},
             (GetTime() * 1000.0) + SHOT_LIFE_TIME,
             false
         };
 
-        addNewShot(pool, newShot);
-        PlaySound(*shotSample);
+        addNewShot(&ctx->objectPools.shots, newShot);
+        PlaySound(ctx->assets.samples.shot);
         lastShot = GetTime() * 1000.0;
     }
 }
@@ -114,17 +115,17 @@ void initShotObjectPool(ShotObjectPool* pool) {
     pool->activeCount = 0;
 }
 
-void renderShots(ShotObjectPool* pool, Texture2D* shotSprite) {
-    for (int i = 0; i < pool->activeCount; i++) {
+void renderShots(GameContext* ctx) {
+    for (int i = 0; i < ctx->objectPools.shots.activeCount; i++) {
 
-        if (!pool->shots[i].active) continue;
-        Shot* shot = &pool->shots[i].shot;
+        if (!ctx->objectPools.shots.shots[i].active) continue;
+        Shot* shot = &ctx->objectPools.shots.shots[i].shot;
 
         if (shot->destroyed) continue;
 
         DrawTexturePro(
-            *shotSprite,
-            (Rectangle){0, 0, shotSprite->width, shotSprite->height},
+            ctx->assets.sprites.shot,
+            (Rectangle){0, 0, ctx->assets.sprites.shot.width, ctx->assets.sprites.shot.height},
             (Rectangle){shot->position.x, shot->position.y, SHOT_SIZE, SHOT_SIZE},
             (Vector2){SHOT_SIZE / 2.0f, SHOT_SIZE / 2.0f},
             0,

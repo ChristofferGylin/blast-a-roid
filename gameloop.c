@@ -1,4 +1,5 @@
 #include "raylib.h"
+#include "gameContext.h"
 #include "gameloop.h"
 #include "asteroid.h"
 #include "ship.h"
@@ -16,13 +17,9 @@
 #include "bonuses.h"
 #include "animation.h"
 
-static AsteroidPool asteroidObjectPool = {0};
-static DestroyedAsteroidPool destroyedAsteroidsObjectPool = {0};
-static ShotObjectPool shotsObjectPool = {0};
-static AnimationPool explosionPool = {0};
 static Bonuses bonuses = {0};
 
-GameResult gameLoop(Player* player) {
+GameResult gameLoop(GameContext* ctx) {
 
     GameResult result = GAME_CONTINUE;
 
@@ -30,33 +27,19 @@ GameResult gameLoop(Player* player) {
     bool isPaused = false;
     bool exit = false;
 
-    player->levelBonus = (player->level + 1) * 1000;
+    ctx->player.levelBonus = (ctx->player.level + 1) * 1000;
 
     PausMenu pauseMenu;
     initPausMenu(&pauseMenu);
    
-    initAsteroidPool(&asteroidObjectPool);
-    initDestroyedAsteroidPool(&destroyedAsteroidsObjectPool);
-    initShotObjectPool(&shotsObjectPool);
-    initAnimationPool(&explosionPool);
-    initAsteroids(&asteroidObjectPool, player->level);
+    initObjectPools(ctx);
+    initAsteroids(ctx);
     initBonuses(&bonuses);
 
     FaderArgs faderArgs;
     initFaderArgs(&faderArgs);
-
-    Texture2D asteroidSprite = LoadTexture("./assets/asteroid.png");
-    Texture2D shotSprite = LoadTexture("./assets/shot.png");
-
-    Animation explosion;
-    initAnimation(&explosion, "./assets/explosion.png", "./assets/explosion.json", 24.0f, (Vector2){EXPLOSION_SIZE, EXPLOSION_SIZE}, false);
-
-    Sound explosionSample = LoadSound("./assets/samples/explosion.wav");
-    Sound shotSample = LoadSound("./assets/samples/laser_pew.wav");
     
-    Ship ship;
-    ship.sprite = LoadTexture("./assets/ship.png");
-    resetShip(&ship);
+    resetShip(&ctx->ship);
 
     while(!WindowShouldClose())
     {
@@ -66,22 +49,22 @@ GameResult gameLoop(Player* player) {
         }
 
         if (faderArgs.fadeComplete && !isPaused) {
-            resetTimeBonusMultiplier(player);
-            updateLevelBonus(player);
-            handleBonuses(&bonuses, player);
-            clearShots(&shotsObjectPool);
-            handleShooting(&ship, &shotsObjectPool, &shotSample);
-            handleShipControls(&ship);
-            handleShield(&ship, player);
-            handleAsteroidsMovement(&asteroidObjectPool);
-            handleShotsMovement(&shotsObjectPool);
-            handleAsteroidCollisions(&asteroidObjectPool, &destroyedAsteroidsObjectPool, &shotsObjectPool, &explosionPool, &explosion, &explosionSample, &ship, player);
-            handleDestroyedAsteroids(&asteroidObjectPool, &destroyedAsteroidsObjectPool);
-            handleBonusesCollisions(&shotsObjectPool, &bonuses, player);
-            handleFinishedAnimations(&explosionPool);
-            updateAnimationPool(&explosionPool);
+            resetTimeBonusMultiplier(&ctx->player);
+            updateLevelBonus(&ctx->player);
+            handleBonuses(&bonuses, &ctx->player);
+            clearShots(&ctx->objectPools.shots);
+            handleShooting(ctx);
+            handleShipControls(&ctx->ship);
+            handleShield(ctx);
+            handleAsteroidsMovement(&ctx->objectPools.asteroids);
+            handleShotsMovement(&ctx->objectPools.shots);
+            handleAsteroidCollisions(ctx);
+            handleDestroyedAsteroids(ctx);
+            handleBonusesCollisions(ctx, &bonuses);
+            handleFinishedAnimations(&ctx->objectPools.explosions);
+            updateAnimationPool(&ctx->objectPools.explosions);
 
-            if (ship.isShieldActive) {
+            if (ctx->ship.isShieldActive) {
                 updateShieldAnimation();
             }
         }
@@ -112,17 +95,17 @@ GameResult gameLoop(Player* player) {
             }
         }
 
-        if (ship.destroyed) {
-            player->lives--;
+        if (ctx->ship.destroyed) {
+            ctx->player.lives--;
 
-            if (player->lives < 0) {
+            if (ctx->player.lives < 0) {
                 faderArgs.fadeIn = false;
                 exit = true;
             } else {
-                resetShip(&ship);
-                resetAllAsteroids(&asteroidObjectPool);
+                resetShip(&ctx->ship);
+                resetAllAsteroids(&ctx->objectPools.asteroids);
             }
-        } else if (asteroidObjectPool.activeCount == 0) {
+        } else if (ctx->objectPools.asteroids.activeCount == 0) {
             faderArgs.fadeIn = false;
             exit = true;
         }
@@ -130,19 +113,19 @@ GameResult gameLoop(Player* player) {
         BeginDrawing();
             ClearBackground(BLACK);
             DrawTexturePro(
-                ship.sprite,
-                (Rectangle){0, 0, ship.sprite.width, ship.sprite.height},
-                (Rectangle){ship.position.x, ship.position.y, SHIP_SIZE, SHIP_SIZE},
+                ctx->assets.sprites.ship,
+                (Rectangle){0, 0, ctx->assets.sprites.ship.width, ctx->assets.sprites.ship.height},
+                (Rectangle){ctx->ship.position.x, ctx->ship.position.y, SHIP_SIZE, SHIP_SIZE},
                 (Vector2){ SHIP_SIZE / 2.0f, SHIP_SIZE / 2.0f},
-                ship.rotation,
+                ctx->ship.rotation,
                 WHITE
             );
-            renderShield(&ship);
-            renderAsteroids(&asteroidObjectPool, &asteroidSprite);
-            renderShots(&shotsObjectPool, &shotSprite);
+            renderShield(&ctx->ship);
+            renderAsteroids(ctx);
+            renderShots(ctx);
             renderBonuses(&bonuses);
-            renderAnimationPool(&explosionPool);
-            renderSidebars(player);
+            renderAnimationPool(&ctx->objectPools.explosions);
+            renderSidebars(&ctx->player);
             
             if (isPaused) drawPausMenu(&pauseMenu);
             fader(&faderArgs);
@@ -151,13 +134,6 @@ GameResult gameLoop(Player* player) {
 
         if (faderArgs.fadeComplete && exit) break;
     }
-
-    UnloadTexture(asteroidSprite);
-    UnloadTexture(ship.sprite);
-    UnloadTexture(shotSprite);
-    unloadAnimation(&explosion);
-    UnloadSound(explosionSample);
-    UnloadSound(shotSample);
 
     if (WindowShouldClose()) result = EXIT_TO_DESKTOP;
     return result;

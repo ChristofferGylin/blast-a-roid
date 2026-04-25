@@ -1,16 +1,16 @@
 #include "runGameSession.h"
 #include "player.h"
+#include "gameContext.h"
 #include "gameOver.h"
 #include "gameloop.h"
 #include "scoreScreen.h"
 
-bool runGameSession() {
-    Player player = {0};
-    initPlayer(&player);
+bool runGameSession(GameContext* ctx) {
+    initPlayer(&ctx->player);
     GameResult gameLoopResult = GAME_CONTINUE;
 
-    while (player.lives >= 0) {            
-        gameLoopResult = gameLoop(&player);
+    while (ctx->player.lives >= 0) {            
+        gameLoopResult = gameLoop(ctx);
 
         if (gameLoopResult == EXIT_TO_DESKTOP) {
             return false;
@@ -18,10 +18,10 @@ bool runGameSession() {
             return true;
         }
 
-        if (player.lives < 0) {
-            gameOver(&player);
+        if (ctx->player.lives < 0) {
+            gameOver(&ctx->player);
         } else {
-            scoreScreen(&player);
+            scoreScreen(&ctx->player);
         }
     }
 

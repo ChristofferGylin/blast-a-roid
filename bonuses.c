@@ -6,6 +6,7 @@
 #include <math.h>
 #include <string.h>
 #include <stdio.h>
+#include "gameContext.h"
 
 const int MIN_BONUS_SPAWN_TIME = 5;
 const int MAX_BONUS_SPAWN_TIME = 30;
@@ -91,12 +92,12 @@ void handleBonuses(Bonuses* bonuses, Player* player) {
     }
 }
 
-void handleBonusesCollisions(ShotObjectPool* shotPool, Bonuses* bonuses, Player* player) {
-    for (int i = 0; i < shotPool->activeCount; i++) {
-        if (bonuses->bonusMultiplier.base.isActive && CheckCollisionCircles(shotPool->shots[i].shot.position, SHOT_SIZE / 2.0f, bonuses->bonusMultiplier.base.position, BONUS_MULTIPLIER_RADIUS)) {
-            player->powerups.levelBonusMultiplier = round(bonuses->bonusMultiplier.level);
+void handleBonusesCollisions(GameContext* ctx, Bonuses* bonuses) {
+    for (int i = 0; i < ctx->objectPools.shots.activeCount; i++) {
+        if (bonuses->bonusMultiplier.base.isActive && CheckCollisionCircles(ctx->objectPools.shots.shots[i].shot.position, SHOT_SIZE / 2.0f, bonuses->bonusMultiplier.base.position, BONUS_MULTIPLIER_RADIUS)) {
+            ctx->player.powerups.levelBonusMultiplier = round(bonuses->bonusMultiplier.level);
             bonuses->bonusMultiplier.base.isActive = false;
-            destroyShot(&shotPool->shots[i]);
+            destroyShot(&ctx->objectPools.shots.shots[i]);
         }
     }
 }

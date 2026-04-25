@@ -1,6 +1,7 @@
 #include "constants.h"
 #include "raylib.h"
 #include "player.h"
+#include "gameContext.h"
 #include "gameloop.h"
 #include "gameOver.h"
 #include "scoreScreen.h"
@@ -166,7 +167,7 @@ void initMenu(Menu* menu) {
     menu->selected = -1;
 }
 
-void mainMenu() {
+void mainMenu(GameContext* ctx) {
     Menu menu;
     initMenu(&menu);
     FaderArgs faderArgs;
@@ -186,7 +187,7 @@ void mainMenu() {
                 case -1: break;
                 case 0: 
                     menu.selected = -1;
-                    isRunning = runGameSession();
+                    isRunning = runGameSession(ctx);
                     faderArgs.fadeIn = true;
                 break;
 

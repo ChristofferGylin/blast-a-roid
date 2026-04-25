@@ -13,6 +13,7 @@
 #include "outOfBoundsCheck.h"
 #include "animation.h"
 #include "explosion.h"
+#include "gameContext.h"
 
 void addNewAsteroid(AsteroidPool* pool, Asteroid ast) {
     
@@ -71,41 +72,41 @@ int getAsteroidSize(int level) {
     return size;
 }
 
-void handleAsteroidCollisions(AsteroidPool* pool, DestroyedAsteroidPool* destroyedPool, ShotObjectPool* shotPool, AnimationPool* explosionPool, Animation* explosion, Sound* explosionSample, Ship* ship, Player* player) {
+void handleAsteroidCollisions(GameContext* ctx) {
 
-    if (ship->destroyed) return; 
+    if (ctx->ship.destroyed) return; 
 
-    for (int i = 0; i < pool->activeCount; i++) {
+    for (int i = 0; i < ctx->objectPools.asteroids.activeCount; i++) {
 
-        if (!pool->asteroids[i].active) continue;
+        if (!ctx->objectPools.asteroids.asteroids[i].active) continue;
 
-        Asteroid* ast = &pool->asteroids[i].asteroid;
+        Asteroid* ast = &ctx->objectPools.asteroids.asteroids[i].asteroid;
 
         if (ast->destroyed) continue;
 
         float asteroidRadius = getAsteroidSize(ast->level) / 2.0f;
 
-        if (ship->isShieldActive) {
-            if (CheckCollisionCircles(ship->position, SHIELD_SIZE / 2.0f, ast->position, asteroidRadius)) {
-                newExplosion(explosion, explosionPool, explosionSample, ast->position);
-                destroyAsteroid(destroyedPool, &pool->asteroids[i]);
+        if (ctx->ship.isShieldActive) {
+            if (CheckCollisionCircles(ctx->ship.position, SHIELD_SIZE / 2.0f, ast->position, asteroidRadius)) {
+                newExplosion(ctx, ast->position);
+                destroyAsteroid(&ctx->objectPools.destroyedAsteroids, &ctx->objectPools.asteroids.asteroids[i]);
                 continue;
             }
         } else {
-            if (CheckCollisionCircles(ship->position, SHIP_SIZE / 2.0f, ast->position, asteroidRadius)) {
-                ship->destroyed = true;
-                newExplosion(explosion, explosionPool, explosionSample, ship->position);
-                destroyAsteroid(destroyedPool, &pool->asteroids[i]);
+            if (CheckCollisionCircles(ctx->ship.position, SHIP_SIZE / 2.0f, ast->position, asteroidRadius)) {
+                ctx->ship.destroyed = true;
+                newExplosion(ctx, ctx->ship.position);
+                destroyAsteroid(&ctx->objectPools.destroyedAsteroids, &ctx->objectPools.asteroids.asteroids[i]);
                 continue;
             }
         }
 
-        for (int j = 0; j < shotPool->activeCount; j++) {
-            if (CheckCollisionCircles(shotPool->shots[j].shot.position, SHOT_SIZE / 2.0f, ast->position, asteroidRadius)) {
-                addScore(player, ast);
-                newExplosion(explosion, explosionPool, explosionSample, ast->position);
-                destroyShot(&shotPool->shots[j]);
-                destroyAsteroid(destroyedPool, &pool->asteroids[i]);
+        for (int j = 0; j < ctx->objectPools.shots.activeCount; j++) {
+            if (CheckCollisionCircles(ctx->objectPools.shots.shots[j].shot.position, SHOT_SIZE / 2.0f, ast->position, asteroidRadius)) {
+                addScore(&ctx->player, ast);
+                newExplosion(ctx, ast->position);
+                destroyShot(&ctx->objectPools.shots.shots[j]);
+                destroyAsteroid(&ctx->objectPools.destroyedAsteroids, &ctx->objectPools.asteroids.asteroids[i]);
             
                 break;
             }
@@ -140,16 +141,16 @@ void handleAsteroidsMovement(AsteroidPool* pool) {
     }
 }
 
-void handleDestroyedAsteroids(AsteroidPool* pool, DestroyedAsteroidPool* destroyedPool) {
-    if (destroyedPool->activeCount == 0) return;
+void handleDestroyedAsteroids(GameContext* ctx) {
+    if (ctx->objectPools.destroyedAsteroids.activeCount == 0) return;
 
-    for (int i = 0; i < destroyedPool->activeCount; i++) {
-        destroyedPool->asteroids[i]->active = false;
+    for (int i = 0; i < ctx->objectPools.destroyedAsteroids.activeCount; i++) {
+        ctx->objectPools.destroyedAsteroids.asteroids[i]->active = false;
     }
 
-    for (int i = 0; i < destroyedPool->activeCount; i++) {
+    for (int i = 0; i < ctx->objectPools.destroyedAsteroids.activeCount; i++) {
         int numberOfNew = 0;
-        int astLevel = destroyedPool->asteroids[i]->asteroid.level;
+        int astLevel = ctx->objectPools.destroyedAsteroids.asteroids[i]->asteroid.level;
 
         switch (astLevel) {
             case 1: numberOfNew = 3; break;
@@ -162,14 +163,14 @@ void handleDestroyedAsteroids(AsteroidPool* pool, DestroyedAsteroidPool* destroy
             Asteroid newAst = {0};
             resetAsteroid(&newAst);
             newAst.level = astLevel + 1;
-            newAst.position = destroyedPool->asteroids[i]->asteroid.position;
+            newAst.position = ctx->objectPools.destroyedAsteroids.asteroids[i]->asteroid.position;
 
-            addNewAsteroid(pool, newAst);
+            addNewAsteroid(&ctx->objectPools.asteroids, newAst);
         }
     }
 
-    compactAsteroidPool(pool);
-    destroyedPool->activeCount = 0;
+    compactAsteroidPool(&ctx->objectPools.asteroids);
+    ctx->objectPools.destroyedAsteroids.activeCount = 0;
 }
 
 void initAsteroidPool(AsteroidPool* pool) {
@@ -189,30 +190,30 @@ void initDestroyedAsteroidPool(DestroyedAsteroidPool* pool) {
     pool->activeCount = 0;
 }
 
-void initAsteroids(AsteroidPool* pool, int gameLevel) {
-    int numberOfAsteroids = getNumberOfAsteroids(gameLevel);
+void initAsteroids(GameContext* ctx) {
+    int numberOfAsteroids = getNumberOfAsteroids(ctx->player.level);
     for (int i = 0; i < numberOfAsteroids; i++) {
         Asteroid ast = {0};
         resetAsteroid(&ast);
         ast.level = 1;
         ast.destroyed = false;
-        addNewAsteroid(pool, ast);
+        addNewAsteroid(&ctx->objectPools.asteroids, ast);
     }
 }
 
-void renderAsteroids(AsteroidPool* pool, Texture2D* asteroidSprite) {
-    for (int i = 0; i < pool->activeCount; i++) {
+void renderAsteroids(GameContext* ctx) {
+    for (int i = 0; i < ctx->objectPools.asteroids.activeCount; i++) {
 
-        if (!pool->asteroids[i].active) continue;
-        Asteroid* ast = &pool->asteroids[i].asteroid;
+        if (!ctx->objectPools.asteroids.asteroids[i].active) continue;
+        Asteroid* ast = &ctx->objectPools.asteroids.asteroids[i].asteroid;
 
         if (ast->destroyed) continue;
 
         int asteroidSize = getAsteroidSize(ast->level);
 
         DrawTexturePro(
-            *asteroidSprite,
-            (Rectangle){0, 0, asteroidSprite->width, asteroidSprite->height},
+            ctx->assets.sprites.asteroid,
+            (Rectangle){0, 0, ctx->assets.sprites.asteroid.width, ctx->assets.sprites.asteroid.height},
             (Rectangle){ast->position.x, ast->position.y, asteroidSize, asteroidSize},
             (Vector2){asteroidSize / 2.0f, asteroidSize / 2.0f},
             ast->rotation,

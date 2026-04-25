@@ -5,7 +5,10 @@
 #include "ship.h"
 #include <stdbool.h>
 
+
 #define MAX_SHOTS 1024
+
+typedef struct GameContext GameContext;
 
 typedef struct {    
     Vector2 position;
@@ -28,9 +31,9 @@ void addNewShot(ShotObjectPool* pool, Shot shot);
 void clearShots(ShotObjectPool* pool);
 void compactShotPool(ShotObjectPool* pool);
 void destroyShot(ShotPoolObject* shot);
-void handleShooting(Ship* ship, ShotObjectPool* pool, Sound* shotSample);
+void handleShooting(GameContext* ctx);
 void handleShotsMovement(ShotObjectPool* pool);
 void initShotObjectPool(ShotObjectPool* pool);
-void renderShots(ShotObjectPool* pool, Texture2D* shotSprite);
+void renderShots(GameContext* ctx);
 
 #endif

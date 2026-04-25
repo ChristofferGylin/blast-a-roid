@@ -32,7 +32,7 @@ BonusMultiplierIcon getBonusMultiplierIcon(float level);
 double getNextSpawnTime();
 Vector2 getRandomPosition();
 void handleBonuses(Bonuses* bonuses, Player* player);
-void handleBonusesCollisions(ShotObjectPool* shotPool, Bonuses* bonuses, Player* player);
+void handleBonusesCollisions(GameContext* ctx, Bonuses* bonuses);
 void initBonuses(Bonuses* bonuses);
 void renderBonuses(Bonuses* bonuses);
 void renderBonusMultiplier(int level, Vector2 position);

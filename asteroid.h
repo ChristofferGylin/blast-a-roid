@@ -36,13 +36,13 @@ typedef struct {
 
 void addNewAsteroid(AsteroidPool* pool, Asteroid ast);
 int getAsteroidSize(int level);
-void handleAsteroidCollisions(AsteroidPool* pool, DestroyedAsteroidPool* destroyedPool, ShotObjectPool* shotPool, AnimationPool* explosionPool, Animation* explosion, Sound* explosionSample, Ship* ship, Player* player);
+void handleAsteroidCollisions(GameContext* ctx);
 void handleAsteroidsMovement(AsteroidPool* pool);
-void handleDestroyedAsteroids(AsteroidPool* pool, DestroyedAsteroidPool* destroyedPool);
+void handleDestroyedAsteroids(GameContext* ctx);
 void initAsteroidPool(AsteroidPool* pool);
 void initDestroyedAsteroidPool(DestroyedAsteroidPool* pool);
-void initAsteroids(AsteroidPool* pool, int gameLevel);
-void renderAsteroids(AsteroidPool* pool, Texture2D* asteroidSprite);
+void initAsteroids(GameContext* ctx);
+void renderAsteroids(GameContext* ctx);
 void resetAllAsteroids(AsteroidPool* pool);
 void resetAsteroid(Asteroid* ast);
 
