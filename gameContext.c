@@ -25,6 +25,8 @@ void loadAssets(GameContext* ctx) {
     initAnimation(&ctx->assets.animations.explosion, "./assets/explosion.png", "./assets/explosion.json", 24.0f, (Vector2){EXPLOSION_SIZE, EXPLOSION_SIZE}, false);
     
     ctx->assets.samples.explosion = LoadSound("./assets/samples/explosion.wav");
+    ctx->assets.samples.multiplier_collect = LoadSound("./assets/samples/multiplier_collect.wav");
+    ctx->assets.samples.multiplier_spawn = LoadSound("./assets/samples/multiplier_spawn.wav");
     ctx->assets.samples.shot = LoadSound("./assets/samples/laser_pew.wav");
 
     ctx->assets.sprites.asteroid = LoadTexture("./assets/asteroid.png");

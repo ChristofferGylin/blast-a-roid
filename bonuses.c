@@ -52,7 +52,7 @@ Vector2 getRandomPosition() {
     return (Vector2){GetRandomValue(SIDEBAR_WIDTH + 10, SCREEN_WIDTH - 10 - SIDEBAR_WIDTH), GetRandomValue(10, SCREEN_HEIGHT - 10)};
 }
 
-void handleBonuses(Bonuses* bonuses, Player* player) {
+void handleBonuses(GameContext* ctx, Bonuses* bonuses) {
     
     double now = GetTime();
 
@@ -76,12 +76,13 @@ void handleBonuses(Bonuses* bonuses, Player* player) {
         if (randomSelect < 50) {
             return;
         } else if (randomSelect < 70) {
-            if (bonuses->bonusMultiplier.base.isActive || player->powerups.levelBonusMultiplier > 1) return;
+            if (bonuses->bonusMultiplier.base.isActive || ctx->player.powerups.levelBonusMultiplier > 1) return;
 
             bonuses->bonusMultiplier.base.isActive = true;
             bonuses->bonusMultiplier.base.spawnTime = now;
             bonuses->bonusMultiplier.base.position = getRandomPosition();
             bonuses->bonusMultiplier.level = 2.0f;
+            PlaySound(ctx->assets.samples.multiplier_spawn);
 
         } else if (randomSelect < 85) {
             // spawn powerup or shield
@@ -98,6 +99,7 @@ void handleBonusesCollisions(GameContext* ctx, Bonuses* bonuses) {
             ctx->player.powerups.levelBonusMultiplier = round(bonuses->bonusMultiplier.level);
             bonuses->bonusMultiplier.base.isActive = false;
             destroyShot(&ctx->objectPools.shots.shots[i]);
+            PlaySound(ctx->assets.samples.multiplier_collect);
         }
     }
 }

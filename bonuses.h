@@ -31,7 +31,7 @@ typedef struct Bonuses {
 BonusMultiplierIcon getBonusMultiplierIcon(float level);
 double getNextSpawnTime();
 Vector2 getRandomPosition();
-void handleBonuses(Bonuses* bonuses, Player* player);
+void handleBonuses(GameContext* ctx, Bonuses* bonuses);
 void handleBonusesCollisions(GameContext* ctx, Bonuses* bonuses);
 void initBonuses(Bonuses* bonuses);
 void renderBonuses(Bonuses* bonuses);

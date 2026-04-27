@@ -51,7 +51,7 @@ GameResult gameLoop(GameContext* ctx) {
         if (faderArgs.fadeComplete && !isPaused) {
             resetTimeBonusMultiplier(&ctx->player);
             updateLevelBonus(&ctx->player);
-            handleBonuses(&bonuses, &ctx->player);
+            handleBonuses(ctx, &bonuses);
             clearShots(&ctx->objectPools.shots);
             handleShooting(ctx);
             handleShipControls(&ctx->ship);
