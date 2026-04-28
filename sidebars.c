@@ -39,7 +39,11 @@ int renderShieldPower(float shieldPower, int posY) {
     BeginScissorMode(rect.x, rect.y, barLevelWidth, rect.height);
         DrawRectangleRounded(rect, roundness, segments, shieldBarFGColor);
     EndScissorMode();
+
+    return posY + barHeight;
 }
+
+
 
 int renderStats(uint64_t value, char title[], int startY, int bonusMultiplierLevel, bool isMultiplierRendered) {
     
