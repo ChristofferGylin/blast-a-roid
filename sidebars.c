@@ -3,6 +3,7 @@
 #include "bonuses.h"
 #include "sidebars.h"
 #include "player.h"
+#include "utils.h"
 #include <inttypes.h>
 #include <stdio.h>
 #include <stdbool.h>
@@ -16,17 +17,28 @@ int renderShieldPower(float shieldPower, int posY) {
     int sideOffset = 10;
     
     Color shieldBarFGColor = {0, 218, 255, 255};
-    Color shieldBarBGColor = {0, 218, 255, 128};
+    Color shieldBarBGColor = {0, 218, 255, 78};
 
     int barTotalWidth = SIDEBAR_WIDTH - (sideOffset * 2);
     int barLevelWidth = barTotalWidth * shieldPower;
     int barHeight = 20;
     int posX = SCREEN_WIDTH - SIDEBAR_WIDTH + sideOffset;
-    int roundness = 10;
+    float roundnessRadius = 8.0f;
     int segments = 10;
 
-    DrawRectangleRounded((Rectangle){posX, posY, barTotalWidth, barHeight}, roundness, segments, shieldBarBGColor);
-    DrawRectangleRounded((Rectangle){posX, posY, barLevelWidth, barHeight}, roundness, segments, shieldBarFGColor);
+    Rectangle rect = {
+        posX,
+        posY,
+        barTotalWidth,
+        barHeight
+    };
+
+    float roundness = getRoundness(rect, roundnessRadius);
+
+    DrawRectangleRounded(rect, roundness, segments, shieldBarBGColor);
+    BeginScissorMode(rect.x, rect.y, barLevelWidth, rect.height);
+        DrawRectangleRounded(rect, roundness, segments, shieldBarFGColor);
+    EndScissorMode();
 }
 
 int renderStats(uint64_t value, char title[], int startY, int bonusMultiplierLevel, bool isMultiplierRendered) {
