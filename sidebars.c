@@ -11,6 +11,24 @@ Color topColor = {0, 25, 38, 255};
 Color bottomColor = {0, 13, 36, 255};
 Color lineColor = {156, 192, 255, 128};
 
+int renderShieldPower(float shieldPower, int posY) {
+    
+    int sideOffset = 10;
+    
+    Color shieldBarFGColor = {0, 218, 255, 255};
+    Color shieldBarBGColor = {0, 218, 255, 128};
+
+    int barTotalWidth = SIDEBAR_WIDTH - (sideOffset * 2);
+    int barLevelWidth = barTotalWidth * shieldPower;
+    int barHeight = 20;
+    int posX = SCREEN_WIDTH - SIDEBAR_WIDTH + sideOffset;
+    int roundness = 10;
+    int segments = 10;
+
+    DrawRectangleRounded((Rectangle){posX, posY, barTotalWidth, barHeight}, roundness, segments, shieldBarBGColor);
+    DrawRectangleRounded((Rectangle){posX, posY, barLevelWidth, barHeight}, roundness, segments, shieldBarFGColor);
+}
+
 int renderStats(uint64_t value, char title[], int startY, int bonusMultiplierLevel, bool isMultiplierRendered) {
     
     int sideOffset = 30;
@@ -71,7 +89,11 @@ void renderSidebars(Player* player) {
     DrawLine(SIDEBAR_WIDTH, 0, SIDEBAR_WIDTH, SCREEN_HEIGHT, lineColor);
     DrawLine(SCREEN_WIDTH - SIDEBAR_WIDTH, 0, SCREEN_WIDTH - SIDEBAR_WIDTH, SCREEN_HEIGHT, lineColor);
 
+    renderShieldPower(player->shieldPower, startY);
+
     startY = renderStats(player->score, "SCORE", startY, player->powerups.levelBonusMultiplier, false) + statsBlockGap;
     startY = renderStats(player->levelBonus, "BONUS", startY, player->powerups.levelBonusMultiplier, true) + statsBlockGap;
-    startY = renderStats((uint64_t)player->level, "LEVEL", startY, player->powerups.levelBonusMultiplier, false) + statsBlockGap;   
+    startY = renderStats((uint64_t)player->level, "LEVEL", startY, player->powerups.levelBonusMultiplier, false) + statsBlockGap;
+
+
 }
