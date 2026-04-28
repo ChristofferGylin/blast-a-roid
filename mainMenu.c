@@ -10,6 +10,7 @@
 #include <string.h>
 #include "fader.h"
 #include "runGameSession.h"
+#include "utils.h"
 
 int fontSize = 32;
 int fontSpacing = 6;
@@ -127,11 +128,6 @@ void drawMenu(Menu* menu) {
             );
         }
     }
-}
-
-float getRoundness(Rectangle rect, float radiusPx) {
-    float minDim = rect.width < rect.height ? rect.width : rect.height;
-    return (radiusPx * 2.0f) / minDim;
 }
 
 void initMenu(Menu* menu) {
