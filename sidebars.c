@@ -7,12 +7,50 @@
 #include <inttypes.h>
 #include <stdio.h>
 #include <stdbool.h>
+#include "gameContext.h"
 
 Color topColor = {0, 25, 38, 255};
 Color bottomColor = {0, 13, 36, 255};
 Color lineColor = {156, 192, 255, 128};
 Color primaryColor = {0, 218, 255, 255};
 Color primaryColorDimmed = {0, 218, 255, 78};
+
+void renderLives(GameContext* ctx, Vector2 position, Vector2 size) {
+    
+    int gap = 4;
+    int maxIcons = (size.x + gap) / (size.y + gap);
+    int currentPosX = position.x;
+
+    for (int i = 0; i < ctx->player.lives; i++) {
+        if (i + 1 >= maxIcons) {
+
+            if (i + 1 >= ctx->player.lives) {
+                DrawTexturePro(
+                    ctx->assets.sprites.ship,
+                    (Rectangle){0, 0, ctx->assets.sprites.ship.width, ctx->assets.sprites.ship.height},
+                    (Rectangle){currentPosX, position.y, size.y, size.y},
+                    (Vector2){ 0, 0},
+                    0,
+                    primaryColor
+                );
+            } else {
+                DrawText("+", currentPosX, position.y, 18, primaryColor);
+            }
+            break;
+        }
+
+        DrawTexturePro(
+            ctx->assets.sprites.ship,
+            (Rectangle){0, 0, ctx->assets.sprites.ship.width, ctx->assets.sprites.ship.height},
+            (Rectangle){currentPosX, position.y, size.y, size.y},
+            (Vector2){ 0, 0},
+            0,
+            primaryColor
+        );
+
+        currentPosX += size.y + gap;
+    }
+}
 
 void renderShieldPower(float shieldPower, Vector2 position, Vector2 size) {
 
@@ -137,7 +175,7 @@ int renderStats(uint64_t value, char title[], int startY, int bonusMultiplierLev
     return valuePosition.y + valueSize.y;
 }
 
-void renderSidebars(Player* player) {
+void renderSidebars(GameContext* ctx) {
     int startY = 20;
     int statsBlockGap = 25;
 
@@ -146,10 +184,13 @@ void renderSidebars(Player* player) {
     DrawLine(SIDEBAR_WIDTH, 0, SIDEBAR_WIDTH, SCREEN_HEIGHT, lineColor);
     DrawLine(SCREEN_WIDTH - SIDEBAR_WIDTH, 0, SCREEN_WIDTH - SIDEBAR_WIDTH, SCREEN_HEIGHT, lineColor);
 
-    RenderPositions shieldPowerPosition = renderBlock("SHIELD", 4, false);
-    renderShieldPower(player->shieldPower, shieldPowerPosition.contentPosition, shieldPowerPosition.contentSize);
+    RenderPositions shieldPowerPosition = renderBlock("SHIELD", 0, false);
+    renderShieldPower(ctx->player.shieldPower, shieldPowerPosition.contentPosition, shieldPowerPosition.contentSize);
 
-    startY = renderStats(player->score, "SCORE", startY, player->powerups.levelBonusMultiplier, false) + statsBlockGap;
-    startY = renderStats(player->levelBonus, "BONUS", startY, player->powerups.levelBonusMultiplier, true) + statsBlockGap;
-    startY = renderStats((uint64_t)player->level, "LEVEL", startY, player->powerups.levelBonusMultiplier, false) + statsBlockGap;
+    RenderPositions livesPosition = renderBlock("LIVES", shieldPowerPosition.endYPosition, false);
+    renderLives(ctx, livesPosition.contentPosition, livesPosition.contentSize);
+
+    startY = renderStats(ctx->player.score, "SCORE", startY, ctx->player.powerups.levelBonusMultiplier, false) + statsBlockGap;
+    startY = renderStats(ctx->player.levelBonus, "BONUS", startY, ctx->player.powerups.levelBonusMultiplier, true) + statsBlockGap;
+    startY = renderStats((uint64_t)ctx->player.level, "LEVEL", startY, ctx->player.powerups.levelBonusMultiplier, false) + statsBlockGap;
 }

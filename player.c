@@ -12,7 +12,7 @@ void initPlayer(Player* player) {
     player->level = 1;
     player->levelBonus = 2000;
     player->levelBonusTimer = GetTime();
-    player->lives = 2;
+    player->lives = 9;
     player->powerups = initPowerups;
     player->score = 0;
     player->shieldPower = 0.5f;
