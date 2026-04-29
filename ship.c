@@ -61,6 +61,14 @@ void initShip(GameContext* ctx) {
     ship->destroyedPieces[2].sprite = &ctx->assets.sprites.destroyedShip2;
 }
 
+void resetDestroyedPieces(Ship* ship) {
+    ship->timeDestroyed = GetTime();
+    
+    for (int i = 0; i < 3; i++) {
+        ship->destroyedPieces[i].position = ship->position;
+    }
+}
+
 void resetShip(Ship* ship) {
     ship->destroyed = false;
     ship->position.x = GetScreenWidth() / 2;

@@ -20,7 +20,7 @@ typedef struct {
     bool isShieldActive;
     double timeDestroyed;
     DestroyedShipPiece destroyedPieces[3]; 
-}Ship; 
+}Ship;
 
 void handleShipControls(Ship *ship);
 void initShip(GameContext* ctx);
