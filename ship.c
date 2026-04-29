@@ -6,36 +6,6 @@
 #include "utils.h"
 #include <math.h>
 
-void renderShip(GameContext* ctx) {
-    if (!ctx->ship.destroyed) {
-        DrawTexturePro(
-            ctx->assets.sprites.ship,
-            (Rectangle){0, 0, ctx->assets.sprites.ship.width, ctx->assets.sprites.ship.height},
-            (Rectangle){ctx->ship.position.x, ctx->ship.position.y, SHIP_SIZE, SHIP_SIZE},
-            (Vector2){ SHIP_SIZE / 2.0f, SHIP_SIZE / 2.0f},
-            ctx->ship.rotation,
-            WHITE
-        );
-        renderShield(&ctx->ship);    
-    }
-}
-
-void renderDestroyedShip(Ship* ship) {
-    for (int i = 0; i < 3; i++) {
-        DestroyedShipPiece* piece = &ship->destroyedPieces[i];
-        Texture2D sprite = *ship->destroyedPieces[i].sprite;
-
-        DrawTexturePro(
-            sprite,
-            (Rectangle){0, 0, sprite.width, sprite.height},
-            (Rectangle){piece->position.x, piece->position.y, sprite.width, sprite.height},
-            (Vector2){ sprite.width / 2.0f, sprite.height / 2.0f },
-            piece->rotation,
-            WHITE
-        );
-    }
-}
-
 void initShip(GameContext* ctx) {
     Ship* ship = &ctx->ship;
 
@@ -62,6 +32,36 @@ void initShip(GameContext* ctx) {
 
     ship->destroyedPieces[2] = destroyedBase;
     ship->destroyedPieces[2].sprite = &ctx->assets.sprites.destroyedShip2;
+}
+
+void renderDestroyedShip(Ship* ship) {
+    for (int i = 0; i < 3; i++) {
+        DestroyedShipPiece* piece = &ship->destroyedPieces[i];
+        Texture2D sprite = *ship->destroyedPieces[i].sprite;
+
+        DrawTexturePro(
+            sprite,
+            (Rectangle){0, 0, sprite.width, sprite.height},
+            (Rectangle){piece->position.x, piece->position.y, sprite.width, sprite.height},
+            (Vector2){ sprite.width / 2.0f, sprite.height / 2.0f },
+            piece->rotation,
+            WHITE
+        );
+    }
+}
+
+void renderShip(GameContext* ctx) {
+    if (!ctx->ship.destroyed) {
+        DrawTexturePro(
+            ctx->assets.sprites.ship,
+            (Rectangle){0, 0, ctx->assets.sprites.ship.width, ctx->assets.sprites.ship.height},
+            (Rectangle){ctx->ship.position.x, ctx->ship.position.y, SHIP_SIZE, SHIP_SIZE},
+            (Vector2){ SHIP_SIZE / 2.0f, SHIP_SIZE / 2.0f},
+            ctx->ship.rotation,
+            WHITE
+        );
+        renderShield(&ctx->ship);    
+    }
 }
 
 void resetDestroyedPieces(Ship* ship) {
