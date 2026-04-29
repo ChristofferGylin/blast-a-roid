@@ -48,27 +48,6 @@ GameResult gameLoop(GameContext* ctx) {
             isPaused = !isPaused;
         }
 
-        if (faderArgs.fadeComplete && !isPaused) {
-            resetTimeBonusMultiplier(&ctx->player);
-            updateLevelBonus(&ctx->player);
-            handleBonuses(ctx, &bonuses);
-            clearShots(&ctx->objectPools.shots);
-            handleShooting(ctx);
-            handleShipControls(&ctx->ship);
-            handleShield(ctx);
-            handleAsteroidsMovement(&ctx->objectPools.asteroids);
-            handleShotsMovement(&ctx->objectPools.shots);
-            handleAsteroidCollisions(ctx);
-            handleDestroyedAsteroids(ctx);
-            handleBonusesCollisions(ctx, &bonuses);
-            handleFinishedAnimations(&ctx->objectPools.explosions);
-            updateAnimationPool(&ctx->objectPools.explosions);
-
-            if (ctx->ship.isShieldActive) {
-                updateShieldAnimation();
-            }
-        }
-
         if (isPaused) {
             updatePausMenu(&pauseMenu);
 
@@ -93,7 +72,27 @@ GameResult gameLoop(GameContext* ctx) {
 
                 pauseMenu.selected = -1;
             }
-        }
+        } else if (faderArgs.fadeComplete || !faderArgs.fadeIn) {
+
+            resetTimeBonusMultiplier(&ctx->player);
+            updateLevelBonus(&ctx->player);
+            handleBonuses(ctx, &bonuses);
+            clearShots(&ctx->objectPools.shots);
+            handleShooting(ctx);
+            handleShipControls(&ctx->ship);
+            handleShield(ctx);
+            handleAsteroidsMovement(&ctx->objectPools.asteroids);
+            handleShotsMovement(&ctx->objectPools.shots);
+            handleAsteroidCollisions(ctx);
+            handleDestroyedAsteroids(ctx);
+            handleBonusesCollisions(ctx, &bonuses);
+            handleFinishedAnimations(&ctx->objectPools.explosions);
+            updateAnimationPool(&ctx->objectPools.explosions);
+
+            if (ctx->ship.isShieldActive) {
+                updateShieldAnimation();
+            }
+        }        
 
         if (ctx->ship.destroyed) {
             ctx->player.lives--;
@@ -112,7 +111,8 @@ GameResult gameLoop(GameContext* ctx) {
         
         BeginDrawing();
             ClearBackground(BLACK);
-            DrawTexturePro(
+            if (!ctx->ship.destroyed) {
+                DrawTexturePro(
                 ctx->assets.sprites.ship,
                 (Rectangle){0, 0, ctx->assets.sprites.ship.width, ctx->assets.sprites.ship.height},
                 (Rectangle){ctx->ship.position.x, ctx->ship.position.y, SHIP_SIZE, SHIP_SIZE},
@@ -120,7 +120,8 @@ GameResult gameLoop(GameContext* ctx) {
                 ctx->ship.rotation,
                 WHITE
             );
-            renderShield(&ctx->ship);
+            renderShield(&ctx->ship);    
+            }
             renderAsteroids(ctx);
             renderShots(ctx);
             renderBonuses(&bonuses);
