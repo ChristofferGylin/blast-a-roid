@@ -4,8 +4,8 @@
 typedef struct Rectangle Rectangle;
 
 typedef struct FloatRange {
-    float max;
     float min;
+    float max;
 }FloatRange;
 
 float scaleFloat(float oldMin, float oldMax, float newMin, float newMax, float value);

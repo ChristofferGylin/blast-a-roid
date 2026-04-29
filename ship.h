@@ -9,6 +9,7 @@ typedef struct DestroyedShipPiece {
     Vector2 position;
     Vector2 velocity;
     float rotation;
+    int rotationSpeed;
     Texture2D* sprite;
 }DestroyedShipPiece;
 

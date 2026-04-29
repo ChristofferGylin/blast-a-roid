@@ -3,6 +3,8 @@
 #include "raylib.h"
 #include "gameContext.h"
 #include "constants.h"
+#include "utils.h"
+#include <math.h>
 
 void renderShip(GameContext* ctx) {
     if (!ctx->ship.destroyed) {
@@ -49,6 +51,7 @@ void initShip(GameContext* ctx) {
         (Vector2){0, 0},
         (Vector2){0, 0},
         0,
+        0,
     };
 
     ship->destroyedPieces[0] = destroyedBase;
@@ -62,10 +65,38 @@ void initShip(GameContext* ctx) {
 }
 
 void resetDestroyedPieces(Ship* ship) {
+    
+    FloatRange directionRanges[] = {
+        {-30, 30},
+        {90, 150},
+        {210, 270}
+    };
+
+    FloatRange rotationSpeedRange = {-100, 100};
+    FloatRange velocityRange = {30, 100};
+    
     ship->timeDestroyed = GetTime();
     
     for (int i = 0; i < 3; i++) {
-        ship->destroyedPieces[i].position = ship->position;
+
+        DestroyedShipPiece* piece = &ship->destroyedPieces[i];
+
+        float direction = GetRandomValue(directionRanges[i].min, directionRanges[i].max);
+
+        direction = fmodf(direction, 360.0f);
+
+        if (direction < 0.0f) {
+            direction += 360.0f;
+        }
+
+        float radians = (direction - 90.0f) * (PI / 180.0f);
+
+        piece->velocity.x = cosf(radians) * GetRandomValue(velocityRange.min, velocityRange.max);
+        piece->velocity.y = sinf(radians) * GetRandomValue(velocityRange.min, velocityRange.max);
+        piece->position = ship->position;
+        piece->rotation = 0;
+        piece->rotationSpeed = GetRandomValue(rotationSpeedRange.min, rotationSpeedRange.max);
+
     }
 }
 
