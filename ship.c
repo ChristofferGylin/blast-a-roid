@@ -18,6 +18,22 @@ void renderShip(GameContext* ctx) {
     }
 }
 
+void renderDestroyedShip(Ship* ship) {
+    for (int i = 0; i < 3; i++) {
+        DestroyedShipPiece* piece = &ship->destroyedPieces[i];
+        Texture2D sprite = *ship->destroyedPieces[i].sprite;
+
+        DrawTexturePro(
+            sprite,
+            (Rectangle){0, 0, sprite.width, sprite.height},
+            (Rectangle){piece->position.x, piece->position.y, sprite.width, sprite.height},
+            (Vector2){ sprite.width / 2.0f, sprite.height / 2.0f },
+            piece->rotation,
+            WHITE
+        );
+    }
+}
+
 void initShip(GameContext* ctx) {
     Ship* ship = &ctx->ship;
 
