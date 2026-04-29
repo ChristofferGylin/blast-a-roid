@@ -10,7 +10,6 @@ typedef struct DestroyedShipPiece {
     Vector2 velocity;
     float rotation;
     Texture2D* sprite;
-
 }DestroyedShipPiece;
 
 typedef struct {
@@ -19,6 +18,8 @@ typedef struct {
     float rotation;
     bool destroyed;
     bool isShieldActive;
+    double timeDestroyed;
+    DestroyedShipPiece destroyedPieces[3]; 
 }Ship; 
 
 void handleShipControls(Ship *ship);
