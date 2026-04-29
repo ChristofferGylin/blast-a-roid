@@ -2,7 +2,7 @@
 #include "raylib.h"
 #include "constants.h"
 #include <stdbool.h>
-#include "mainMenu.h"
+#include "utils.h"
 #include <string.h>
 
 int menuWidth = 400;

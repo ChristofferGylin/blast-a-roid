@@ -23,7 +23,6 @@ typedef struct Menu {
 
 void drawLayoutContainers();
 void drawMenu(Menu* menu);
-float getRoundness(Rectangle rect, float radiusPx);
 void initMenu(Menu* menu);
 void mainMenu(GameContext* ctx);
 void updateMenu(Menu* menu);

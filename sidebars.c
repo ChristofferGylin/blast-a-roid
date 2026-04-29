@@ -3,6 +3,7 @@
 #include "bonuses.h"
 #include "sidebars.h"
 #include "player.h"
+#include "utils.h"
 #include <inttypes.h>
 #include <stdio.h>
 #include <stdbool.h>
@@ -10,6 +11,77 @@
 Color topColor = {0, 25, 38, 255};
 Color bottomColor = {0, 13, 36, 255};
 Color lineColor = {156, 192, 255, 128};
+Color primaryColor = {0, 218, 255, 255};
+Color primaryColorDimmed = {0, 218, 255, 78};
+
+void renderShieldPower(float shieldPower, Vector2 position, int width) {
+
+    int barLevelWidth = width * shieldPower;
+    int barHeight = 20;
+    float roundnessRadius = 8.0f;
+    int segments = 10;
+
+    Rectangle rect = {
+        position.x,
+        position.y,
+        width,
+        barHeight
+    };
+
+    float roundness = getRoundness(rect, roundnessRadius);
+
+    DrawRectangleRounded(rect, roundness, segments, primaryColorDimmed);
+    BeginScissorMode(rect.x, rect.y, barLevelWidth, rect.height);
+        DrawRectangleRounded(rect, roundness, segments, primaryColor);
+    EndScissorMode();
+}
+
+RenderPositions renderBlock(char text[], int startY, bool isLeftSide) {
+    
+    int margin = 4;
+    int padding = 6;
+    float lineThickness = 2;
+    int fontSize = 18;
+    int fontSpacing = 8;
+    int underlineGap = 2;
+    int contentHeight = 20;
+
+    int zeroX = isLeftSide ? 0 : SCREEN_WIDTH - SIDEBAR_WIDTH;
+
+    Vector2 textSize = MeasureTextEx(GetFontDefault(), text, fontSize, fontSpacing);
+
+    Rectangle container = {
+        zeroX + margin,
+        startY + margin,
+        SIDEBAR_WIDTH - (margin * 2),
+        (padding * 4) + textSize.y + contentHeight
+    };
+
+    Vector2 textOrigin = {textSize.x / 2, 0};
+    Vector2 textPosition = {zeroX + (SIDEBAR_WIDTH / 2), startY + lineThickness + padding};
+
+    float roundnessRadius = 8.0f;
+    int segments = 10;
+
+    float roundness = getRoundness(container, roundnessRadius);
+
+    Vector2 lineStart = {container.x, textPosition.y + textSize.y + padding};
+    Vector2 lineEnd = {container.x + container.width, textPosition.y + textSize.y + padding};
+
+    DrawRectangleRoundedLinesEx(container, roundness, segments, lineThickness, primaryColor);
+    DrawLineEx(lineStart, lineEnd, lineThickness, primaryColor);
+    DrawTextPro(GetFontDefault(), text, textPosition, textOrigin, 0, fontSize, fontSpacing, primaryColor);
+    
+    Vector2 contentPosition = {
+        container.x + padding,
+        lineStart.y + lineThickness + padding
+    };
+
+    int contentWidth = container.width - (padding * 2);
+    int endYPosition = container.y + container.height;
+
+    return (RenderPositions){contentPosition, contentWidth, endYPosition};
+}
 
 int renderStats(uint64_t value, char title[], int startY, int bonusMultiplierLevel, bool isMultiplierRendered) {
     
@@ -71,7 +143,10 @@ void renderSidebars(Player* player) {
     DrawLine(SIDEBAR_WIDTH, 0, SIDEBAR_WIDTH, SCREEN_HEIGHT, lineColor);
     DrawLine(SCREEN_WIDTH - SIDEBAR_WIDTH, 0, SCREEN_WIDTH - SIDEBAR_WIDTH, SCREEN_HEIGHT, lineColor);
 
+    RenderPositions shieldPowerPosition = renderBlock("SHIELD", 4, false);
+    renderShieldPower(player->shieldPower, shieldPowerPosition.contentPosition, shieldPowerPosition.contentWidth);
+
     startY = renderStats(player->score, "SCORE", startY, player->powerups.levelBonusMultiplier, false) + statsBlockGap;
     startY = renderStats(player->levelBonus, "BONUS", startY, player->powerups.levelBonusMultiplier, true) + statsBlockGap;
-    startY = renderStats((uint64_t)player->level, "LEVEL", startY, player->powerups.levelBonusMultiplier, false) + statsBlockGap;   
+    startY = renderStats((uint64_t)player->level, "LEVEL", startY, player->powerups.levelBonusMultiplier, false) + statsBlockGap;
 }
