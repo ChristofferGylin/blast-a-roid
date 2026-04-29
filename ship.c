@@ -6,6 +6,13 @@
 #include "utils.h"
 #include <math.h>
 #include "outOfBoundsCheck.h"
+#include "explosion.h"
+
+void destroyShip(GameContext* ctx) {
+    ctx->ship.destroyed = true;
+    newExplosion(ctx, ctx->ship.position);
+    resetDestroyedPieces(&ctx->ship);
+}
 
 void handleDestroyedPiecesMovement(Ship* ship) {
     for (int i = 0; i < 3; i++) {

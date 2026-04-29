@@ -23,6 +23,7 @@ typedef struct {
     DestroyedShipPiece destroyedPieces[3]; 
 }Ship;
 
+void destroyShip(GameContext* ctx);
 void handleDestroyedPiecesMovement(Ship* ship);
 void handleShipControls(Ship *ship);
 void initShip(GameContext* ctx);
