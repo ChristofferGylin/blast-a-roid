@@ -14,18 +14,17 @@ Color lineColor = {156, 192, 255, 128};
 Color primaryColor = {0, 218, 255, 255};
 Color primaryColorDimmed = {0, 218, 255, 78};
 
-void renderShieldPower(float shieldPower, Vector2 position, int width) {
+void renderShieldPower(float shieldPower, Vector2 position, Vector2 size) {
 
-    int barLevelWidth = width * shieldPower;
-    int barHeight = 20;
+    int barLevelWidth = size.x * shieldPower;
     float roundnessRadius = 8.0f;
     int segments = 10;
 
     Rectangle rect = {
         position.x,
         position.y,
-        width,
-        barHeight
+        size.x,
+        size.y
     };
 
     float roundness = getRoundness(rect, roundnessRadius);
@@ -77,10 +76,14 @@ RenderPositions renderBlock(char text[], int startY, bool isLeftSide) {
         lineStart.y + lineThickness + padding
     };
 
-    int contentWidth = container.width - (padding * 2);
+    Vector2 contentSize = {
+        container.width - (padding * 2),
+        contentHeight
+    };
+
     int endYPosition = container.y + container.height;
 
-    return (RenderPositions){contentPosition, contentWidth, endYPosition};
+    return (RenderPositions){contentPosition, contentSize, endYPosition};
 }
 
 int renderStats(uint64_t value, char title[], int startY, int bonusMultiplierLevel, bool isMultiplierRendered) {
@@ -144,7 +147,7 @@ void renderSidebars(Player* player) {
     DrawLine(SCREEN_WIDTH - SIDEBAR_WIDTH, 0, SCREEN_WIDTH - SIDEBAR_WIDTH, SCREEN_HEIGHT, lineColor);
 
     RenderPositions shieldPowerPosition = renderBlock("SHIELD", 4, false);
-    renderShieldPower(player->shieldPower, shieldPowerPosition.contentPosition, shieldPowerPosition.contentWidth);
+    renderShieldPower(player->shieldPower, shieldPowerPosition.contentPosition, shieldPowerPosition.contentSize);
 
     startY = renderStats(player->score, "SCORE", startY, player->powerups.levelBonusMultiplier, false) + statsBlockGap;
     startY = renderStats(player->levelBonus, "BONUS", startY, player->powerups.levelBonusMultiplier, true) + statsBlockGap;
