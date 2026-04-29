@@ -83,6 +83,7 @@ GameResult gameLoop(GameContext* ctx) {
             handleShield(ctx);
             handleAsteroidsMovement(&ctx->objectPools.asteroids);
             handleShotsMovement(&ctx->objectPools.shots);
+            handleDestroyedPiecesMovement(&ctx->ship);
             handleAsteroidCollisions(ctx);
             handleDestroyedAsteroids(ctx);
             handleBonusesCollisions(ctx, &bonuses);
@@ -94,7 +95,7 @@ GameResult gameLoop(GameContext* ctx) {
             }
         }        
 
-        if (ctx->ship.destroyed) {
+        if (ctx->ship.destroyed && GetTime() >= ctx->ship.timeDestroyed + 2) {
             ctx->player.lives--;
 
             if (ctx->player.lives < 0) {

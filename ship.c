@@ -10,6 +10,7 @@
 
 void destroyShip(GameContext* ctx) {
     ctx->ship.destroyed = true;
+    ctx->ship.timeDestroyed = GetTime();
     newExplosion(ctx, ctx->ship.position);
     resetDestroyedPieces(&ctx->ship);
 }
@@ -85,7 +86,9 @@ void renderDestroyedShip(Ship* ship) {
 }
 
 void renderShip(GameContext* ctx) {
-    if (!ctx->ship.destroyed) {
+    if (ctx->ship.destroyed) {
+        renderDestroyedShip(&ctx->ship);
+    } else {
         DrawTexturePro(
             ctx->assets.sprites.ship,
             (Rectangle){0, 0, ctx->assets.sprites.ship.width, ctx->assets.sprites.ship.height},
@@ -94,7 +97,7 @@ void renderShip(GameContext* ctx) {
             ctx->ship.rotation,
             WHITE
         );
-        renderShield(&ctx->ship);    
+        renderShield(&ctx->ship);
     }
 }
 
@@ -108,8 +111,6 @@ void resetDestroyedPieces(Ship* ship) {
 
     FloatRange rotationSpeedRange = {-100, 100};
     FloatRange velocityRange = {30, 100};
-    
-    ship->timeDestroyed = GetTime();
     
     for (int i = 0; i < 3; i++) {
 

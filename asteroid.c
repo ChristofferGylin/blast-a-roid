@@ -94,8 +94,7 @@ void handleAsteroidCollisions(GameContext* ctx) {
             }
         } else {
             if (CheckCollisionCircles(ctx->ship.position, SHIP_SIZE / 2.0f, ast->position, asteroidRadius)) {
-                ctx->ship.destroyed = true;
-                newExplosion(ctx, ctx->ship.position);
+                destroyShip(ctx);
                 destroyAsteroid(&ctx->objectPools.destroyedAsteroids, &ctx->objectPools.asteroids.asteroids[i]);
                 continue;
             }
