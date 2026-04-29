@@ -5,6 +5,33 @@
 #include "constants.h"
 #include "utils.h"
 #include <math.h>
+#include "outOfBoundsCheck.h"
+
+void handleDestroyedPiecesMovement(Ship* ship) {
+    for (int i = 0; i < 3; i++) {
+        DestroyedShipPiece* piece = &ship->destroyedPieces[i];
+
+        piece->rotation += GetFrameTime() * piece->rotationSpeed;
+        piece->rotation = fmodf(piece->rotation, 360.0f);
+
+        if (piece->rotation < 0.0f) {
+            piece->rotation += 360.0f;
+        }
+
+        piece->position.x += GetFrameTime() * piece->velocity.x;
+        piece->position.y += GetFrameTime() * piece->velocity.y;
+
+        int spriteSize;
+
+        if (piece->sprite->height > piece->sprite->width) {
+            spriteSize = piece->sprite->height;
+        } else {
+            spriteSize = piece->sprite->height;
+        }
+
+        outOfBoundsCheck(&piece->position, spriteSize);
+    }
+}
 
 void initShip(GameContext* ctx) {
     Ship* ship = &ctx->ship;
