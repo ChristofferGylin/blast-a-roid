@@ -125,7 +125,7 @@ GameResult gameLoop(GameContext* ctx) {
             renderShots(ctx);
             renderBonuses(&bonuses);
             renderAnimationPool(&ctx->objectPools.explosions);
-            renderSidebars(&ctx->player);
+            renderSidebars(ctx);
             
             if (isPaused) drawPausMenu(&pauseMenu);
             fader(&faderArgs);
