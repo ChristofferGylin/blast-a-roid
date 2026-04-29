@@ -18,6 +18,33 @@ void renderShip(GameContext* ctx) {
     }
 }
 
+void initShip(GameContext* ctx) {
+    Ship* ship = &ctx->ship;
+
+    ship->destroyed = false;
+    ship->timeDestroyed = 0.0;
+    ship->position.x = GetScreenWidth() / 2;
+    ship->position.y = GetScreenHeight() / 2;
+    ship->rotation = 0;
+    ship->velocity.x = 0;
+    ship->velocity.y = 0;
+
+    DestroyedShipPiece destroyedBase = {
+        (Vector2){0, 0},
+        (Vector2){0, 0},
+        0,
+    };
+
+    ship->destroyedPieces[0] = destroyedBase;
+    ship->destroyedPieces[0].sprite = &ctx->assets.sprites.destroyedShip1;
+
+    ship->destroyedPieces[1] = destroyedBase;
+    ship->destroyedPieces[1].sprite = &ctx->assets.sprites.destroyedShip2;
+
+    ship->destroyedPieces[2] = destroyedBase;
+    ship->destroyedPieces[2].sprite = &ctx->assets.sprites.destroyedShip2;
+}
+
 void resetShip(Ship* ship) {
     ship->destroyed = false;
     ship->position.x = GetScreenWidth() / 2;

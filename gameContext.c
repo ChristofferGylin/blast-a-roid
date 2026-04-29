@@ -11,7 +11,7 @@ void initGameContext(GameContext* ctx) {
     initPlayer(&ctx->player);
     initObjectPools(ctx);
     loadAssets(ctx);
-    resetShip(&ctx->ship);
+    initShip(ctx);
 }
 
 void initObjectPools(GameContext* ctx) {

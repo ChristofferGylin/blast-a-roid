@@ -23,6 +23,7 @@ typedef struct {
 }Ship; 
 
 void handleShipControls(Ship *ship);
+void initShip(GameContext* ctx);
 void renderShip(GameContext* ctx);
 void resetShip(Ship* ship);
 
