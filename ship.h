@@ -5,6 +5,14 @@
 
 typedef struct GameContext GameContext;
 
+typedef struct DestroyedShipPiece {
+    Vector2 position;
+    Vector2 velocity;
+    float rotation;
+    Texture2D* sprite;
+
+}DestroyedShipPiece;
+
 typedef struct {
     Vector2 position;
     Vector2 velocity;
