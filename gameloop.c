@@ -111,17 +111,7 @@ GameResult gameLoop(GameContext* ctx) {
         
         BeginDrawing();
             ClearBackground(BLACK);
-            if (!ctx->ship.destroyed) {
-                DrawTexturePro(
-                ctx->assets.sprites.ship,
-                (Rectangle){0, 0, ctx->assets.sprites.ship.width, ctx->assets.sprites.ship.height},
-                (Rectangle){ctx->ship.position.x, ctx->ship.position.y, SHIP_SIZE, SHIP_SIZE},
-                (Vector2){ SHIP_SIZE / 2.0f, SHIP_SIZE / 2.0f},
-                ctx->ship.rotation,
-                WHITE
-            );
-            renderShield(&ctx->ship);    
-            }
+            renderShip(ctx);
             renderAsteroids(ctx);
             renderShots(ctx);
             renderBonuses(&bonuses);

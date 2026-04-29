@@ -3,6 +3,8 @@
 #ifndef SHIP_H
 #define SHIP_H
 
+typedef struct GameContext GameContext;
+
 typedef struct {
     Vector2 position;
     Vector2 velocity;
@@ -12,6 +14,7 @@ typedef struct {
 }Ship; 
 
 void handleShipControls(Ship *ship);
+void renderShip(GameContext* ctx);
 void resetShip(Ship* ship);
 
 #endif
