@@ -5,6 +5,32 @@
 void initUfo1(GameContext* ctx, Enemy* enemy);
 
 void handleUfoMovement(Enemy* enemy) {
+    if (enemy->position.x < enemy->destinaton.x) {
+        enemy->velocity.x += enemy->acceleration;
+    } else if (enemy->position.x > enemy->destinaton.x) {
+        enemy->velocity.x -= enemy->acceleration;
+    }
+
+    if (enemy->velocity.x > enemy->maxVelocity) {
+        enemy->velocity.x = enemy->maxVelocity;
+    } else if (enemy->velocity.x < -enemy->maxVelocity) {
+        enemy->velocity.x = -enemy->maxVelocity;
+    }
+
+    if (enemy->position.y < enemy->destinaton.y) {
+        enemy->velocity.y += enemy->acceleration;
+    } else if (enemy->position.y > enemy->destinaton.y) {
+        enemy->velocity.y -= enemy->acceleration;
+    }
+
+    if (enemy->velocity.y > enemy->maxVelocity) {
+        enemy->velocity.y = enemy->maxVelocity;
+    } else if (enemy->velocity.y < -enemy->maxVelocity) {
+        enemy->velocity.y = -enemy->maxVelocity;
+    }
+
+    enemy->position.x += GetFrameTime() * enemy->velocity.x;
+    enemy->position.y += GetFrameTime() * enemy->velocity.y;
 
 }
 
