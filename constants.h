@@ -24,5 +24,6 @@ static const int ACTIVE_SCREEN_WIDTH = 960;
 static const int ACTIVE_SCREEN_HEIGHT = 720;
 static const int SIDEBAR_WIDTH = 160;
 static const int BONUS_MULTIPLIER_RADIUS = 9;
+static const int UFO_1_SIZE = 32;
 
 #endif
