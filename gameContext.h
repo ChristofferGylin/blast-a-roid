@@ -10,6 +10,7 @@
 
 typedef struct Animations {
     Animation explosion;
+    Animation ufo1;
 }Animations;
 
 typedef struct Samples {
