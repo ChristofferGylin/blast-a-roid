@@ -23,6 +23,7 @@ void initObjectPools(GameContext* ctx) {
 
 void loadAssets(GameContext* ctx) {
     initAnimation(&ctx->assets.animations.explosion, "./assets/explosion.png", "./assets/explosion.json", 24.0f, (Vector2){EXPLOSION_SIZE, EXPLOSION_SIZE}, false);
+    initAnimation(&ctx->assets.animations.ufo1, "./assets/ufo1.png", "./assets/ufo1.json", 24.0f, (Vector2){EXPLOSION_SIZE, EXPLOSION_SIZE}, false);
     
     ctx->assets.samples.explosion = LoadSound("./assets/samples/explosion.wav");
     ctx->assets.samples.multiplier_collect = LoadSound("./assets/samples/multiplier_collect.wav");
@@ -39,6 +40,7 @@ void loadAssets(GameContext* ctx) {
 
 void unloadAssets(GameContext* ctx) {
     unloadAnimation(&ctx->assets.animations.explosion);
+    unloadAnimation(&ctx->assets.animations.ufo1);
 
     UnloadSound(ctx->assets.samples.explosion);
     UnloadSound(ctx->assets.samples.shot);
