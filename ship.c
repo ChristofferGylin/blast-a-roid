@@ -109,6 +109,12 @@ void resetDestroyedPieces(Ship* ship) {
         {210, 270}
     };
 
+    Vector2 posOffset[] = {
+        (Vector2){0, -5},
+        (Vector2){-8, 5},
+        (Vector2){8, 5},
+    };
+
     FloatRange rotationSpeedRange = {-100, 100};
     FloatRange velocityRange = {30, 100};
     
@@ -124,12 +130,28 @@ void resetDestroyedPieces(Ship* ship) {
             direction += 360.0f;
         }
 
+        direction += ship->rotation;
+
         float radians = (direction - 90.0f) * (PI / 180.0f);
+
+        float angle = ship->rotation * (PI / 180.0f);
+
+        Vector2 offset = posOffset[i];
+
+        Vector2 rotatedOffset = {
+            offset.x * cosf(angle) - offset.y * sinf(angle),
+            offset.x * sinf(angle) + offset.y * cosf(angle)
+        };
+
+        Vector2 pos = {
+            ship->position.x + rotatedOffset.x,
+            ship->position.y +  rotatedOffset.y
+        };
 
         piece->velocity.x = cosf(radians) * GetRandomValue(velocityRange.min, velocityRange.max);
         piece->velocity.y = sinf(radians) * GetRandomValue(velocityRange.min, velocityRange.max);
-        piece->position = ship->position;
-        piece->rotation = 0;
+        piece->position = pos;
+        piece->rotation = ship->rotation;
         piece->rotationSpeed = GetRandomValue(rotationSpeedRange.min, rotationSpeedRange.max);
 
     }
