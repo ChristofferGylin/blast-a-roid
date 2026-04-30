@@ -3,6 +3,19 @@
 #include "gameContext.h"
 
 void initUfo1(GameContext* ctx, Enemy* enemy);
+void handleUfoMovement(Enemy* enemy);
+
+void handleEnemyMovement(Enemy* enemy) {
+    switch (enemy->type)
+    {
+    case UFO_1:
+        handleUfoMovement(enemy);
+        break;
+    
+    default:
+        break;
+    }
+}
 
 void handleUfoMovement(Enemy* enemy) {
     if (enemy->position.x < enemy->destinaton.x) {
