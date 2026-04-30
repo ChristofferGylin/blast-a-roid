@@ -4,6 +4,10 @@
 
 void initUfo1(GameContext* ctx, Enemy* enemy);
 
+void handleUfoMovement(Enemy* enemy) {
+
+}
+
 void initEnemy(GameContext* ctx, Enemy* enemy, EnemyType type) {
 
     enemy->health = 1.0f;
@@ -25,12 +29,13 @@ void initEnemy(GameContext* ctx, Enemy* enemy, EnemyType type) {
 void initUfo1(GameContext* ctx, Enemy* enemy) {
 
     float y = 50.0f;
-    float velocity = 100;
 
+    enemy->acceleration = 1.0f;
     enemy->destinaton = (Vector2){SCREEN_WIDTH + 10, y};
+    enemy->maxVelocity = 100.0f;
     enemy->position = (Vector2){-10, y};
     enemy->type = UFO_1;
-    enemy->velocity = velocity;
+    enemy->velocity = (Vector2){0, 0};
     enemy->visualType = VISUAL_ANIMATION;
     enemy->animation = &ctx->assets.animations.ufo1;
 }

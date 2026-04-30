@@ -4,6 +4,7 @@
 #include "raylib.h"
 
 typedef struct Animation Animation;
+typedef struct GameContext GameContext;
 
 typedef enum EnemyType {
     UFO_1
@@ -15,10 +16,12 @@ typedef enum VisualType {
 }VisualType;
 
 typedef struct Enemy {
+    float acceleration;
     Vector2 position;
     Vector2 destinaton;
     float rotation;
-    float velocity;
+    Vector2 velocity;
+    float maxVelocity;
     float health;
     double shotTime;
     int shotCount;
@@ -30,5 +33,7 @@ typedef struct Enemy {
     };
 
 }Enemy;
+
+void initEnemy(GameContext* ctx, Enemy* enemy, EnemyType type);
 
 #endif
