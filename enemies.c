@@ -144,7 +144,7 @@ void renderEnemies(EnemyObjectPool* pool) {
                 WHITE  
             );
         } else {
-
+            renderAnimation(&enemy->animation);
         }
     }
 }
