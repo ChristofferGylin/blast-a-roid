@@ -32,7 +32,7 @@ typedef struct Enemy {
     VisualType visualType;
     union {
         Texture2D* sprite;
-        Animation* animation;
+        AnimationInstance animation;
     };
 
 }Enemy;

@@ -106,6 +106,15 @@ void initUfo1(GameContext* ctx, Enemy* enemy) {
 
     float y = 50.0f;
 
+    AnimationInstance animation;
+
+    animation.animation = &ctx->assets.animations.ufo1;
+    animation.currentFrame = 0;
+    animation.frameTimer = 0.0f;
+    animation.isFinished = false;
+    animation.position = enemy->position;
+    animation.rotation = enemy->rotation;
+
     enemy->acceleration = 1.0f;
     enemy->destinaton = (Vector2){SCREEN_WIDTH + 10, y};
     enemy->maxVelocity = 100.0f;
@@ -113,7 +122,7 @@ void initUfo1(GameContext* ctx, Enemy* enemy) {
     enemy->type = UFO_1;
     enemy->velocity = (Vector2){0, 0};
     enemy->visualType = VISUAL_ANIMATION;
-    enemy->animation = &ctx->assets.animations.ufo1;
+    enemy->animation = animation;
 }
 
 void renderEnemies(EnemyObjectPool* pool) {
@@ -135,7 +144,7 @@ void renderEnemies(EnemyObjectPool* pool) {
                 WHITE  
             );
         } else {
-            
+
         }
     }
 }
