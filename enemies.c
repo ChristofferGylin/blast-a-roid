@@ -115,3 +115,27 @@ void initUfo1(GameContext* ctx, Enemy* enemy) {
     enemy->visualType = VISUAL_ANIMATION;
     enemy->animation = &ctx->assets.animations.ufo1;
 }
+
+void renderEnemies(EnemyObjectPool* pool) {
+    for (int i = 0; i < pool->activeCount; i++) {
+        if (!pool->enemies[i].active) continue;
+
+        Enemy* enemy = &pool->enemies[i];
+
+        if (enemy->visualType == VISUAL_SPRITE) {
+
+            Texture2D sprite = *enemy->sprite;
+
+            DrawTexturePro(
+                sprite,
+                (Rectangle){0, 0, sprite.width, sprite.height},
+                (Rectangle){enemy->position.x, enemy->position.y, sprite.width, sprite.height},
+                (Vector2){sprite.width / 2.0f, sprite.height / 2.0f},
+                enemy->rotation,
+                WHITE  
+            );
+        } else {
+            
+        }
+    }
+}
