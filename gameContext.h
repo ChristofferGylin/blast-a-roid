@@ -3,6 +3,7 @@
 
 #include "raylib.h"
 #include "asteroid.h"
+#include "enemies.h"
 #include "shooting.h"
 #include "animation.h"
 #include "player.h"
@@ -38,6 +39,7 @@ typedef struct Assets {
 typedef struct ObjectPools {
     AsteroidPool asteroids;
     DestroyedAsteroidPool destroyedAsteroids;
+    EnemyObjectPool enemies;
     AnimationPool explosions;
     ShotObjectPool shots;
 }ObjectPools;
