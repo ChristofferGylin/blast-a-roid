@@ -145,8 +145,9 @@ void updateAnimation(AnimationInstance* aniInst) {
         aniInst->currentFrame++;
 
         if ((aniInst->currentFrame >= aniInst->animation->frameCount) && !aniInst->animation->isLoop) {
-
             aniInst->isFinished = true;
+        } else if ((aniInst->currentFrame > aniInst->animation->frameCount) && aniInst->animation->isLoop) {
+            aniInst->currentFrame = 0;
         }
     }
 }
