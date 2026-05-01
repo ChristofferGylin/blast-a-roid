@@ -29,7 +29,7 @@ void addNewEnemy(GameContext* ctx, EnemyObjectPool* pool, EnemyType type) {
 
 }
 
-void handleEnemyMovement(Enemy* enemy) {
+void handleEnemiesMovement(Enemy* enemy) {
     switch (enemy->type)
     {
     case UFO_1:
