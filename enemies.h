@@ -51,5 +51,6 @@ void addNewEnemy(GameContext* ctx, EnemyObjectPool* pool, EnemyType type);
 void handleEnemiesMovement(Enemy* enemy);
 void initEnemyPool(EnemyObjectPool* pool);
 void renderEnemies(EnemyObjectPool* pool);
+void updateEnemies(EnemyObjectPool* pool);
 
 #endif

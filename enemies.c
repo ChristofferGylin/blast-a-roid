@@ -147,3 +147,16 @@ void renderEnemies(EnemyObjectPool* pool) {
         }
     }
 }
+
+void updateEnemies(EnemyObjectPool* pool) {
+    for (int i = 0; i < pool->activeCount; i++) {
+        if (!pool->enemies[i].active) continue;
+
+        Enemy* enemy = &pool->enemies[i];
+
+        if (enemy->visualType == VISUAL_ANIMATION) {
+            enemy->animation.position = enemy->position;
+            updateAnimation(&enemy->animation);
+        } 
+    }
+}
