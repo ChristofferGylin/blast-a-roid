@@ -110,7 +110,7 @@ void initUfo1(GameContext* ctx, Enemy* enemy) {
 
     float y = 50.0f;
 
-    enemy->acceleration = 50.0f;
+    enemy->acceleration = 100.0f;
     enemy->destinaton = (Vector2){SCREEN_WIDTH + UFO_1_SIZE, y};
     enemy->maxVelocity = 100.0f;
     enemy->position = (Vector2){SIDEBAR_WIDTH - UFO_1_SIZE, y};
