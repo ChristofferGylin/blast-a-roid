@@ -16,6 +16,7 @@
 #include "shield.h"
 #include "bonuses.h"
 #include "animation.h"
+#include "enemies.h"
 
 static Bonuses bonuses = {0};
 
@@ -82,6 +83,7 @@ GameResult gameLoop(GameContext* ctx) {
             handleShipControls(&ctx->ship);
             handleShield(ctx);
             handleAsteroidsMovement(&ctx->objectPools.asteroids);
+            handleEnemiesMovement(&ctx->objectPools.enemies);
             handleShotsMovement(&ctx->objectPools.shots);
             handleDestroyedPiecesMovement(&ctx->ship);
             handleAsteroidCollisions(ctx);
@@ -89,6 +91,7 @@ GameResult gameLoop(GameContext* ctx) {
             handleBonusesCollisions(ctx, &bonuses);
             handleFinishedAnimations(&ctx->objectPools.explosions);
             updateAnimationPool(&ctx->objectPools.explosions);
+            updateEnemies(&ctx->objectPools.enemies);
 
             if (ctx->ship.isShieldActive) {
                 updateShieldAnimation();
@@ -116,6 +119,7 @@ GameResult gameLoop(GameContext* ctx) {
             renderAsteroids(ctx);
             renderShots(ctx);
             renderBonuses(&bonuses);
+            renderEnemies(&ctx->objectPools.enemies);
             renderAnimationPool(&ctx->objectPools.explosions);
             renderSidebars(ctx);
             
