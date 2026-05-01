@@ -2,11 +2,12 @@
 #define ENEMIES_H
 
 #include "raylib.h"
+#include "constants.h"
+
+#define MAX_ENEMIES 32
 
 typedef struct Animation Animation;
 typedef struct GameContext GameContext;
-
-const int MAX_ENEMIES = 32;
 
 typedef enum EnemyType {
     UFO_1
