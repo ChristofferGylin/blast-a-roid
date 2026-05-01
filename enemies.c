@@ -46,14 +46,16 @@ void handleEnemiesMovement(EnemyObjectPool* pool) {
             default:
                 break;
         }
+
+        outOfBoundsCheck(&enemy->position, enemy->size);
     }
 }
 
 void handleUfoMovement(Enemy* enemy) {
     if (enemy->position.x < enemy->destinaton.x) {
-        enemy->velocity.x += enemy->acceleration;
+        enemy->velocity.x += GetFrameTime() * enemy->acceleration;
     } else if (enemy->position.x > enemy->destinaton.x) {
-        enemy->velocity.x -= enemy->acceleration;
+        enemy->velocity.x -= GetFrameTime() * enemy->acceleration;
     }
 
     if (enemy->velocity.x > enemy->maxVelocity) {
@@ -63,9 +65,9 @@ void handleUfoMovement(Enemy* enemy) {
     }
 
     if (enemy->position.y < enemy->destinaton.y) {
-        enemy->velocity.y += enemy->acceleration;
+        enemy->velocity.y += GetFrameTime() * enemy->acceleration;
     } else if (enemy->position.y > enemy->destinaton.y) {
-        enemy->velocity.y -= enemy->acceleration;
+        enemy->velocity.y -= GetFrameTime() * enemy->acceleration;
     }
 
     if (enemy->velocity.y > enemy->maxVelocity) {
@@ -108,10 +110,11 @@ void initUfo1(GameContext* ctx, Enemy* enemy) {
 
     float y = 50.0f;
 
-    enemy->acceleration = 1.0f;
+    enemy->acceleration = 50.0f;
     enemy->destinaton = (Vector2){SCREEN_WIDTH + UFO_1_SIZE, y};
     enemy->maxVelocity = 100.0f;
     enemy->position = (Vector2){SIDEBAR_WIDTH - UFO_1_SIZE, y};
+    enemy->size = UFO_1_SIZE;
     enemy->type = UFO_1;
     enemy->velocity = (Vector2){0, 0};
     enemy->visualType = VISUAL_ANIMATION;

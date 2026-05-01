@@ -116,7 +116,7 @@ void renderAnimation(AnimationInstance* aniInst) {
     DrawTexturePro(
         aniInst->animation->texture,
         aniInst->animation->frames[aniInst->currentFrame],
-        (Rectangle){aniInst->position.x, aniInst->position.y, aniInst->animation->size.x, aniInst->animation->size.y},
+        (Rectangle){round(aniInst->position.x),  round(aniInst->position.y), round(aniInst->animation->size.x), round(aniInst->animation->size.y)},
         (Vector2){aniInst->animation->size.x / 2, aniInst->animation->size.y / 2},
         aniInst->rotation,
         RAYWHITE

@@ -26,6 +26,7 @@ typedef struct Enemy {
     Vector2 velocity;
     float maxVelocity;
     float health;
+    int size;
     double shotTime;
     int shotCount;
     EnemyType type;
