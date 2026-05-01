@@ -65,6 +65,14 @@ void initEnemy(GameContext* ctx, Enemy* enemy, EnemyType type) {
     }
 }
 
+void initEnemyPool(EnemyObjectPool* pool) {
+    for (int i = 0; i < MAX_ENEMIES; i++) {
+        pool->enemies[i].active = false;
+    }
+
+    pool->activeCount = 0;
+}
+
 void initUfo1(GameContext* ctx, Enemy* enemy) {
 
     float y = 50.0f;
