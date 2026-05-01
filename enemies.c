@@ -73,7 +73,6 @@ void handleUfoMovement(Enemy* enemy) {
 
     enemy->position.x += GetFrameTime() * enemy->velocity.x;
     enemy->position.y += GetFrameTime() * enemy->velocity.y;
-
 }
 
 void initEnemy(GameContext* ctx, Enemy* enemy, EnemyType type) {
