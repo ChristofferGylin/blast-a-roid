@@ -2,6 +2,7 @@
 #include "constants.h"
 #include "gameContext.h"
 #include <stdio.h>
+#include "outOfBoundsCheck.h"
 
 void initEnemy(GameContext* ctx, Enemy* enemy, EnemyType type);
 void initUfo1(GameContext* ctx, Enemy* enemy);
@@ -35,7 +36,7 @@ void handleEnemiesMovement(EnemyObjectPool* pool) {
     for (int i = 0; i < pool->activeCount; i++) {
         if (!pool->enemies[i].active) continue;
 
-        Enemy* enemy = &pool->enemies[i];
+        Enemy* enemy = &pool->enemies[i].enemy;
 
         switch (enemy->type) {
             case UFO_1:
@@ -107,6 +108,14 @@ void initUfo1(GameContext* ctx, Enemy* enemy) {
 
     float y = 50.0f;
 
+    enemy->acceleration = 1.0f;
+    enemy->destinaton = (Vector2){SCREEN_WIDTH + UFO_1_SIZE, y};
+    enemy->maxVelocity = 100.0f;
+    enemy->position = (Vector2){SIDEBAR_WIDTH - UFO_1_SIZE, y};
+    enemy->type = UFO_1;
+    enemy->velocity = (Vector2){0, 0};
+    enemy->visualType = VISUAL_ANIMATION;
+
     AnimationInstance animation;
 
     animation.animation = &ctx->assets.animations.ufo1;
@@ -116,13 +125,6 @@ void initUfo1(GameContext* ctx, Enemy* enemy) {
     animation.position = enemy->position;
     animation.rotation = enemy->rotation;
 
-    enemy->acceleration = 1.0f;
-    enemy->destinaton = (Vector2){SCREEN_WIDTH + 10, y};
-    enemy->maxVelocity = 100.0f;
-    enemy->position = (Vector2){-10, y};
-    enemy->type = UFO_1;
-    enemy->velocity = (Vector2){0, 0};
-    enemy->visualType = VISUAL_ANIMATION;
     enemy->animation = animation;
 }
 
@@ -130,7 +132,7 @@ void renderEnemies(EnemyObjectPool* pool) {
     for (int i = 0; i < pool->activeCount; i++) {
         if (!pool->enemies[i].active) continue;
 
-        Enemy* enemy = &pool->enemies[i];
+        Enemy* enemy = &pool->enemies[i].enemy;
 
         if (enemy->visualType == VISUAL_SPRITE) {
 
@@ -154,7 +156,7 @@ void updateEnemies(EnemyObjectPool* pool) {
     for (int i = 0; i < pool->activeCount; i++) {
         if (!pool->enemies[i].active) continue;
 
-        Enemy* enemy = &pool->enemies[i];
+        Enemy* enemy = &pool->enemies[i].enemy;
 
         if (enemy->visualType == VISUAL_ANIMATION) {
             enemy->animation.position = enemy->position;

@@ -42,6 +42,8 @@ GameResult gameLoop(GameContext* ctx) {
     
     resetShip(&ctx->ship);
 
+    addNewEnemy(ctx, UFO_1);
+
     while(!WindowShouldClose())
     {
 
