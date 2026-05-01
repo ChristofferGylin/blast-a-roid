@@ -7,7 +7,9 @@ void initEnemy(GameContext* ctx, Enemy* enemy, EnemyType type);
 void initUfo1(GameContext* ctx, Enemy* enemy);
 void handleUfoMovement(Enemy* enemy);
 
-void addNewEnemy(GameContext* ctx, EnemyObjectPool* pool, EnemyType type) {
+void addNewEnemy(GameContext* ctx, EnemyType type) {
+
+    EnemyObjectPool* pool = &ctx->objectPools.enemies; 
 
     if (pool->activeCount >= MAX_ENEMIES) {
         printf("Error: Memory overflow in addNewEnemy\n");
