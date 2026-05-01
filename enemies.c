@@ -1,9 +1,33 @@
 #include "enemies.h"
 #include "constants.h"
 #include "gameContext.h"
+#include <stdio.h>
 
+void initEnemy(GameContext* ctx, Enemy* enemy, EnemyType type);
 void initUfo1(GameContext* ctx, Enemy* enemy);
 void handleUfoMovement(Enemy* enemy);
+
+void addNewEnemy(GameContext* ctx, EnemyObjectPool* pool, EnemyType type) {
+
+    if (pool->activeCount >= MAX_ENEMIES) {
+        printf("Error: Memory overflow in addNewEnemy\n");
+        return;
+    }
+
+    if (pool->enemies[pool->activeCount].active) {
+        printf("Error: Could not add new enemy, index allready in use in addNewEnemy\n");
+        return;
+    }
+
+    Enemy newEnemy;
+
+    initEnemy(ctx, &newEnemy, type);
+
+    pool->enemies[pool->activeCount].enemy = newEnemy;
+    pool->enemies[pool->activeCount].active = true;
+    pool->activeCount++;
+
+}
 
 void handleEnemyMovement(Enemy* enemy) {
     switch (enemy->type)
