@@ -9,6 +9,7 @@
 void initEnemy(GameContext* ctx, Enemy* enemy, EnemyType type);
 void initUfo1(GameContext* ctx, Enemy* enemy);
 void handleUfoMovement(Enemy* enemy);
+void updateUfo1(Enemy* enemy, Ship* ship);
 
 void addNewEnemy(GameContext* ctx, EnemyType type) {
 
@@ -165,6 +166,34 @@ void updateEnemies(EnemyObjectPool* pool) {
         if (enemy->visualType == VISUAL_ANIMATION) {
             enemy->animation.position = enemy->position;
             updateAnimation(&enemy->animation);
-        } 
+        }
+
+        switch (enemy->type)
+        {
+        case UFO_1:
+            /* code */
+            break;
+        
+        default:
+            break;
+        }
+    }
+    
+}
+
+void updateUfo1(Enemy* enemy, Ship* ship) {
+    
+    double now = GetTime();
+    
+    if (now < enemy->lastReaction + enemy->reactionTime) return;
+
+    enemy->lastReaction = now;
+    
+    int attackDurationTime = 30;
+
+    if (now <= enemy->spawnTime + attackDurationTime) {
+        enemy->destination = ship->position;
+    } else {
+        enemy->destination.x = SCREEN_WIDTH + UFO_1_SIZE / 2;
     }
 }
