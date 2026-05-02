@@ -9,6 +9,7 @@
 void initEnemy(GameContext* ctx, Enemy* enemy, EnemyType type);
 void initUfo1(GameContext* ctx, Enemy* enemy);
 void handleUfoMovement(Enemy* enemy);
+void ufoGoOffScreen(Enemy* enemy);
 void updateUfo1(Enemy* enemy, Ship* ship);
 
 void addNewEnemy(GameContext* ctx, EnemyType type) {
@@ -204,6 +205,19 @@ void ufoGoOffScreen(Enemy* enemy) {
 
 
 void updateUfo1(Enemy* enemy, Ship* ship) {
+    
+    double now = GetTime();
+    
+    if (now < enemy->lastReaction + enemy->reactionTime) return;
+
+    enemy->lastReaction = now;
+    
+    int attackDurationTime = 45;
+
+    ufoGoOffScreen(enemy);
+}
+
+void updateUfo2(Enemy* enemy, Ship* ship) {
     
     double now = GetTime();
     
