@@ -3,6 +3,8 @@
 #include "gameContext.h"
 #include <stdio.h>
 #include "outOfBoundsCheck.h"
+#include "ship.h"
+#include <math.h>
 
 void initEnemy(GameContext* ctx, Enemy* enemy, EnemyType type);
 void initUfo1(GameContext* ctx, Enemy* enemy);
@@ -32,7 +34,10 @@ void addNewEnemy(GameContext* ctx, EnemyType type) {
 
 }
 
-void handleEnemiesMovement(EnemyObjectPool* pool) {
+void handleEnemiesMovement(GameContext* ctx) {
+    
+    EnemyObjectPool* pool = &ctx->objectPools.enemies;
+
     for (int i = 0; i < pool->activeCount; i++) {
         if (!pool->enemies[i].active) continue;
 
@@ -52,28 +57,21 @@ void handleEnemiesMovement(EnemyObjectPool* pool) {
 }
 
 void handleUfoMovement(Enemy* enemy) {
-    if (enemy->position.x < enemy->destinaton.x) {
-        enemy->velocity.x += GetFrameTime() * enemy->acceleration;
-    } else if (enemy->position.x > enemy->destinaton.x) {
-        enemy->velocity.x -= GetFrameTime() * enemy->acceleration;
-    }
+    float angle = atan2(enemy->destination.y - enemy->position.y, enemy->destination.x - enemy->position.x);
 
-    if (enemy->velocity.x > enemy->maxVelocity) {
-        enemy->velocity.x = enemy->maxVelocity;
-    } else if (enemy->velocity.x < -enemy->maxVelocity) {
+    enemy->velocity.x += GetFrameTime() * (cosf(angle) * enemy->acceleration);
+    enemy->velocity.y += GetFrameTime() * (sinf(angle) * enemy->acceleration);
+
+    if (enemy->velocity.x < -enemy->maxVelocity) {
         enemy->velocity.x = -enemy->maxVelocity;
+    } else if (enemy->velocity.x > enemy->maxVelocity) {
+        enemy->velocity.x = enemy->maxVelocity;
     }
 
-    if (enemy->position.y < enemy->destinaton.y) {
-        enemy->velocity.y += GetFrameTime() * enemy->acceleration;
-    } else if (enemy->position.y > enemy->destinaton.y) {
-        enemy->velocity.y -= GetFrameTime() * enemy->acceleration;
-    }
-
-    if (enemy->velocity.y > enemy->maxVelocity) {
-        enemy->velocity.y = enemy->maxVelocity;
-    } else if (enemy->velocity.y < -enemy->maxVelocity) {
+    if (enemy->velocity.y < -enemy->maxVelocity) {
         enemy->velocity.y = -enemy->maxVelocity;
+    } else if (enemy->velocity.y > enemy->maxVelocity) {
+        enemy->velocity.y = enemy->maxVelocity;
     }
 
     enemy->position.x += GetFrameTime() * enemy->velocity.x;
@@ -111,8 +109,8 @@ void initUfo1(GameContext* ctx, Enemy* enemy) {
     float y = 50.0f;
 
     enemy->acceleration = 100.0f;
-    enemy->destinaton = (Vector2){SCREEN_WIDTH + UFO_1_SIZE, y};
-    enemy->maxVelocity = 100.0f;
+    enemy->destination = (Vector2){SCREEN_WIDTH + UFO_1_SIZE, y};
+    enemy->maxVelocity = 50.0f;
     enemy->position = (Vector2){SIDEBAR_WIDTH - UFO_1_SIZE, y};
     enemy->size = UFO_1_SIZE;
     enemy->type = UFO_1;

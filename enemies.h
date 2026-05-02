@@ -21,7 +21,7 @@ typedef enum VisualType {
 typedef struct Enemy {
     float acceleration;
     Vector2 position;
-    Vector2 destinaton;
+    Vector2 destination;
     float rotation;
     Vector2 velocity;
     float maxVelocity;
@@ -49,7 +49,7 @@ typedef struct EnemyObjectPool {
 }EnemyObjectPool;
 
 void addNewEnemy(GameContext* ctx, EnemyType type);
-void handleEnemiesMovement(EnemyObjectPool* pool);
+void handleEnemiesMovement(GameContext* ctx);
 void initEnemyPool(EnemyObjectPool* pool);
 void renderEnemies(EnemyObjectPool* pool);
 void updateEnemies(EnemyObjectPool* pool);
