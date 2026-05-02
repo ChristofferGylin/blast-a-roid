@@ -83,7 +83,8 @@ void initEnemy(GameContext* ctx, Enemy* enemy, EnemyType type) {
     enemy->health = 1.0f;
     enemy->rotation = 0.0f;
     enemy->shotCount = 0;
-    enemy->shotTime = GetTime();
+    enemy->lastReaction = GetTime();
+    enemy->lastShot = GetTime();
 
     switch (type)
     {
@@ -112,6 +113,7 @@ void initUfo1(GameContext* ctx, Enemy* enemy) {
     enemy->destination = (Vector2){SCREEN_WIDTH + UFO_1_SIZE, y};
     enemy->maxVelocity = 50.0f;
     enemy->position = (Vector2){SIDEBAR_WIDTH - UFO_1_SIZE, y};
+    enemy->reactionTime = 0.3f;
     enemy->size = UFO_1_SIZE;
     enemy->type = UFO_1;
     enemy->velocity = (Vector2){0, 0};

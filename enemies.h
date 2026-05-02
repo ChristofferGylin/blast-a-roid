@@ -27,7 +27,9 @@ typedef struct Enemy {
     float maxVelocity;
     float health;
     int size;
-    double shotTime;
+    double lastShot;
+    double lastReaction;
+    float reactionTime;
     int shotCount;
     EnemyType type;
     VisualType visualType;
