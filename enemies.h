@@ -54,6 +54,7 @@ typedef struct EnemyObjectPool {
 void addNewEnemy(GameContext* ctx, EnemyType type);
 void handleEnemiesMovement(GameContext* ctx);
 void initEnemyPool(EnemyObjectPool* pool);
+void removeEnemy(EnemyObjectPool* pool, Enemy* enemy);
 void renderEnemies(EnemyObjectPool* pool);
 void updateEnemies(GameContext* ctx);
 

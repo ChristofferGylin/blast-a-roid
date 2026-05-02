@@ -134,6 +134,15 @@ void initUfo1(GameContext* ctx, Enemy* enemy) {
     enemy->animation = animation;
 }
 
+void removeEnemy(EnemyObjectPool* pool, Enemy* enemy) {
+    for (int i = 0; i < pool->activeCount; i++) {
+        if (&pool->enemies[i].enemy == enemy) {
+            pool->enemies[i].active = false;
+            return;
+        }
+    }
+}
+
 void renderEnemies(EnemyObjectPool* pool) {
     for (int i = 0; i < pool->activeCount; i++) {
         if (!pool->enemies[i].active) continue;
