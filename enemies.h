@@ -29,6 +29,7 @@ typedef struct Enemy {
     int size;
     double lastShot;
     double lastReaction;
+    double spawnTime;
     float reactionTime;
     int shotCount;
     EnemyType type;

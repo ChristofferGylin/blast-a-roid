@@ -85,6 +85,7 @@ void initEnemy(GameContext* ctx, Enemy* enemy, EnemyType type) {
     enemy->shotCount = 0;
     enemy->lastReaction = GetTime();
     enemy->lastShot = GetTime();
+    enemy->spawnTime = GetTime();
 
     switch (type)
     {
