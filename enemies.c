@@ -114,7 +114,7 @@ void initUfo1(GameContext* ctx, Enemy* enemy) {
     enemy->acceleration = 100.0f;
     enemy->destination = (Vector2){SCREEN_WIDTH + UFO_1_SIZE, y};
     enemy->maxVelocity = 50.0f;
-    enemy->position = (Vector2){SIDEBAR_WIDTH - UFO_1_SIZE, y};
+    enemy->position = (Vector2){SIDEBAR_WIDTH - (UFO_1_SIZE / 2), y};
     enemy->reactionTime = 0.3f;
     enemy->size = UFO_1_SIZE;
     enemy->type = UFO_1;
@@ -184,6 +184,25 @@ void updateEnemies(GameContext* ctx) {
     
 }
 
+void ufoGoOffScreen(Enemy* enemy) {
+
+    Vector2 destination;
+    destination.x = SCREEN_WIDTH - SIDEBAR_WIDTH + (UFO_1_SIZE / 2);
+
+    if (enemy->position.y <= SCREEN_HEIGHT / 2) {
+        destination.y = 50;
+    } else {
+        destination.y = SCREEN_HEIGHT - 50;
+    }
+
+    enemy->destination = destination;
+        
+    if (enemy->position.x > destination.x) {
+        // remove enemy
+    }
+}
+
+
 void updateUfo1(Enemy* enemy, Ship* ship) {
     
     double now = GetTime();
@@ -197,7 +216,7 @@ void updateUfo1(Enemy* enemy, Ship* ship) {
     if (now <= enemy->spawnTime + attackDurationTime) {
         enemy->destination = ship->position;
     } else {
-        enemy->destination.x = SCREEN_WIDTH + UFO_1_SIZE / 2;
-        enemy->destination.y = 50;
+
+        ufoGoOffScreen(enemy);
     }
 }
