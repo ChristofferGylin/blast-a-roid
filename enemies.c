@@ -157,7 +157,10 @@ void renderEnemies(EnemyObjectPool* pool) {
     }
 }
 
-void updateEnemies(EnemyObjectPool* pool) {
+void updateEnemies(GameContext* ctx) {
+
+    EnemyObjectPool* pool = &ctx->objectPools.enemies;
+
     for (int i = 0; i < pool->activeCount; i++) {
         if (!pool->enemies[i].active) continue;
 
@@ -171,7 +174,7 @@ void updateEnemies(EnemyObjectPool* pool) {
         switch (enemy->type)
         {
         case UFO_1:
-            /* code */
+            updateUfo1(enemy, &ctx->ship);
             break;
         
         default:

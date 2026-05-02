@@ -93,7 +93,7 @@ GameResult gameLoop(GameContext* ctx) {
             handleBonusesCollisions(ctx, &bonuses);
             handleFinishedAnimations(&ctx->objectPools.explosions);
             updateAnimationPool(&ctx->objectPools.explosions);
-            updateEnemies(&ctx->objectPools.enemies);
+            updateEnemies(ctx);
 
             if (ctx->ship.isShieldActive) {
                 updateShieldAnimation();
