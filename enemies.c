@@ -192,11 +192,12 @@ void updateUfo1(Enemy* enemy, Ship* ship) {
 
     enemy->lastReaction = now;
     
-    int attackDurationTime = 30;
+    int attackDurationTime = 45;
 
     if (now <= enemy->spawnTime + attackDurationTime) {
         enemy->destination = ship->position;
     } else {
         enemy->destination.x = SCREEN_WIDTH + UFO_1_SIZE / 2;
+        enemy->destination.y = 50;
     }
 }
