@@ -17,6 +17,7 @@ typedef enum ShotType {
 
 typedef struct {
     ShotType type;
+    Texture2D* sprite;
     int size;
     Vector2 position;
     Vector2 direction;
