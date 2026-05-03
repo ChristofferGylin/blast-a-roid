@@ -85,6 +85,7 @@ void handleShooting(GameContext* ctx) {
 
         Shot newShot = {
             PLAYER_SHOT,
+            &ctx->assets.sprites.shot,
             SHOT_SIZE,
             ctx->ship.position,
             {cosf(radians) * SHOT_VELOCITY, sinf(radians) * SHOT_VELOCITY},
@@ -130,7 +131,7 @@ void renderShots(GameContext* ctx) {
         if (shot->destroyed) continue;
 
         DrawTexturePro(
-            ctx->assets.sprites.shot,
+            *shot->sprite,
             (Rectangle){0, 0, ctx->assets.sprites.shot.width, ctx->assets.sprites.shot.height},
             (Rectangle){shot->position.x, shot->position.y, shot->size, shot->size},
             (Vector2){shot->size / 2.0f, shot->size / 2.0f},
