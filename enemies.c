@@ -224,7 +224,8 @@ void updateUfo1(GameContext* ctx, Enemy* enemy) {
         float angle = atan2(ctx->ship.position.y - enemy->position.y, ctx->ship.position.x - enemy->position.x);
 
         Shot newShot = {
-            ENEMY_SHOT_1,
+            ENEMY_SHOT,
+            0,
             &ctx->assets.sprites.enemyShot1,
             SHOT_SIZE,
             enemy->position,

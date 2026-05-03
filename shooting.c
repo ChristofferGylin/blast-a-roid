@@ -85,6 +85,7 @@ void handleShooting(GameContext* ctx) {
 
         Shot newShot = {
             PLAYER_SHOT,
+            1,
             &ctx->assets.sprites.shot,
             SHOT_SIZE,
             ctx->ship.position,

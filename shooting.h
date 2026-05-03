@@ -10,13 +10,14 @@
 
 typedef struct GameContext GameContext;
 
-typedef enum ShotType {
+typedef enum ShotOwner {
     PLAYER_SHOT,
-    ENEMY_SHOT_1
-}ShotType;
+    ENEMY_SHOT
+}ShotOwner;
 
 typedef struct {
-    ShotType type;
+    ShotOwner owner;
+    int level;
     Texture2D* sprite;
     int size;
     Vector2 position;
