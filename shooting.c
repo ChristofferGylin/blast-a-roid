@@ -99,8 +99,6 @@ void handleShooting(GameContext* ctx) {
 }
 
 void handleShotsMovement(ShotObjectPool* pool) {
-    int spriteWidth = 32;
-
     for (int i = 0; i < pool->activeCount; i++) {
         if (!pool->shots[i].active) continue;
 
