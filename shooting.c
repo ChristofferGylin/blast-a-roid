@@ -74,8 +74,8 @@ void handleShooting(GameContext* ctx) {
 
     const int SHOT_COOLDOWN_TIME = 80;
     const int SHOT_LIFE_TIME = 800;
+    const int SHOT_SIZE = 6;
     const int SHOT_VELOCITY = 450;
-    
 
     if (ctx->ship.destroyed) return;
     if (ctx->objectPools.shots.activeCount >= MAX_SHOTS) return;
