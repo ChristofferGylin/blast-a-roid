@@ -101,10 +101,12 @@ void handleAsteroidCollisions(GameContext* ctx) {
         }
 
         for (int j = 0; j < ctx->objectPools.shots.activeCount; j++) {
-            if (CheckCollisionCircles(ctx->objectPools.shots.shots[j].shot.position, SHOT_SIZE / 2.0f, ast->position, asteroidRadius)) {
+            ShotPoolObject* shotObj = &ctx->objectPools.shots.shots[j];
+
+            if (CheckCollisionCircles(shotObj->shot.position, shotObj->shot.size / 2.0f, ast->position, asteroidRadius)) {
                 addScore(&ctx->player, ast);
                 newExplosion(ctx, ast->position);
-                destroyShot(&ctx->objectPools.shots.shots[j]);
+                destroyShot(shotObj);
                 destroyAsteroid(&ctx->objectPools.destroyedAsteroids, &ctx->objectPools.asteroids.asteroids[i]);
             
                 break;
