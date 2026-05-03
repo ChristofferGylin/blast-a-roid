@@ -10,7 +10,7 @@ void initEnemy(GameContext* ctx, Enemy* enemy, EnemyType type);
 void initUfo1(GameContext* ctx, Enemy* enemy);
 void handleUfoMovement(Enemy* enemy);
 void ufoGoOffScreen(Enemy* enemy);
-void updateUfo1(Enemy* enemy, Ship* ship);
+void updateUfo1(GameContext* ctx, Enemy* enemy);
 
 void addNewEnemy(GameContext* ctx, EnemyType type) {
 
@@ -86,7 +86,7 @@ void initEnemy(GameContext* ctx, Enemy* enemy, EnemyType type) {
     enemy->rotation = 0.0f;
     enemy->shotCount = 0;
     enemy->lastReaction = GetTime();
-    enemy->lastShot = GetTime();
+    enemy->lastShot = GetTime() * 1000;
     enemy->spawnTime = GetTime();
 
     switch (type)
@@ -184,7 +184,7 @@ void updateEnemies(GameContext* ctx) {
         switch (enemy->type)
         {
         case UFO_1:
-            updateUfo1(enemy, &ctx->ship);
+            updateUfo1(ctx, enemy);
             break;
         
         default:
@@ -213,15 +213,29 @@ void ufoGoOffScreen(Enemy* enemy) {
 }
 
 
-void updateUfo1(Enemy* enemy, Ship* ship) {
-    
-    double now = GetTime();
-    
-    if (now < enemy->lastReaction + enemy->reactionTime) return;
+void updateUfo1(GameContext* ctx, Enemy* enemy) {
 
-    enemy->lastReaction = now;
+    const int SHOT_COOLDOWN_TIME = 2000;
+    const int SHOT_LIFE_TIME = 1200;
+    const int SHOT_SIZE = 4;
+    const int SHOT_VELOCITY = 300;
     
-    int attackDurationTime = 45;
+    if ((GetTime() * 1000) > enemy->lastShot + SHOT_COOLDOWN_TIME) {
+        float angle = atan2(ctx->ship.position.y - enemy->position.y, ctx->ship.position.x - enemy->position.x);
+
+        Shot newShot = {
+            ENEMY_SHOT_1,
+            &ctx->assets.sprites.enemyShot1,
+            SHOT_SIZE,
+            enemy->position,
+            {cosf(angle) * SHOT_VELOCITY, sinf(angle) * SHOT_VELOCITY},
+            (GetTime() * 1000.0) + SHOT_LIFE_TIME,
+            false
+        };
+
+        addNewShot(&ctx->objectPools.shots, newShot);
+        enemy->lastShot = GetTime() * 1000.0;
+    }
 
     ufoGoOffScreen(enemy);
 }
