@@ -109,7 +109,7 @@ void handleShotsMovement(ShotObjectPool* pool) {
         shot->position.x += GetFrameTime() * shot->direction.x;
         shot->position.y += GetFrameTime() * shot->direction.y;
 
-        outOfBoundsCheck(&shot->position, SHOT_SIZE);
+        outOfBoundsCheck(&shot->position, shot->size);
     }
 }
 
