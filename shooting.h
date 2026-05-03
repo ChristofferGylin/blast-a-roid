@@ -11,7 +11,7 @@
 typedef struct GameContext GameContext;
 
 typedef enum ShotType {
-    PLAYER_SHOT_1,
+    PLAYER_SHOT,
     ENEMY_SHOT_1
 }ShotType;
 

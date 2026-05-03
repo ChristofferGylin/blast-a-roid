@@ -71,6 +71,12 @@ void destroyShot(ShotPoolObject* shot) {
 }
 
 void handleShooting(GameContext* ctx) {
+
+    const int SHOT_COOLDOWN_TIME = 80;
+    const int SHOT_LIFE_TIME = 800;
+    const int SHOT_VELOCITY = 450;
+    
+
     if (ctx->ship.destroyed) return;
     if (ctx->objectPools.shots.activeCount >= MAX_SHOTS) return;
 
@@ -78,6 +84,8 @@ void handleShooting(GameContext* ctx) {
         float radians = (ctx->ship.rotation - 90.0f) * (PI / 180.0f);
 
         Shot newShot = {
+            PLAYER_SHOT,
+            SHOT_SIZE,
             ctx->ship.position,
             {cosf(radians) * SHOT_VELOCITY, sinf(radians) * SHOT_VELOCITY},
             (GetTime() * 1000.0) + SHOT_LIFE_TIME,
