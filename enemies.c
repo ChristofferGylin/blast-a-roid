@@ -215,10 +215,10 @@ void ufoGoOffScreen(Enemy* enemy) {
 
 void updateUfo1(GameContext* ctx, Enemy* enemy) {
 
-    const int SHOT_COOLDOWN_TIME = 2000;
-    const int SHOT_LIFE_TIME = 1200;
+    const int SHOT_COOLDOWN_TIME = 3000;
+    const int SHOT_LIFE_TIME = 3000;
     const int SHOT_SIZE = 4;
-    const int SHOT_VELOCITY = 300;
+    const int SHOT_VELOCITY = 150;
     
     if ((GetTime() * 1000) > enemy->lastShot + SHOT_COOLDOWN_TIME) {
         float angle = atan2(ctx->ship.position.y - enemy->position.y, ctx->ship.position.x - enemy->position.x);
