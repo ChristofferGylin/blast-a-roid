@@ -35,6 +35,7 @@ void loadAssets(GameContext* ctx) {
     ctx->assets.sprites.destroyedShip1 = LoadTexture("./assets/ship_destroyed_1.png");
     ctx->assets.sprites.destroyedShip2 = LoadTexture("./assets/ship_destroyed_2.png");
     ctx->assets.sprites.destroyedShip3 = LoadTexture("./assets/ship_destroyed_3.png");
+    ctx->assets.sprites.enemyShot1 = LoadTexture("./assets/enemy_shot_1.png");
     ctx->assets.sprites.ship = LoadTexture("./assets/ship.png");
     ctx->assets.sprites.shot = LoadTexture("./assets/shot.png");
 }
@@ -50,6 +51,7 @@ void unloadAssets(GameContext* ctx) {
     UnloadTexture(ctx->assets.sprites.destroyedShip1);
     UnloadTexture(ctx->assets.sprites.destroyedShip2);
     UnloadTexture(ctx->assets.sprites.destroyedShip3);
+    UnloadTexture(ctx->assets.sprites.enemyShot1);
     UnloadTexture(ctx->assets.sprites.ship);
     UnloadTexture(ctx->assets.sprites.shot);
 }
