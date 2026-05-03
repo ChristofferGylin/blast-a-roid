@@ -10,7 +10,14 @@
 
 typedef struct GameContext GameContext;
 
-typedef struct {    
+typedef enum ShotType {
+    PLAYER_SHOT_1,
+    ENEMY_SHOT_1
+}ShotType;
+
+typedef struct {
+    ShotType type;
+    int size;
     Vector2 position;
     Vector2 direction;
     double destroyTime;
