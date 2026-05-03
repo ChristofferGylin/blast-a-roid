@@ -132,8 +132,8 @@ void renderShots(GameContext* ctx) {
         DrawTexturePro(
             ctx->assets.sprites.shot,
             (Rectangle){0, 0, ctx->assets.sprites.shot.width, ctx->assets.sprites.shot.height},
-            (Rectangle){shot->position.x, shot->position.y, SHOT_SIZE, SHOT_SIZE},
-            (Vector2){SHOT_SIZE / 2.0f, SHOT_SIZE / 2.0f},
+            (Rectangle){shot->position.x, shot->position.y, shot->size, shot->size},
+            (Vector2){shot->size / 2.0f, shot->size / 2.0f},
             0,
             WHITE  
         );
