@@ -239,7 +239,7 @@ void initUfo1(GameContext* ctx, Enemy* enemy) {
     enemy->shooting.perfectHitChance = 3;
     enemy->shooting.salvoRate = 3000;
     enemy->shooting.salvoSize = 1;
-    enemy->shooting.spreadRadian = 100;
+    enemy->shooting.spreadRadian = SHIP_SIZE * 3;
 
     enemy->shooting.shot = getShotProps(ctx, GREEN_SHOT_1);
 
