@@ -4,6 +4,7 @@
 #include "animation.h"
 #include "raylib.h"
 #include "constants.h"
+#include <stdbool.h>
 
 #define MAX_ENEMIES 32
 
@@ -25,7 +26,8 @@ typedef struct Enemy {
     float rotation;
     Vector2 velocity;
     float maxVelocity;
-    float health;
+    bool isMoveable;
+    int health;
     int size;
     double lastShot;
     double lastReaction;

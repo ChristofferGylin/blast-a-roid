@@ -105,7 +105,6 @@ void handleUfoMovement(Enemy* enemy) {
 
 void initEnemy(GameContext* ctx, Enemy* enemy, EnemyType type) {
 
-    enemy->health = 1.0f;
     enemy->rotation = 0.0f;
     enemy->shotCount = 0;
     enemy->lastReaction = GetTime();
@@ -137,7 +136,9 @@ void initUfo1(GameContext* ctx, Enemy* enemy) {
 
     enemy->acceleration = 100.0f;
     enemy->destination = (Vector2){SCREEN_WIDTH + UFO_1_SIZE, y};
+    enemy->health = 100;
     enemy->maxVelocity = 50.0f;
+    enemy->isMoveable = true;
     enemy->position = (Vector2){SIDEBAR_WIDTH - (UFO_1_SIZE / 2), y};
     enemy->reactionTime = 0.3f;
     enemy->size = UFO_1_SIZE;
