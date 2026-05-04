@@ -40,16 +40,27 @@ void addNewEnemy(GameContext* ctx, EnemyType type) {
 }
 
 void handleEnemiesHitDetection(GameContext* ctx) {
+
+    bool enemyPoolHasChanges = false;
+
     for (int i = 0; i < ctx->objectPools.shots.activeCount; i++) {
         ShotPoolObject* shotObj = &ctx->objectPools.shots.shots[i];
         
-        if (shotObj->shot.owner == ENEMY_SHOT && !ctx->ship.destroyed && CheckCollisionCircles(shotObj->shot.position, shotObj->shot.size / 2.0f, ctx->ship.position, SHIP_SIZE / 2.0f)) {
-            destroyShip(ctx);
+        if (shotObj->shot.owner == ENEMY_SHOT && !ctx->ship.destroyed) {
 
-            if (shotObj->shot.level <= 1) {
+            if (ctx->ship.isShieldActive && CheckCollisionCircles(shotObj->shot.position, shotObj->shot.size / 2.0f, ctx->ship.position, SHIELD_SIZE / 2.0f)) {
                 destroyShot(shotObj);
                 continue;
+
+            } else if (CheckCollisionCircles(shotObj->shot.position, shotObj->shot.size / 2.0f, ctx->ship.position, SHIP_SIZE / 2.0f)) {
+                destroyShip(ctx);
+
+                if (shotObj->shot.level <= 1) {
+                    destroyShot(shotObj);
+                    continue;
+                }
             }
+
         }
 
         if (shotObj->shot.owner == ENEMY_SHOT) continue;
@@ -67,6 +78,7 @@ void handleEnemiesHitDetection(GameContext* ctx) {
                 if (enemy->health <= 0) {
                     newExplosion(ctx, enemy->position);
                     removeEnemy(&ctx->objectPools.enemies, enemy);
+                    enemyPoolHasChanges = true;
 
                     if (shotObj->shot.level <= 1) {
                         destroyShot(shotObj);
@@ -87,6 +99,10 @@ void handleEnemiesHitDetection(GameContext* ctx) {
                 }
             }
         }
+    }
+
+    if (enemyPoolHasChanges) {
+        // compact enemies pool
     }
 }
 
