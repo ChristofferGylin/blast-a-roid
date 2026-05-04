@@ -36,6 +36,29 @@ void addNewEnemy(GameContext* ctx, EnemyType type) {
 
 }
 
+void handleEnemiesHitDetection(GameContext* ctx) {
+    for (int i = 0; i < ctx->objectPools.shots.activeCount; i++) {
+        ShotPoolObject* shotObj = &ctx->objectPools.shots.shots[i];
+
+        if (shotObj->shot.owner != PLAYER_SHOT) continue;
+        
+        if (shotObj->shot.owner == ENEMY_SHOT && !ctx->ship.destroyed && CheckCollisionCircles(shotObj->shot.position, shotObj->shot.size / 2.0f, ctx->ship.position, SHIP_SIZE / 2.0f)) {
+            destroyShip(ctx);
+
+            if (shotObj->shot.level <= 1) {
+                destroyShot(shotObj);
+                continue;
+            }
+        }
+
+        if (shotObj->shot.owner == ENEMY_SHOT) continue;
+
+        for (int j = 0; j < ctx->objectPools.enemies.activeCount; j++) {
+            
+        }
+    }
+}
+
 void handleEnemiesMovement(GameContext* ctx) {
     
     EnemyObjectPool* pool = &ctx->objectPools.enemies;
