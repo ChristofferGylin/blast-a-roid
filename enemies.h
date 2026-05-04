@@ -19,6 +19,16 @@ typedef enum VisualType {
     VISUAL_ANIMATION
 }VisualType;
 
+typedef struct ShootingProperties {
+    int perfectHitChance;
+    int spreadRadian;
+    double lastShot;
+    int shotCount;
+    int salvoSize;
+    float fireRate;
+    float salvoRate;
+}ShootingProperties;
+
 typedef struct Enemy {
     float acceleration;
     Vector2 position;
@@ -29,11 +39,10 @@ typedef struct Enemy {
     bool isMoveable;
     int health;
     int size;
-    double lastShot;
     double lastReaction;
     double spawnTime;
     float reactionTime;
-    int shotCount;
+    ShootingProperties shooting;
     EnemyType type;
     VisualType visualType;
     union {
