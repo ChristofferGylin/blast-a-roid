@@ -12,6 +12,7 @@
 
 void initEnemy(GameContext* ctx, Enemy* enemy, EnemyType type);
 void initUfo1(GameContext* ctx, Enemy* enemy);
+void handleEnemyShooting(GameContext* ctx, Enemy* enemy);
 void handleUfoMovement(Enemy* enemy);
 void ufoGoOffScreen(Enemy* enemy);
 void updateUfo1(GameContext* ctx, Enemy* enemy);
@@ -126,6 +127,45 @@ void handleEnemiesMovement(GameContext* ctx) {
         }
 
         outOfBoundsCheck(&enemy->position, enemy->size);
+    }
+}
+
+void handleEnemyShooting(GameContext* ctx, Enemy* enemy) {
+
+    ShootingProperties* shotProps = &enemy->shooting;
+
+    int coolDownTime = 0;
+
+    if (shotProps->shotCount == 0) {
+        coolDownTime = shotProps->salvoRate;
+    } else {
+        coolDownTime = shotProps->fireRate;
+    }
+
+    if ((GetTime() * 1000) > shotProps->lastShot + coolDownTime) {
+        
+        // TODO: Account for accuracy
+        
+        float angle = atan2(ctx->ship.position.y - enemy->position.y, ctx->ship.position.x - enemy->position.x);
+
+        Shot newShot = {
+            ENEMY_SHOT,
+            shotProps->shot.level,
+            shotProps->shot.sprite,
+            shotProps->shot.size,
+            enemy->position,
+            {cosf(angle) * shotProps->shot.velocity, sinf(angle) * shotProps->shot.velocity},
+            (GetTime() * 1000.0) + shotProps->shot.lifetime,
+            false
+        };
+
+        addNewShot(&ctx->objectPools.shots, newShot);
+        shotProps->lastShot = GetTime() * 1000.0;
+        shotProps->shotCount++;
+
+        if (shotProps->shotCount >= shotProps->salvoSize) {
+            shotProps->shotCount = 0;
+        }
     }
 }
 
@@ -293,32 +333,8 @@ void ufoGoOffScreen(Enemy* enemy) {
     }
 }
 
-
 void updateUfo1(GameContext* ctx, Enemy* enemy) {
-
-    const int SHOT_COOLDOWN_TIME = 3000;
-    const int SHOT_LIFE_TIME = 3000;
-    const int SHOT_SIZE = 4;
-    const int SHOT_VELOCITY = 150;
-    
-    if ((GetTime() * 1000) > enemy->shooting.lastShot + SHOT_COOLDOWN_TIME) {
-        float angle = atan2(ctx->ship.position.y - enemy->position.y, ctx->ship.position.x - enemy->position.x);
-
-        Shot newShot = {
-            ENEMY_SHOT,
-            0,
-            &ctx->assets.sprites.enemyShot1,
-            SHOT_SIZE,
-            enemy->position,
-            {cosf(angle) * SHOT_VELOCITY, sinf(angle) * SHOT_VELOCITY},
-            (GetTime() * 1000.0) + SHOT_LIFE_TIME,
-            false
-        };
-
-        addNewShot(&ctx->objectPools.shots, newShot);
-        enemy->shooting.lastShot = GetTime() * 1000.0;
-    }
-
+    handleEnemyShooting(ctx, enemy);
     ufoGoOffScreen(enemy);
 }
 
