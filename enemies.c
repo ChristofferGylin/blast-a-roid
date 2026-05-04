@@ -143,10 +143,18 @@ void handleEnemyShooting(GameContext* ctx, Enemy* enemy) {
     }
 
     if ((GetTime() * 1000) > shotProps->lastShot + coolDownTime) {
+
+        Vector2 aimPos = ctx->ship.position;
+
+        if (GetRandomValue(1, 10) > shotProps->perfectHitChance) {
+            float theta = GetRandomValue(0, 360);
+            float radius = sqrtf(GetRandomValue(0, 1000) / 1000.0f) * shotProps->spreadRadian;
+
+            aimPos.x += cosf(theta) * radius;
+            aimPos.y += sinf(theta) * radius;
+        }
         
-        // TODO: Account for accuracy
-        
-        float angle = atan2(ctx->ship.position.y - enemy->position.y, ctx->ship.position.x - enemy->position.x);
+        float angle = atan2(aimPos.y - enemy->position.y, aimPos.x - enemy->position.x);
 
         Shot newShot = {
             ENEMY_SHOT,
