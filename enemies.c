@@ -5,6 +5,7 @@
 #include <stdio.h>
 #include "outOfBoundsCheck.h"
 #include "ship.h"
+#include "shooting.h"
 #include "raylib.h"
 #include "raymath.h"
 #include <math.h>
@@ -194,16 +195,13 @@ void initUfo1(GameContext* ctx, Enemy* enemy) {
     enemy->velocity = (Vector2){0, 0};
     enemy->visualType = VISUAL_ANIMATION;
 
-    const int SHOT_COOLDOWN_TIME = 3000;
-    const int SHOT_LIFE_TIME = 3000;
-    const int SHOT_SIZE = 4;
-    const int SHOT_VELOCITY = 150;
-
     enemy->shooting.fireRate = 500;
     enemy->shooting.perfectHitChance = 3;
     enemy->shooting.salvoRate = 3000;
     enemy->shooting.salvoSize = 1;
     enemy->shooting.spreadRadian = 100;
+
+    enemy->shooting.shot = getShotProps(ctx, GREEN_SHOT_1);
 
     AnimationInstance animation;
 
@@ -303,7 +301,7 @@ void updateUfo1(GameContext* ctx, Enemy* enemy) {
     const int SHOT_SIZE = 4;
     const int SHOT_VELOCITY = 150;
     
-    if ((GetTime() * 1000) > enemy->lastShot + SHOT_COOLDOWN_TIME) {
+    if ((GetTime() * 1000) > enemy->shooting.lastShot + SHOT_COOLDOWN_TIME) {
         float angle = atan2(ctx->ship.position.y - enemy->position.y, ctx->ship.position.x - enemy->position.x);
 
         Shot newShot = {
@@ -318,7 +316,7 @@ void updateUfo1(GameContext* ctx, Enemy* enemy) {
         };
 
         addNewShot(&ctx->objectPools.shots, newShot);
-        enemy->lastShot = GetTime() * 1000.0;
+        enemy->shooting.lastShot = GetTime() * 1000.0;
     }
 
     ufoGoOffScreen(enemy);
