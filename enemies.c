@@ -153,10 +153,11 @@ void handleUfoMovement(Enemy* enemy) {
 void initEnemy(GameContext* ctx, Enemy* enemy, EnemyType type) {
 
     enemy->rotation = 0.0f;
-    enemy->shotCount = 0;
     enemy->lastReaction = GetTime();
-    enemy->lastShot = GetTime() * 1000;
     enemy->spawnTime = GetTime();
+
+    enemy->shooting.shotCount = 0;
+    enemy->shooting.lastShot = GetTime() * 1000;
 
     switch (type)
     {
@@ -192,6 +193,17 @@ void initUfo1(GameContext* ctx, Enemy* enemy) {
     enemy->type = UFO_1;
     enemy->velocity = (Vector2){0, 0};
     enemy->visualType = VISUAL_ANIMATION;
+
+    const int SHOT_COOLDOWN_TIME = 3000;
+    const int SHOT_LIFE_TIME = 3000;
+    const int SHOT_SIZE = 4;
+    const int SHOT_VELOCITY = 150;
+
+    enemy->shooting.fireRate = 500;
+    enemy->shooting.perfectHitChance = 3;
+    enemy->shooting.salvoRate = 3000;
+    enemy->shooting.salvoSize = 1;
+    enemy->shooting.spreadRadian = 100;
 
     AnimationInstance animation;
 
