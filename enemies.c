@@ -1,9 +1,12 @@
 #include "enemies.h"
+#include "explosion.h"
 #include "constants.h"
 #include "gameContext.h"
 #include <stdio.h>
 #include "outOfBoundsCheck.h"
 #include "ship.h"
+#include "raylib.h"
+#include "raymath.h"
 #include <math.h>
 
 void initEnemy(GameContext* ctx, Enemy* enemy, EnemyType type);
@@ -39,8 +42,6 @@ void addNewEnemy(GameContext* ctx, EnemyType type) {
 void handleEnemiesHitDetection(GameContext* ctx) {
     for (int i = 0; i < ctx->objectPools.shots.activeCount; i++) {
         ShotPoolObject* shotObj = &ctx->objectPools.shots.shots[i];
-
-        if (shotObj->shot.owner != PLAYER_SHOT) continue;
         
         if (shotObj->shot.owner == ENEMY_SHOT && !ctx->ship.destroyed && CheckCollisionCircles(shotObj->shot.position, shotObj->shot.size / 2.0f, ctx->ship.position, SHIP_SIZE / 2.0f)) {
             destroyShip(ctx);
@@ -54,7 +55,37 @@ void handleEnemiesHitDetection(GameContext* ctx) {
         if (shotObj->shot.owner == ENEMY_SHOT) continue;
 
         for (int j = 0; j < ctx->objectPools.enemies.activeCount; j++) {
-            
+
+            Enemy* enemy = &ctx->objectPools.enemies.enemies[j].enemy;
+
+            if (CheckCollisionCircles(enemy->position, enemy->size / 2.0f, shotObj->shot.position, shotObj->shot.size / 2.0f)) {
+                
+                int damage = 10 + (shotObj->shot.level * 10);
+                
+                enemy->health -= damage;
+
+                if (enemy->health <= 0) {
+                    newExplosion(ctx, enemy->position);
+                    removeEnemy(&ctx->objectPools.enemies, enemy);
+
+                    if (shotObj->shot.level <= 1) {
+                        destroyShot(shotObj);
+                    }
+                } else {
+
+                    if (enemy->isMoveable) {
+
+                        const int knockbackForce = 10;
+                        Vector2 hitDirection = Vector2Subtract(enemy->position, shotObj->shot.position);
+                        hitDirection = Vector2Normalize(hitDirection);
+
+                        enemy->velocity.x += hitDirection.x * knockbackForce;
+                        enemy->velocity.y += hitDirection.y * knockbackForce;
+                    }
+
+                    destroyShot(shotObj);
+                }
+            }
         }
     }
 }
