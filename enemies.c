@@ -75,7 +75,7 @@ void handleEnemiesHitDetection(GameContext* ctx) {
 
                     if (enemy->isMoveable) {
 
-                        const int knockbackForce = 10;
+                        const int knockbackForce = 35;
                         Vector2 hitDirection = Vector2Subtract(enemy->position, shotObj->shot.position);
                         hitDirection = Vector2Normalize(hitDirection);
 
