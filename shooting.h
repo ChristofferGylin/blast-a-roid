@@ -15,6 +15,29 @@ typedef enum ShotOwner {
     ENEMY_SHOT
 }ShotOwner;
 
+typedef enum ShotType {
+    GREEN_SHOT_1
+}ShotType;
+
+typedef struct ShotProperties {
+    Texture2D* sprite;
+    int level;
+    int lifetime;
+    int size;
+    int velocity;
+}ShotProperties;
+
+typedef struct ShootingProperties {
+    int perfectHitChance;
+    int spreadRadian;
+    double lastShot;
+    int shotCount;
+    int salvoSize;
+    float fireRate;
+    float salvoRate;
+    ShotProperties shot;
+}ShootingProperties;
+
 typedef struct {
     ShotOwner owner;
     int level;
@@ -40,6 +63,7 @@ void addNewShot(ShotObjectPool* pool, Shot shot);
 void clearShots(ShotObjectPool* pool);
 void compactShotPool(ShotObjectPool* pool);
 void destroyShot(ShotPoolObject* shot);
+ShotProperties getShotProps(GameContext* ctx, ShotType type);
 void handleShooting(GameContext* ctx);
 void handleShotsMovement(ShotObjectPool* pool);
 void initShotObjectPool(ShotObjectPool* pool);

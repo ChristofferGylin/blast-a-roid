@@ -5,6 +5,7 @@
 #include "raylib.h"
 #include "constants.h"
 #include <stdbool.h>
+#include "shooting.h"
 
 #define MAX_ENEMIES 32
 
@@ -18,29 +19,6 @@ typedef enum VisualType {
     VISUAL_SPRITE,
     VISUAL_ANIMATION
 }VisualType;
-
-typedef enum ShotType {
-    GREEN_1
-}ShotType;
-
-typedef struct ShotProperties {
-    Texture2D* sprite;
-    int level;
-    int lifetime;
-    int size;
-    int velocity;
-}ShotProperties;
-
-typedef struct ShootingProperties {
-    int perfectHitChance;
-    int spreadRadian;
-    double lastShot;
-    int shotCount;
-    int salvoSize;
-    float fireRate;
-    float salvoRate;
-    ShotProperties shot;
-}ShootingProperties;
 
 typedef struct Enemy {
     float acceleration;

@@ -70,6 +70,25 @@ void destroyShot(ShotPoolObject* shot) {
     shot->shot.destroyed = true;
 }
 
+ShotProperties getShotProps(GameContext* ctx, ShotType type) {
+    switch (type)
+    {
+    case GREEN_SHOT_1:
+        return (ShotProperties){
+            &ctx->assets.sprites.enemyShot1,
+            0,
+            3000,
+            4,
+            150
+        };
+        break;
+    
+    default:
+        printf("Error: Invalid Shot Type in getShotProps\n");
+        break;
+    }
+}
+
 void handleShooting(GameContext* ctx) {
 
     const int SHOT_COOLDOWN_TIME = 80;
