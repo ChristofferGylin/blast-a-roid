@@ -15,8 +15,8 @@ void initEnemy(GameContext* ctx, Enemy* enemy, EnemyType type);
 void initUfo1(GameContext* ctx, Enemy* enemy);
 void handleEnemyShooting(GameContext* ctx, Enemy* enemy);
 void handleUfoMovement(Enemy* enemy);
-void ufoGoOffScreen(Enemy* enemy);
-void updateUfo1(GameContext* ctx, Enemy* enemy);
+bool ufoGoOffScreen(GameContext* ctx, Enemy* enemy);
+bool updateUfo1(GameContext* ctx, Enemy* enemy);
 
 void addNewEnemy(GameContext* ctx, EnemyType type) {
 
@@ -343,7 +343,9 @@ void updateEnemies(GameContext* ctx) {
     
 }
 
-void ufoGoOffScreen(Enemy* enemy) {
+bool ufoGoOffScreen(GameContext* ctx, Enemy* enemy) {
+
+    bool hasBeenRemoved = false;
 
     Vector2 destination;
     destination.x = SCREEN_WIDTH - SIDEBAR_WIDTH + (UFO_1_SIZE / 2);
@@ -357,13 +359,18 @@ void ufoGoOffScreen(Enemy* enemy) {
     enemy->destination = destination;
         
     if (enemy->position.x > destination.x) {
-        // remove enemy
+        removeEnemy(&ctx->objectPools.enemies, enemy);
+        hasBeenRemoved = true;
     }
+
+    return hasBeenRemoved;
 }
 
-void updateUfo1(GameContext* ctx, Enemy* enemy) {
+bool updateUfo1(GameContext* ctx, Enemy* enemy) {
     handleEnemyShooting(ctx, enemy);
-    ufoGoOffScreen(enemy);
+    bool hasBeenRemoved = ufoGoOffScreen(ctx, enemy);
+
+    return hasBeenRemoved;
 }
 
 void updateUfo2(Enemy* enemy, Ship* ship) {
@@ -380,6 +387,6 @@ void updateUfo2(Enemy* enemy, Ship* ship) {
         enemy->destination = ship->position;
     } else {
 
-        ufoGoOffScreen(enemy);
+        // ufoGoOffScreen(enemy);
     }
 }
