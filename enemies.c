@@ -319,6 +319,7 @@ void renderEnemies(EnemyObjectPool* pool) {
 void updateEnemies(GameContext* ctx) {
 
     EnemyObjectPool* pool = &ctx->objectPools.enemies;
+    bool hasPoolChanged = false;
 
     for (int i = 0; i < pool->activeCount; i++) {
         if (!pool->enemies[i].active) continue;
@@ -333,12 +334,19 @@ void updateEnemies(GameContext* ctx) {
         switch (enemy->type)
         {
         case UFO_1:
-            updateUfo1(ctx, enemy);
+            if (updateUfo1(ctx, enemy)) {
+                hasPoolChanged = true;
+            }
+            ;
             break;
         
         default:
             break;
         }
+    }
+
+    if (hasPoolChanged) {
+        compactEnemyPool(&ctx->objectPools.enemies);
     }
     
 }
@@ -348,7 +356,7 @@ bool ufoGoOffScreen(GameContext* ctx, Enemy* enemy) {
     bool hasBeenRemoved = false;
 
     Vector2 destination;
-    destination.x = SCREEN_WIDTH - SIDEBAR_WIDTH + (UFO_1_SIZE / 2);
+    destination.x = SCREEN_WIDTH - SIDEBAR_WIDTH + (UFO_1_SIZE / 2) - 1;
 
     if (enemy->position.y <= SCREEN_HEIGHT / 2) {
         destination.y = 50;
@@ -358,7 +366,7 @@ bool ufoGoOffScreen(GameContext* ctx, Enemy* enemy) {
 
     enemy->destination = destination;
         
-    if (enemy->position.x > destination.x) {
+    if (enemy->position.x >= destination.x) {
         removeEnemy(&ctx->objectPools.enemies, enemy);
         hasBeenRemoved = true;
     }
