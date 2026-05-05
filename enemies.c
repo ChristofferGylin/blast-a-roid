@@ -10,6 +10,7 @@
 #include "raymath.h"
 #include <math.h>
 
+void compactShotPool(ShotObjectPool* pool);
 void initEnemy(GameContext* ctx, Enemy* enemy, EnemyType type);
 void initUfo1(GameContext* ctx, Enemy* enemy);
 void handleEnemyShooting(GameContext* ctx, Enemy* enemy);
@@ -39,6 +40,25 @@ void addNewEnemy(GameContext* ctx, EnemyType type) {
     pool->enemies[pool->activeCount].active = true;
     pool->activeCount++;
 
+}
+
+void compactEnemyPool(EnemyObjectPool* pool) {
+    int write = 0;
+
+    for (int i = 0; i < pool->activeCount; i++) {
+        if (pool->enemies[i].active) {
+            if (write != i) {
+                pool->enemies[write] = pool->enemies[i];
+            }
+            write++;
+        }
+    }
+
+    for (int i = write; i < pool->activeCount; i++) {
+        pool->enemies[i].active = false;
+    }
+
+    pool->activeCount = write;
 }
 
 void handleEnemiesHitDetection(GameContext* ctx) {
@@ -79,7 +99,7 @@ void handleEnemiesHitDetection(GameContext* ctx) {
 
                 if (enemy->health <= 0) {
                     newExplosion(ctx, enemy->position);
-                    removeEnemy(&ctx->objectPools.enemies, enemy);
+                    ctx->objectPools.enemies.enemies[j].active = false;
                     enemyPoolHasChanges = true;
 
                     if (shotObj->shot.level <= 1) {
@@ -104,7 +124,7 @@ void handleEnemiesHitDetection(GameContext* ctx) {
     }
 
     if (enemyPoolHasChanges) {
-        // compact enemies pool
+        compactEnemyPool(&ctx->objectPools.enemies);
     }
 }
 
