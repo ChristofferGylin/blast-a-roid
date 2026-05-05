@@ -6,6 +6,7 @@
 #include "constants.h"
 #include <stdbool.h>
 #include "shooting.h"
+#include "utils.h"
 
 #define MAX_ENEMIES 32
 
@@ -52,6 +53,19 @@ typedef struct EnemyObjectPool {
     EnemyPoolObject enemies[MAX_ENEMIES];
     int activeCount;
 }EnemyObjectPool;
+
+typedef struct EnemySpawnOption {
+    EnemyType type;
+    int weight;
+    int count;
+    int maxCount;
+}EnemySpawnOption;
+
+typedef struct EnemySpawnPool {
+    const EnemySpawnOption* options;
+    int count;
+    FloatRange spawnDelay;
+}EnemySpawnPool;
 
 void addNewEnemy(GameContext* ctx, EnemyType type);
 void handleEnemiesHitDetection(GameContext* ctx);
