@@ -9,7 +9,7 @@
 #include "utils.h"
 
 #define MAX_ENEMIES 32
-
+#define NUMBER_OF_ENEMY_TYPES 1
 typedef struct GameContext GameContext;
 
 typedef enum EnemyType {
@@ -56,15 +56,20 @@ typedef struct EnemyObjectPool {
 
 typedef struct EnemySpawnOption {
     EnemyType type;
-    int weight;
+    float weight;
     int count;
     int maxCount;
 }EnemySpawnOption;
 
+typedef struct  EnemySpawnOptionPoolObject {
+    bool active;
+    EnemySpawnOption;
+}EnemySpawnOptionPoolObject;
+
 typedef struct EnemySpawnPool {
-    const EnemySpawnOption* options;
-    int count;
+    EnemySpawnOption options[NUMBER_OF_ENEMY_TYPES];
     FloatRange spawnDelay;
+    int activeCount;
 }EnemySpawnPool;
 
 void addNewEnemy(GameContext* ctx, EnemyType type);
