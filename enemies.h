@@ -10,6 +10,8 @@
 
 #define MAX_ENEMIES 32
 #define NUMBER_OF_ENEMY_TYPES 1
+#define NUMBER_OF_LEVEL_ENEMY_OPTIONS 3
+
 typedef struct GameContext GameContext;
 
 typedef enum EnemyType {
@@ -71,6 +73,18 @@ typedef struct EnemySpawnPool {
     FloatRange spawnDelay;
     int activeCount;
 }EnemySpawnPool;
+
+EnemySpawnOption levelsEnemyOptions[NUMBER_OF_LEVEL_ENEMY_OPTIONS][NUMBER_OF_ENEMY_TYPES] = {
+    {
+        {UFO_1, 100.0f, 0, 1},
+    },
+    {
+        {UFO_1, 100.0f, 0, 2},
+    },
+    {
+        {UFO_1, 100.0f, 0, 2},
+    },
+};
 
 void addNewEnemy(GameContext* ctx, EnemyType type);
 void handleEnemiesHitDetection(GameContext* ctx);

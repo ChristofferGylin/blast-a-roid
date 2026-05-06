@@ -249,18 +249,22 @@ void initEnemyPool(EnemyObjectPool* pool) {
 
 void initEnemySpawnPool(EnemySpawnPool* pool, EnemySpawnOption* options, int level) {
     FloatRange minDelay = {5, 10};
+    FloatRange maxDelay = {30, 60};
     
-    pool->options = options;
-    pool->count = sizeof(options) / sizeof(EnemySpawnOption);
-    
-    float multiplier = (level * 5) / 10;
+    float multiplier = (level * 5) / 100;
 
-    FloatRange spawnDelay = {30, 60};
-
-    spawnDelay.min -= spawnDelay.min * multiplier;  
+    FloatRange spawnDelay = {
+        maxDelay.min - (maxDelay.min * multiplier),
+        maxDelay.max - (maxDelay.max * multiplier)
+    };
 
     if (spawnDelay.min < minDelay.min) spawnDelay.min = minDelay.min;
     if (spawnDelay.max < minDelay.max) spawnDelay.max = minDelay.max;
+
+    for (int i = 0; i < sizeof(options) / sizeof(EnemySpawnOption); i++) {
+        //do stuff
+    }
+    
 }
 
 void initUfo1(GameContext* ctx, Enemy* enemy) {
