@@ -33,6 +33,7 @@ typedef struct Enemy {
     bool isMoveable;
     int health;
     int size;
+    int score;
     double lastReaction;
     double spawnTime;
     float reactionTime;

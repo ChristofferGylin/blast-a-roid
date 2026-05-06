@@ -121,6 +121,9 @@ void handleEnemiesHitDetection(GameContext* ctx) {
                     newExplosion(ctx, enemy->position);
                     ctx->objectPools.enemies.enemies[j].active = false;
                     enemyPoolHasChanges = true;
+                    
+                    ctx->player.score += enemy->score;
+                    ctx->player.levelBonus += enemy->score * ctx->player.timeBonusMultiplier; 
 
                     if (shotObj->shot.level <= 1) {
                         destroyShot(shotObj);
@@ -308,6 +311,7 @@ void initUfo1(GameContext* ctx, Enemy* enemy) {
     enemy->position = (Vector2){SIDEBAR_WIDTH - (UFO_1_SIZE / 2), y};
     enemy->reactionTime = 0.3f;
     enemy->size = UFO_1_SIZE;
+    enemy->score = 500;
     enemy->type = UFO_1;
     enemy->velocity = (Vector2){0, 0};
     enemy->visualType = VISUAL_ANIMATION;
