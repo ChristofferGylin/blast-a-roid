@@ -247,7 +247,7 @@ void initEnemyPool(EnemyObjectPool* pool) {
     pool->activeCount = 0;
 }
 
-void initEnemySpawnPool(GameContext* ctx) {
+void setSpawnDelay(GameContext* ctx) {
     FloatRange minDelay = {5, 10};
     FloatRange maxDelay = {30, 60};
     
@@ -260,6 +260,11 @@ void initEnemySpawnPool(GameContext* ctx) {
 
     if (spawnDelay.min < minDelay.min) spawnDelay.min = minDelay.min;
     if (spawnDelay.max < minDelay.max) spawnDelay.max = minDelay.max;
+
+    ctx->spawning.spawnDelay = spawnDelay;
+}
+
+void initEnemySpawnPool(GameContext* ctx) {
 
     EnemySpawnPool* pool = &ctx->objectPools.spawnableEnemies;
     
@@ -355,6 +360,10 @@ void renderEnemies(EnemyObjectPool* pool) {
             renderAnimation(&enemy->animation);
         }
     }
+}
+
+void spawnEnemy(GameContext* ctx) {
+
 }
 
 void updateEnemies(GameContext* ctx) {

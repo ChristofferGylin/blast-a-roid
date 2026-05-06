@@ -70,7 +70,6 @@ typedef struct  EnemySpawnOptionPoolObject {
 
 typedef struct EnemySpawnPool {
     EnemySpawnOptionPoolObject options[NUMBER_OF_ENEMY_TYPES];
-    FloatRange spawnDelay;
     int activeCount;
 }EnemySpawnPool;
 

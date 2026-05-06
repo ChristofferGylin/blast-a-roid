@@ -46,11 +46,17 @@ typedef struct ObjectPools {
     ShotObjectPool shots;
 }ObjectPools;
 
+typedef struct SpawningEnemies {
+    double lastSpawn;
+    FloatRange spawnDelay;
+}SpawningEnemies;
+
 typedef struct GameContext {
     Assets assets;
     ObjectPools objectPools;
     Player player;
     Ship ship;
+    SpawningEnemies spawning;
 }GameContext;
 
 
