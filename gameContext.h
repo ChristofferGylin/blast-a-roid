@@ -47,7 +47,7 @@ typedef struct ObjectPools {
 }ObjectPools;
 
 typedef struct SpawningEnemies {
-    double lastSpawn;
+    double nextSpawn;
     FloatRange spawnDelay;
 }SpawningEnemies;
 

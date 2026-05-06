@@ -8,8 +8,8 @@
 #include "ship.h"
 
 void initSpawning(GameContext* ctx) {
-    ctx->spawning.lastSpawn = GetTime();
     setSpawnDelay(ctx);
+    ctx->spawning.nextSpawn = GetTime() + GetRandomValue(ctx->spawning.spawnDelay.min, ctx->spawning.spawnDelay.max);
 }
 
 void initGameContext(GameContext* ctx) {
