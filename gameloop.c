@@ -17,6 +17,7 @@
 #include "bonuses.h"
 #include "animation.h"
 #include "enemies.h"
+#include "gameContext.h"
 
 static Bonuses bonuses = {0};
 
@@ -36,13 +37,12 @@ GameResult gameLoop(GameContext* ctx) {
     initObjectPools(ctx);
     initAsteroids(ctx);
     initBonuses(&bonuses);
+    initSpawning(ctx);
 
     FaderArgs faderArgs;
     initFaderArgs(&faderArgs);
     
     resetShip(&ctx->ship);
-
-    addNewEnemy(ctx, UFO_1);
 
     while(!WindowShouldClose())
     {
@@ -77,6 +77,7 @@ GameResult gameLoop(GameContext* ctx) {
             }
         } else if (faderArgs.fadeComplete || !faderArgs.fadeIn) {
 
+            spawnEnemy(ctx);
             resetTimeBonusMultiplier(&ctx->player);
             updateLevelBonus(&ctx->player);
             handleBonuses(ctx, &bonuses);
