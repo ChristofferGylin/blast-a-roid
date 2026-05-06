@@ -7,11 +7,17 @@
 #include "shooting.h"
 #include "ship.h"
 
+void initSpawning(GameContext* ctx) {
+    ctx->spawning.lastSpawn = GetTime();
+    setSpawnDelay(ctx);
+}
+
 void initGameContext(GameContext* ctx) {
     initPlayer(&ctx->player);
     initObjectPools(ctx);
     loadAssets(ctx);
     initShip(ctx);
+    initSpawning(ctx);
 }
 
 void initObjectPools(GameContext* ctx) {

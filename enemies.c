@@ -363,7 +363,7 @@ void setSpawnDelay(GameContext* ctx) {
 }
 
 void spawnEnemy(GameContext* ctx) {
-
+    
 }
 
 void updateEnemies(GameContext* ctx) {
