@@ -10,7 +10,8 @@
 #include "raymath.h"
 #include <math.h>
 
-void compactShotPool(ShotObjectPool* pool);
+void compactEnemyPool(EnemyObjectPool* pool);
+void compactEnemySpawnPool(EnemySpawnPool* pool);
 void initEnemy(GameContext* ctx, Enemy* enemy, EnemyType type);
 void initUfo1(GameContext* ctx, Enemy* enemy);
 void handleEnemyShooting(GameContext* ctx, Enemy* enemy);
@@ -56,6 +57,25 @@ void compactEnemyPool(EnemyObjectPool* pool) {
 
     for (int i = write; i < pool->activeCount; i++) {
         pool->enemies[i].active = false;
+    }
+
+    pool->activeCount = write;
+}
+
+void compactEnemySpawnPool(EnemySpawnPool* pool) {
+    int write = 0;
+
+    for (int i = 0; i < pool->activeCount; i++) {
+        if (pool->options[i].active) {
+            if (write != i) {
+                pool->options[write] = pool->options[i];
+            }
+            write++;
+        }
+    }
+
+    for (int i = write; i < pool->activeCount; i++) {
+        pool->options[i].active = false;
     }
 
     pool->activeCount = write;
@@ -393,7 +413,7 @@ void spawnEnemy(GameContext* ctx) {
             if (option->count >= option->maxCount) {
                 pool->options[i].active = false;
 
-                // compact pool
+                compactEnemySpawnPool(pool);
             }
 
             return;
