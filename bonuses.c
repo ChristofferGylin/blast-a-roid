@@ -95,7 +95,11 @@ void handleBonuses(GameContext* ctx, Bonuses* bonuses) {
 
 void handleBonusesCollisions(GameContext* ctx, Bonuses* bonuses) {
     for (int i = 0; i < ctx->objectPools.shots.activeCount; i++) {
-        if (bonuses->bonusMultiplier.base.isActive && CheckCollisionCircles(ctx->objectPools.shots.shots[i].shot.position, SHOT_SIZE / 2.0f, bonuses->bonusMultiplier.base.position, BONUS_MULTIPLIER_RADIUS)) {
+        ShotPoolObject* shotObj = &ctx->objectPools.shots.shots[i];
+
+        if (shotObj->shot.owner != PLAYER_SHOT) continue;
+        
+        if (bonuses->bonusMultiplier.base.isActive && CheckCollisionCircles(shotObj->shot.position, shotObj->shot.size / 2.0f, bonuses->bonusMultiplier.base.position, BONUS_MULTIPLIER_RADIUS)) {
             ctx->player.powerups.levelBonusMultiplier = round(bonuses->bonusMultiplier.level);
             bonuses->bonusMultiplier.base.isActive = false;
             destroyShot(&ctx->objectPools.shots.shots[i]);

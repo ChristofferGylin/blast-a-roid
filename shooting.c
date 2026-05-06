@@ -70,7 +70,32 @@ void destroyShot(ShotPoolObject* shot) {
     shot->shot.destroyed = true;
 }
 
+ShotProperties getShotProps(GameContext* ctx, ShotType type) {
+    switch (type)
+    {
+    case GREEN_SHOT_1:
+        return (ShotProperties){
+            &ctx->assets.sprites.enemyShot1,
+            0,
+            3000,
+            4,
+            150
+        };
+        break;
+    
+    default:
+        printf("Error: Invalid Shot Type in getShotProps\n");
+        break;
+    }
+}
+
 void handleShooting(GameContext* ctx) {
+
+    const int SHOT_COOLDOWN_TIME = 80;
+    const int SHOT_LIFE_TIME = 800;
+    const int SHOT_SIZE = 6;
+    const int SHOT_VELOCITY = 450;
+
     if (ctx->ship.destroyed) return;
     if (ctx->objectPools.shots.activeCount >= MAX_SHOTS) return;
 
@@ -78,6 +103,10 @@ void handleShooting(GameContext* ctx) {
         float radians = (ctx->ship.rotation - 90.0f) * (PI / 180.0f);
 
         Shot newShot = {
+            PLAYER_SHOT,
+            1,
+            &ctx->assets.sprites.shot,
+            SHOT_SIZE,
             ctx->ship.position,
             {cosf(radians) * SHOT_VELOCITY, sinf(radians) * SHOT_VELOCITY},
             (GetTime() * 1000.0) + SHOT_LIFE_TIME,
@@ -91,8 +120,6 @@ void handleShooting(GameContext* ctx) {
 }
 
 void handleShotsMovement(ShotObjectPool* pool) {
-    int spriteWidth = 32;
-
     for (int i = 0; i < pool->activeCount; i++) {
         if (!pool->shots[i].active) continue;
 
@@ -103,7 +130,7 @@ void handleShotsMovement(ShotObjectPool* pool) {
         shot->position.x += GetFrameTime() * shot->direction.x;
         shot->position.y += GetFrameTime() * shot->direction.y;
 
-        outOfBoundsCheck(&shot->position, SHOT_SIZE);
+        outOfBoundsCheck(&shot->position, shot->size);
     }
 }
 
@@ -124,10 +151,10 @@ void renderShots(GameContext* ctx) {
         if (shot->destroyed) continue;
 
         DrawTexturePro(
-            ctx->assets.sprites.shot,
+            *shot->sprite,
             (Rectangle){0, 0, ctx->assets.sprites.shot.width, ctx->assets.sprites.shot.height},
-            (Rectangle){shot->position.x, shot->position.y, SHOT_SIZE, SHOT_SIZE},
-            (Vector2){SHOT_SIZE / 2.0f, SHOT_SIZE / 2.0f},
+            (Rectangle){shot->position.x, shot->position.y, shot->size, shot->size},
+            (Vector2){shot->size / 2.0f, shot->size / 2.0f},
             0,
             WHITE  
         );

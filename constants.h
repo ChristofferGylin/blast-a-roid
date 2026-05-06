@@ -13,10 +13,6 @@ static const int ASTEROID_SIZE_3 = 12;
 static const int ASTEROID_POINTS_1 = 50;
 static const int ASTEROID_POINTS_2 = 100;
 static const int ASTEROID_POINTS_3 = 300;
-static const int SHOT_SIZE = 6;
-static const int SHOT_COOLDOWN_TIME = 80;
-static const int SHOT_LIFE_TIME = 800;
-static const int SHOT_VELOCITY = 450;
 static const int TIME_BONUS_LIMIT = 1000;
 static const int SCREEN_WIDTH = 1280;
 static const int SCREEN_HEIGHT = 720;
@@ -24,5 +20,6 @@ static const int ACTIVE_SCREEN_WIDTH = 960;
 static const int ACTIVE_SCREEN_HEIGHT = 720;
 static const int SIDEBAR_WIDTH = 160;
 static const int BONUS_MULTIPLIER_RADIUS = 9;
+static const int UFO_1_SIZE = 32;
 
 #endif

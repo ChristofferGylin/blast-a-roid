@@ -16,6 +16,8 @@
 #include "shield.h"
 #include "bonuses.h"
 #include "animation.h"
+#include "enemies.h"
+#include "gameContext.h"
 
 static Bonuses bonuses = {0};
 
@@ -35,6 +37,7 @@ GameResult gameLoop(GameContext* ctx) {
     initObjectPools(ctx);
     initAsteroids(ctx);
     initBonuses(&bonuses);
+    initSpawning(ctx);
 
     FaderArgs faderArgs;
     initFaderArgs(&faderArgs);
@@ -74,6 +77,7 @@ GameResult gameLoop(GameContext* ctx) {
             }
         } else if (faderArgs.fadeComplete || !faderArgs.fadeIn) {
 
+            spawnEnemy(ctx);
             resetTimeBonusMultiplier(&ctx->player);
             updateLevelBonus(&ctx->player);
             handleBonuses(ctx, &bonuses);
@@ -82,13 +86,16 @@ GameResult gameLoop(GameContext* ctx) {
             handleShipControls(&ctx->ship);
             handleShield(ctx);
             handleAsteroidsMovement(&ctx->objectPools.asteroids);
+            handleEnemiesMovement(ctx);
             handleShotsMovement(&ctx->objectPools.shots);
+            handleEnemiesHitDetection(ctx);
             handleDestroyedPiecesMovement(&ctx->ship);
             handleAsteroidCollisions(ctx);
             handleDestroyedAsteroids(ctx);
             handleBonusesCollisions(ctx, &bonuses);
             handleFinishedAnimations(&ctx->objectPools.explosions);
             updateAnimationPool(&ctx->objectPools.explosions);
+            updateEnemies(ctx);
 
             if (ctx->ship.isShieldActive) {
                 updateShieldAnimation();
@@ -116,6 +123,7 @@ GameResult gameLoop(GameContext* ctx) {
             renderAsteroids(ctx);
             renderShots(ctx);
             renderBonuses(&bonuses);
+            renderEnemies(&ctx->objectPools.enemies);
             renderAnimationPool(&ctx->objectPools.explosions);
             renderSidebars(ctx);
             

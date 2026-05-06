@@ -3,6 +3,7 @@
 
 #include "raylib.h"
 #include "asteroid.h"
+#include "enemies.h"
 #include "shooting.h"
 #include "animation.h"
 #include "player.h"
@@ -10,6 +11,7 @@
 
 typedef struct Animations {
     Animation explosion;
+    Animation ufo1;
 }Animations;
 
 typedef struct Samples {
@@ -26,6 +28,7 @@ typedef struct Sprites {
     Texture2D destroyedShip3;
     Texture2D ship;
     Texture2D shot;
+    Texture2D enemyShot1;
 }Sprites;
 
 typedef struct Assets {
@@ -37,21 +40,28 @@ typedef struct Assets {
 typedef struct ObjectPools {
     AsteroidPool asteroids;
     DestroyedAsteroidPool destroyedAsteroids;
+    EnemyObjectPool enemies;
+    EnemySpawnPool spawnableEnemies;
     AnimationPool explosions;
     ShotObjectPool shots;
 }ObjectPools;
+
+typedef struct SpawningEnemies {
+    double nextSpawn;
+    FloatRange spawnDelay;
+}SpawningEnemies;
 
 typedef struct GameContext {
     Assets assets;
     ObjectPools objectPools;
     Player player;
     Ship ship;
+    SpawningEnemies spawning;
 }GameContext;
-
-
 
 void initGameContext(GameContext* ctx);
 void initObjectPools(GameContext* ctx);
+void initSpawning(GameContext* ctx);
 void loadAssets(GameContext* ctx);
 void unloadAssets(GameContext* ctx);
 
