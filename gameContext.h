@@ -41,6 +41,7 @@ typedef struct ObjectPools {
     AsteroidPool asteroids;
     DestroyedAsteroidPool destroyedAsteroids;
     EnemyObjectPool enemies;
+    EnemySpawnPool spawnableEnemies;
     AnimationPool explosions;
     ShotObjectPool shots;
 }ObjectPools;
