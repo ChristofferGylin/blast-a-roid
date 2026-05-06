@@ -247,11 +247,11 @@ void initEnemyPool(EnemyObjectPool* pool) {
     pool->activeCount = 0;
 }
 
-void initEnemySpawnPool(EnemySpawnPool* pool, EnemySpawnOption* options, int level) {
+void initEnemySpawnPool(GameContext* ctx) {
     FloatRange minDelay = {5, 10};
     FloatRange maxDelay = {30, 60};
     
-    float multiplier = (level * 5) / 100;
+    float multiplier = (ctx->player.level * 5) / 100;
 
     FloatRange spawnDelay = {
         maxDelay.min - (maxDelay.min * multiplier),
@@ -261,10 +261,31 @@ void initEnemySpawnPool(EnemySpawnPool* pool, EnemySpawnOption* options, int lev
     if (spawnDelay.min < minDelay.min) spawnDelay.min = minDelay.min;
     if (spawnDelay.max < minDelay.max) spawnDelay.max = minDelay.max;
 
-    for (int i = 0; i < sizeof(options) / sizeof(EnemySpawnOption); i++) {
-        //do stuff
-    }
+    EnemySpawnPool* pool = &ctx->objectPools.spawnableEnemies;
     
+    for (int i = 0; i < NUMBER_OF_ENEMY_TYPES; i++) {
+        pool->options[i].active = false;
+    }
+
+    pool->activeCount = 0;
+
+    int index = 0;
+
+    if (ctx->player.level > NUMBER_OF_LEVEL_ENEMY_OPTIONS) {
+        index = NUMBER_OF_LEVEL_ENEMY_OPTIONS - 1;
+    } else {
+        index = ctx->player.level - 1;
+
+        if (index < 0) index = 0;
+    }
+
+    EnemySpawnOption* spawnOptions = levelsEnemyOptions[index];
+
+    for (int i = 0; i < NUMBER_OF_ENEMY_TYPES; i++) {
+        pool->options[i].option = spawnOptions[i];
+        pool->options[i].active = true;
+        pool->activeCount++;
+    }
 }
 
 void initUfo1(GameContext* ctx, Enemy* enemy) {

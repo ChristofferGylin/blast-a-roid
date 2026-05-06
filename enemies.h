@@ -65,11 +65,11 @@ typedef struct EnemySpawnOption {
 
 typedef struct  EnemySpawnOptionPoolObject {
     bool active;
-    EnemySpawnOption;
+    EnemySpawnOption option;
 }EnemySpawnOptionPoolObject;
 
 typedef struct EnemySpawnPool {
-    EnemySpawnOption options[NUMBER_OF_ENEMY_TYPES];
+    EnemySpawnOptionPoolObject options[NUMBER_OF_ENEMY_TYPES];
     FloatRange spawnDelay;
     int activeCount;
 }EnemySpawnPool;
@@ -90,6 +90,7 @@ void addNewEnemy(GameContext* ctx, EnemyType type);
 void handleEnemiesHitDetection(GameContext* ctx);
 void handleEnemiesMovement(GameContext* ctx);
 void initEnemyPool(EnemyObjectPool* pool);
+void initEnemySpawnPool(GameContext* ctx);
 void removeEnemy(EnemyObjectPool* pool, Enemy* enemy);
 void renderEnemies(EnemyObjectPool* pool);
 void updateEnemies(GameContext* ctx);
