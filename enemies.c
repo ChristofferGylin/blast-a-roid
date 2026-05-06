@@ -345,6 +345,10 @@ void renderEnemies(EnemyObjectPool* pool) {
     }
 }
 
+void setNextEnemySpawnTime(GameContext* ctx) {
+    ctx->spawning.nextSpawn = GetTime() + GetRandomValue(ctx->spawning.spawnDelay.min, ctx->spawning.spawnDelay.max);
+}
+
 void setSpawnDelay(GameContext* ctx) {
     FloatRange minDelay = {5, 10};
     FloatRange maxDelay = {30, 60};
@@ -364,6 +368,40 @@ void setSpawnDelay(GameContext* ctx) {
 
 void spawnEnemy(GameContext* ctx) {
     
+    EnemySpawnPool* pool = &ctx->objectPools.spawnableEnemies;
+    
+    if (pool->activeCount == 0 || ctx->spawning.nextSpawn > GetTime()) return;
+
+    setNextEnemySpawnTime(ctx);
+
+    float sumOfWeight = 0.0f;
+
+    for (int i = 0; i < pool->activeCount; i++) {
+        sumOfWeight += pool->options[i].option.weight;
+    }
+
+    int randomSelect = GetRandomValue(0, sumOfWeight);
+
+    for (int i = 0; i < pool->activeCount; i++) {
+
+        EnemySpawnOption* option = &pool->options[i].option;
+
+        if (randomSelect < option->weight) {
+            addNewEnemy(ctx, option->type);
+            option->count++;
+
+            if (option->count >= option->maxCount) {
+                pool->options[i].active = false;
+
+                // compact pool
+            }
+
+            return;
+        }
+
+        randomSelect -= option->weight;
+    }
+
 }
 
 void updateEnemies(GameContext* ctx) {

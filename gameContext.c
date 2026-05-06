@@ -9,7 +9,7 @@
 
 void initSpawning(GameContext* ctx) {
     setSpawnDelay(ctx);
-    ctx->spawning.nextSpawn = GetTime() + GetRandomValue(ctx->spawning.spawnDelay.min, ctx->spawning.spawnDelay.max);
+    setNextEnemySpawnTime(ctx);
 }
 
 void initGameContext(GameContext* ctx) {

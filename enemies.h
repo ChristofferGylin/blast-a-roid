@@ -92,6 +92,7 @@ void initEnemyPool(EnemyObjectPool* pool);
 void initEnemySpawnPool(GameContext* ctx);
 void removeEnemy(EnemyObjectPool* pool, Enemy* enemy);
 void renderEnemies(EnemyObjectPool* pool);
+void setNextEnemySpawnTime(GameContext* ctx);
 void setSpawnDelay(GameContext* ctx);
 void updateEnemies(GameContext* ctx);
 
