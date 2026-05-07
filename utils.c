@@ -1,5 +1,6 @@
 #include "utils.h"
 #include "raylib.h"
+#include "math.h"
 
 float scaleFloat(float oldMin, float oldMax, float newMin, float newMax, float value) {
     return (value - oldMin) / (oldMax - oldMin) * (newMax - newMin) + newMin;
@@ -30,7 +31,7 @@ void updatePosition(Vector2* position, Vector2 velocity) {
 
 void updateRotation(float* rotation, float rotationSpeed) {
         *rotation += GetFrameTime() * rotationSpeed;
-        *rotation = fmodf(rotation, 360.0f);
+        *rotation = fmodf(*rotation, 360.0f);
 
         if (*rotation < 0.0f)
         {
