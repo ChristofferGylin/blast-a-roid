@@ -119,6 +119,7 @@ void handleEnemiesHitDetection(GameContext* ctx) {
 
                 if (enemy->health <= 0) {
                     newExplosion(ctx, enemy->position);
+                    dropNewBonus(ctx, enemy);
                     ctx->objectPools.enemies.enemies[j].active = false;
                     enemyPoolHasChanges = true;
                     
