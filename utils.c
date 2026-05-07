@@ -23,6 +23,11 @@ float getRoundness(Rectangle rect, float radiusPx) {
     return (radiusPx * 2.0f) / minDim;
 }
 
+void updatePosition(Vector2* position, Vector2 velocity) {
+    position->x += GetFrameTime() * velocity.x;
+    position->y += GetFrameTime() * velocity.y;
+}
+
 void updateRotation(float* rotation, float rotationSpeed) {
         *rotation += GetFrameTime() * rotationSpeed;
         *rotation = fmodf(rotation, 360.0f);

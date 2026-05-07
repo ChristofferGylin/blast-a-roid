@@ -234,6 +234,7 @@ void updateBonuses(BonusObjectPool* pool) {
             poolHasChanged = true;
         } else {
             updateRotation(&bonus->rotation, bonus->rotationVelocity);
+            updatePosition(&bonus->position, bonus->velocity);
         }
     }
 }
