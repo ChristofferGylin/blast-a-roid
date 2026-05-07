@@ -1,6 +1,7 @@
 #ifndef GAMECONTEXT_H
 #define GAMECONTEXT_H
 
+#include "bonuses.h"
 #include "raylib.h"
 #include "asteroid.h"
 #include "enemies.h"
@@ -40,6 +41,7 @@ typedef struct Assets {
 
 typedef struct ObjectPools {
     AsteroidPool asteroids;
+    BonusObjectPool bonuses;
     DestroyedAsteroidPool destroyedAsteroids;
     EnemyObjectPool enemies;
     EnemySpawnPool spawnableEnemies;

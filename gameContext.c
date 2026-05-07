@@ -23,6 +23,7 @@ void initGameContext(GameContext* ctx) {
 void initObjectPools(GameContext* ctx) {
     initAnimationPool(&ctx->objectPools.explosions);
     initAsteroidPool(&ctx->objectPools.asteroids);
+    initBonusPool(&ctx->objectPools.bonuses);
     initDestroyedAsteroidPool(&ctx->objectPools.destroyedAsteroids);
     initEnemyPool(&ctx->objectPools.enemies);
     initEnemySpawnPool(ctx);

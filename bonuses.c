@@ -117,6 +117,13 @@ void initBonuses(Bonuses* bonuses) {
     bonuses->bonusMultiplier.level = 2;
 }
 
+void initBonusPool(BonusObjectPool* pool) {
+    for (int i = 0; i < MAX_BONUSES; i++) {
+        pool->bonuses[i].active = false;
+    }
+    pool->activeCount = 0;
+}
+
 void renderBonuses(Bonuses* bonuses) {
     if (bonuses->bonusMultiplier.base.isActive) {
         renderBonusMultiplier(bonuses->bonusMultiplier.level, bonuses->bonusMultiplier.base.position);
