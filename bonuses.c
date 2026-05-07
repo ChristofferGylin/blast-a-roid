@@ -1,4 +1,5 @@
 #include "bonuses.h"
+#include "enemies.h"
 #include "raylib.h"
 #include "player.h"
 #include "constants.h"
@@ -19,6 +20,23 @@ void addNewBonus(GameContext* ctx, Bonus bonus) {
     pool->bonuses[pool->activeCount].bonus = bonus;
     pool->bonuses[pool->activeCount].active = true;
     pool->activeCount++;
+}
+
+void dropNewBonus(GameContext* ctx, Enemy* enemy) {
+    // TODO: Logic for random selecting bonus
+
+    float rotationVelocity = GetRandomValue(-50, 50);
+
+    Bonus newBonus = {
+        SHIELD_REFILL,
+        GetTime(),
+        enemy->position,
+        getRandomVelocity((FloatRange){30, 100}),
+        0,
+        rotationVelocity
+    };
+
+    addNewBonus(ctx, newBonus);
 }
 
 BonusMultiplierIcon getBonusMultiplierIcon(float level) {
