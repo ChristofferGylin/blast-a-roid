@@ -150,6 +150,32 @@ void handleBonusesCollisions(GameContext* ctx, Bonuses* bonuses) {
     }
 }
 
+void initBonus(GameContext* ctx, Bonus* bonus, BonusType type, Vector2 position, int value) {
+    bonus->position = position;
+    bonus->rotation = 0;
+    bonus->rotationVelocity = GetRandomValue(-50, 50),
+    bonus->type = type;
+    bonus->value;
+    bonus->spawnTime = GetTime();
+    
+    switch (type)
+    {
+    case SHIELD_REFILL:
+        AnimationInstance animationInstance;
+        initAnimtionInstance(&animationInstance, &ctx->assets.animations.crate, position, 0.0f);
+        
+        bonus->animation = animationInstance;
+        bonus->velocity = getRandomVelocity((FloatRange){30.0f, 60.0f});
+        bonus->visualType = VISUAL_ANIMATION;
+        break;
+    
+    default:
+        printf("Error: Invalid BonusType in initBonus\n");
+        break;
+    }
+
+}
+
 void initBonuses(Bonuses* bonuses) {
     bonuses->nextSpawnTime = getNextSpawnTime();
 
