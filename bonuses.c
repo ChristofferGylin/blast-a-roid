@@ -13,6 +13,14 @@ const int MAX_BONUS_SPAWN_TIME = 30;
 const int BONUS_LIFE_TIME = 30;
 const float BONUS_MULTIPLIER_ROLL_RATE = 2.0f;
 
+void addNewBonus(GameContext* ctx, Bonus bonus) {
+    BonusObjectPool* pool = &ctx->objectPools.bonuses;
+    
+    pool->bonuses[pool->activeCount].bonus = bonus;
+    pool->bonuses[pool->activeCount].active = true;
+    pool->activeCount++;
+}
+
 BonusMultiplierIcon getBonusMultiplierIcon(float level) {
     int roundedLevel = round(level);
     BonusMultiplierIcon icon = {0};
