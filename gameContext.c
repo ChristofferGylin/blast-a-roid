@@ -30,6 +30,7 @@ void initObjectPools(GameContext* ctx) {
 }
 
 void loadAssets(GameContext* ctx) {
+    initAnimation(&ctx->assets.animations.explosion, "./assets/crate.png", "./assets/crate.json", 24.0f, (Vector2){CRATE_SIZE, CRATE_SIZE}, true);
     initAnimation(&ctx->assets.animations.explosion, "./assets/explosion.png", "./assets/explosion.json", 24.0f, (Vector2){EXPLOSION_SIZE, EXPLOSION_SIZE}, false);
     initAnimation(&ctx->assets.animations.ufo1, "./assets/ufo1.png", "./assets/ufo1.json", 24.0f, (Vector2){UFO_1_SIZE, UFO_1_SIZE}, true);
     
@@ -48,6 +49,7 @@ void loadAssets(GameContext* ctx) {
 }
 
 void unloadAssets(GameContext* ctx) {
+    unloadAnimation(&ctx->assets.animations.crate);
     unloadAnimation(&ctx->assets.animations.explosion);
     unloadAnimation(&ctx->assets.animations.ufo1);
 

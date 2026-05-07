@@ -1,6 +1,7 @@
 #ifndef CONSTANTS_H
 #define CONSTANTS_H
 
+static const int CRATE_SIZE = 16;
 static const float ROTATION_SPEED = 270.0f;
 static const float THRUST_FACTOR = 2.5f;
 static const float MAX_VELOCITY = 300.0f;
