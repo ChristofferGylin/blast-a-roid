@@ -7,6 +7,24 @@
 
 typedef struct Player Player;
 
+typedef enum BonusType {
+    BONUS_POINTS,
+    SHIELD_REFILL,
+    FULL_AUTO_POWERUP,
+    MULTI_SHOT_POWERUP,
+}BonusType;
+
+typedef struct Bonus {
+    BonusType type;
+    double spawnTime;
+    Vector2 position;
+    Vector2 Velocity;
+    float rotation;
+    float rotationVelocity;
+    int value;
+}Bonus;
+
+
 typedef struct BonusBase {
     bool isActive;
     double spawnTime;
@@ -26,7 +44,7 @@ typedef struct BonusMultiplierIcon {
 typedef struct Bonuses {
     double nextSpawnTime;
     BonusMultiplier bonusMultiplier;
-}Bonuses; 
+}Bonuses;
 
 BonusMultiplierIcon getBonusMultiplierIcon(float level);
 double getNextSpawnTime();
