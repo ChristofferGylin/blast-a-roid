@@ -77,7 +77,7 @@ void handleBonuses(GameContext* ctx, Bonuses* bonuses);
 void handleBonusesCollisions(GameContext* ctx, Bonuses* bonuses);
 void initBonuses(Bonuses* bonuses);
 void initBonusPool(BonusObjectPool* pool);
-void renderBonuses(Bonuses* bonuses);
+void renderBonuses(Bonuses* bonuses, BonusObjectPool* pool);
 void renderBonusMultiplier(int level, Vector2 position);
 
 #endif

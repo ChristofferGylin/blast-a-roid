@@ -15,6 +15,7 @@ const int BONUS_LIFE_TIME = 30;
 const float BONUS_MULTIPLIER_ROLL_RATE = 2.0f;
 
 void addNewBonus(GameContext* ctx, Bonus bonus);
+void initBonus(GameContext* ctx, Bonus* bonus, BonusType type, Vector2 position, int value);
 
 void addNewBonus(GameContext* ctx, Bonus bonus) {
     BonusObjectPool* pool = &ctx->objectPools.bonuses;
@@ -183,9 +184,27 @@ void initBonusPool(BonusObjectPool* pool) {
     pool->activeCount = 0;
 }
 
-void renderBonuses(Bonuses* bonuses) {
+void renderBonuses(Bonuses* bonuses, BonusObjectPool* pool) {
     if (bonuses->bonusMultiplier.base.isActive) {
         renderBonusMultiplier(bonuses->bonusMultiplier.level, bonuses->bonusMultiplier.base.position);
+    }
+
+    for (int i = 0; i < pool->activeCount; i++) {
+        
+        Bonus* bonus = &pool->bonuses[i].bonus;
+        
+        if (bonus->visualType == VISUAL_ANIMATION) {
+            renderAnimation(&bonus->animation);
+        } else {
+            DrawTexturePro(
+                *bonus->sprite,
+                (Rectangle){0, 0, bonus->sprite->width, bonus->sprite->height},
+                (Rectangle){bonus->position.x, bonus->position.y, bonus->sprite->width, bonus->sprite->height},
+                (Vector2){ bonus->sprite->width / 2.0f, bonus->sprite->height / 2.0f},
+                bonus->rotation,
+                WHITE
+            );
+        }
     }
 }
 
