@@ -104,6 +104,15 @@ void initAnimation(Animation* animation, char* spritesheetPath, const char* json
 
 }
 
+void initAnimtionInstance(AnimationInstance* instance, Animation* animation, Vector2 position, float rotation) {
+    instance->animation = animation;
+    instance->currentFrame = 0;
+    instance->frameTimer = 0.0f;
+    instance->isFinished = false;
+    instance->position = position;
+    instance->rotation = rotation;
+}
+
 void initAnimationPool(AnimationPool* pool) {
     for (int i = 0; i < MAX_ANIMATIONS; i++) {
         pool->animations[i].active = false;

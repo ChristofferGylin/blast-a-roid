@@ -28,6 +28,17 @@ void dropNewBonus(GameContext* ctx, Enemy* enemy) {
     // TODO: Logic for random selecting bonus
 
     float rotationVelocity = GetRandomValue(-50, 50);
+    float shieldValue = 0.0f;
+
+    if (GetRandomValue(0, 100) < 70) {
+        shieldValue = 0.5f;
+    } else {
+        shieldValue = 1.0f;
+    }
+
+    AnimationInstance animationInstance;
+
+    initAnimtionInstance(&animationInstance, &ctx->assets.animations.crate, enemy->position, 0.0f);
 
     Bonus newBonus = {
         SHIELD_REFILL,
@@ -35,7 +46,10 @@ void dropNewBonus(GameContext* ctx, Enemy* enemy) {
         enemy->position,
         getRandomVelocity((FloatRange){30, 100}),
         0,
-        rotationVelocity
+        rotationVelocity,
+        shieldValue,
+        VISUAL_ANIMATION,
+        
     };
 
     addNewBonus(ctx, newBonus);

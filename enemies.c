@@ -324,16 +324,11 @@ void initUfo1(GameContext* ctx, Enemy* enemy) {
 
     enemy->shooting.shot = getShotProps(ctx, GREEN_SHOT_1);
 
-    AnimationInstance animation;
+    AnimationInstance instance;
 
-    animation.animation = &ctx->assets.animations.ufo1;
-    animation.currentFrame = 0;
-    animation.frameTimer = 0.0f;
-    animation.isFinished = false;
-    animation.position = enemy->position;
-    animation.rotation = enemy->rotation;
+    initAnimtionInstance(&instance, &ctx->assets.animations.ufo1, enemy->position, enemy->rotation);
 
-    enemy->animation = animation;
+    enemy->animation = instance;
 }
 
 void removeEnemy(EnemyObjectPool* pool, Enemy* enemy) {
