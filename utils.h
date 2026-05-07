@@ -19,5 +19,6 @@ float scaleFloat(float oldMin, float oldMax, float newMin, float newMax, float v
 int getNumberOfAsteroids(int gameLevel);
 Vector2 getRandomVelocity(FloatRange range);
 float getRoundness(Rectangle rect, float radiusPx);
+void updateRotation(float* rotation, float rotationSpeed);
 
 #endif

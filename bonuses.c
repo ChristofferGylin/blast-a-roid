@@ -217,3 +217,23 @@ void renderBonusMultiplier(int level, Vector2 position) {
     DrawCircleV(position, BONUS_MULTIPLIER_RADIUS, icon.color);
     DrawTextPro(GetFontDefault(), icon.text, textPos, (Vector2){0, 0}, 0, 12, 2, RAYWHITE);
 }
+
+void updateBonuses(BonusObjectPool* pool) {
+
+    const float lifeTime = 30;
+    const double deactivateTime = GetTime() + lifeTime;
+
+    bool poolHasChanged = false;
+
+    for (int i = 0; i < pool->activeCount; i++) {
+        
+        Bonus* bonus = &pool->bonuses[i].bonus;
+        
+        if (bonus->spawnTime + lifeTime <= GetTime()) {
+            pool->bonuses[i].active = false;
+            poolHasChanged = true;
+        } else {
+            updateRotation(&bonus->rotation, bonus->rotationVelocity);
+        }
+    }
+}

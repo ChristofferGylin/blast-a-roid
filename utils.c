@@ -22,3 +22,13 @@ float getRoundness(Rectangle rect, float radiusPx) {
     float minDim = rect.width < rect.height ? rect.width : rect.height;
     return (radiusPx * 2.0f) / minDim;
 }
+
+void updateRotation(float* rotation, float rotationSpeed) {
+        *rotation += GetFrameTime() * rotationSpeed;
+        *rotation = fmodf(rotation, 360.0f);
+
+        if (*rotation < 0.0f)
+        {
+            *rotation += 360.0f;
+        }
+}
