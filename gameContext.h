@@ -10,6 +10,7 @@
 #include "ship.h"
 
 typedef struct Animations {
+    Animation crate;
     Animation explosion;
     Animation ufo1;
 }Animations;
