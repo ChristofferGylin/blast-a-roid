@@ -12,6 +12,8 @@ typedef enum BonusType {
     SHIELD_REFILL,
     FULL_AUTO_POWERUP,
     MULTI_SHOT_POWERUP,
+    AUTO_STOP_POWERUP,
+    
 }BonusType;
 
 typedef struct Bonus {
