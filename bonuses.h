@@ -5,6 +5,8 @@
 #include "raylib.h"
 #include "shooting.h"
 
+static const int MAX_BONUSES = 256;
+
 typedef struct Player Player;
 
 typedef enum BonusType {
@@ -47,6 +49,16 @@ typedef struct Bonuses {
     double nextSpawnTime;
     BonusMultiplier bonusMultiplier;
 }Bonuses;
+
+typedef struct BonusPoolObject {
+    bool active;
+    Bonus bonus;
+}BonusPoolObject;
+
+typedef struct BonusObjectPool {
+    BonusPoolObject bonuses[MAX_BONUSES];
+    int activeCount;
+}BonusObjectPool;
 
 BonusMultiplierIcon getBonusMultiplierIcon(float level);
 double getNextSpawnTime();
