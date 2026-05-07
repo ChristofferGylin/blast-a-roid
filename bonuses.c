@@ -40,18 +40,9 @@ void dropNewBonus(GameContext* ctx, Enemy* enemy) {
 
     initAnimtionInstance(&animationInstance, &ctx->assets.animations.crate, enemy->position, 0.0f);
 
-    Bonus newBonus = {
-        SHIELD_REFILL,
-        GetTime(),
-        enemy->position,
-        getRandomVelocity((FloatRange){30, 100}),
-        0,
-        rotationVelocity,
-        shieldValue,
-        VISUAL_ANIMATION,
-        
-    };
+    Bonus newBonus;
 
+    initBonus(ctx, &newBonus, SHIELD_REFILL, enemy->position, shieldValue);
     addNewBonus(ctx, newBonus);
 }
 
