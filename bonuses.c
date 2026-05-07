@@ -14,6 +14,8 @@ const int MAX_BONUS_SPAWN_TIME = 30;
 const int BONUS_LIFE_TIME = 30;
 const float BONUS_MULTIPLIER_ROLL_RATE = 2.0f;
 
+void addNewBonus(GameContext* ctx, Bonus bonus);
+
 void addNewBonus(GameContext* ctx, Bonus bonus) {
     BonusObjectPool* pool = &ctx->objectPools.bonuses;
     

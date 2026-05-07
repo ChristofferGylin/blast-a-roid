@@ -1,6 +1,8 @@
 #ifndef UTILS_H
 #define UTILS_H
 
+#include "raylib.h"
+
 typedef struct Rectangle Rectangle;
 
 typedef struct FloatRange {

@@ -4,9 +4,11 @@
 #include <stdbool.h>
 #include "raylib.h"
 #include "shooting.h"
+#include "constants.h"
 
-static const int MAX_BONUSES = 256;
+#define MAX_BONUSES 256
 
+typedef struct Enemy Enemy;
 typedef struct Player Player;
 
 typedef enum BonusType {
@@ -60,6 +62,7 @@ typedef struct BonusObjectPool {
     int activeCount;
 }BonusObjectPool;
 
+void dropNewBonus(GameContext* ctx, Enemy* enemy);
 BonusMultiplierIcon getBonusMultiplierIcon(float level);
 double getNextSpawnTime();
 Vector2 getRandomPosition();
