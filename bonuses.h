@@ -1,10 +1,12 @@
 #ifndef BONUSES_H
 #define BONUSES_H
 
+#include "animation.h"
 #include <stdbool.h>
 #include "raylib.h"
 #include "shooting.h"
 #include "constants.h"
+#include "utils.h"
 
 #define MAX_BONUSES 256
 
@@ -28,6 +30,11 @@ typedef struct Bonus {
     float rotation;
     float rotationVelocity;
     int value;
+    VisualType visualType;
+    union {
+        Texture2D* sprite;
+        AnimationInstance animation;
+    };
 }Bonus;
 
 
