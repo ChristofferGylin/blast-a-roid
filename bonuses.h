@@ -27,6 +27,7 @@ typedef struct Bonus {
     double spawnTime;
     Vector2 position;
     Vector2 velocity;
+    Vector2 size;
     float rotation;
     float rotationVelocity;
     int value;
