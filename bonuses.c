@@ -237,6 +237,8 @@ void updateBonuses(BonusObjectPool* pool) {
         } else {
             updateRotation(&bonus->rotation, bonus->rotationVelocity);
             updatePosition(&bonus->position, bonus->velocity);
+
+            outOfBoundsCheck(&bonus->position, bonus->size.x);
         }
     }
 }

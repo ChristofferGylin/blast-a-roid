@@ -80,5 +80,6 @@ void initBonuses(Bonuses* bonuses);
 void initBonusPool(BonusObjectPool* pool);
 void renderBonuses(Bonuses* bonuses, BonusObjectPool* pool);
 void renderBonusMultiplier(int level, Vector2 position);
+void updateBonuses(BonusObjectPool* pool);
 
 #endif
