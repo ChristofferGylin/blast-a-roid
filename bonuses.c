@@ -216,7 +216,9 @@ void renderBonuses(Bonuses* bonuses, BonusObjectPool* pool) {
         Bonus* bonus = &pool->bonuses[i].bonus;
         
         if (bonus->visualType == VISUAL_ANIMATION) {
+            printf("render animation start\n");
             renderAnimation(&bonus->animation);
+            printf("render animation end\n");
         } else {
             DrawTexturePro(
                 *bonus->sprite,
