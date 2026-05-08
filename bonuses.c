@@ -163,7 +163,7 @@ void handleBonusesCollisions(GameContext* ctx, Bonuses* bonuses) {
     }
 }
 
-void initBonus(GameContext* ctx, Bonus* bonus, BonusType type, Vector2 position, int value) {
+void initBonus(GameContext* ctx, Bonus* bonus, BonusType type, Vector2 position, int value) {    
     bonus->position = position;
     bonus->rotation = 0;
     bonus->rotationVelocity = GetRandomValue(-50, 50),
@@ -187,7 +187,6 @@ void initBonus(GameContext* ctx, Bonus* bonus, BonusType type, Vector2 position,
         printf("Error: Invalid BonusType in initBonus\n");
         break;
     }
-
 }
 
 void initBonuses(Bonuses* bonuses) {
@@ -216,9 +215,7 @@ void renderBonuses(Bonuses* bonuses, BonusObjectPool* pool) {
         Bonus* bonus = &pool->bonuses[i].bonus;
         
         if (bonus->visualType == VISUAL_ANIMATION) {
-            printf("render animation start\n");
             renderAnimation(&bonus->animation);
-            printf("render animation end\n");
         } else {
             DrawTexturePro(
                 *bonus->sprite,
@@ -263,6 +260,12 @@ void updateBonuses(BonusObjectPool* pool) {
             updatePosition(&bonus->position, bonus->velocity);
 
             outOfBoundsCheck(&bonus->position, bonus->size.x);
+
+            if (bonus->visualType == VISUAL_ANIMATION) {
+                bonus->animation.position = bonus->position;
+                bonus->animation.rotation = bonus->rotation;
+                updateAnimation(&bonus->animation);
+            }
         }
     }
 
