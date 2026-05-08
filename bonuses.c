@@ -161,6 +161,32 @@ void handleBonusesCollisions(GameContext* ctx, Bonuses* bonuses) {
             PlaySound(ctx->assets.samples.multiplier_collect);
         }
     }
+
+    bool objectPoolHasChanged = false;
+
+    for (int i = 0; i < ctx->objectPools.bonuses.activeCount; i++) {
+        Bonus* bonus = &ctx->objectPools.bonuses.bonuses[i].bonus;
+
+        if (CheckCollisionCircles(ctx->ship.position, SHIP_SIZE, bonus->position, bonus->size.x)) {
+            switch (bonus->type)
+            {
+            case SHIELD_REFILL:
+                ctx->player.shieldPower += bonus->value;
+                PlaySound(ctx->assets.samples.shieldUp);
+                break;
+            
+            default:
+                break;
+            }
+
+            ctx->objectPools.bonuses.bonuses[i].active = false;
+            objectPoolHasChanged = true;
+        }
+    }
+
+    if (objectPoolHasChanged) {
+        compactBonusPool(&ctx->objectPools.bonuses);
+    }
 }
 
 void initBonus(GameContext* ctx, Bonus* bonus, BonusType type, Vector2 position, int value) {    
@@ -178,7 +204,7 @@ void initBonus(GameContext* ctx, Bonus* bonus, BonusType type, Vector2 position,
         initAnimtionInstance(&animationInstance, &ctx->assets.animations.crate, position, 0.0f);
         
         bonus->animation = animationInstance;
-        bonus->size = ctx->assets.animations.crate.size;
+        bonus->size = (Vector2){CRATE_COLLISION_SIZE, CRATE_COLLISION_SIZE};
         bonus->velocity = getRandomVelocity((FloatRange){30.0f, 60.0f});
         bonus->visualType = VISUAL_ANIMATION;
         break;

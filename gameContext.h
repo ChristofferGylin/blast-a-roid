@@ -20,6 +20,7 @@ typedef struct Samples {
     Sound explosion;
     Sound multiplier_collect;
     Sound multiplier_spawn;
+    Sound shieldUp;
     Sound shot;
 }Samples;
 
