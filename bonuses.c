@@ -165,6 +165,8 @@ void handleBonusesCollisions(GameContext* ctx, Bonuses* bonuses) {
             {
             case SHIELD_REFILL:
                 ctx->player.shieldPower += bonus->value;
+                if (ctx->player.shieldPower > 1.0f) ctx->player.shieldPower = 1.0f;
+
                 PlaySound(ctx->assets.samples.shieldUp);
                 break;
             
