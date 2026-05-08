@@ -134,16 +134,8 @@ void handleAsteroidsMovement(AsteroidPool* pool) {
 
         if (ast->destroyed) continue;
 
-        ast->rotation += GetFrameTime() * ast->rotationSpeed;
-        ast->rotation = fmodf(ast->rotation, 360.0f);
-
-        if (ast->rotation < 0.0f)
-        {
-            ast->rotation += 360.0f;
-        }
-        
-        ast->position.x += GetFrameTime() * ast->velocity.x;
-        ast->position.y += GetFrameTime() * ast->velocity.y;
+        updateRotation(&ast->rotation, ast->rotationSpeed);
+        updatePosition(&ast->position, ast->velocity);
 
         int asteroidSize = getAsteroidSize(ast->level);
 

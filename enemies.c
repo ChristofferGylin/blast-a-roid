@@ -119,6 +119,7 @@ void handleEnemiesHitDetection(GameContext* ctx) {
 
                 if (enemy->health <= 0) {
                     newExplosion(ctx, enemy->position);
+                    dropNewBonus(ctx, enemy);
                     ctx->objectPools.enemies.enemies[j].active = false;
                     enemyPoolHasChanges = true;
                     
@@ -324,16 +325,11 @@ void initUfo1(GameContext* ctx, Enemy* enemy) {
 
     enemy->shooting.shot = getShotProps(ctx, GREEN_SHOT_1);
 
-    AnimationInstance animation;
+    AnimationInstance instance;
 
-    animation.animation = &ctx->assets.animations.ufo1;
-    animation.currentFrame = 0;
-    animation.frameTimer = 0.0f;
-    animation.isFinished = false;
-    animation.position = enemy->position;
-    animation.rotation = enemy->rotation;
+    initAnimtionInstance(&instance, &ctx->assets.animations.ufo1, enemy->position, enemy->rotation);
 
-    enemy->animation = animation;
+    enemy->animation = instance;
 }
 
 void removeEnemy(EnemyObjectPool* pool, Enemy* enemy) {
@@ -375,7 +371,7 @@ void setNextEnemySpawnTime(GameContext* ctx) {
 
 void setSpawnDelay(GameContext* ctx) {
     FloatRange minDelay = {5, 10};
-    FloatRange maxDelay = {30, 60};
+    FloatRange maxDelay = {15, 30};
     
     float multiplier = (ctx->player.level * 5) / 100;
 

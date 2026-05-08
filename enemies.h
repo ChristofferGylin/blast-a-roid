@@ -18,11 +18,6 @@ typedef enum EnemyType {
     UFO_1
 }EnemyType;
 
-typedef enum VisualType {
-    VISUAL_SPRITE,
-    VISUAL_ANIMATION
-}VisualType;
-
 typedef struct Enemy {
     float acceleration;
     Vector2 position;

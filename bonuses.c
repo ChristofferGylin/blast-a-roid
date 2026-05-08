@@ -1,4 +1,5 @@
 #include "bonuses.h"
+#include "enemies.h"
 #include "raylib.h"
 #include "player.h"
 #include "constants.h"
@@ -7,11 +8,58 @@
 #include <string.h>
 #include <stdio.h>
 #include "gameContext.h"
+#include "outOfBoundsCheck.h"
 
 const int MIN_BONUS_SPAWN_TIME = 5;
 const int MAX_BONUS_SPAWN_TIME = 30;
 const int BONUS_LIFE_TIME = 30;
 const float BONUS_MULTIPLIER_ROLL_RATE = 2.0f;
+
+void addNewBonus(GameContext* ctx, Bonus bonus);
+void compactBonusPool(BonusObjectPool* pool);
+void initBonus(GameContext* ctx, Bonus* bonus, BonusType type, Vector2 position);
+
+void addNewBonus(GameContext* ctx, Bonus bonus) {
+    BonusObjectPool* pool = &ctx->objectPools.bonuses;
+    
+    pool->bonuses[pool->activeCount].bonus = bonus;
+    pool->bonuses[pool->activeCount].active = true;
+    pool->activeCount++;
+}
+
+void compactBonusPool(BonusObjectPool* pool) {
+    int write = 0;
+
+    for (int i = 0; i < pool->activeCount; i++) {
+        if (pool->bonuses[i].active) {
+            if (write != i) {
+                pool->bonuses[write] = pool->bonuses[i];
+            }
+            write++;
+        }
+    }
+
+    for (int i = write; i < pool->activeCount; i++) {
+        pool->bonuses[i].active = false;
+    }
+
+    pool->activeCount = write;
+}
+
+void dropNewBonus(GameContext* ctx, Enemy* enemy) {
+    // TODO: Logic for random selecting bonus
+
+    float rotationSpeed = GetRandomValue(-50, 50);
+
+    AnimationInstance animationInstance;
+
+    initAnimtionInstance(&animationInstance, &ctx->assets.animations.crate, enemy->position, 0.0f);
+
+    Bonus newBonus;
+
+    initBonus(ctx, &newBonus, SHIELD_REFILL, enemy->position);
+    addNewBonus(ctx, newBonus);
+}
 
 BonusMultiplierIcon getBonusMultiplierIcon(float level) {
     int roundedLevel = round(level);
@@ -106,6 +154,71 @@ void handleBonusesCollisions(GameContext* ctx, Bonuses* bonuses) {
             PlaySound(ctx->assets.samples.multiplier_collect);
         }
     }
+
+    bool objectPoolHasChanged = false;
+
+    for (int i = 0; i < ctx->objectPools.bonuses.activeCount; i++) {
+        Bonus* bonus = &ctx->objectPools.bonuses.bonuses[i].bonus;
+
+        if (CheckCollisionCircles(ctx->ship.position, SHIP_SIZE, bonus->position, bonus->size.x)) {
+            switch (bonus->type)
+            {
+            case SHIELD_REFILL:
+                ctx->player.shieldPower += bonus->value;
+                if (ctx->player.shieldPower > 1.0f) ctx->player.shieldPower = 1.0f;
+
+                PlaySound(ctx->assets.samples.shieldUp);
+                break;
+            
+            default:
+                break;
+            }
+
+            ctx->objectPools.bonuses.bonuses[i].active = false;
+            objectPoolHasChanged = true;
+        }
+    }
+
+    if (objectPoolHasChanged) {
+        compactBonusPool(&ctx->objectPools.bonuses);
+    }
+}
+
+void initBonus(GameContext* ctx, Bonus* bonus, BonusType type, Vector2 position) {    
+    bonus->position = position;
+    bonus->rotation = 0;
+    bonus->rotationSpeed = GetRandomValue(-100, 100),
+    bonus->type = type;
+    bonus->value;
+    bonus->spawnTime = GetTime();
+    
+    switch (type)
+    {
+    case SHIELD_REFILL:
+        AnimationInstance animationInstance;
+        initAnimtionInstance(&animationInstance, &ctx->assets.animations.crate, position, 0.0f);
+        
+        bonus->animation = animationInstance;
+        bonus->size = (Vector2){CRATE_COLLISION_SIZE, CRATE_COLLISION_SIZE};
+        bonus->velocity = getRandomVelocity((FloatRange){30.0f, 60.0f});
+        bonus->visualType = VISUAL_ANIMATION;
+
+        float shieldValue = 0.0f;
+
+        if (GetRandomValue(0, 100) < 70) {
+            shieldValue = 0.5f;
+        } else {
+            shieldValue = 1.0f;
+        }
+
+        bonus->value = shieldValue;
+
+        break;
+    
+    default:
+        printf("Error: Invalid BonusType in initBonus\n");
+        break;
+    }
 }
 
 void initBonuses(Bonuses* bonuses) {
@@ -117,9 +230,34 @@ void initBonuses(Bonuses* bonuses) {
     bonuses->bonusMultiplier.level = 2;
 }
 
-void renderBonuses(Bonuses* bonuses) {
+void initBonusPool(BonusObjectPool* pool) {
+    for (int i = 0; i < MAX_BONUSES; i++) {
+        pool->bonuses[i].active = false;
+    }
+    pool->activeCount = 0;
+}
+
+void renderBonuses(Bonuses* bonuses, BonusObjectPool* pool) {
     if (bonuses->bonusMultiplier.base.isActive) {
         renderBonusMultiplier(bonuses->bonusMultiplier.level, bonuses->bonusMultiplier.base.position);
+    }
+
+    for (int i = 0; i < pool->activeCount; i++) {
+        
+        Bonus* bonus = &pool->bonuses[i].bonus;
+        
+        if (bonus->visualType == VISUAL_ANIMATION) {
+            renderAnimation(&bonus->animation);
+        } else {
+            DrawTexturePro(
+                *bonus->sprite,
+                (Rectangle){0, 0, bonus->sprite->width, bonus->sprite->height},
+                (Rectangle){bonus->position.x, bonus->position.y, bonus->sprite->width, bonus->sprite->height},
+                (Vector2){ bonus->sprite->width / 2.0f, bonus->sprite->height / 2.0f},
+                bonus->rotation,
+                WHITE
+            );
+        }
     }
 }
 
@@ -131,4 +269,39 @@ void renderBonusMultiplier(int level, Vector2 position) {
 
     DrawCircleV(position, BONUS_MULTIPLIER_RADIUS, icon.color);
     DrawTextPro(GetFontDefault(), icon.text, textPos, (Vector2){0, 0}, 0, 12, 2, RAYWHITE);
+}
+
+void updateBonuses(BonusObjectPool* pool) {
+
+    if (pool->activeCount == 0) return;
+
+    const float lifeTime = 30;
+    const double deactivateTime = GetTime() + lifeTime;
+
+    bool poolHasChanged = false;
+
+    for (int i = 0; i < pool->activeCount; i++) {
+        
+        Bonus* bonus = &pool->bonuses[i].bonus;
+        
+        if (bonus->spawnTime + lifeTime <= GetTime()) {
+            pool->bonuses[i].active = false;
+            poolHasChanged = true;
+        } else {
+            updateRotation(&bonus->rotation, bonus->rotationSpeed);
+            updatePosition(&bonus->position, bonus->velocity);
+
+            outOfBoundsCheck(&bonus->position, bonus->size.x);
+
+            if (bonus->visualType == VISUAL_ANIMATION) {
+                bonus->animation.position = bonus->position;
+                bonus->animation.rotation = bonus->rotation;
+                updateAnimation(&bonus->animation);
+            }
+        }
+    }
+
+    if (poolHasChanged) {
+        compactBonusPool(pool);
+    }
 }

@@ -39,6 +39,7 @@ void addNewAnimation(AnimationPool* pool, Animation* animation, Vector2 position
 void compactAnimationPool(AnimationPool* pool);
 void handleFinishedAnimations(AnimationPool* pool);
 void initAnimation(Animation* animation, char* spritesheetPath, const char* jsonPath, float fps, Vector2 size, bool isLoop);
+void initAnimtionInstance(AnimationInstance* instance, Animation* animation, Vector2 position, float rotation);
 void initAnimationPool(AnimationPool* pool);
 void renderAnimation(AnimationInstance* aniInst);
 void renderAnimationPool(AnimationPool* pool);

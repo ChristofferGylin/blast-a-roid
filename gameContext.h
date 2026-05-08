@@ -1,6 +1,7 @@
 #ifndef GAMECONTEXT_H
 #define GAMECONTEXT_H
 
+#include "bonuses.h"
 #include "raylib.h"
 #include "asteroid.h"
 #include "enemies.h"
@@ -10,6 +11,7 @@
 #include "ship.h"
 
 typedef struct Animations {
+    Animation crate;
     Animation explosion;
     Animation ufo1;
 }Animations;
@@ -18,6 +20,7 @@ typedef struct Samples {
     Sound explosion;
     Sound multiplier_collect;
     Sound multiplier_spawn;
+    Sound shieldUp;
     Sound shot;
 }Samples;
 
@@ -39,6 +42,7 @@ typedef struct Assets {
 
 typedef struct ObjectPools {
     AsteroidPool asteroids;
+    BonusObjectPool bonuses;
     DestroyedAsteroidPool destroyedAsteroids;
     EnemyObjectPool enemies;
     EnemySpawnPool spawnableEnemies;

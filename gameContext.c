@@ -23,6 +23,7 @@ void initGameContext(GameContext* ctx) {
 void initObjectPools(GameContext* ctx) {
     initAnimationPool(&ctx->objectPools.explosions);
     initAsteroidPool(&ctx->objectPools.asteroids);
+    initBonusPool(&ctx->objectPools.bonuses);
     initDestroyedAsteroidPool(&ctx->objectPools.destroyedAsteroids);
     initEnemyPool(&ctx->objectPools.enemies);
     initEnemySpawnPool(ctx);
@@ -30,12 +31,14 @@ void initObjectPools(GameContext* ctx) {
 }
 
 void loadAssets(GameContext* ctx) {
+    initAnimation(&ctx->assets.animations.crate, "./assets/crate.png", "./assets/crate.json", 24.0f, (Vector2){CRATE_RENDER_SIZE, CRATE_RENDER_SIZE}, true);
     initAnimation(&ctx->assets.animations.explosion, "./assets/explosion.png", "./assets/explosion.json", 24.0f, (Vector2){EXPLOSION_SIZE, EXPLOSION_SIZE}, false);
     initAnimation(&ctx->assets.animations.ufo1, "./assets/ufo1.png", "./assets/ufo1.json", 24.0f, (Vector2){UFO_1_SIZE, UFO_1_SIZE}, true);
     
     ctx->assets.samples.explosion = LoadSound("./assets/samples/explosion.wav");
     ctx->assets.samples.multiplier_collect = LoadSound("./assets/samples/multiplier_collect.wav");
     ctx->assets.samples.multiplier_spawn = LoadSound("./assets/samples/multiplier_spawn.wav");
+    ctx->assets.samples.shieldUp = LoadSound("./assets/samples/shield_up.wav");
     ctx->assets.samples.shot = LoadSound("./assets/samples/laser_pew.wav");
 
     ctx->assets.sprites.asteroid = LoadTexture("./assets/asteroid.png");
@@ -48,6 +51,7 @@ void loadAssets(GameContext* ctx) {
 }
 
 void unloadAssets(GameContext* ctx) {
+    unloadAnimation(&ctx->assets.animations.crate);
     unloadAnimation(&ctx->assets.animations.explosion);
     unloadAnimation(&ctx->assets.animations.ufo1);
 
