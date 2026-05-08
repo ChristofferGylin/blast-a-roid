@@ -371,7 +371,7 @@ void setNextEnemySpawnTime(GameContext* ctx) {
 
 void setSpawnDelay(GameContext* ctx) {
     FloatRange minDelay = {5, 10};
-    FloatRange maxDelay = {30, 60};
+    FloatRange maxDelay = {15, 30};
     
     float multiplier = (ctx->player.level * 5) / 100;
 

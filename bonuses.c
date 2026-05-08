@@ -16,6 +16,7 @@ const int BONUS_LIFE_TIME = 30;
 const float BONUS_MULTIPLIER_ROLL_RATE = 2.0f;
 
 void addNewBonus(GameContext* ctx, Bonus bonus);
+void compactBonusPool(BonusObjectPool* pool);
 void initBonus(GameContext* ctx, Bonus* bonus, BonusType type, Vector2 position, int value);
 
 void addNewBonus(GameContext* ctx, Bonus bonus) {
@@ -24,6 +25,25 @@ void addNewBonus(GameContext* ctx, Bonus bonus) {
     pool->bonuses[pool->activeCount].bonus = bonus;
     pool->bonuses[pool->activeCount].active = true;
     pool->activeCount++;
+}
+
+void compactBonusPool(BonusObjectPool* pool) {
+    int write = 0;
+
+    for (int i = 0; i < pool->activeCount; i++) {
+        if (pool->bonuses[i].active) {
+            if (write != i) {
+                pool->bonuses[write] = pool->bonuses[i];
+            }
+            write++;
+        }
+    }
+
+    for (int i = write; i < pool->activeCount; i++) {
+        pool->bonuses[i].active = false;
+    }
+
+    pool->activeCount = write;
 }
 
 void dropNewBonus(GameContext* ctx, Enemy* enemy) {
@@ -222,6 +242,8 @@ void renderBonusMultiplier(int level, Vector2 position) {
 
 void updateBonuses(BonusObjectPool* pool) {
 
+    if (pool->activeCount == 0) return;
+
     const float lifeTime = 30;
     const double deactivateTime = GetTime() + lifeTime;
 
@@ -240,5 +262,9 @@ void updateBonuses(BonusObjectPool* pool) {
 
             outOfBoundsCheck(&bonus->position, bonus->size.x);
         }
+    }
+
+    if (poolHasChanged) {
+        compactBonusPool(pool);
     }
 }
