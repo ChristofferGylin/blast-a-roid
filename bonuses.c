@@ -166,7 +166,7 @@ void handleBonusesCollisions(GameContext* ctx, Bonuses* bonuses) {
 void initBonus(GameContext* ctx, Bonus* bonus, BonusType type, Vector2 position, int value) {    
     bonus->position = position;
     bonus->rotation = 0;
-    bonus->rotationSpeed = GetRandomValue(-50, 50),
+    bonus->rotationSpeed = GetRandomValue(-100, 100),
     bonus->type = type;
     bonus->value;
     bonus->spawnTime = GetTime();
