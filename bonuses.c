@@ -49,7 +49,7 @@ void compactBonusPool(BonusObjectPool* pool) {
 void dropNewBonus(GameContext* ctx, Enemy* enemy) {
     // TODO: Logic for random selecting bonus
 
-    float rotationVelocity = GetRandomValue(-50, 50);
+    float rotationSpeed = GetRandomValue(-50, 50);
     float shieldValue = 0.0f;
 
     if (GetRandomValue(0, 100) < 70) {
@@ -166,7 +166,7 @@ void handleBonusesCollisions(GameContext* ctx, Bonuses* bonuses) {
 void initBonus(GameContext* ctx, Bonus* bonus, BonusType type, Vector2 position, int value) {    
     bonus->position = position;
     bonus->rotation = 0;
-    bonus->rotationVelocity = GetRandomValue(-50, 50),
+    bonus->rotationSpeed = GetRandomValue(-50, 50),
     bonus->type = type;
     bonus->value;
     bonus->spawnTime = GetTime();
@@ -256,7 +256,7 @@ void updateBonuses(BonusObjectPool* pool) {
             pool->bonuses[i].active = false;
             poolHasChanged = true;
         } else {
-            updateRotation(&bonus->rotation, bonus->rotationVelocity);
+            updateRotation(&bonus->rotation, bonus->rotationSpeed);
             updatePosition(&bonus->position, bonus->velocity);
 
             outOfBoundsCheck(&bonus->position, bonus->size.x);

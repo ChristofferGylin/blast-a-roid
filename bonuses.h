@@ -29,7 +29,7 @@ typedef struct Bonus {
     Vector2 velocity;
     Vector2 size;
     float rotation;
-    float rotationVelocity;
+    float rotationSpeed;
     int value;
     VisualType visualType;
     union {
