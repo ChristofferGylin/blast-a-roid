@@ -30,7 +30,7 @@ typedef struct Bonus {
     Vector2 size;
     float rotation;
     float rotationSpeed;
-    int value;
+    float value;
     VisualType visualType;
     union {
         Texture2D* sprite;

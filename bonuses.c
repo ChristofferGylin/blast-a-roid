@@ -17,7 +17,7 @@ const float BONUS_MULTIPLIER_ROLL_RATE = 2.0f;
 
 void addNewBonus(GameContext* ctx, Bonus bonus);
 void compactBonusPool(BonusObjectPool* pool);
-void initBonus(GameContext* ctx, Bonus* bonus, BonusType type, Vector2 position, int value);
+void initBonus(GameContext* ctx, Bonus* bonus, BonusType type, Vector2 position);
 
 void addNewBonus(GameContext* ctx, Bonus bonus) {
     BonusObjectPool* pool = &ctx->objectPools.bonuses;
@@ -50,13 +50,6 @@ void dropNewBonus(GameContext* ctx, Enemy* enemy) {
     // TODO: Logic for random selecting bonus
 
     float rotationSpeed = GetRandomValue(-50, 50);
-    float shieldValue = 0.0f;
-
-    if (GetRandomValue(0, 100) < 70) {
-        shieldValue = 0.5f;
-    } else {
-        shieldValue = 1.0f;
-    }
 
     AnimationInstance animationInstance;
 
@@ -64,7 +57,7 @@ void dropNewBonus(GameContext* ctx, Enemy* enemy) {
 
     Bonus newBonus;
 
-    initBonus(ctx, &newBonus, SHIELD_REFILL, enemy->position, shieldValue);
+    initBonus(ctx, &newBonus, SHIELD_REFILL, enemy->position);
     addNewBonus(ctx, newBonus);
 }
 
@@ -189,7 +182,7 @@ void handleBonusesCollisions(GameContext* ctx, Bonuses* bonuses) {
     }
 }
 
-void initBonus(GameContext* ctx, Bonus* bonus, BonusType type, Vector2 position, int value) {    
+void initBonus(GameContext* ctx, Bonus* bonus, BonusType type, Vector2 position) {    
     bonus->position = position;
     bonus->rotation = 0;
     bonus->rotationSpeed = GetRandomValue(-100, 100),
@@ -207,6 +200,17 @@ void initBonus(GameContext* ctx, Bonus* bonus, BonusType type, Vector2 position,
         bonus->size = (Vector2){CRATE_COLLISION_SIZE, CRATE_COLLISION_SIZE};
         bonus->velocity = getRandomVelocity((FloatRange){30.0f, 60.0f});
         bonus->visualType = VISUAL_ANIMATION;
+
+        float shieldValue = 0.0f;
+
+        if (GetRandomValue(0, 100) < 70) {
+            shieldValue = 0.5f;
+        } else {
+            shieldValue = 1.0f;
+        }
+
+        bonus->value = shieldValue;
+
         break;
     
     default:
