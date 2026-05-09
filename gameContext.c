@@ -48,6 +48,7 @@ void loadAssets(GameContext* ctx) {
     ctx->assets.sprites.enemyShot1 = LoadTexture("./assets/enemy_shot_1.png");
     ctx->assets.sprites.ship = LoadTexture("./assets/ship.png");
     ctx->assets.sprites.shot = LoadTexture("./assets/shot.png");
+    ctx->assets.sprites.triShotIcon = LoadTexture("./assets/tri_shot_icon.png");
 }
 
 void unloadAssets(GameContext* ctx) {
@@ -65,4 +66,5 @@ void unloadAssets(GameContext* ctx) {
     UnloadTexture(ctx->assets.sprites.enemyShot1);
     UnloadTexture(ctx->assets.sprites.ship);
     UnloadTexture(ctx->assets.sprites.shot);
+    UnloadTexture(ctx->assets.sprites.triShotIcon);
 }

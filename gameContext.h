@@ -31,6 +31,7 @@ typedef struct Sprites {
     Texture2D destroyedShip3;
     Texture2D ship;
     Texture2D shot;
+    Texture2D triShotIcon;
     Texture2D enemyShot1;
 }Sprites;
 
