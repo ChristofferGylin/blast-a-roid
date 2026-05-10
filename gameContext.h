@@ -48,6 +48,7 @@ typedef struct Assets {
 typedef struct ObjectPools {
     AsteroidPool asteroids;
     BonusObjectPool bonuses;
+    BonusSpawnPool spawnableBonuses;
     DestroyedAsteroidPool destroyedAsteroids;
     EnemyObjectPool enemies;
     EnemySpawnPool spawnableEnemies;
