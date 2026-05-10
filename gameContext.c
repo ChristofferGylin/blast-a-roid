@@ -43,8 +43,8 @@ void loadAssets(GameContext* ctx) {
     ctx->assets.samples.shot = LoadSound("./assets/samples/laser_pew.wav");
 
     ctx->assets.sprites.asteroid = LoadTexture("./assets/asteroid.png");
-    ctx->assets.sprites.blueGem = LoadTexture("./assets/blue_gem.png");
     ctx->assets.sprites.autoShotIcon = LoadTexture("./assets/auto_shot_icon.png");
+    ctx->assets.sprites.blueGem = LoadTexture("./assets/blue_gem.png");
     ctx->assets.sprites.destroyedShip1 = LoadTexture("./assets/ship_destroyed_1.png");
     ctx->assets.sprites.destroyedShip2 = LoadTexture("./assets/ship_destroyed_2.png");
     ctx->assets.sprites.destroyedShip3 = LoadTexture("./assets/ship_destroyed_3.png");
@@ -66,11 +66,16 @@ void unloadAssets(GameContext* ctx) {
     UnloadSound(ctx->assets.samples.shot);
 
     UnloadTexture(ctx->assets.sprites.asteroid);
+    UnloadTexture(ctx->assets.sprites.autoShotIcon);
+    UnloadTexture(ctx->assets.sprites.blueGem);
     UnloadTexture(ctx->assets.sprites.destroyedShip1);
     UnloadTexture(ctx->assets.sprites.destroyedShip2);
     UnloadTexture(ctx->assets.sprites.destroyedShip3);
     UnloadTexture(ctx->assets.sprites.enemyShot1);
+    UnloadTexture(ctx->assets.sprites.lockIcon);
+    UnloadTexture(ctx->assets.sprites.longShotIcon);
     UnloadTexture(ctx->assets.sprites.ship);
     UnloadTexture(ctx->assets.sprites.shot);
+    UnloadTexture(ctx->assets.sprites.stopIcon);
     UnloadTexture(ctx->assets.sprites.triShotIcon);
 }
