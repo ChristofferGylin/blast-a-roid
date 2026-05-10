@@ -86,15 +86,6 @@ void renderPowerups(GameContext* ctx, Vector2 position, Vector2 size) {
     currentPosX += size.y + gap;
 
     renderPowerupIcon(
-        &ctx->assets.sprites.lockIcon,
-        (Vector2){currentPosX, position.y},
-        size,
-        ctx->player.powerups.lock
-    );
-
-    currentPosX += size.y + gap;
-
-    renderPowerupIcon(
         &ctx->assets.sprites.longShotIcon,
         (Vector2){currentPosX, position.y},
         size,
@@ -104,6 +95,15 @@ void renderPowerups(GameContext* ctx, Vector2 position, Vector2 size) {
     currentPosX += size.y + gap;
     
     renderPowerupIcon(
+        &ctx->assets.sprites.triShotIcon,
+        (Vector2){currentPosX, position.y},
+        size,
+        ctx->player.powerups.trippleShot
+    );
+
+    currentPosX += size.y + gap;
+
+    renderPowerupIcon(
         &ctx->assets.sprites.stopIcon,
         (Vector2){currentPosX, position.y},
         size,
@@ -111,13 +111,13 @@ void renderPowerups(GameContext* ctx, Vector2 position, Vector2 size) {
     );
 
     currentPosX += size.y + gap;
-    
+
     renderPowerupIcon(
-        &ctx->assets.sprites.triShotIcon,
+        &ctx->assets.sprites.lockIcon,
         (Vector2){currentPosX, position.y},
         size,
-        ctx->player.powerups.trippleShot
-    );    
+        ctx->player.powerups.lock
+    );
 }
 
 void renderShieldPower(float shieldPower, Vector2 position, Vector2 size) {
