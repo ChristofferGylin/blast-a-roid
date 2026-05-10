@@ -358,7 +358,7 @@ void initBonusSpawnPool(GameContext* ctx) {
 
     pool->options[pool->activeCount].option = (BonusSpawnOption){
         BONUS_POINTS,
-        100.0f,
+        100,
         0,
         MAX_BONUSES
     };
@@ -367,7 +367,7 @@ void initBonusSpawnPool(GameContext* ctx) {
 
     pool->options[pool->activeCount].option = (BonusSpawnOption){
         SHIELD_REFILL,
-        75.0f,
+        75,
         0,
         MAX_BONUSES
     };
@@ -377,7 +377,7 @@ void initBonusSpawnPool(GameContext* ctx) {
     if (!playerPowerups->autoStop) {
         pool->options[pool->activeCount].option = (BonusSpawnOption){
             AUTO_STOP_POWERUP,
-            30.0f,
+            30,
             0,
             1
         };
@@ -388,7 +388,7 @@ void initBonusSpawnPool(GameContext* ctx) {
     if (!playerPowerups->fullAuto) {
         pool->options[pool->activeCount].option = (BonusSpawnOption){
             FULL_AUTO_POWERUP,
-            50.0f,
+            50,
             0,
             1
         };

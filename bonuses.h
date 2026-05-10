@@ -74,7 +74,7 @@ typedef struct BonusObjectPool {
 
 typedef struct BonusSpawnOption {
     BonusType type;
-    float weight;
+    int weight;
     int count;
     int maxCount;
 }BonusSpawnOption;
