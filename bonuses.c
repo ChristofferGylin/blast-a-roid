@@ -255,12 +255,12 @@ void initBonus(GameContext* ctx, Bonus* bonus, BonusType type, Vector2 position)
     bonus->rotation = 0;
     bonus->rotationSpeed = GetRandomValue(-100, 100),
     bonus->type = type;
-    bonus->value;
     bonus->spawnTime = GetTime();
-    
-    switch (type)
-    {
-    case SHIELD_REFILL:
+
+    if (type == BONUS_POINTS) {
+        // TODO: set sprite
+        bonus->visualType = VISUAL_SPRITE;
+    } else {
         AnimationInstance animationInstance;
         initAnimtionInstance(&animationInstance, &ctx->assets.animations.crate, position, 0.0f);
         
@@ -268,7 +268,9 @@ void initBonus(GameContext* ctx, Bonus* bonus, BonusType type, Vector2 position)
         bonus->size = (Vector2){CRATE_COLLISION_SIZE, CRATE_COLLISION_SIZE};
         bonus->velocity = getRandomVelocity((FloatRange){30.0f, 60.0f});
         bonus->visualType = VISUAL_ANIMATION;
+    }
 
+    if (type == SHIELD_REFILL) {
         float shieldValue = 0.0f;
 
         if (GetRandomValue(0, 100) < 70) {
@@ -278,13 +280,22 @@ void initBonus(GameContext* ctx, Bonus* bonus, BonusType type, Vector2 position)
         }
 
         bonus->value = shieldValue;
+    } else if (type == BONUS_POINTS) {
+        int rnd = GetRandomValue(0, 100);
 
-        break;
-    
-    default:
-        printf("Error: Invalid BonusType in initBonus\n");
-        break;
-    }
+        if (rnd < 50) {
+            bonus->value = 500.0f;
+        } else  if (rnd < 75) {
+            bonus->value = 1000.0f;
+        } else if (rnd < 95) {
+            bonus->value = 2000.0f;
+        } else {
+            bonus->value = 5000.0f;
+        }
+
+    } else {
+        bonus->value = 0.0f;
+    }  
 }
 
 void initBonuses(Bonuses* bonuses) {
