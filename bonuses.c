@@ -256,9 +256,10 @@ void initBonus(GameContext* ctx, Bonus* bonus, BonusType type, Vector2 position)
     bonus->rotationSpeed = GetRandomValue(-100, 100),
     bonus->type = type;
     bonus->spawnTime = GetTime();
+    bonus->velocity = getRandomVelocity((FloatRange){30.0f, 60.0f});
 
     if (type == BONUS_POINTS) {
-        // TODO: set sprite
+        bonus->sprite = &ctx->assets.sprites.blueGem;
         bonus->visualType = VISUAL_SPRITE;
     } else {
         AnimationInstance animationInstance;
@@ -266,7 +267,6 @@ void initBonus(GameContext* ctx, Bonus* bonus, BonusType type, Vector2 position)
         
         bonus->animation = animationInstance;
         bonus->size = (Vector2){CRATE_COLLISION_SIZE, CRATE_COLLISION_SIZE};
-        bonus->velocity = getRandomVelocity((FloatRange){30.0f, 60.0f});
         bonus->visualType = VISUAL_ANIMATION;
     }
 
