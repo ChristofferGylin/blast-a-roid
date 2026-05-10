@@ -17,6 +17,7 @@ const float BONUS_MULTIPLIER_ROLL_RATE = 2.0f;
 
 void addNewBonus(GameContext* ctx, Bonus bonus);
 void compactBonusPool(BonusObjectPool* pool);
+void compactBonusSpawnPool(BonusSpawnPool* pool);
 void initBonus(GameContext* ctx, Bonus* bonus, BonusType type, Vector2 position);
 
 void addNewBonus(GameContext* ctx, Bonus bonus) {
@@ -43,6 +44,25 @@ void compactBonusPool(BonusObjectPool* pool) {
 
     for (int i = write; i < pool->activeCount; i++) {
         pool->bonuses[i].active = false;
+    }
+
+    pool->activeCount = write;
+}
+
+void compactBonusSpawnPool(BonusSpawnPool* pool) {
+    int write = 0;
+
+    for (int i = 0; i < pool->activeCount; i++) {
+        if (pool->options[i].active) {
+            if (write != i) {
+                pool->options[write] = pool->options[i];
+            }
+            write++;
+        }
+    }
+
+    for (int i = write; i < pool->activeCount; i++) {
+        pool->options[i].active = false;
     }
 
     pool->activeCount = write;
@@ -232,7 +252,7 @@ void handleBonusesCollisions(GameContext* ctx, Bonuses* bonuses) {
     }
 
     if (spawnPoolHasChanged) {
-        // TODO: compact spawn pool
+        compactBonusSpawnPool(spawnPool);
     }
 }
 
