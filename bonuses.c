@@ -71,12 +71,6 @@ void compactBonusSpawnPool(BonusSpawnPool* pool) {
 void dropNewBonus(GameContext* ctx, Enemy* enemy) {
     // TODO: Logic for random selecting bonus
 
-    float rotationSpeed = GetRandomValue(-50, 50);
-
-    AnimationInstance animationInstance;
-
-    initAnimtionInstance(&animationInstance, &ctx->assets.animations.crate, enemy->position, 0.0f);
-
     Bonus newBonus;
 
     initBonus(ctx, &newBonus, SHIELD_REFILL, enemy->position);
