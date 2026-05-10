@@ -237,6 +237,92 @@ void initBonusPool(BonusObjectPool* pool) {
     pool->activeCount = 0;
 }
 
+void initBonusSpawnPool(GameContext* ctx) {
+
+    BonusSpawnPool* pool = &ctx->objectPools.spawnableBonuses;
+    Powerups* playerPowerups = &ctx->player.powerups;
+
+    for (int i = 0; i < NUMBER_OF_BONUS_TYPES; i++) {
+        pool->options[i].active = false;
+    }
+
+    pool->activeCount = 0;
+
+    pool->options[pool->activeCount].option = (BonusSpawnOption){
+        BONUS_POINTS,
+        100.0f,
+        0,
+        MAX_BONUSES
+    };
+
+    pool->activeCount++;
+
+    pool->options[pool->activeCount].option = (BonusSpawnOption){
+        SHIELD_REFILL,
+        75.0f,
+        0,
+        MAX_BONUSES
+    };
+
+    pool->activeCount++;
+
+    if (!playerPowerups->autoStop) {
+        pool->options[pool->activeCount].option = (BonusSpawnOption){
+            AUTO_STOP_POWERUP,
+            30.0f,
+            0,
+            1
+        };
+
+        pool->activeCount++;
+    }
+
+    if (!playerPowerups->fullAuto) {
+        pool->options[pool->activeCount].option = (BonusSpawnOption){
+            FULL_AUTO_POWERUP,
+            50.0f,
+            0,
+            1
+        };
+
+        pool->activeCount++;
+    }
+
+    if (!playerPowerups->lock) {
+        pool->options[pool->activeCount].option = (BonusSpawnOption){
+            LOCK_POWERUP,
+            20.0f,
+            0,
+            1
+        };
+
+        pool->activeCount++;
+    }
+
+    if (!playerPowerups->longShot) {
+        pool->options[pool->activeCount].option = (BonusSpawnOption){
+            LONG_SHOT_POWERUP,
+            50.0f,
+            0,
+            1
+        };
+
+        pool->activeCount++;
+    }
+
+    if (!playerPowerups->trippleShot) {
+        pool->options[pool->activeCount].option = (BonusSpawnOption){
+            MULTI_SHOT_POWERUP,
+            50.0f,
+            0,
+            1
+        };
+
+        pool->activeCount++;
+    }
+
+}
+
 void renderBonuses(Bonuses* bonuses, BonusObjectPool* pool) {
     if (bonuses->bonusMultiplier.base.isActive) {
         renderBonusMultiplier(bonuses->bonusMultiplier.level, bonuses->bonusMultiplier.base.position);
