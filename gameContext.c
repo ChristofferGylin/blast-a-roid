@@ -43,6 +43,7 @@ void loadAssets(GameContext* ctx) {
     ctx->assets.samples.shot = LoadSound("./assets/samples/laser_pew.wav");
 
     ctx->assets.sprites.asteroid = LoadTexture("./assets/asteroid.png");
+    ctx->assets.sprites.blueGem = LoadTexture("./assets/blue_gem.png");
     ctx->assets.sprites.autoShotIcon = LoadTexture("./assets/auto_shot_icon.png");
     ctx->assets.sprites.destroyedShip1 = LoadTexture("./assets/ship_destroyed_1.png");
     ctx->assets.sprites.destroyedShip2 = LoadTexture("./assets/ship_destroyed_2.png");
