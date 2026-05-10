@@ -96,7 +96,7 @@ void dropNewBonus(GameContext* ctx, Enemy* enemy) {
         if (randomSelect < option->weight) {
             Bonus newBonus;
 
-            initBonus(ctx, &newBonus, SHIELD_REFILL, enemy->position);
+            initBonus(ctx, &newBonus, option->type, enemy->position);
             addNewBonus(ctx, newBonus);
             option->count++;
 
