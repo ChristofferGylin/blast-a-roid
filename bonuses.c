@@ -76,6 +76,8 @@ void dropNewBonus(GameContext* ctx, Enemy* enemy) {
 
     for (int i = 0; i < pool->activeCount; i++) {
         
+        if (!pool->options[i].active) continue;
+
         BonusSpawnOption* option = &pool->options[i].option;
 
         if (option->count < option->maxCount) {
@@ -88,6 +90,8 @@ void dropNewBonus(GameContext* ctx, Enemy* enemy) {
     int randomSelect = GetRandomValue(0, sumOfWeight - 1);    
         
     for (int i = 0; i < pool->activeCount; i++) {
+
+        if (!pool->options[i].active) continue;
 
         BonusSpawnOption* option = &pool->options[i].option;
 
@@ -206,6 +210,8 @@ void handleBonusesCollisions(GameContext* ctx, Bonuses* bonuses) {
     BonusSpawnPool* spawnPool = &ctx->objectPools.spawnableBonuses;
 
     for (int i = 0; i < ctx->objectPools.bonuses.activeCount; i++) {
+        if (!ctx->objectPools.bonuses.bonuses[i].active) continue;
+
         Bonus* bonus = &ctx->objectPools.bonuses.bonuses[i].bonus;
 
         if (CheckCollisionCircles(ctx->ship.position, SHIP_SIZE, bonus->position, bonus->size.x)) {
@@ -437,6 +443,8 @@ void renderBonuses(Bonuses* bonuses, BonusObjectPool* pool) {
     }
 
     for (int i = 0; i < pool->activeCount; i++) {
+
+        if (!pool->bonuses[i].active) continue;
         
         Bonus* bonus = &pool->bonuses[i].bonus;
         
@@ -490,6 +498,8 @@ void updateBonuses(BonusObjectPool* pool) {
     bool poolHasChanged = false;
 
     for (int i = 0; i < pool->activeCount; i++) {
+
+        if (!pool->bonuses[i].active) continue;
         
         Bonus* bonus = &pool->bonuses[i].bonus;
         
