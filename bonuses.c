@@ -260,6 +260,7 @@ void initBonus(GameContext* ctx, Bonus* bonus, BonusType type, Vector2 position)
 
     if (type == BONUS_POINTS) {
         bonus->sprite = &ctx->assets.sprites.blueGem;
+        bonus->size = (Vector2){GEM_COLLISION_SIZE, GEM_COLLISION_SIZE};
         bonus->visualType = VISUAL_SPRITE;
     } else {
         AnimationInstance animationInstance;
