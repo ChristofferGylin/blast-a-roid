@@ -70,8 +70,11 @@ void renderPowerupIcon(Texture2D* iconSprite, Vector2 position, Vector2 size, bo
 void renderPowerups(GameContext* ctx, Vector2 position, Vector2 size) {
     
     int gap = 4;
-    int maxIcons = (size.x + gap) / (size.y + gap);
-    int currentPosX = position.x;
+    int numberOfIcons = 5;
+    int iconsSize = (numberOfIcons * (size.y + gap)) - gap;
+    int offset = (size.x - iconsSize) / 2;
+    int currentPosX = position.x + offset;
+    
 
     renderPowerupIcon(
         &ctx->assets.sprites.autoShotIcon,
