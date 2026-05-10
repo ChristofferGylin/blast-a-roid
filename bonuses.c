@@ -158,11 +158,14 @@ void handleBonusesCollisions(GameContext* ctx, Bonuses* bonuses) {
     }
 
     bool objectPoolHasChanged = false;
+    bool spawnPoolHasChanged = false;
+    BonusSpawnPool* spawnPool = &ctx->objectPools.spawnableBonuses;
 
     for (int i = 0; i < ctx->objectPools.bonuses.activeCount; i++) {
         Bonus* bonus = &ctx->objectPools.bonuses.bonuses[i].bonus;
 
         if (CheckCollisionCircles(ctx->ship.position, SHIP_SIZE, bonus->position, bonus->size.x)) {
+            
             switch (bonus->type)
             {
             case SHIELD_REFILL:
@@ -171,18 +174,65 @@ void handleBonusesCollisions(GameContext* ctx, Bonuses* bonuses) {
 
                 PlaySound(ctx->assets.samples.shieldUp);
                 break;
+
+            case BONUS_POINTS:
+                ctx->player.score += bonus->value;
+                // TODO: Play sound
+                break;
+
+            case FULL_AUTO_POWERUP:
+                ctx->player.powerups.fullAuto = true;
+                // TODO: Play sound
+                break;
+            
+            case MULTI_SHOT_POWERUP:
+                ctx->player.powerups.trippleShot = true;
+                // TODO: Play sound
+                break;
+            
+            case AUTO_STOP_POWERUP:
+                ctx->player.powerups.autoStop = true;
+                // TODO: Play sound
+                break;
+            
+            case LOCK_POWERUP:
+                ctx->player.powerups.lock = true;
+                // TODO: Play sound
+                break;
+            
+            case LONG_SHOT_POWERUP:
+                ctx->player.powerups.longShot = true;
+                // TODO: Play sound
+                break;
             
             default:
+                printf("Error: Invalid BonusType in handleBonusesCollisions\n");
                 break;
             }
 
             ctx->objectPools.bonuses.bonuses[i].active = false;
             objectPoolHasChanged = true;
+
+            for (int j = 0; j < spawnPool->activeCount; j++) {
+                if (bonus->type == spawnPool->options[j].option.type) {
+                    if (bonus->type == SHIELD_REFILL || bonus->type == BONUS_POINTS) {
+                        spawnPool->options[j].option.count--;
+                    } else {
+                        spawnPool->options[j].active = false;
+                        spawnPoolHasChanged = true;
+                    }
+                    break;
+                }
+            }
         }
     }
 
     if (objectPoolHasChanged) {
         compactBonusPool(&ctx->objectPools.bonuses);
+    }
+
+    if (spawnPoolHasChanged) {
+        // TODO: compact spawn pool
     }
 }
 
