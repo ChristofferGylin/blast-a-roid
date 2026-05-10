@@ -52,6 +52,56 @@ void renderLives(GameContext* ctx, Vector2 position, Vector2 size) {
     }
 }
 
+void renderPowerups(GameContext* ctx, Vector2 position, Vector2 size) {
+    
+    int gap = 4;
+    int maxIcons = (size.x + gap) / (size.y + gap);
+    int currentPosX = position.x;
+
+    // for (int i = 0; i < ctx->player.lives; i++) {
+    //     if (i + 1 >= maxIcons) {
+
+    //         if (i + 1 >= ctx->player.lives) {
+    //             DrawTexturePro(
+    //                 ctx->assets.sprites.ship,
+    //                 (Rectangle){0, 0, ctx->assets.sprites.ship.width, ctx->assets.sprites.ship.height},
+    //                 (Rectangle){currentPosX, position.y, size.y, size.y},
+    //                 (Vector2){ 0, 0},
+    //                 0,
+    //                 primaryColor
+    //             );
+    //         } else {
+    //             DrawText("+", currentPosX, position.y, 18, primaryColor);
+    //         }
+    //         break;
+    //     }
+
+    //     DrawTexturePro(
+    //         ctx->assets.sprites.ship,
+    //         (Rectangle){0, 0, ctx->assets.sprites.ship.width, ctx->assets.sprites.ship.height},
+    //         (Rectangle){currentPosX, position.y, size.y, size.y},
+    //         (Vector2){ 0, 0},
+    //         0,
+    //         primaryColor
+    //     );
+
+    //     currentPosX += size.y + gap;
+    // }
+
+    DrawTexturePro(
+            ctx->assets.sprites.triShotIcon,
+            (Rectangle){0, 0, ctx->assets.sprites.triShotIcon.width, ctx->assets.sprites.triShotIcon.height},
+            (Rectangle){currentPosX, position.y, size.y, size.y},
+            (Vector2){ 0, 0},
+            0,
+            primaryColor
+    );
+
+    currentPosX += size.y + gap;
+
+
+}
+
 void renderShieldPower(float shieldPower, Vector2 position, Vector2 size) {
 
     int barLevelWidth = size.x * shieldPower;
@@ -187,7 +237,10 @@ void renderSidebars(GameContext* ctx) {
     RenderPositions shieldPowerPosition = renderBlock("SHIELD", 0, false);
     renderShieldPower(ctx->player.shieldPower, shieldPowerPosition.contentPosition, shieldPowerPosition.contentSize);
 
-    RenderPositions livesPosition = renderBlock("LIVES", shieldPowerPosition.endYPosition, false);
+    RenderPositions powerupsPosition = renderBlock("POWERUPS", shieldPowerPosition.endYPosition, false);
+    renderPowerups(ctx, powerupsPosition.contentPosition, powerupsPosition.contentSize);
+    
+    RenderPositions livesPosition = renderBlock("LIVES", powerupsPosition.endYPosition, false);
     renderLives(ctx, livesPosition.contentPosition, livesPosition.contentSize);
 
     startY = renderStats(ctx->player.score, "SCORE", startY, ctx->player.powerups.levelBonusMultiplier, false) + statsBlockGap;
