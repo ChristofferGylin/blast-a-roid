@@ -69,12 +69,42 @@ void compactBonusSpawnPool(BonusSpawnPool* pool) {
 }
 
 void dropNewBonus(GameContext* ctx, Enemy* enemy) {
-    // TODO: Logic for random selecting bonus
+    
+    BonusSpawnPool* pool = &ctx->objectPools.spawnableBonuses;
+    
+    int sumOfWeight = 0;
 
-    Bonus newBonus;
+    for (int i = 0; i < pool->activeCount; i++) {
+        
+        BonusSpawnOption* option = &pool->options[i].option;
 
-    initBonus(ctx, &newBonus, SHIELD_REFILL, enemy->position);
-    addNewBonus(ctx, newBonus);
+        if (option->count < option->maxCount) {
+            sumOfWeight += pool->options[i].option.weight;
+        }
+    }
+
+    if (sumOfWeight == 0) return;
+    
+    int randomSelect = GetRandomValue(0, sumOfWeight - 1);    
+        
+    for (int i = 0; i < pool->activeCount; i++) {
+
+        BonusSpawnOption* option = &pool->options[i].option;
+
+        if (option->count >= option->maxCount) continue;
+
+        if (randomSelect < option->weight) {
+            Bonus newBonus;
+
+            initBonus(ctx, &newBonus, SHIELD_REFILL, enemy->position);
+            addNewBonus(ctx, newBonus);
+            option->count++;
+
+            return;    
+        }
+
+        randomSelect -= option->weight;
+    }
 }
 
 BonusMultiplierIcon getBonusMultiplierIcon(float level) {
