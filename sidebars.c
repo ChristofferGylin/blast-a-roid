@@ -52,54 +52,69 @@ void renderLives(GameContext* ctx, Vector2 position, Vector2 size) {
     }
 }
 
+void renderPowerupIcon(Texture2D* iconSprite, Vector2 position, Vector2 size, bool active) {
+    
+    Texture2D sprite = *iconSprite;
+    Color color = active ? primaryColor : primaryColorDimmed;
+    
+    DrawTexturePro(
+            sprite,
+            (Rectangle){0, 0, sprite.width, sprite.height},
+            (Rectangle){position.x, position.y, size.y, size.y},
+            (Vector2){ 0, 0},
+            0,
+            color
+    );
+}
+
 void renderPowerups(GameContext* ctx, Vector2 position, Vector2 size) {
     
     int gap = 4;
     int maxIcons = (size.x + gap) / (size.y + gap);
     int currentPosX = position.x;
 
-    // for (int i = 0; i < ctx->player.lives; i++) {
-    //     if (i + 1 >= maxIcons) {
-
-    //         if (i + 1 >= ctx->player.lives) {
-    //             DrawTexturePro(
-    //                 ctx->assets.sprites.ship,
-    //                 (Rectangle){0, 0, ctx->assets.sprites.ship.width, ctx->assets.sprites.ship.height},
-    //                 (Rectangle){currentPosX, position.y, size.y, size.y},
-    //                 (Vector2){ 0, 0},
-    //                 0,
-    //                 primaryColor
-    //             );
-    //         } else {
-    //             DrawText("+", currentPosX, position.y, 18, primaryColor);
-    //         }
-    //         break;
-    //     }
-
-    //     DrawTexturePro(
-    //         ctx->assets.sprites.ship,
-    //         (Rectangle){0, 0, ctx->assets.sprites.ship.width, ctx->assets.sprites.ship.height},
-    //         (Rectangle){currentPosX, position.y, size.y, size.y},
-    //         (Vector2){ 0, 0},
-    //         0,
-    //         primaryColor
-    //     );
-
-    //     currentPosX += size.y + gap;
-    // }
-
-    DrawTexturePro(
-            ctx->assets.sprites.triShotIcon,
-            (Rectangle){0, 0, ctx->assets.sprites.triShotIcon.width, ctx->assets.sprites.triShotIcon.height},
-            (Rectangle){currentPosX, position.y, size.y, size.y},
-            (Vector2){ 0, 0},
-            0,
-            primaryColor
+    renderPowerupIcon(
+        &ctx->assets.sprites.autoShotIcon,
+        (Vector2){currentPosX, position.y},
+        size,
+        ctx->player.powerups.fullAuto
     );
 
     currentPosX += size.y + gap;
 
+    renderPowerupIcon(
+        &ctx->assets.sprites.lockIcon,
+        (Vector2){currentPosX, position.y},
+        size,
+        ctx->player.powerups.lock
+    );
 
+    currentPosX += size.y + gap;
+
+    renderPowerupIcon(
+        &ctx->assets.sprites.longShotIcon,
+        (Vector2){currentPosX, position.y},
+        size,
+        ctx->player.powerups.longShot
+    );
+
+    currentPosX += size.y + gap;
+    
+    renderPowerupIcon(
+        &ctx->assets.sprites.stopIcon,
+        (Vector2){currentPosX, position.y},
+        size,
+        ctx->player.powerups.autoStop
+    );
+
+    currentPosX += size.y + gap;
+    
+    renderPowerupIcon(
+        &ctx->assets.sprites.triShotIcon,
+        (Vector2){currentPosX, position.y},
+        size,
+        ctx->player.powerups.trippleShot
+    );    
 }
 
 void renderShieldPower(float shieldPower, Vector2 position, Vector2 size) {

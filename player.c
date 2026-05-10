@@ -6,7 +6,7 @@
 #include "raylib.h"
 
 void initPlayer(Player* player) {
-    Powerups initPowerups = {false, false, false, false, 1};
+    Powerups initPowerups = {false, false, false, false, false, 1};
     
     player->bombs = 2;
     player->level = 1;

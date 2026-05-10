@@ -6,6 +6,7 @@
 #include "asteroid.h"
 
 typedef struct {
+    bool autoStop;
     bool fullAuto;
     bool longShot;
     bool trippleShot;
