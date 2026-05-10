@@ -75,7 +75,6 @@ void renderPowerups(GameContext* ctx, Vector2 position, Vector2 size) {
     int offset = (size.x - iconsSize) / 2;
     int currentPosX = position.x + offset;
     
-
     renderPowerupIcon(
         &ctx->assets.sprites.autoShotIcon,
         (Vector2){currentPosX, position.y},
