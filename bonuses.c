@@ -21,6 +21,8 @@ void initBonus(GameContext* ctx, Bonus* bonus, BonusType type, Vector2 position)
 
 void addNewBonus(GameContext* ctx, Bonus bonus) {
     BonusObjectPool* pool = &ctx->objectPools.bonuses;
+
+    if (pool->activeCount >= MAX_BONUSES) return;
     
     pool->bonuses[pool->activeCount].bonus = bonus;
     pool->bonuses[pool->activeCount].active = true;
