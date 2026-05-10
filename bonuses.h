@@ -9,6 +9,7 @@
 #include "utils.h"
 
 #define MAX_BONUSES 256
+#define NUMBER_OF_BONUS_TYPES 6
 
 typedef struct Enemy Enemy;
 typedef struct Player Player;
@@ -19,7 +20,7 @@ typedef enum BonusType {
     FULL_AUTO_POWERUP,
     MULTI_SHOT_POWERUP,
     AUTO_STOP_POWERUP,
-    
+    LOCK_POWERUP,
 }BonusType;
 
 typedef struct Bonus {
@@ -69,6 +70,23 @@ typedef struct BonusObjectPool {
     BonusPoolObject bonuses[MAX_BONUSES];
     int activeCount;
 }BonusObjectPool;
+
+typedef struct BonusSpawnOption {
+    BonusType type;
+    float weight;
+    int count;
+    int maxCount;
+}BonusSpawnOption;
+
+typedef struct BonusSpawnPoolObject {
+    bool active;
+    BonusSpawnOption option;
+}BonusSpawnPoolObject;
+
+typedef struct BonusSpawnPool {
+    BonusSpawnPoolObject options[NUMBER_OF_BONUS_TYPES];
+    int activeCount;
+} BonusSpawnPool;
 
 void dropNewBonus(GameContext* ctx, Enemy* enemy);
 BonusMultiplierIcon getBonusMultiplierIcon(float level);
