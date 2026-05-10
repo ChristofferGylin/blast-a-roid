@@ -110,9 +110,10 @@ GameResult gameLoop(GameContext* ctx) {
                 faderArgs.fadeIn = false;
                 exit = true;
             } else {
-                ctx->player.shieldPower = 0.5f;
                 resetShip(&ctx->ship);
                 resetAllAsteroids(&ctx->objectPools.asteroids);
+                resetPowerups(&ctx->player);
+                initBonusSpawnPool(ctx);
             }
         } else if (ctx->objectPools.asteroids.activeCount == 0) {
             faderArgs.fadeIn = false;

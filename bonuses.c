@@ -357,6 +357,21 @@ void renderBonusMultiplier(int level, Vector2 position) {
     DrawTextPro(GetFontDefault(), icon.text, textPos, (Vector2){0, 0}, 0, 12, 2, RAYWHITE);
 }
 
+void resetPowerups(Player* player) {
+    Powerups* powerups = &player->powerups;
+
+    player->shieldPower = 0.5f;
+
+    if (powerups->lock) {
+        powerups->lock = false;
+    } else {
+        powerups->autoStop = false;
+        powerups->fullAuto = false;
+        powerups->longShot = false;
+        powerups->trippleShot = false;
+    }
+}
+
 void updateBonuses(BonusObjectPool* pool) {
 
     if (pool->activeCount == 0) return;
