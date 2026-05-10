@@ -26,11 +26,16 @@ typedef struct Samples {
 
 typedef struct Sprites {
     Texture2D asteroid;
+    Texture2D autoShotIcon;
     Texture2D destroyedShip1;
     Texture2D destroyedShip2;
     Texture2D destroyedShip3;
+    Texture2D lockIcon;
+    Texture2D longShotIcon;
     Texture2D ship;
     Texture2D shot;
+    Texture2D stopIcon;
+    Texture2D triShotIcon;
     Texture2D enemyShot1;
 }Sprites;
 

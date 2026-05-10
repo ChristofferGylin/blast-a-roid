@@ -52,6 +52,73 @@ void renderLives(GameContext* ctx, Vector2 position, Vector2 size) {
     }
 }
 
+void renderPowerupIcon(Texture2D* iconSprite, Vector2 position, Vector2 size, bool active) {
+    
+    Texture2D sprite = *iconSprite;
+    Color color = active ? primaryColor : primaryColorDimmed;
+    
+    DrawTexturePro(
+            sprite,
+            (Rectangle){0, 0, sprite.width, sprite.height},
+            (Rectangle){position.x, position.y, size.y, size.y},
+            (Vector2){ 0, 0},
+            0,
+            color
+    );
+}
+
+void renderPowerups(GameContext* ctx, Vector2 position, Vector2 size) {
+    
+    int gap = 4;
+    int numberOfIcons = 5;
+    int iconsSize = (numberOfIcons * (size.y + gap)) - gap;
+    int offset = (size.x - iconsSize) / 2;
+    int currentPosX = position.x + offset;
+    
+    renderPowerupIcon(
+        &ctx->assets.sprites.autoShotIcon,
+        (Vector2){currentPosX, position.y},
+        size,
+        ctx->player.powerups.fullAuto
+    );
+
+    currentPosX += size.y + gap;
+
+    renderPowerupIcon(
+        &ctx->assets.sprites.longShotIcon,
+        (Vector2){currentPosX, position.y},
+        size,
+        ctx->player.powerups.longShot
+    );
+
+    currentPosX += size.y + gap;
+    
+    renderPowerupIcon(
+        &ctx->assets.sprites.triShotIcon,
+        (Vector2){currentPosX, position.y},
+        size,
+        ctx->player.powerups.trippleShot
+    );
+
+    currentPosX += size.y + gap;
+
+    renderPowerupIcon(
+        &ctx->assets.sprites.stopIcon,
+        (Vector2){currentPosX, position.y},
+        size,
+        ctx->player.powerups.autoStop
+    );
+
+    currentPosX += size.y + gap;
+
+    renderPowerupIcon(
+        &ctx->assets.sprites.lockIcon,
+        (Vector2){currentPosX, position.y},
+        size,
+        ctx->player.powerups.lock
+    );
+}
+
 void renderShieldPower(float shieldPower, Vector2 position, Vector2 size) {
 
     int barLevelWidth = size.x * shieldPower;
@@ -187,7 +254,10 @@ void renderSidebars(GameContext* ctx) {
     RenderPositions shieldPowerPosition = renderBlock("SHIELD", 0, false);
     renderShieldPower(ctx->player.shieldPower, shieldPowerPosition.contentPosition, shieldPowerPosition.contentSize);
 
-    RenderPositions livesPosition = renderBlock("LIVES", shieldPowerPosition.endYPosition, false);
+    RenderPositions powerupsPosition = renderBlock("POWERUPS", shieldPowerPosition.endYPosition, false);
+    renderPowerups(ctx, powerupsPosition.contentPosition, powerupsPosition.contentSize);
+    
+    RenderPositions livesPosition = renderBlock("LIVES", powerupsPosition.endYPosition, false);
     renderLives(ctx, livesPosition.contentPosition, livesPosition.contentSize);
 
     startY = renderStats(ctx->player.score, "SCORE", startY, ctx->player.powerups.levelBonusMultiplier, false) + statsBlockGap;
