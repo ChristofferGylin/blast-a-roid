@@ -223,7 +223,7 @@ void handleBonusesCollisions(GameContext* ctx, Bonuses* bonuses) {
 
         Bonus* bonus = &ctx->objectPools.bonuses.bonuses[i].bonus;
 
-        if (CheckCollisionCircles(ctx->ship.position, SHIP_SIZE, bonus->position, bonus->size.x)) {
+        if (CheckCollisionCircles(ctx->ship.position, SHIP_SIZE / 2.0f, bonus->position, bonus->size.x / 2.0f)) {
             
             switch (bonus->type)
             {
