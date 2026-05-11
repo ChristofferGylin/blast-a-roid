@@ -16,6 +16,7 @@ const int BONUS_LIFE_TIME = 30;
 const float BONUS_MULTIPLIER_ROLL_RATE = 2.0f;
 
 void addNewBonus(GameContext* ctx, Bonus bonus);
+void addNewBonusSpawnOption(BonusSpawnPool* pool, BonusSpawnOption option);
 void compactBonusPool(BonusObjectPool* pool);
 void compactBonusSpawnPool(BonusSpawnPool* pool);
 void initBonus(GameContext* ctx, Bonus* bonus, BonusType type, Vector2 position);
@@ -31,6 +32,13 @@ void addNewBonus(GameContext* ctx, Bonus bonus) {
     pool->bonuses[pool->activeCount].active = true;
     pool->activeCount++;
     printf("addNewBonus End\n");
+}
+
+void addNewBonusSpawnOption(BonusSpawnPool* pool, BonusSpawnOption option) {
+    pool->options[pool->activeCount].active = true;
+    pool->options[pool->activeCount].option = option;
+
+    pool->activeCount++;
 }
 
 void compactBonusPool(BonusObjectPool* pool) {
@@ -373,86 +381,64 @@ void initBonusSpawnPool(GameContext* ctx) {
 
     pool->activeCount = 0;
 
-    pool->options[pool->activeCount].active = true;
-    pool->options[pool->activeCount].option = (BonusSpawnOption){
+    addNewBonusSpawnOption(pool, (BonusSpawnOption){
         BONUS_POINTS,
         100,
         0,
         MAX_BONUSES
-    };
+    });
 
-    pool->activeCount++;
-
-    pool->options[pool->activeCount].active = true;
-    pool->options[pool->activeCount].option = (BonusSpawnOption){
+    addNewBonusSpawnOption(pool, (BonusSpawnOption){
         SHIELD_REFILL,
         75,
         0,
         MAX_BONUSES
-    };
-
-    pool->activeCount++;
+    });
 
     if (!playerPowerups->autoStop) {
-        pool->options[pool->activeCount].active = true;
-        pool->options[pool->activeCount].option = (BonusSpawnOption){
+        addNewBonusSpawnOption(pool, (BonusSpawnOption){
             AUTO_STOP_POWERUP,
             30,
             0,
             1
-        };
-
-        pool->activeCount++;
+        });
     }
 
     if (!playerPowerups->fullAuto) {
-        pool->options[pool->activeCount].active = true;
-        pool->options[pool->activeCount].option = (BonusSpawnOption){
+        addNewBonusSpawnOption(pool, (BonusSpawnOption){
             FULL_AUTO_POWERUP,
             50,
             0,
             1
-        };
-
-        pool->activeCount++;
+        });
     }
 
     if (!playerPowerups->lock) {
-        pool->options[pool->activeCount].active = true;
-        pool->options[pool->activeCount].option = (BonusSpawnOption){
+        addNewBonusSpawnOption(pool, (BonusSpawnOption){
             LOCK_POWERUP,
             20.0f,
             0,
             1
-        };
-
-        pool->activeCount++;
+        });
     }
 
     if (!playerPowerups->longShot) {
-        pool->options[pool->activeCount].active = true;
-        pool->options[pool->activeCount].option = (BonusSpawnOption){
+        addNewBonusSpawnOption(pool, (BonusSpawnOption){
             LONG_SHOT_POWERUP,
             50.0f,
             0,
             1
-        };
-
-        pool->activeCount++;
+        });
     }
 
     if (!playerPowerups->trippleShot) {
-        pool->options[pool->activeCount].active = true;
-        pool->options[pool->activeCount].option = (BonusSpawnOption){
+        addNewBonusSpawnOption(pool, (BonusSpawnOption){
             MULTI_SHOT_POWERUP,
             50.0f,
             0,
             1
-        };
-
-        pool->activeCount++;
+        });
     }
-
 }
 
 void renderBonuses(Bonuses* bonuses, BonusObjectPool* pool) {
