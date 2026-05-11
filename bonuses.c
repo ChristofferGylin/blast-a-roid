@@ -16,14 +16,65 @@ const int BONUS_LIFE_TIME = 30;
 const float BONUS_MULTIPLIER_ROLL_RATE = 2.0f;
 
 void addNewBonus(GameContext* ctx, Bonus bonus);
+void addNewBonusSpawnOption(BonusSpawnPool* pool, BonusType type);
 void compactBonusPool(BonusObjectPool* pool);
+void compactBonusSpawnPool(BonusSpawnPool* pool);
 void initBonus(GameContext* ctx, Bonus* bonus, BonusType type, Vector2 position);
 
 void addNewBonus(GameContext* ctx, Bonus bonus) {
+    
     BonusObjectPool* pool = &ctx->objectPools.bonuses;
+
+    if (pool->activeCount >= MAX_BONUSES) return;
     
     pool->bonuses[pool->activeCount].bonus = bonus;
     pool->bonuses[pool->activeCount].active = true;
+    pool->activeCount++;
+}
+
+void addNewBonusSpawnOption(BonusSpawnPool* pool, BonusType type) {
+    
+    BonusSpawnOption option;
+    option.type = type;
+
+    switch (type) {
+
+        case AUTO_STOP_POWERUP:
+            option.weight = 30;
+            break;
+    
+        case BONUS_POINTS:
+            option.weight = 150;
+            break;
+    
+        case FULL_AUTO_POWERUP:
+            option.weight = 50;
+            break;
+    
+        case LOCK_POWERUP:
+            option.weight = 20;
+            break;
+    
+        case LONG_SHOT_POWERUP:
+            option.weight = 50;
+            break;
+    
+        case MULTI_SHOT_POWERUP:
+            option.weight = 50;
+            break;
+    
+        case SHIELD_REFILL:
+            option.weight = 75;
+            break;
+    
+        default:
+            printf("Error: Invalid BonusType in addNewBonusSpawnOption\n");
+            break;
+    }
+    
+    pool->options[pool->activeCount].active = true;
+    pool->options[pool->activeCount].option = option;
+
     pool->activeCount++;
 }
 
@@ -46,19 +97,64 @@ void compactBonusPool(BonusObjectPool* pool) {
     pool->activeCount = write;
 }
 
+void compactBonusSpawnPool(BonusSpawnPool* pool) {
+    int write = 0;
+
+    for (int i = 0; i < pool->activeCount; i++) {
+        if (pool->options[i].active) {
+            if (write != i) {
+                pool->options[write] = pool->options[i];
+            }
+            write++;
+        }
+    }
+
+    for (int i = write; i < pool->activeCount; i++) {
+        pool->options[i].active = false;
+    }
+
+    pool->activeCount = write;
+}
+
 void dropNewBonus(GameContext* ctx, Enemy* enemy) {
-    // TODO: Logic for random selecting bonus
+    
+    BonusSpawnPool* pool = &ctx->objectPools.spawnableBonuses;
+    
+    int sumOfWeight = 0;
 
-    float rotationSpeed = GetRandomValue(-50, 50);
+    for (int i = 0; i < pool->activeCount; i++) {
+        
+        if (!pool->options[i].active) continue;
+        sumOfWeight += pool->options[i].option.weight;
+    }
 
-    AnimationInstance animationInstance;
+    if (sumOfWeight == 0) return;
+    
+    int randomSelect = GetRandomValue(0, sumOfWeight - 1);    
+        
+    for (int i = 0; i < pool->activeCount; i++) {
 
-    initAnimtionInstance(&animationInstance, &ctx->assets.animations.crate, enemy->position, 0.0f);
+        if (!pool->options[i].active) continue;
 
-    Bonus newBonus;
+        BonusSpawnOption* option = &pool->options[i].option;
 
-    initBonus(ctx, &newBonus, SHIELD_REFILL, enemy->position);
-    addNewBonus(ctx, newBonus);
+        if (randomSelect < option->weight) {
+
+            Bonus newBonus;
+
+            initBonus(ctx, &newBonus, option->type, enemy->position);
+            addNewBonus(ctx, newBonus);
+
+            if (option->type != BONUS_POINTS && option->type != SHIELD_REFILL) {
+                pool->options[i].active = false;
+                compactBonusSpawnPool(pool);
+            }
+
+            return;    
+        }
+
+        randomSelect -= option->weight;
+    }
 }
 
 BonusMultiplierIcon getBonusMultiplierIcon(float level) {
@@ -156,11 +252,15 @@ void handleBonusesCollisions(GameContext* ctx, Bonuses* bonuses) {
     }
 
     bool objectPoolHasChanged = false;
+    BonusSpawnPool* spawnPool = &ctx->objectPools.spawnableBonuses;
 
     for (int i = 0; i < ctx->objectPools.bonuses.activeCount; i++) {
+        if (!ctx->objectPools.bonuses.bonuses[i].active) continue;
+
         Bonus* bonus = &ctx->objectPools.bonuses.bonuses[i].bonus;
 
-        if (CheckCollisionCircles(ctx->ship.position, SHIP_SIZE, bonus->position, bonus->size.x)) {
+        if (CheckCollisionCircles(ctx->ship.position, SHIP_SIZE / 2.0f, bonus->position, bonus->size.x / 2.0f)) {
+            
             switch (bonus->type)
             {
             case SHIELD_REFILL:
@@ -169,8 +269,45 @@ void handleBonusesCollisions(GameContext* ctx, Bonuses* bonuses) {
 
                 PlaySound(ctx->assets.samples.shieldUp);
                 break;
+
+            case BONUS_POINTS:
+                ctx->player.score += bonus->value;
+                // TODO: Play unique sound
+                PlaySound(ctx->assets.samples.multiplier_collect);
+                break;
+
+            case FULL_AUTO_POWERUP:
+                ctx->player.powerups.fullAuto = true;
+                // TODO: Play unique sound
+                PlaySound(ctx->assets.samples.multiplier_collect);
+                break;
+            
+            case MULTI_SHOT_POWERUP:
+                ctx->player.powerups.trippleShot = true;
+                // TODO: Play unique sound
+                PlaySound(ctx->assets.samples.multiplier_collect);
+                break;
+            
+            case AUTO_STOP_POWERUP:
+                ctx->player.powerups.autoStop = true;
+                // TODO: Play unique sound
+                PlaySound(ctx->assets.samples.multiplier_collect);
+                break;
+            
+            case LOCK_POWERUP:
+                ctx->player.powerups.lock = true;
+                // TODO: Play unique sound
+                PlaySound(ctx->assets.samples.multiplier_collect);
+                break;
+            
+            case LONG_SHOT_POWERUP:
+                ctx->player.powerups.longShot = true;
+                // TODO: Play unique sound
+                PlaySound(ctx->assets.samples.multiplier_collect);
+                break;
             
             default:
+                printf("Error: Invalid BonusType in handleBonusesCollisions\n");
                 break;
             }
 
@@ -189,20 +326,23 @@ void initBonus(GameContext* ctx, Bonus* bonus, BonusType type, Vector2 position)
     bonus->rotation = 0;
     bonus->rotationSpeed = GetRandomValue(-100, 100),
     bonus->type = type;
-    bonus->value;
     bonus->spawnTime = GetTime();
-    
-    switch (type)
-    {
-    case SHIELD_REFILL:
+    bonus->velocity = getRandomVelocity((FloatRange){30.0f, 60.0f});
+
+    if (type == BONUS_POINTS) {
+        bonus->sprite = &ctx->assets.sprites.blueGem;
+        bonus->size = (Vector2){GEM_COLLISION_SIZE, GEM_COLLISION_SIZE};
+        bonus->visualType = VISUAL_SPRITE;
+    } else {
         AnimationInstance animationInstance;
         initAnimtionInstance(&animationInstance, &ctx->assets.animations.crate, position, 0.0f);
         
         bonus->animation = animationInstance;
         bonus->size = (Vector2){CRATE_COLLISION_SIZE, CRATE_COLLISION_SIZE};
-        bonus->velocity = getRandomVelocity((FloatRange){30.0f, 60.0f});
         bonus->visualType = VISUAL_ANIMATION;
+    }
 
+    if (type == SHIELD_REFILL) {
         float shieldValue = 0.0f;
 
         if (GetRandomValue(0, 100) < 70) {
@@ -212,13 +352,22 @@ void initBonus(GameContext* ctx, Bonus* bonus, BonusType type, Vector2 position)
         }
 
         bonus->value = shieldValue;
+    } else if (type == BONUS_POINTS) {
+        int rnd = GetRandomValue(0, 100);
 
-        break;
-    
-    default:
-        printf("Error: Invalid BonusType in initBonus\n");
-        break;
-    }
+        if (rnd < 50) {
+            bonus->value = 500.0f;
+        } else  if (rnd < 75) {
+            bonus->value = 1000.0f;
+        } else if (rnd < 95) {
+            bonus->value = 2000.0f;
+        } else {
+            bonus->value = 5000.0f;
+        }
+
+    } else {
+        bonus->value = 0.0f;
+    }  
 }
 
 void initBonuses(Bonuses* bonuses) {
@@ -237,12 +386,49 @@ void initBonusPool(BonusObjectPool* pool) {
     pool->activeCount = 0;
 }
 
+void initBonusSpawnPool(GameContext* ctx) {
+
+    BonusSpawnPool* pool = &ctx->objectPools.spawnableBonuses;
+    Powerups* playerPowerups = &ctx->player.powerups;
+
+    for (int i = 0; i < NUMBER_OF_BONUS_TYPES; i++) {
+        pool->options[i].active = false;
+    }
+
+    pool->activeCount = 0;
+
+    addNewBonusSpawnOption(pool, BONUS_POINTS);
+    addNewBonusSpawnOption(pool, SHIELD_REFILL);
+
+    if (!playerPowerups->autoStop) {
+        addNewBonusSpawnOption(pool, AUTO_STOP_POWERUP);
+    }
+
+    if (!playerPowerups->fullAuto) {
+        addNewBonusSpawnOption(pool, FULL_AUTO_POWERUP);
+    }
+
+    if (!playerPowerups->lock) {
+        addNewBonusSpawnOption(pool, LOCK_POWERUP);
+    }
+
+    if (!playerPowerups->longShot) {
+        addNewBonusSpawnOption(pool, LONG_SHOT_POWERUP);
+    }
+
+    if (!playerPowerups->trippleShot) {
+        addNewBonusSpawnOption(pool, MULTI_SHOT_POWERUP);
+    }
+}
+
 void renderBonuses(Bonuses* bonuses, BonusObjectPool* pool) {
     if (bonuses->bonusMultiplier.base.isActive) {
         renderBonusMultiplier(bonuses->bonusMultiplier.level, bonuses->bonusMultiplier.base.position);
     }
 
     for (int i = 0; i < pool->activeCount; i++) {
+
+        if (!pool->bonuses[i].active) continue;
         
         Bonus* bonus = &pool->bonuses[i].bonus;
         
@@ -271,7 +457,25 @@ void renderBonusMultiplier(int level, Vector2 position) {
     DrawTextPro(GetFontDefault(), icon.text, textPos, (Vector2){0, 0}, 0, 12, 2, RAYWHITE);
 }
 
-void updateBonuses(BonusObjectPool* pool) {
+void resetPowerups(Player* player) {
+    Powerups* powerups = &player->powerups;
+
+    player->shieldPower = 0.5f;
+
+    if (powerups->lock) {
+        powerups->lock = false;
+    } else {
+        powerups->autoStop = false;
+        powerups->fullAuto = false;
+        powerups->longShot = false;
+        powerups->trippleShot = false;
+    }
+}
+
+void updateBonuses(GameContext* ctx) {
+
+    BonusObjectPool* pool = &ctx->objectPools.bonuses;
+    BonusSpawnPool* spawnPool = &ctx->objectPools.spawnableBonuses;
 
     if (pool->activeCount == 0) return;
 
@@ -281,10 +485,17 @@ void updateBonuses(BonusObjectPool* pool) {
     bool poolHasChanged = false;
 
     for (int i = 0; i < pool->activeCount; i++) {
+
+        if (!pool->bonuses[i].active) continue;
         
         Bonus* bonus = &pool->bonuses[i].bonus;
         
         if (bonus->spawnTime + lifeTime <= GetTime()) {
+            
+            if (bonus->type != BONUS_POINTS && bonus->type != SHIELD_REFILL) {
+                addNewBonusSpawnOption(spawnPool, bonus->type);
+            }
+            
             pool->bonuses[i].active = false;
             poolHasChanged = true;
         } else {

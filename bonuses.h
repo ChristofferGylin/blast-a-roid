@@ -9,17 +9,19 @@
 #include "utils.h"
 
 #define MAX_BONUSES 256
+#define NUMBER_OF_BONUS_TYPES 7
 
 typedef struct Enemy Enemy;
 typedef struct Player Player;
 
 typedef enum BonusType {
-    BONUS_POINTS,
-    SHIELD_REFILL,
-    FULL_AUTO_POWERUP,
-    MULTI_SHOT_POWERUP,
     AUTO_STOP_POWERUP,
-    
+    BONUS_POINTS,
+    FULL_AUTO_POWERUP,
+    LOCK_POWERUP,
+    LONG_SHOT_POWERUP,
+    MULTI_SHOT_POWERUP,
+    SHIELD_REFILL
 }BonusType;
 
 typedef struct Bonus {
@@ -70,6 +72,21 @@ typedef struct BonusObjectPool {
     int activeCount;
 }BonusObjectPool;
 
+typedef struct BonusSpawnOption {
+    BonusType type;
+    int weight;
+}BonusSpawnOption;
+
+typedef struct BonusSpawnPoolObject {
+    bool active;
+    BonusSpawnOption option;
+}BonusSpawnPoolObject;
+
+typedef struct BonusSpawnPool {
+    BonusSpawnPoolObject options[NUMBER_OF_BONUS_TYPES];
+    int activeCount;
+} BonusSpawnPool;
+
 void dropNewBonus(GameContext* ctx, Enemy* enemy);
 BonusMultiplierIcon getBonusMultiplierIcon(float level);
 double getNextSpawnTime();
@@ -78,8 +95,10 @@ void handleBonuses(GameContext* ctx, Bonuses* bonuses);
 void handleBonusesCollisions(GameContext* ctx, Bonuses* bonuses);
 void initBonuses(Bonuses* bonuses);
 void initBonusPool(BonusObjectPool* pool);
+void initBonusSpawnPool(GameContext* ctx);
 void renderBonuses(Bonuses* bonuses, BonusObjectPool* pool);
 void renderBonusMultiplier(int level, Vector2 position);
-void updateBonuses(BonusObjectPool* pool);
+void resetPowerups(Player* player);
+void updateBonuses(GameContext* ctx);
 
 #endif

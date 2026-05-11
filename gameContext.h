@@ -30,6 +30,7 @@ typedef struct Sprites {
     Texture2D destroyedShip1;
     Texture2D destroyedShip2;
     Texture2D destroyedShip3;
+    Texture2D blueGem;
     Texture2D lockIcon;
     Texture2D longShotIcon;
     Texture2D ship;
@@ -48,6 +49,7 @@ typedef struct Assets {
 typedef struct ObjectPools {
     AsteroidPool asteroids;
     BonusObjectPool bonuses;
+    BonusSpawnPool spawnableBonuses;
     DestroyedAsteroidPool destroyedAsteroids;
     EnemyObjectPool enemies;
     EnemySpawnPool spawnableEnemies;

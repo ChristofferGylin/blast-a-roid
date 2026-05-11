@@ -96,7 +96,7 @@ GameResult gameLoop(GameContext* ctx) {
             handleFinishedAnimations(&ctx->objectPools.explosions);
             updateAnimationPool(&ctx->objectPools.explosions);
             updateEnemies(ctx);
-            updateBonuses(&ctx->objectPools.bonuses);
+            updateBonuses(ctx);
 
             if (ctx->ship.isShieldActive) {
                 updateShieldAnimation();
@@ -110,9 +110,10 @@ GameResult gameLoop(GameContext* ctx) {
                 faderArgs.fadeIn = false;
                 exit = true;
             } else {
-                ctx->player.shieldPower = 0.5f;
                 resetShip(&ctx->ship);
                 resetAllAsteroids(&ctx->objectPools.asteroids);
+                resetPowerups(&ctx->player);
+                initBonusSpawnPool(ctx);
             }
         } else if (ctx->objectPools.asteroids.activeCount == 0) {
             faderArgs.fadeIn = false;
