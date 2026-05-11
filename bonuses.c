@@ -252,7 +252,6 @@ void handleBonusesCollisions(GameContext* ctx, Bonuses* bonuses) {
     }
 
     bool objectPoolHasChanged = false;
-    bool spawnPoolHasChanged = false;
     BonusSpawnPool* spawnPool = &ctx->objectPools.spawnableBonuses;
 
     for (int i = 0; i < ctx->objectPools.bonuses.activeCount; i++) {
@@ -308,27 +307,11 @@ void handleBonusesCollisions(GameContext* ctx, Bonuses* bonuses) {
 
             ctx->objectPools.bonuses.bonuses[i].active = false;
             objectPoolHasChanged = true;
-
-            for (int j = 0; j < spawnPool->activeCount; j++) {
-                if (!spawnPool->options->active) continue;
-
-                if (bonus->type == spawnPool->options[j].option.type) {
-                    if (bonus->type != SHIELD_REFILL && bonus->type != BONUS_POINTS) {
-                        spawnPool->options[j].active = false;
-                        spawnPoolHasChanged = true;
-                    }
-                    break;
-                }
-            }
         }
     }
 
     if (objectPoolHasChanged) {
         compactBonusPool(&ctx->objectPools.bonuses);
-    }
-
-    if (spawnPoolHasChanged) {
-        compactBonusSpawnPool(spawnPool);
     }
 }
 
