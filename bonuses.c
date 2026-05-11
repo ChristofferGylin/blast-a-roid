@@ -264,6 +264,8 @@ void handleBonusesCollisions(GameContext* ctx, Bonuses* bonuses) {
             objectPoolHasChanged = true;
 
             for (int j = 0; j < spawnPool->activeCount; j++) {
+                if (!spawnPool->options->active) continue;
+
                 if (bonus->type == spawnPool->options[j].option.type) {
                     if (bonus->type == SHIELD_REFILL || bonus->type == BONUS_POINTS) {
                         spawnPool->options[j].option.count--;
@@ -488,7 +490,10 @@ void resetPowerups(Player* player) {
     }
 }
 
-void updateBonuses(BonusObjectPool* pool) {
+void updateBonuses(GameContext* ctx) {
+
+    BonusObjectPool* pool = &ctx->objectPools.bonuses;
+    BonusSpawnPool* spawnPool = &ctx->objectPools.spawnableBonuses;
 
     if (pool->activeCount == 0) return;
 
@@ -504,6 +509,16 @@ void updateBonuses(BonusObjectPool* pool) {
         Bonus* bonus = &pool->bonuses[i].bonus;
         
         if (bonus->spawnTime + lifeTime <= GetTime()) {
+
+            for (int j = 0; j < spawnPool->activeCount; j++) {
+                if (!spawnPool->options->active) continue;
+
+                if (bonus->type == spawnPool->options[j].option.type) {
+                    spawnPool->options[j].option.count--;
+                    break;
+                }
+            }
+
             pool->bonuses[i].active = false;
             poolHasChanged = true;
         } else {
