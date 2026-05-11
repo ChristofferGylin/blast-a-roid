@@ -117,7 +117,6 @@ void dropNewBonus(GameContext* ctx, Enemy* enemy) {
 
             initBonus(ctx, &newBonus, option->type, enemy->position);
             addNewBonus(ctx, newBonus);
-            option->count++;
 
             printf("dropNewBonus dropped\n");
 
@@ -284,9 +283,7 @@ void handleBonusesCollisions(GameContext* ctx, Bonuses* bonuses) {
                 if (!spawnPool->options->active) continue;
 
                 if (bonus->type == spawnPool->options[j].option.type) {
-                    if (bonus->type == SHIELD_REFILL || bonus->type == BONUS_POINTS) {
-                        spawnPool->options[j].option.count--;
-                    } else {
+                    if (bonus->type != SHIELD_REFILL && bonus->type != BONUS_POINTS) {
                         spawnPool->options[j].active = false;
                         spawnPoolHasChanged = true;
                     }
@@ -511,16 +508,6 @@ void updateBonuses(GameContext* ctx) {
         Bonus* bonus = &pool->bonuses[i].bonus;
         
         if (bonus->spawnTime + lifeTime <= GetTime()) {
-
-            for (int j = 0; j < spawnPool->activeCount; j++) {
-                if (!spawnPool->options->active) continue;
-
-                if (bonus->type == spawnPool->options[j].option.type) {
-                    spawnPool->options[j].option.count--;
-                    break;
-                }
-            }
-
             pool->bonuses[i].active = false;
             poolHasChanged = true;
         } else {
