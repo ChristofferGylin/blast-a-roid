@@ -106,8 +106,8 @@ void handleShooting(GameContext* ctx) {
 
         float radians[] = {
             (ctx->ship.rotation - 90.0f) * (PI / 180.0f),
-            (ctx->ship.rotation - 45.0f) * (PI / 180.0f),
-            (ctx->ship.rotation - 135.0f) * (PI / 180.0f)
+            (ctx->ship.rotation - 55.0f) * (PI / 180.0f),
+            (ctx->ship.rotation - 125.0f) * (PI / 180.0f)
         };
 
         double nowMillis = GetTime() * 1000.0f;
