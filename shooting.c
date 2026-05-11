@@ -91,7 +91,7 @@ ShotProperties getShotProps(GameContext* ctx, ShotType type) {
 
 void handleShooting(GameContext* ctx) {
 
-    const int SHOT_COOLDOWN_TIME = 80;
+    const int SHOT_COOLDOWN_TIME = 100;
     const int SHOT_LIFE_TIME = 800;
     const int SHOT_SIZE = 6;
     const int SHOT_VELOCITY = 450;
