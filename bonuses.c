@@ -485,6 +485,11 @@ void updateBonuses(GameContext* ctx) {
         Bonus* bonus = &pool->bonuses[i].bonus;
         
         if (bonus->spawnTime + lifeTime <= GetTime()) {
+            
+            if (bonus->type != BONUS_POINTS && bonus->type != SHIELD_REFILL) {
+                addNewBonusSpawnOption(spawnPool, bonus->type);
+            }
+            
             pool->bonuses[i].active = false;
             poolHasChanged = true;
         } else {
