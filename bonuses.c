@@ -21,6 +21,8 @@ void compactBonusSpawnPool(BonusSpawnPool* pool);
 void initBonus(GameContext* ctx, Bonus* bonus, BonusType type, Vector2 position);
 
 void addNewBonus(GameContext* ctx, Bonus bonus) {
+    printf("addNewBonus Start\n");
+    
     BonusObjectPool* pool = &ctx->objectPools.bonuses;
 
     if (pool->activeCount >= MAX_BONUSES) return;
@@ -28,6 +30,7 @@ void addNewBonus(GameContext* ctx, Bonus bonus) {
     pool->bonuses[pool->activeCount].bonus = bonus;
     pool->bonuses[pool->activeCount].active = true;
     pool->activeCount++;
+    printf("addNewBonus End\n");
 }
 
 void compactBonusPool(BonusObjectPool* pool) {
@@ -69,6 +72,8 @@ void compactBonusSpawnPool(BonusSpawnPool* pool) {
 }
 
 void dropNewBonus(GameContext* ctx, Enemy* enemy) {
+
+    printf("dropNewBonus Start\n");
     
     BonusSpawnPool* pool = &ctx->objectPools.spawnableBonuses;
     
@@ -77,13 +82,10 @@ void dropNewBonus(GameContext* ctx, Enemy* enemy) {
     for (int i = 0; i < pool->activeCount; i++) {
         
         if (!pool->options[i].active) continue;
-
-        BonusSpawnOption* option = &pool->options[i].option;
-
-        if (option->count < option->maxCount) {
-            sumOfWeight += pool->options[i].option.weight;
-        }
+        sumOfWeight += pool->options[i].option.weight;
     }
+
+    printf("dropNewBonus sumOfWeight: %d\n", sumOfWeight);
 
     if (sumOfWeight == 0) return;
     
@@ -91,18 +93,25 @@ void dropNewBonus(GameContext* ctx, Enemy* enemy) {
         
     for (int i = 0; i < pool->activeCount; i++) {
 
+        printf("dropNewBonus loop #%d\n", i);
+        printf("dropNewBonus randomSelect: %d\n", randomSelect);
+
         if (!pool->options[i].active) continue;
 
         BonusSpawnOption* option = &pool->options[i].option;
 
-        if (option->count >= option->maxCount) continue;
+        printf("dropNewBonus weight: %d\n", option->weight);
 
         if (randomSelect < option->weight) {
+
+            printf("dropNewBonus Weight match, drop\n");
             Bonus newBonus;
 
             initBonus(ctx, &newBonus, option->type, enemy->position);
             addNewBonus(ctx, newBonus);
             option->count++;
+
+            printf("dropNewBonus dropped\n");
 
             return;    
         }
@@ -364,6 +373,7 @@ void initBonusSpawnPool(GameContext* ctx) {
 
     pool->activeCount = 0;
 
+    pool->options[pool->activeCount].active = true;
     pool->options[pool->activeCount].option = (BonusSpawnOption){
         BONUS_POINTS,
         100,
@@ -373,6 +383,7 @@ void initBonusSpawnPool(GameContext* ctx) {
 
     pool->activeCount++;
 
+    pool->options[pool->activeCount].active = true;
     pool->options[pool->activeCount].option = (BonusSpawnOption){
         SHIELD_REFILL,
         75,
@@ -383,6 +394,7 @@ void initBonusSpawnPool(GameContext* ctx) {
     pool->activeCount++;
 
     if (!playerPowerups->autoStop) {
+        pool->options[pool->activeCount].active = true;
         pool->options[pool->activeCount].option = (BonusSpawnOption){
             AUTO_STOP_POWERUP,
             30,
@@ -394,6 +406,7 @@ void initBonusSpawnPool(GameContext* ctx) {
     }
 
     if (!playerPowerups->fullAuto) {
+        pool->options[pool->activeCount].active = true;
         pool->options[pool->activeCount].option = (BonusSpawnOption){
             FULL_AUTO_POWERUP,
             50,
@@ -405,6 +418,7 @@ void initBonusSpawnPool(GameContext* ctx) {
     }
 
     if (!playerPowerups->lock) {
+        pool->options[pool->activeCount].active = true;
         pool->options[pool->activeCount].option = (BonusSpawnOption){
             LOCK_POWERUP,
             20.0f,
@@ -416,6 +430,7 @@ void initBonusSpawnPool(GameContext* ctx) {
     }
 
     if (!playerPowerups->longShot) {
+        pool->options[pool->activeCount].active = true;
         pool->options[pool->activeCount].option = (BonusSpawnOption){
             LONG_SHOT_POWERUP,
             50.0f,
@@ -427,6 +442,7 @@ void initBonusSpawnPool(GameContext* ctx) {
     }
 
     if (!playerPowerups->trippleShot) {
+        pool->options[pool->activeCount].active = true;
         pool->options[pool->activeCount].option = (BonusSpawnOption){
             MULTI_SHOT_POWERUP,
             50.0f,
