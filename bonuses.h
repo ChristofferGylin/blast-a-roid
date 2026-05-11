@@ -101,6 +101,6 @@ void initBonusSpawnPool(GameContext* ctx);
 void renderBonuses(Bonuses* bonuses, BonusObjectPool* pool);
 void renderBonusMultiplier(int level, Vector2 position);
 void resetPowerups(Player* player);
-void updateBonuses(BonusObjectPool* pool);
+void updateBonuses(GameContext* ctx);
 
 #endif
