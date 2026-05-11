@@ -98,8 +98,12 @@ void handleShooting(GameContext* ctx) {
 
     if (ctx->ship.destroyed) return;
     if (ctx->objectPools.shots.activeCount >= MAX_SHOTS) return;
+    if (GetTime() * 1000.0 <= lastShot + SHOT_COOLDOWN_TIME) return;
 
-    if (IsKeyPressed(KEY_RIGHT_CONTROL) && GetTime() * 1000.0 > lastShot + SHOT_COOLDOWN_TIME) {
+    bool shoot = false;
+
+    if (IsKeyPressed(KEY_RIGHT_CONTROL) || (ctx->player.powerups.fullAuto && IsKeyDown(KEY_RIGHT_CONTROL))) {
+
         float radians = (ctx->ship.rotation - 90.0f) * (PI / 180.0f);
 
         Shot newShot = {
