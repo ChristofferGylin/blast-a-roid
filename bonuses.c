@@ -145,6 +145,11 @@ void dropNewBonus(GameContext* ctx, Enemy* enemy) {
             initBonus(ctx, &newBonus, option->type, enemy->position);
             addNewBonus(ctx, newBonus);
 
+            if (option->type != BONUS_POINTS && option->type != SHIELD_REFILL) {
+                pool->options[i].active = false;
+                compactBonusSpawnPool(pool);
+            }
+
             return;    
         }
 
