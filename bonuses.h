@@ -15,13 +15,13 @@ typedef struct Enemy Enemy;
 typedef struct Player Player;
 
 typedef enum BonusType {
-    BONUS_POINTS,
-    SHIELD_REFILL,
-    FULL_AUTO_POWERUP,
-    MULTI_SHOT_POWERUP,
     AUTO_STOP_POWERUP,
+    BONUS_POINTS,
+    FULL_AUTO_POWERUP,
     LOCK_POWERUP,
     LONG_SHOT_POWERUP,
+    MULTI_SHOT_POWERUP,
+    SHIELD_REFILL
 }BonusType;
 
 typedef struct Bonus {

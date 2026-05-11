@@ -16,7 +16,7 @@ const int BONUS_LIFE_TIME = 30;
 const float BONUS_MULTIPLIER_ROLL_RATE = 2.0f;
 
 void addNewBonus(GameContext* ctx, Bonus bonus);
-void addNewBonusSpawnOption(BonusSpawnPool* pool, BonusSpawnOption option);
+void addNewBonusSpawnOption(BonusSpawnPool* pool, BonusType type);
 void compactBonusPool(BonusObjectPool* pool);
 void compactBonusSpawnPool(BonusSpawnPool* pool);
 void initBonus(GameContext* ctx, Bonus* bonus, BonusType type, Vector2 position);
@@ -34,7 +34,46 @@ void addNewBonus(GameContext* ctx, Bonus bonus) {
     printf("addNewBonus End\n");
 }
 
-void addNewBonusSpawnOption(BonusSpawnPool* pool, BonusSpawnOption option) {
+void addNewBonusSpawnOption(BonusSpawnPool* pool, BonusType type) {
+    
+    BonusSpawnOption option;
+    option.type = type;
+
+    switch (type) {
+
+        case AUTO_STOP_POWERUP:
+            option.weight = 30;
+            break;
+    
+        case BONUS_POINTS:
+            option.weight = 150;
+            break;
+    
+        case FULL_AUTO_POWERUP:
+            option.weight = 50;
+            break;
+    
+        case LOCK_POWERUP:
+            option.weight = 20;
+            break;
+    
+        case LONG_SHOT_POWERUP:
+            option.weight = 50;
+            break;
+    
+        case MULTI_SHOT_POWERUP:
+            option.weight = 50;
+            break;
+    
+        case SHIELD_REFILL:
+            option.weight = 75;
+            break;
+    
+        default:
+            printf("Error: Invalid BonusType in addNewBonusSpawnOption\n");
+            break;
+    }
+    
     pool->options[pool->activeCount].active = true;
     pool->options[pool->activeCount].option = option;
 
@@ -378,63 +417,27 @@ void initBonusSpawnPool(GameContext* ctx) {
 
     pool->activeCount = 0;
 
-    addNewBonusSpawnOption(pool, (BonusSpawnOption){
-        BONUS_POINTS,
-        100,
-        0,
-        MAX_BONUSES
-    });
-
-    addNewBonusSpawnOption(pool, (BonusSpawnOption){
-        SHIELD_REFILL,
-        75,
-        0,
-        MAX_BONUSES
-    });
+    addNewBonusSpawnOption(pool, BONUS_POINTS);
+    addNewBonusSpawnOption(pool, SHIELD_REFILL);
 
     if (!playerPowerups->autoStop) {
-        addNewBonusSpawnOption(pool, (BonusSpawnOption){
-            AUTO_STOP_POWERUP,
-            30,
-            0,
-            1
-        });
+        addNewBonusSpawnOption(pool, AUTO_STOP_POWERUP);
     }
 
     if (!playerPowerups->fullAuto) {
-        addNewBonusSpawnOption(pool, (BonusSpawnOption){
-            FULL_AUTO_POWERUP,
-            50,
-            0,
-            1
-        });
+        addNewBonusSpawnOption(pool, FULL_AUTO_POWERUP);
     }
 
     if (!playerPowerups->lock) {
-        addNewBonusSpawnOption(pool, (BonusSpawnOption){
-            LOCK_POWERUP,
-            20.0f,
-            0,
-            1
-        });
+        addNewBonusSpawnOption(pool, LOCK_POWERUP);
     }
 
     if (!playerPowerups->longShot) {
-        addNewBonusSpawnOption(pool, (BonusSpawnOption){
-            LONG_SHOT_POWERUP,
-            50.0f,
-            0,
-            1
-        });
+        addNewBonusSpawnOption(pool, LONG_SHOT_POWERUP);
     }
 
     if (!playerPowerups->trippleShot) {
-        addNewBonusSpawnOption(pool, (BonusSpawnOption){
-            MULTI_SHOT_POWERUP,
-            50.0f,
-            0,
-            1
-        });
+        addNewBonusSpawnOption(pool, MULTI_SHOT_POWERUP);
     }
 }
 
