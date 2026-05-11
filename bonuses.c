@@ -272,32 +272,38 @@ void handleBonusesCollisions(GameContext* ctx, Bonuses* bonuses) {
 
             case BONUS_POINTS:
                 ctx->player.score += bonus->value;
-                // TODO: Play sound
+                // TODO: Play unique sound
+                PlaySound(ctx->assets.samples.multiplier_collect);
                 break;
 
             case FULL_AUTO_POWERUP:
                 ctx->player.powerups.fullAuto = true;
-                // TODO: Play sound
+                // TODO: Play unique sound
+                PlaySound(ctx->assets.samples.multiplier_collect);
                 break;
             
             case MULTI_SHOT_POWERUP:
                 ctx->player.powerups.trippleShot = true;
-                // TODO: Play sound
+                // TODO: Play unique sound
+                PlaySound(ctx->assets.samples.multiplier_collect);
                 break;
             
             case AUTO_STOP_POWERUP:
                 ctx->player.powerups.autoStop = true;
-                // TODO: Play sound
+                // TODO: Play unique sound
+                PlaySound(ctx->assets.samples.multiplier_collect);
                 break;
             
             case LOCK_POWERUP:
                 ctx->player.powerups.lock = true;
-                // TODO: Play sound
+                // TODO: Play unique sound
+                PlaySound(ctx->assets.samples.multiplier_collect);
                 break;
             
             case LONG_SHOT_POWERUP:
                 ctx->player.powerups.longShot = true;
-                // TODO: Play sound
+                // TODO: Play unique sound
+                PlaySound(ctx->assets.samples.multiplier_collect);
                 break;
             
             default:
