@@ -105,6 +105,8 @@ void handleShooting(GameContext* ctx) {
     if (IsKeyPressed(KEY_RIGHT_CONTROL) || (ctx->player.powerups.fullAuto && IsKeyDown(KEY_RIGHT_CONTROL))) {
 
         float radians = (ctx->ship.rotation - 90.0f) * (PI / 180.0f);
+        double nowMillis = GetTime() * 1000.0f;
+        int lifetime = ctx->player.powerups.longShot ? nowMillis + (SHOT_LIFE_TIME * 2) : nowMillis + SHOT_LIFE_TIME;
 
         Shot newShot = {
             PLAYER_SHOT,
@@ -113,13 +115,13 @@ void handleShooting(GameContext* ctx) {
             SHOT_SIZE,
             ctx->ship.position,
             {cosf(radians) * SHOT_VELOCITY, sinf(radians) * SHOT_VELOCITY},
-            (GetTime() * 1000.0) + SHOT_LIFE_TIME,
+            lifetime,
             false
         };
 
         addNewShot(&ctx->objectPools.shots, newShot);
         PlaySound(ctx->assets.samples.shot);
-        lastShot = GetTime() * 1000.0;
+        lastShot = nowMillis;
     }
 }
 
