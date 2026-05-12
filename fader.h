@@ -8,6 +8,8 @@ typedef struct FaderArgs {
     float fadeValue;
 }FaderArgs;
 
+bool fadeIn(float fadeValue);
+bool fadeOut(float fadeValue);
 void fader(FaderArgs* args);
 void initFaderArgs(FaderArgs* args);
 
