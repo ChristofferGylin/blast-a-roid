@@ -5,3 +5,4 @@ A highly unique, never before seen game experience about blasting ast... Eh, roc
 Written in C with Raylib.
 
 Enjoy!
+# fan_controller
