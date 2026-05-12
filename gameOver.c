@@ -13,7 +13,7 @@ void gameOver(Player* player) {
     bool isFadeInComplete = false;
     bool isFadeOutComplete = false;
     bool exit = false;
-    int waitTime = 5;
+    int waitTime = 2;
     double timer = GetTime();
 
     char text[] = "GAME OVER";
