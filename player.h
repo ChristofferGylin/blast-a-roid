@@ -17,6 +17,7 @@ typedef struct {
 typedef struct Player {
     int lives;
     int level;
+    int shotCount;
     uint64_t score;
     uint64_t levelBonus;
     double levelBonusTimer;
