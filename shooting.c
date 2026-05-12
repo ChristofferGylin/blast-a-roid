@@ -7,6 +7,7 @@
 #include "gameContext.h"
 
 double lastShot = 0;
+double lastAutoShot = 0;
 
 void addNewShot(ShotObjectPool* pool, Shot shot) {
     if (pool->activeCount >= MAX_SHOTS) {
@@ -92,17 +93,34 @@ ShotProperties getShotProps(GameContext* ctx, ShotType type) {
 void handleShooting(GameContext* ctx) {
 
     const int SHOT_COOLDOWN_TIME = 100;
+    const int AUTO_BURST_COOLDOWN_TIME = 400;
     const int SHOT_LIFE_TIME = 800;
     const int SHOT_SIZE = 6;
     const int SHOT_VELOCITY = 450;
+    const int MAX_SHOTS_BURST = 6;
+
+    double nowMillis = GetTime() * 1000.0f;
 
     if (ctx->ship.destroyed) return;
     if (ctx->objectPools.shots.activeCount >= MAX_SHOTS) return;
-    if (GetTime() * 1000.0 <= lastShot + SHOT_COOLDOWN_TIME) return;
+    if (nowMillis <= lastShot + SHOT_COOLDOWN_TIME) return;
 
     bool shoot = false;
 
-    if (IsKeyPressed(KEY_RIGHT_CONTROL) || (ctx->player.powerups.fullAuto && IsKeyDown(KEY_RIGHT_CONTROL))) {
+    if (IsKeyPressed(KEY_RIGHT_CONTROL)) {
+        shoot = true;
+    } else  if (ctx->player.powerups.fullAuto && IsKeyDown(KEY_RIGHT_CONTROL)) {
+        if (ctx->player.shotCount < MAX_SHOTS_BURST) {
+            ctx->player.shotCount++;
+            lastAutoShot = nowMillis;
+            shoot = true;
+        } else if (nowMillis > lastAutoShot + AUTO_BURST_COOLDOWN_TIME) {
+            ctx->player.shotCount = 1;
+            shoot = true;
+        }
+    }
+
+    if (shoot) {
 
         float radians[] = {
             (ctx->ship.rotation - 90.0f) * (PI / 180.0f),
@@ -110,7 +128,6 @@ void handleShooting(GameContext* ctx) {
             (ctx->ship.rotation - 100.0f) * (PI / 180.0f)
         };
 
-        double nowMillis = GetTime() * 1000.0f;
         int lifetime = ctx->player.powerups.longShot ? nowMillis + (SHOT_LIFE_TIME * 2) : nowMillis + SHOT_LIFE_TIME;
         int numberOfShots = ctx->player.powerups.trippleShot ? 3 : 1;
 
