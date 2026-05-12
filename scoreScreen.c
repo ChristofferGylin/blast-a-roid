@@ -116,8 +116,10 @@ int renderScoreLine(uint64_t value, char title[], int startY, bool hasUnderline,
 
 void scoreScreen(Player* player) {
     
-    FaderArgs faderArgs;
-    initFaderArgs(&faderArgs);
+    float fadeInValue = 1.0f;
+    float fadeOutValue = 0.0f;
+    bool isFadeInComplete = false;
+    bool isFadeOutComplete = false;
 
     uint64_t displayBonus = 0;
     uint64_t levelBonus = player->levelBonus;
@@ -151,7 +153,7 @@ void scoreScreen(Player* player) {
 
     while (!WindowShouldClose()) {
 
-        if (faderArgs.fadeComplete && faderArgs.fadeIn && !isWaiting) {
+        if (isFadeInComplete && !isWaiting) {
 
             if (!isCountUpFinished) {
 
@@ -195,7 +197,7 @@ void scoreScreen(Player* player) {
                     delayTime = EXIT_DELAY;
                 }
             } else {
-                faderArgs.fadeIn = false;
+                exit = true;
             }
 
         } else if (isWaiting) {
@@ -203,9 +205,6 @@ void scoreScreen(Player* player) {
             if (GetTime() >= lastUpdate + delayTime) {
                 isWaiting = false;
             }
-
-        } else if (faderArgs.fadeComplete && !faderArgs.fadeIn) {
-            exit = true;
         }
 
         int yOffset = (SCREEN_HEIGHT / 2) - (TEXT_BLOCK_HEIGHT / 2);
@@ -216,9 +215,15 @@ void scoreScreen(Player* player) {
             yOffset = renderScoreLine(displayBonus, "BONUS:", yOffset, true, currentMultiplier, bonusCountUpState.isZeroPadded);
             yOffset = yOffset + GAP;
             yOffset = renderScoreLine(displayScore, "SCORE:", yOffset, false, 0, false);
-            fader(&faderArgs);
+
+            if (!isFadeInComplete) {
+                isFadeInComplete = fadeIn(&fadeInValue);
+            } else if (exit && !isFadeOutComplete) {
+                isFadeOutComplete = fadeOut(&fadeOutValue);
+            }
+
         EndDrawing();
 
-        if (exit) break;
+        if (exit && isFadeOutComplete) break;
     }
 }   

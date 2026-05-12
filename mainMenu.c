@@ -166,25 +166,21 @@ void initMenu(Menu* menu) {
 void mainMenu(GameContext* ctx) {
     Menu menu;
     initMenu(&menu);
-    FaderArgs faderArgs;
-    initFaderArgs(&faderArgs);
+    float fadeInValue = 1.0f;
+    float fadeOutValue = 0.0f;
+    bool isFadeInComplete = false;
+    bool isFadeOutComplete = false;
     bool isRunning = true;
 
     while (!WindowShouldClose() && isRunning) {
         updateMenu(&menu);
 
-        if (menu.selected != -1 && faderArgs.fadeIn) {
-            faderArgs.fadeIn = false;
-            faderArgs.fadeComplete = false;
-        }
-
-        if (faderArgs.fadeComplete) {
+        if (isFadeOutComplete) {
             switch (menu.selected) {
                 case -1: break;
                 case 0: 
                     menu.selected = -1;
                     isRunning = runGameSession(ctx);
-                    faderArgs.fadeIn = true;
                 break;
 
                 case 1:
@@ -209,7 +205,12 @@ void mainMenu(GameContext* ctx) {
             ClearBackground(BLACK);
             drawLayoutContainers();
             drawMenu(&menu);
-            fader(&faderArgs);
+            
+            if (!isFadeInComplete) {
+                isFadeInComplete = fadeIn(&fadeInValue);
+            } else if (menu.selected != -1 && !isFadeOutComplete) {
+                isFadeOutComplete = fadeOut(&fadeOutValue);
+            }
         EndDrawing();
     }
 }

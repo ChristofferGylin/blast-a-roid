@@ -25,7 +25,8 @@ GameResult gameLoop(GameContext* ctx) {
 
     GameResult result = GAME_CONTINUE;
 
-    bool isRunning = true;
+    bool isFadeInComplete = false;
+    bool isFadeOutComplete = false;
     bool isPaused = false;
     bool exit = false;
 
@@ -39,8 +40,8 @@ GameResult gameLoop(GameContext* ctx) {
     initBonuses(&bonuses);
     initSpawning(ctx);
 
-    FaderArgs faderArgs;
-    initFaderArgs(&faderArgs);
+    float fadeInValue = 1.0f;
+    float fadeOutValue = 0.0f;
     
     resetShip(&ctx->ship);
 
@@ -63,7 +64,6 @@ GameResult gameLoop(GameContext* ctx) {
                         // TODO: Options
                         break;
                     case 2:
-                        faderArgs.fadeIn = false;
                         exit = true;
                         result = EXIT_TO_MENU;
                         break;
@@ -75,7 +75,7 @@ GameResult gameLoop(GameContext* ctx) {
 
                 pauseMenu.selected = -1;
             }
-        } else if (faderArgs.fadeComplete || !faderArgs.fadeIn) {
+        } else if (isFadeInComplete) {
 
             spawnEnemy(ctx);
             resetTimeBonusMultiplier(&ctx->player);
@@ -107,7 +107,6 @@ GameResult gameLoop(GameContext* ctx) {
             ctx->player.lives--;
 
             if (ctx->player.lives < 0) {
-                faderArgs.fadeIn = false;
                 exit = true;
             } else {
                 resetShip(&ctx->ship);
@@ -116,7 +115,6 @@ GameResult gameLoop(GameContext* ctx) {
                 initBonusSpawnPool(ctx);
             }
         } else if (ctx->objectPools.asteroids.activeCount == 0) {
-            faderArgs.fadeIn = false;
             exit = true;
         }
         
@@ -131,11 +129,16 @@ GameResult gameLoop(GameContext* ctx) {
             renderSidebars(ctx);
             
             if (isPaused) drawPausMenu(&pauseMenu);
-            fader(&faderArgs);
+
+            if (!isFadeInComplete) {
+                isFadeInComplete = fadeIn(&fadeInValue);
+            } else if (exit && !isFadeOutComplete) {
+                isFadeOutComplete = fadeOut(&fadeOutValue);
+            }
             
         EndDrawing();
 
-        if (faderArgs.fadeComplete && exit) break;
+        if (exit && isFadeOutComplete) break;
     }
 
     if (WindowShouldClose()) result = EXIT_TO_DESKTOP;
