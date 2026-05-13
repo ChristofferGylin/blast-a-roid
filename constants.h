@@ -7,6 +7,7 @@ static const int GEM_RENDER_SIZE = 32;
 static const int GEM_COLLISION_SIZE = 24;
 static const float ROTATION_SPEED = 270.0f;
 static const float THRUST_FACTOR = 2.5f;
+static const float BRAKE_FACTOR = 2.0f;
 static const float MAX_VELOCITY = 300.0f;
 static const int EXPLOSION_SIZE = 32;
 static const int SHIP_SIZE = 32;
