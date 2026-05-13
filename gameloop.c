@@ -25,10 +25,14 @@ GameResult gameLoop(GameContext* ctx) {
 
     GameResult result = GAME_CONTINUE;
 
+    const int WAIT_TIME = 2;
+
     bool isFadeInComplete = false;
-    bool isFadeOutComplete = false;
+    bool isFadeOutComplete = true;
     bool isPaused = false;
+    bool reset = false;
     bool exit = false;
+    bool wait = false;
 
     ctx->player.levelBonus = (ctx->player.level + 1) * 1000;
 
@@ -39,6 +43,9 @@ GameResult gameLoop(GameContext* ctx) {
     initAsteroids(ctx);
     initBonuses(&bonuses);
     initSpawning(ctx);
+
+    double waitForExitTime = 0;
+    bool waitForExit = false;
 
     float fadeInValue = 1.0f;
     float fadeOutValue = 0.0f;
@@ -103,18 +110,21 @@ GameResult gameLoop(GameContext* ctx) {
             }
         }        
 
-        if (ctx->ship.destroyed && GetTime() >= ctx->ship.timeDestroyed + 2) {
+        if (ctx->ship.destroyed && GetTime() >= ctx->ship.timeDestroyed + WAIT_TIME && !exit && !reset) {
             ctx->player.lives--;
-
-            if (ctx->player.lives < 0) {
+            isFadeOutComplete = false;
+            if (ctx->player.lives < 0) {    
                 exit = true;
             } else {
-                resetShip(&ctx->ship);
-                resetAllAsteroids(&ctx->objectPools.asteroids);
-                resetPowerups(&ctx->player);
-                initBonusSpawnPool(ctx);
+                reset = true;
             }
-        } else if (ctx->objectPools.asteroids.activeCount == 0) {
+        } else if (ctx->objectPools.asteroids.activeCount == 0 && !waitForExit) {
+            waitForExit = true;
+            waitForExitTime = GetTime() + WAIT_TIME;
+        }
+
+        if (waitForExit && waitForExitTime < GetTime()) {
+            isFadeOutComplete = false;
             exit = true;
         }
         
@@ -132,13 +142,26 @@ GameResult gameLoop(GameContext* ctx) {
 
             if (!isFadeInComplete) {
                 isFadeInComplete = fadeIn(&fadeInValue);
-            } else if (exit && !isFadeOutComplete) {
+            } else if (!isFadeOutComplete) {
                 isFadeOutComplete = fadeOut(&fadeOutValue);
             }
             
         EndDrawing();
 
-        if (exit && isFadeOutComplete) break;
+        if (exit && isFadeOutComplete) {
+            break;
+        } else if (reset && isFadeOutComplete) {
+            resetShip(&ctx->ship);
+            resetAllAsteroids(&ctx->objectPools.asteroids);
+            resetPowerups(&ctx->player);
+            initBonusSpawnPool(ctx);
+
+            fadeOutValue = 0.0f;
+            fadeInValue = 1.0f;
+
+            isFadeInComplete = false;
+            reset = false;
+        }
     }
 
     if (WindowShouldClose()) result = EXIT_TO_DESKTOP;
