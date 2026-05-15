@@ -16,7 +16,7 @@ void initEnemy(GameContext* ctx, Enemy* enemy, EnemyType type);
 void initUfo1(GameContext* ctx, Enemy* enemy);
 void initUfo2(GameContext* ctx, Enemy* enemy);
 void handleEnemyShooting(GameContext* ctx, Enemy* enemy);
-void handleUfoMovement(Enemy* enemy);
+void handleUfoMovement(GameContext* ctx, Enemy* enemy);
 bool ufoGoOffScreen(GameContext* ctx, Enemy* enemy);
 bool updateUfo1(GameContext* ctx, Enemy* enemy);
 bool updateUfo2(GameContext* ctx, Enemy* enemy);
@@ -166,7 +166,7 @@ void handleEnemiesMovement(GameContext* ctx) {
 
         switch (enemy->type) {
             case UFO_1 || UFO_2:
-                handleUfoMovement(enemy);
+                handleUfoMovement(ctx, enemy);
                 break;
     
             default:
@@ -224,26 +224,33 @@ void handleEnemyShooting(GameContext* ctx, Enemy* enemy) {
     }
 }
 
-void handleUfoMovement(Enemy* enemy) {
-    float angle = atan2(enemy->destination.y - enemy->position.y, enemy->destination.x - enemy->position.x);
+void handleUfoMovement(GameContext* ctx, Enemy* enemy) {
 
-    enemy->velocity.x += GetFrameTime() * (cosf(angle) * enemy->acceleration);
-    enemy->velocity.y += GetFrameTime() * (sinf(angle) * enemy->acceleration);
+    bool stop = false;
 
-    if (enemy->velocity.x < -enemy->maxVelocity) {
-        enemy->velocity.x = -enemy->maxVelocity;
-    } else if (enemy->velocity.x > enemy->maxVelocity) {
-        enemy->velocity.x = enemy->maxVelocity;
+    if (enemy->isAttacking && CheckCollisionCircles(enemy->position, (float)enemy->attackRange, ctx->ship.position, SHIP_SIZE / 2)) {
+        brakeShip(&enemy->velocity, enemy->brakeFactor);
+    } else {
+        float angle = atan2(enemy->destination.y - enemy->position.y, enemy->destination.x - enemy->position.x);
+
+        enemy->velocity.x += GetFrameTime() * (cosf(angle) * enemy->acceleration);
+        enemy->velocity.y += GetFrameTime() * (sinf(angle) * enemy->acceleration);
+
+        if (enemy->velocity.x < -enemy->maxVelocity) {
+            enemy->velocity.x = -enemy->maxVelocity;
+        } else if (enemy->velocity.x > enemy->maxVelocity) {
+            enemy->velocity.x = enemy->maxVelocity;
+        }
+
+        if (enemy->velocity.y < -enemy->maxVelocity) {
+            enemy->velocity.y = -enemy->maxVelocity;
+        } else if (enemy->velocity.y > enemy->maxVelocity) {
+            enemy->velocity.y = enemy->maxVelocity;
+        }
+
+        enemy->position.x += GetFrameTime() * enemy->velocity.x;
+        enemy->position.y += GetFrameTime() * enemy->velocity.y;
     }
-
-    if (enemy->velocity.y < -enemy->maxVelocity) {
-        enemy->velocity.y = -enemy->maxVelocity;
-    } else if (enemy->velocity.y > enemy->maxVelocity) {
-        enemy->velocity.y = enemy->maxVelocity;
-    }
-
-    enemy->position.x += GetFrameTime() * enemy->velocity.x;
-    enemy->position.y += GetFrameTime() * enemy->velocity.y;
 }
 
 void initEnemy(GameContext* ctx, Enemy* enemy, EnemyType type) {
@@ -313,6 +320,7 @@ void initUfo1(GameContext* ctx, Enemy* enemy) {
     float y = 50.0f;
 
     enemy->acceleration = 100.0f;
+    enemy->brakeFactor = 5.0f;
     enemy->attackRange = 0;
     enemy->destination = (Vector2){SCREEN_WIDTH + UFO_1_SIZE, y};
     enemy->health = 100;
@@ -347,6 +355,7 @@ void initUfo2(GameContext* ctx, Enemy* enemy) {
     int size = 32;
 
     enemy->acceleration = 130.0f;
+    enemy->brakeFactor = 5.0f;
     enemy->attackRange = 300;
     enemy->destination = ctx->ship.position;
     enemy->health = 100;
@@ -547,26 +556,10 @@ bool updateUfo2(GameContext* ctx, Enemy* enemy) {
     bool hasBeenRemoved = false;
 
     if (now <= enemy->spawnTime + attackDurationTime) {
+        enemy->isAttacking = true;
         enemy->destination = ctx->ship.position;
     } else {
-       hasBeenRemoved = ufoGoOffScreen(ctx, enemy);
-    }
-
-    handleEnemyShooting(ctx, enemy);
-
-    return hasBeenRemoved;
-}
-
-bool updateUfo3(GameContext* ctx, Enemy* enemy) {
-    
-    double now = GetTime();
-    int attackDurationTime = 45;
-    bool hasBeenRemoved = false;
-
-    if (now <= enemy->spawnTime + attackDurationTime) {
-        enemy->destination = ctx->ship.position;
-    } else {
-
+        enemy->isAttacking = false;
        hasBeenRemoved = ufoGoOffScreen(ctx, enemy);
     }
 

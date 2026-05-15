@@ -22,6 +22,7 @@ typedef enum EnemyType {
 
 typedef struct Enemy {
     float acceleration;
+    float brakeFactor;
     Vector2 position;
     Vector2 destination;
     float rotation;
