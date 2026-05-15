@@ -15,6 +15,48 @@ Vector2 getRandomPosition() {
     return (Vector2){GetRandomValue(SIDEBAR_WIDTH + 10, SCREEN_WIDTH - 10 - SIDEBAR_WIDTH), GetRandomValue(10, SCREEN_HEIGHT - 10)};
 }
 
+Vector2 getRandomPositionOffScreen(int size) {
+
+    PositionChoice pos = GetRandomValue(0,3);
+
+    const int MIN_X = SIDEBAR_WIDTH;
+    const int MAX_X = SCREEN_WIDTH - SIDEBAR_WIDTH;
+    const int MIN_Y = 0;
+    const int MAX_Y = SCREEN_HEIGHT;
+
+    int x = 0;
+    int y = 0;
+
+    switch (pos)
+    {
+    case TOP_POS:
+        y = -((size / 2) - 1);
+        x = GetRandomValue(MIN_X, MAX_X);
+        break;
+
+    case BOTTOM_POS:
+        y = MAX_Y + ((size / 2) - 1);
+        x = GetRandomValue(MIN_X, MAX_X);
+        break;
+
+    case LEFT_POS:
+        y = GetRandomValue(MIN_Y, MAX_Y);
+        x = -((size / 2) - 1);
+        break;
+    
+    case RIGHT_POS:
+        y = GetRandomValue(MIN_Y, MAX_Y);
+        x = MAX_X + ((size / 2) - 1);
+        break;
+    
+    default:
+        printf("Error: Invalid PosChoice in getRandomPositionOffScreen");
+        break;
+    }
+
+    return (Vector2){x, y};
+}
+
 Vector2 getRandomVelocity(FloatRange range) {
     bool directionX = GetRandomValue(0,1);
     bool directionY = GetRandomValue(0,1);
