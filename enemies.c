@@ -166,7 +166,9 @@ void handleEnemiesMovement(GameContext* ctx) {
         Enemy* enemy = &pool->enemies[i].enemy;
 
         switch (enemy->type) {
-            case UFO_1 || UFO_2:
+            case UFO_1:
+            case UFO_2:
+            case UFO_3:
                 handleUfoMovement(ctx, enemy);
                 break;
     
@@ -538,7 +540,8 @@ void updateEnemies(GameContext* ctx) {
             ;
             break;
 
-        case UFO_2 || UFO_3:
+        case UFO_2:
+        case UFO_3:
             change = updateUfo2(ctx, enemy);
             break;
         
