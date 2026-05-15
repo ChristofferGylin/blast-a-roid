@@ -245,10 +245,10 @@ void handleUfoMovement(GameContext* ctx, Enemy* enemy) {
         } else if (enemy->velocity.y > enemy->maxVelocity) {
             enemy->velocity.y = enemy->maxVelocity;
         }
-
-        enemy->position.x += GetFrameTime() * enemy->velocity.x;
-        enemy->position.y += GetFrameTime() * enemy->velocity.y;
     }
+    
+    enemy->position.x += GetFrameTime() * enemy->velocity.x;
+    enemy->position.y += GetFrameTime() * enemy->velocity.y;
 }
 
 void initEnemy(GameContext* ctx, Enemy* enemy, EnemyType type) {
@@ -318,7 +318,7 @@ void initUfo1(GameContext* ctx, Enemy* enemy) {
     float y = 50.0f;
 
     enemy->acceleration = 100.0f;
-    enemy->brakeFactor = 5.0f;
+    enemy->brakeFactor = 3.0f;
     enemy->attackRange = 0;
     enemy->destination = (Vector2){SCREEN_WIDTH + UFO_1_SIZE, y};
     enemy->health = 100;
@@ -353,8 +353,8 @@ void initUfo2(GameContext* ctx, Enemy* enemy) {
     int size = 32;
 
     enemy->acceleration = 130.0f;
-    enemy->brakeFactor = 5.0f;
-    enemy->attackRange = 300;
+    enemy->brakeFactor = 0.5f;
+    enemy->attackRange = 200;
     enemy->destination = ctx->ship.position;
     enemy->health = 100;
     enemy->maxVelocity = 70.0f;
