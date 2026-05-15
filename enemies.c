@@ -332,6 +332,38 @@ void initUfo1(GameContext* ctx, Enemy* enemy) {
     enemy->animation = instance;
 }
 
+void initUfo2(GameContext* ctx, Enemy* enemy) {
+
+    float y = 50.0f;
+
+    enemy->acceleration = 130.0f;
+    enemy->destination = (Vector2){SCREEN_WIDTH + UFO_1_SIZE, y};
+    enemy->health = 100;
+    enemy->maxVelocity = 70.0f;
+    enemy->isMoveable = true;
+    enemy->position = (Vector2){SIDEBAR_WIDTH - (UFO_1_SIZE / 2), y};
+    enemy->reactionTime = 0.3f;
+    enemy->size = 32;
+    enemy->score = 700;
+    enemy->type = UFO_2;
+    enemy->velocity = (Vector2){0, 0};
+    enemy->visualType = VISUAL_ANIMATION;
+
+    enemy->shooting.fireRate = 500;
+    enemy->shooting.perfectHitChance = 3;
+    enemy->shooting.salvoRate = 2000;
+    enemy->shooting.salvoSize = 2;
+    enemy->shooting.spreadRadian = SHIP_SIZE * 3;
+
+    enemy->shooting.shot = getShotProps(ctx, GREEN_SHOT_1);
+
+    AnimationInstance instance;
+
+    initAnimtionInstance(&instance, &ctx->assets.animations.ufo1, enemy->position, enemy->rotation);
+
+    enemy->animation = instance;
+}
+
 void removeEnemy(EnemyObjectPool* pool, Enemy* enemy) {
     for (int i = 0; i < pool->activeCount; i++) {
         if (&pool->enemies[i].enemy == enemy) {

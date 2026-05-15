@@ -15,7 +15,9 @@
 typedef struct GameContext GameContext;
 
 typedef enum EnemyType {
-    UFO_1
+    UFO_1,
+    UFO_2,
+    UFO_3,
 }EnemyType;
 
 typedef struct Enemy {
