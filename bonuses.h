@@ -90,7 +90,6 @@ typedef struct BonusSpawnPool {
 void dropNewBonus(GameContext* ctx, Enemy* enemy);
 BonusMultiplierIcon getBonusMultiplierIcon(float level);
 double getNextSpawnTime();
-Vector2 getRandomPosition();
 void handleBonuses(GameContext* ctx, Bonuses* bonuses);
 void handleBonusesCollisions(GameContext* ctx, Bonuses* bonuses);
 void initBonuses(Bonuses* bonuses);

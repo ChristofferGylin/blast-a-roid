@@ -1,6 +1,7 @@
 #include "utils.h"
 #include "raylib.h"
 #include "math.h"
+#include "constants.h"
 
 float scaleFloat(float oldMin, float oldMax, float newMin, float newMax, float value) {
     return (value - oldMin) / (oldMax - oldMin) * (newMax - newMin) + newMin;
@@ -8,6 +9,10 @@ float scaleFloat(float oldMin, float oldMax, float newMin, float newMax, float v
 
 int getNumberOfAsteroids(int gameLevel) {
     return gameLevel + 2;
+}
+
+Vector2 getRandomPosition() {
+    return (Vector2){GetRandomValue(SIDEBAR_WIDTH + 10, SCREEN_WIDTH - 10 - SIDEBAR_WIDTH), GetRandomValue(10, SCREEN_HEIGHT - 10)};
 }
 
 Vector2 getRandomVelocity(FloatRange range) {
