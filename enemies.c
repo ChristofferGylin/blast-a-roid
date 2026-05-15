@@ -257,6 +257,10 @@ void initEnemy(GameContext* ctx, Enemy* enemy, EnemyType type) {
     case UFO_1:
         initUfo1(ctx, enemy);
         break;
+
+    case UFO_2:
+        initUfo2(ctx, enemy);
+        break;
     
     default:
         break;
