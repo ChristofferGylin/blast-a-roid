@@ -341,15 +341,16 @@ void initUfo1(GameContext* ctx, Enemy* enemy) {
 void initUfo2(GameContext* ctx, Enemy* enemy) {
 
     float y = 50.0f;
+    int size = 32;
 
     enemy->acceleration = 130.0f;
-    enemy->destination = (Vector2){SCREEN_WIDTH + UFO_1_SIZE, y};
+    enemy->destination = ctx->ship.position;
     enemy->health = 100;
     enemy->maxVelocity = 70.0f;
     enemy->isMoveable = true;
-    enemy->position = (Vector2){SIDEBAR_WIDTH - (UFO_1_SIZE / 2), y};
+    enemy->position = getRandomPositionOffScreen(size);
     enemy->reactionTime = 0.3f;
-    enemy->size = 32;
+    enemy->size = size;
     enemy->score = 700;
     enemy->type = UFO_2;
     enemy->velocity = (Vector2){0, 0};
