@@ -15,6 +15,7 @@ void compactEnemySpawnPool(EnemySpawnPool* pool);
 void initEnemy(GameContext* ctx, Enemy* enemy, EnemyType type);
 void initUfo1(GameContext* ctx, Enemy* enemy);
 void initUfo2(GameContext* ctx, Enemy* enemy);
+void initUfo3(GameContext* ctx, Enemy* enemy);
 void handleEnemyShooting(GameContext* ctx, Enemy* enemy);
 void handleUfoMovement(GameContext* ctx, Enemy* enemy);
 bool ufoGoOffScreen(GameContext* ctx, Enemy* enemy);
@@ -270,6 +271,10 @@ void initEnemy(GameContext* ctx, Enemy* enemy, EnemyType type) {
     case UFO_2:
         initUfo2(ctx, enemy);
         break;
+
+    case UFO_3:
+        initUfo3(ctx, enemy);
+        break;
     
     default:
         break;
@@ -371,6 +376,41 @@ void initUfo2(GameContext* ctx, Enemy* enemy) {
     enemy->shooting.perfectHitChance = 3;
     enemy->shooting.salvoRate = 2000;
     enemy->shooting.salvoSize = 2;
+    enemy->shooting.spreadRadian = SHIP_SIZE * 3;
+
+    enemy->shooting.shot = getShotProps(ctx, GREEN_SHOT_1);
+
+    AnimationInstance instance;
+
+    initAnimtionInstance(&instance, &ctx->assets.animations.ufo1, enemy->position, enemy->rotation);
+
+    enemy->animation = instance;
+}
+
+void initUfo3(GameContext* ctx, Enemy* enemy) {
+
+    float y = 50.0f;
+    int size = 32;
+
+    enemy->acceleration = 160.0f;
+    enemy->brakeFactor = 0.5f;
+    enemy->attackRange = 0;
+    enemy->destination = ctx->ship.position;
+    enemy->health = 150;
+    enemy->maxVelocity = 100.0f;
+    enemy->isMoveable = true;
+    enemy->position = getRandomPositionOffScreen(size);
+    enemy->reactionTime = 0.3f;
+    enemy->size = size;
+    enemy->score = 1000;
+    enemy->type = UFO_3;
+    enemy->velocity = (Vector2){0, 0};
+    enemy->visualType = VISUAL_ANIMATION;
+
+    enemy->shooting.fireRate = 300;
+    enemy->shooting.perfectHitChance = 3;
+    enemy->shooting.salvoRate = 2000;
+    enemy->shooting.salvoSize = 5;
     enemy->shooting.spreadRadian = SHIP_SIZE * 3;
 
     enemy->shooting.shot = getShotProps(ctx, GREEN_SHOT_1);
