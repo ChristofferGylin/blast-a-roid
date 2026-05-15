@@ -9,8 +9,8 @@
 #include "utils.h"
 
 #define MAX_ENEMIES 32
-#define NUMBER_OF_ENEMY_TYPES 1
-#define NUMBER_OF_LEVEL_ENEMY_OPTIONS 3
+#define NUMBER_OF_ENEMY_TYPES 3
+#define NUMBER_OF_LEVEL_ENEMY_OPTIONS 5
 
 typedef struct GameContext GameContext;
 
@@ -76,13 +76,26 @@ typedef struct EnemySpawnPool {
 
 static EnemySpawnOption levelsEnemyOptions[NUMBER_OF_LEVEL_ENEMY_OPTIONS][NUMBER_OF_ENEMY_TYPES] = {
     {
-        {UFO_2, 100.0f, 0, 1},
+        {UFO_1, 100.0f, 0, 1},
     },
     {
-        {UFO_1, 100.0f, 0, 2},
+        {UFO_1, 100.0f, 0, 1},
+        {UFO_2, 70.0f, 0, 1}
     },
     {
-        {UFO_1, 100.0f, 0, 2},
+        {UFO_1, 100.0f, 0, 1},
+        {UFO_2, 70.0f, 0, 1},
+        {UFO_3, 50.0f, 0, 1}
+    },
+    {
+        {UFO_1, 100.0f, 0, 1},
+        {UFO_2, 70.0f, 0, 2},
+        {UFO_3, 50.0f, 0, 1}
+    },    
+    {
+        {UFO_1, 100.0f, 0, 1},
+        {UFO_2, 70.0f, 0, 2},
+        {UFO_3, 50.0f, 0, 2}
     },
 };
 
