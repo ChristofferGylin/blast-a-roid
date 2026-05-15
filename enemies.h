@@ -9,17 +9,20 @@
 #include "utils.h"
 
 #define MAX_ENEMIES 32
-#define NUMBER_OF_ENEMY_TYPES 1
-#define NUMBER_OF_LEVEL_ENEMY_OPTIONS 3
+#define NUMBER_OF_ENEMY_TYPES 3
+#define NUMBER_OF_LEVEL_ENEMY_OPTIONS 5
 
 typedef struct GameContext GameContext;
 
 typedef enum EnemyType {
-    UFO_1
+    UFO_1,
+    UFO_2,
+    UFO_3,
 }EnemyType;
 
 typedef struct Enemy {
     float acceleration;
+    float brakeFactor;
     Vector2 position;
     Vector2 destination;
     float rotation;
@@ -32,6 +35,8 @@ typedef struct Enemy {
     double lastReaction;
     double spawnTime;
     float reactionTime;
+    bool isAttacking;
+    int attackRange;
     ShootingProperties shooting;
     EnemyType type;
     VisualType visualType;
@@ -72,12 +77,28 @@ typedef struct EnemySpawnPool {
 static EnemySpawnOption levelsEnemyOptions[NUMBER_OF_LEVEL_ENEMY_OPTIONS][NUMBER_OF_ENEMY_TYPES] = {
     {
         {UFO_1, 100.0f, 0, 1},
+        {UFO_2, 100.0f, 0, 0},
+        {UFO_3, 100.0f, 0, 0},
     },
     {
-        {UFO_1, 100.0f, 0, 2},
+        {UFO_1, 100.0f, 0, 1},
+        {UFO_2, 70.0f, 0, 1},
+        {UFO_3, 70.0f, 0, 0}
     },
     {
-        {UFO_1, 100.0f, 0, 2},
+        {UFO_1, 100.0f, 0, 1},
+        {UFO_2, 70.0f, 0, 1},
+        {UFO_3, 50.0f, 0, 1}
+    },
+    {
+        {UFO_1, 70.0f, 0, 1},
+        {UFO_2, 100.0f, 0, 2},
+        {UFO_3, 70.0f, 0, 1}
+    },    
+    {
+        {UFO_1, 50.0f, 0, 1},
+        {UFO_2, 70.0f, 0, 2},
+        {UFO_3, 100.0f, 0, 2}
     },
 };
 

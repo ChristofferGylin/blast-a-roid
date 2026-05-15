@@ -9,6 +9,7 @@
 #include <stdio.h>
 #include "gameContext.h"
 #include "outOfBoundsCheck.h"
+#include "utils.h"
 
 const int MIN_BONUS_SPAWN_TIME = 5;
 const int MAX_BONUS_SPAWN_TIME = 30;
@@ -190,10 +191,6 @@ BonusMultiplierIcon getBonusMultiplierIcon(float level) {
 
 double getNextSpawnTime() {
     return GetTime() + GetRandomValue(MIN_BONUS_SPAWN_TIME, MAX_BONUS_SPAWN_TIME);
-}
-
-Vector2 getRandomPosition() {
-    return (Vector2){GetRandomValue(SIDEBAR_WIDTH + 10, SCREEN_WIDTH - 10 - SIDEBAR_WIDTH), GetRandomValue(10, SCREEN_HEIGHT - 10)};
 }
 
 void handleBonuses(GameContext* ctx, Bonuses* bonuses) {
