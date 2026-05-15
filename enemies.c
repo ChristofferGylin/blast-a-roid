@@ -14,6 +14,7 @@ void compactEnemyPool(EnemyObjectPool* pool);
 void compactEnemySpawnPool(EnemySpawnPool* pool);
 void initEnemy(GameContext* ctx, Enemy* enemy, EnemyType type);
 void initUfo1(GameContext* ctx, Enemy* enemy);
+void initUfo2(GameContext* ctx, Enemy* enemy);
 void handleEnemyShooting(GameContext* ctx, Enemy* enemy);
 void handleUfoMovement(Enemy* enemy);
 bool ufoGoOffScreen(GameContext* ctx, Enemy* enemy);
@@ -475,17 +476,25 @@ void updateEnemies(GameContext* ctx) {
             updateAnimation(&enemy->animation);
         }
 
+        bool change = false;
+
         switch (enemy->type)
         {
         case UFO_1:
-            if (updateUfo1(ctx, enemy)) {
-                hasPoolChanged = true;
-            }
+            change = updateUfo1(ctx, enemy)
             ;
+            break;
+
+        case UFO_2:
+            change = updateUfo2(ctx, enemy);
             break;
         
         default:
             break;
+        }
+
+        if (change) {
+            hasPoolChanged = true;
         }
     }
 
@@ -525,20 +534,23 @@ bool updateUfo1(GameContext* ctx, Enemy* enemy) {
     return hasBeenRemoved;
 }
 
-void updateUfo2(Enemy* enemy, Ship* ship) {
+bool updateUfo2(GameContext* ctx, Enemy* enemy) {
     
     double now = GetTime();
-    
+    int attackDurationTime = 45;
+    bool hasBeenRemoved = false;
     if (now < enemy->lastReaction + enemy->reactionTime) return;
 
     enemy->lastReaction = now;
-    
-    int attackDurationTime = 45;
 
     if (now <= enemy->spawnTime + attackDurationTime) {
-        enemy->destination = ship->position;
+        enemy->destination = ctx->ship.position;
     } else {
 
-        // ufoGoOffScreen(enemy);
+       hasBeenRemoved = ufoGoOffScreen(ctx, enemy);
     }
+
+    handleEnemyShooting(ctx, enemy);
+
+    return hasBeenRemoved;
 }
