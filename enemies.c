@@ -20,6 +20,7 @@ void handleUfoMovement(Enemy* enemy);
 bool ufoGoOffScreen(GameContext* ctx, Enemy* enemy);
 bool updateUfo1(GameContext* ctx, Enemy* enemy);
 bool updateUfo2(GameContext* ctx, Enemy* enemy);
+bool updateUfo3(GameContext* ctx, Enemy* enemy);
 
 void addNewEnemy(GameContext* ctx, EnemyType type) {
 
@@ -250,6 +251,7 @@ void initEnemy(GameContext* ctx, Enemy* enemy, EnemyType type) {
     enemy->rotation = 0.0f;
     enemy->lastReaction = GetTime();
     enemy->spawnTime = GetTime();
+    enemy->isAttacking = false;
 
     enemy->shooting.shotCount = 0;
     enemy->shooting.lastShot = GetTime() * 1000;
@@ -311,6 +313,7 @@ void initUfo1(GameContext* ctx, Enemy* enemy) {
     float y = 50.0f;
 
     enemy->acceleration = 100.0f;
+    enemy->attackRange = 0;
     enemy->destination = (Vector2){SCREEN_WIDTH + UFO_1_SIZE, y};
     enemy->health = 100;
     enemy->maxVelocity = 50.0f;
@@ -344,6 +347,7 @@ void initUfo2(GameContext* ctx, Enemy* enemy) {
     int size = 32;
 
     enemy->acceleration = 130.0f;
+    enemy->attackRange = 300;
     enemy->destination = ctx->ship.position;
     enemy->health = 100;
     enemy->maxVelocity = 70.0f;
@@ -537,6 +541,23 @@ bool updateUfo1(GameContext* ctx, Enemy* enemy) {
 }
 
 bool updateUfo2(GameContext* ctx, Enemy* enemy) {
+    
+    double now = GetTime();
+    int attackDurationTime = 45;
+    bool hasBeenRemoved = false;
+
+    if (now <= enemy->spawnTime + attackDurationTime) {
+        enemy->destination = ctx->ship.position;
+    } else {
+       hasBeenRemoved = ufoGoOffScreen(ctx, enemy);
+    }
+
+    handleEnemyShooting(ctx, enemy);
+
+    return hasBeenRemoved;
+}
+
+bool updateUfo3(GameContext* ctx, Enemy* enemy) {
     
     double now = GetTime();
     int attackDurationTime = 45;

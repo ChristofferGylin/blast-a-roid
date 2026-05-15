@@ -34,6 +34,8 @@ typedef struct Enemy {
     double lastReaction;
     double spawnTime;
     float reactionTime;
+    bool isAttacking;
+    int attackRange;
     ShootingProperties shooting;
     EnemyType type;
     VisualType visualType;
