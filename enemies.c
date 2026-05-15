@@ -19,6 +19,7 @@ void handleEnemyShooting(GameContext* ctx, Enemy* enemy);
 void handleUfoMovement(Enemy* enemy);
 bool ufoGoOffScreen(GameContext* ctx, Enemy* enemy);
 bool updateUfo1(GameContext* ctx, Enemy* enemy);
+bool updateUfo2(GameContext* ctx, Enemy* enemy);
 
 void addNewEnemy(GameContext* ctx, EnemyType type) {
 
@@ -163,7 +164,7 @@ void handleEnemiesMovement(GameContext* ctx) {
         Enemy* enemy = &pool->enemies[i].enemy;
 
         switch (enemy->type) {
-            case UFO_1:
+            case UFO_1 || UFO_2:
                 handleUfoMovement(enemy);
                 break;
     
@@ -539,9 +540,6 @@ bool updateUfo2(GameContext* ctx, Enemy* enemy) {
     double now = GetTime();
     int attackDurationTime = 45;
     bool hasBeenRemoved = false;
-    if (now < enemy->lastReaction + enemy->reactionTime) return;
-
-    enemy->lastReaction = now;
 
     if (now <= enemy->spawnTime + attackDurationTime) {
         enemy->destination = ctx->ship.position;
