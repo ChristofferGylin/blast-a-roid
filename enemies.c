@@ -538,7 +538,7 @@ void updateEnemies(GameContext* ctx) {
             ;
             break;
 
-        case UFO_2:
+        case UFO_2 || UFO_3:
             change = updateUfo2(ctx, enemy);
             break;
         
