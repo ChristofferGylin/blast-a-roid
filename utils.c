@@ -2,6 +2,7 @@
 #include "raylib.h"
 #include "math.h"
 #include "constants.h"
+#include "stdio.h"
 
 float scaleFloat(float oldMin, float oldMax, float newMin, float newMax, float value) {
     return (value - oldMin) / (oldMax - oldMin) * (newMax - newMin) + newMin;

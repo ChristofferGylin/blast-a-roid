@@ -226,8 +226,6 @@ void handleEnemyShooting(GameContext* ctx, Enemy* enemy) {
 
 void handleUfoMovement(GameContext* ctx, Enemy* enemy) {
 
-    bool stop = false;
-
     if (enemy->isAttacking && CheckCollisionCircles(enemy->position, (float)enemy->attackRange, ctx->ship.position, SHIP_SIZE / 2)) {
         brakeShip(&enemy->velocity, enemy->brakeFactor);
     } else {
