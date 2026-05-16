@@ -19,7 +19,9 @@ typedef struct {
     float rotation;
     bool destroyed;
     bool isShieldActive;
+    bool isAutoShieldActive;
     double timeDestroyed;
+    double timeSpawned;
     DestroyedShipPiece destroyedPieces[3]; 
 }Ship;
 

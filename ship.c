@@ -44,8 +44,11 @@ void handleDestroyedPiecesMovement(Ship* ship) {
 void initShip(GameContext* ctx) {
     Ship* ship = &ctx->ship;
 
+    ship->isAutoShieldActive = true;
+    ship->isShieldActive = false;
     ship->destroyed = false;
     ship->timeDestroyed = 0.0;
+    ship->timeSpawned = GetTime();
     ship->position.x = GetScreenWidth() / 2;
     ship->position.y = GetScreenHeight() / 2;
     ship->rotation = 0;
@@ -158,10 +161,12 @@ void resetDestroyedPieces(Ship* ship) {
 }
 
 void resetShip(Ship* ship) {
+    ship->isAutoShieldActive = true;
     ship->destroyed = false;
     ship->position.x = GetScreenWidth() / 2;
     ship->position.y = GetScreenHeight() / 2;
     ship->rotation = 0;
     ship->velocity.x = 0;
     ship->velocity.y = 0;
+    ship->timeSpawned = GetTime();
 }
