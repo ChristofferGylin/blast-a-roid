@@ -5,6 +5,7 @@
 #include "gameContext.h"
 #include <math.h>
 
+static const int AUTO_SHIELD_DURATION = 4;
 static const float SHIELD_DRAIN_RATE = 0.05f;
 static const Color SHIELD_GRADIENT_COLOR_1 = {126, 0, 252, 64};
 static const Color SHIELD_GRADIENT_COLOR_2 = {0, 205, 252, 64};
@@ -17,7 +18,13 @@ float shieldLerpT = 0.0f;
 
 void handleShield(GameContext* ctx) {
 
-    if (IsKeyDown(KEY_SPACE)) {
+    if (GetTime() < (ctx->ship.timeSpawned + AUTO_SHIELD_DURATION)) {
+        ctx->ship.isAutoShieldActive = true;
+    } else {
+        ctx->ship.isAutoShieldActive = false;
+    }
+
+    if (IsKeyDown(KEY_SPACE) && !ctx->ship.isAutoShieldActive) {
 
         ctx->player.shieldPower -= GetFrameTime() * SHIELD_DRAIN_RATE;
 
@@ -43,7 +50,7 @@ Color lerpColor(Color a, Color b, float t) {
 }
 
 void renderShield(Ship* ship) {
-    if (!ship->isShieldActive) return;
+    if (!ship->isShieldActive && !ship->isAutoShieldActive) return;
 
     Color inner = lerpColor(SHIELD_GRADIENT_COLOR_1, SHIELD_GRADIENT_COLOR_2, shieldLerpT);
     Color outer = lerpColor(SHIELD_GRADIENT_COLOR_2, SHIELD_GRADIENT_COLOR_1, shieldLerpT);
