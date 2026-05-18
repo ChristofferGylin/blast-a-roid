@@ -570,25 +570,35 @@ void updateEnemies(GameContext* ctx) {
 
 bool ufoGoOffScreen(GameContext* ctx, Enemy* enemy) {
 
-    bool hasBeenRemoved = false;
+    bool remove = false;
 
-    Vector2 destination;
-    destination.x = SCREEN_WIDTH - SIDEBAR_WIDTH + (UFO_1_SIZE / 2) - 1;
+    Vector2 destination = enemy->endPosition;
 
-    if (enemy->position.y <= SCREEN_HEIGHT / 2) {
-        destination.y = 50;
-    } else {
+    if (enemy->type == UFO_1) {
+        if (enemy->position.y <= SCREEN_HEIGHT / 2) {
+            destination.y = 50;
+        } else {
         destination.y = SCREEN_HEIGHT - 50;
+        }
     }
 
     enemy->destination = destination;
-        
-    if (enemy->position.x >= destination.x) {
-        removeEnemy(&ctx->objectPools.enemies, enemy);
-        hasBeenRemoved = true;
+
+    PositionChoice destinationPosition;
+
+    if (destination.y < 0 && enemy->position.y <= destination.y) {
+        remove = true;
+    } else if (destination.y > SCREEN_HEIGHT && enemy->position.y >= destination.y) {
+        remove = true;
+    } else if (destination.x < SIDEBAR_WIDTH && destination.x <= destination.x) {
+        remove = true;
+    } else if (destination.x > SCREEN_WIDTH - SIDEBAR_WIDTH && enemy->position.x >= destination.x) {
+         remove = true;
     }
 
-    return hasBeenRemoved;
+    if (remove) removeEnemy(&ctx->objectPools.enemies, enemy);
+
+    return remove;
 }
 
 bool updateUfo1(GameContext* ctx, Enemy* enemy) {
