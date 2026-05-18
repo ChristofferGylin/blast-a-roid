@@ -24,6 +24,8 @@ typedef struct Enemy {
     float acceleration;
     float brakeFactor;
     Vector2 position;
+    Vector2 startPosition;
+    Vector2 endPosition;
     Vector2 destination;
     float rotation;
     Vector2 velocity;
