@@ -324,14 +324,17 @@ void initUfo1(GameContext* ctx, Enemy* enemy) {
 
     float y = 50.0f;
 
+    enemy->endPosition = (Vector2){SCREEN_WIDTH + UFO_1_SIZE, y};
+    enemy->startPosition = (Vector2){SIDEBAR_WIDTH - (UFO_1_SIZE / 2), y};
+
     enemy->acceleration = 100.0f;
     enemy->brakeFactor = 3.0f;
     enemy->attackRange = 0;
-    enemy->destination = (Vector2){SCREEN_WIDTH + UFO_1_SIZE, y};
+    enemy->destination = enemy->endPosition;
     enemy->health = 100;
     enemy->maxVelocity = 50.0f;
     enemy->isMoveable = true;
-    enemy->position = (Vector2){SIDEBAR_WIDTH - (UFO_1_SIZE / 2), y};
+    enemy->position = enemy->startPosition;
     enemy->reactionTime = 0.3f;
     enemy->size = UFO_1_SIZE;
     enemy->score = 500;
@@ -359,6 +362,9 @@ void initUfo2(GameContext* ctx, Enemy* enemy) {
     float y = 50.0f;
     int size = 32;
 
+    enemy->startPosition = getRandomPositionOffScreen(size);
+    enemy->endPosition = getRandomPositionOffScreen(size);
+
     enemy->acceleration = 130.0f;
     enemy->brakeFactor = 0.5f;
     enemy->attackRange = 200;
@@ -366,7 +372,7 @@ void initUfo2(GameContext* ctx, Enemy* enemy) {
     enemy->health = 100;
     enemy->maxVelocity = 70.0f;
     enemy->isMoveable = true;
-    enemy->position = getRandomPositionOffScreen(size);
+    enemy->position = enemy->startPosition;
     enemy->reactionTime = 0.3f;
     enemy->size = size;
     enemy->score = 700;
@@ -394,6 +400,9 @@ void initUfo3(GameContext* ctx, Enemy* enemy) {
     float y = 50.0f;
     int size = 32;
 
+    enemy->startPosition = getRandomPositionOffScreen(size);
+    enemy->endPosition = getRandomPositionOffScreen(size);
+
     enemy->acceleration = 160.0f;
     enemy->brakeFactor = 0.5f;
     enemy->attackRange = 0;
@@ -401,7 +410,7 @@ void initUfo3(GameContext* ctx, Enemy* enemy) {
     enemy->health = 150;
     enemy->maxVelocity = 100.0f;
     enemy->isMoveable = true;
-    enemy->position = getRandomPositionOffScreen(size);
+    enemy->position = enemy->startPosition;
     enemy->reactionTime = 0.3f;
     enemy->size = size;
     enemy->score = 1000;
@@ -536,8 +545,7 @@ void updateEnemies(GameContext* ctx) {
         switch (enemy->type)
         {
         case UFO_1:
-            change = updateUfo1(ctx, enemy)
-            ;
+            change = updateUfo1(ctx, enemy);
             break;
 
         case UFO_2:
