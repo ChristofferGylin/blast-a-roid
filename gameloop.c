@@ -156,6 +156,7 @@ GameResult gameLoop(GameContext* ctx) {
             resetPowerups(&ctx->player);
             initBonusSpawnPool(ctx);
             initEnemyPool(&ctx->objectPools.enemies);
+            initShotObjectPool(&ctx->objectPools.shots);
 
             fadeOutValue = 0.0f;
             fadeInValue = 1.0f;
