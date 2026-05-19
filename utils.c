@@ -42,7 +42,7 @@ Vector2 getRandomPositionOffScreen(int size) {
 
     case LEFT_POS:
         y = GetRandomValue(MIN_Y, MAX_Y);
-        x = -((size / 2) - 1);
+        x = MIN_X -((size / 2) - 1);
         break;
     
     case RIGHT_POS:

@@ -324,14 +324,17 @@ void initUfo1(GameContext* ctx, Enemy* enemy) {
 
     float y = 50.0f;
 
+    enemy->endPosition = (Vector2){SCREEN_WIDTH - SIDEBAR_WIDTH + (UFO_1_SIZE / 2) - 1, y};
+    enemy->startPosition = (Vector2){SIDEBAR_WIDTH - (UFO_1_SIZE / 2), y};
+
     enemy->acceleration = 100.0f;
     enemy->brakeFactor = 3.0f;
     enemy->attackRange = 0;
-    enemy->destination = (Vector2){SCREEN_WIDTH + UFO_1_SIZE, y};
+    enemy->destination = enemy->endPosition;
     enemy->health = 100;
     enemy->maxVelocity = 50.0f;
     enemy->isMoveable = true;
-    enemy->position = (Vector2){SIDEBAR_WIDTH - (UFO_1_SIZE / 2), y};
+    enemy->position = enemy->startPosition;
     enemy->reactionTime = 0.3f;
     enemy->size = UFO_1_SIZE;
     enemy->score = 500;
@@ -359,6 +362,9 @@ void initUfo2(GameContext* ctx, Enemy* enemy) {
     float y = 50.0f;
     int size = 32;
 
+    enemy->startPosition = getRandomPositionOffScreen(size);
+    enemy->endPosition = getRandomPositionOffScreen(size);
+
     enemy->acceleration = 130.0f;
     enemy->brakeFactor = 0.5f;
     enemy->attackRange = 200;
@@ -366,7 +372,7 @@ void initUfo2(GameContext* ctx, Enemy* enemy) {
     enemy->health = 100;
     enemy->maxVelocity = 70.0f;
     enemy->isMoveable = true;
-    enemy->position = getRandomPositionOffScreen(size);
+    enemy->position = enemy->startPosition;
     enemy->reactionTime = 0.3f;
     enemy->size = size;
     enemy->score = 700;
@@ -394,6 +400,9 @@ void initUfo3(GameContext* ctx, Enemy* enemy) {
     float y = 50.0f;
     int size = 32;
 
+    enemy->startPosition = getRandomPositionOffScreen(size);
+    enemy->endPosition = getRandomPositionOffScreen(size);
+
     enemy->acceleration = 160.0f;
     enemy->brakeFactor = 0.5f;
     enemy->attackRange = 0;
@@ -401,7 +410,7 @@ void initUfo3(GameContext* ctx, Enemy* enemy) {
     enemy->health = 150;
     enemy->maxVelocity = 100.0f;
     enemy->isMoveable = true;
-    enemy->position = getRandomPositionOffScreen(size);
+    enemy->position = enemy->startPosition;
     enemy->reactionTime = 0.3f;
     enemy->size = size;
     enemy->score = 1000;
@@ -536,8 +545,7 @@ void updateEnemies(GameContext* ctx) {
         switch (enemy->type)
         {
         case UFO_1:
-            change = updateUfo1(ctx, enemy)
-            ;
+            change = updateUfo1(ctx, enemy);
             break;
 
         case UFO_2:
@@ -562,25 +570,33 @@ void updateEnemies(GameContext* ctx) {
 
 bool ufoGoOffScreen(GameContext* ctx, Enemy* enemy) {
 
-    bool hasBeenRemoved = false;
+    bool remove = false;
 
-    Vector2 destination;
-    destination.x = SCREEN_WIDTH - SIDEBAR_WIDTH + (UFO_1_SIZE / 2) - 1;
+    Vector2 destination = enemy->endPosition;
 
-    if (enemy->position.y <= SCREEN_HEIGHT / 2) {
-        destination.y = 50;
-    } else {
+    if (enemy->type == UFO_1) {
+        if (enemy->position.y <= SCREEN_HEIGHT / 2) {
+            destination.y = 50;
+        } else {
         destination.y = SCREEN_HEIGHT - 50;
+        }
     }
 
     enemy->destination = destination;
-        
-    if (enemy->position.x >= destination.x) {
-        removeEnemy(&ctx->objectPools.enemies, enemy);
-        hasBeenRemoved = true;
+
+    if (destination.y < 0 && enemy->position.y <= destination.y) {
+        remove = true;
+    } else if (destination.y > SCREEN_HEIGHT && enemy->position.y >= destination.y) {
+        remove = true;
+    } else if (destination.x < SIDEBAR_WIDTH && enemy->position.x <= destination.x) {
+        remove = true;
+    } else if (destination.x > SCREEN_WIDTH - SIDEBAR_WIDTH && enemy->position.x >= destination.x) {
+         remove = true;
     }
 
-    return hasBeenRemoved;
+    if (remove) removeEnemy(&ctx->objectPools.enemies, enemy);
+
+    return remove;
 }
 
 bool updateUfo1(GameContext* ctx, Enemy* enemy) {
