@@ -584,8 +584,6 @@ bool ufoGoOffScreen(GameContext* ctx, Enemy* enemy) {
 
     enemy->destination = destination;
 
-    PositionChoice destinationPosition;
-
     if (destination.y < 0 && enemy->position.y <= destination.y) {
         remove = true;
     } else if (destination.y > SCREEN_HEIGHT && enemy->position.y >= destination.y) {
