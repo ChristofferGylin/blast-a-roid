@@ -314,9 +314,12 @@ void initEnemySpawnPool(GameContext* ctx) {
     EnemySpawnOption* spawnOptions = levelsEnemyOptions[index];
 
     for (int i = 0; i < NUMBER_OF_ENEMY_TYPES; i++) {
-        pool->options[i].option = spawnOptions[i];
-        pool->options[i].active = true;
-        pool->activeCount++;
+        
+        if (spawnOptions[i].maxCount > 0) {
+            pool->options[i].option = spawnOptions[i];
+            pool->options[i].active = true;
+            pool->activeCount++;
+        } 
     }
 }
 
