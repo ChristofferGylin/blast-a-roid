@@ -324,7 +324,7 @@ void initUfo1(GameContext* ctx, Enemy* enemy) {
 
     float y = 50.0f;
 
-    enemy->endPosition = (Vector2){SCREEN_WIDTH + UFO_1_SIZE, y};
+    enemy->endPosition = (Vector2){SCREEN_WIDTH - SIDEBAR_WIDTH + (UFO_1_SIZE / 2) - 1, y};
     enemy->startPosition = (Vector2){SIDEBAR_WIDTH - (UFO_1_SIZE / 2), y};
 
     enemy->acceleration = 100.0f;
@@ -588,7 +588,7 @@ bool ufoGoOffScreen(GameContext* ctx, Enemy* enemy) {
         remove = true;
     } else if (destination.y > SCREEN_HEIGHT && enemy->position.y >= destination.y) {
         remove = true;
-    } else if (destination.x < SIDEBAR_WIDTH && destination.x <= destination.x) {
+    } else if (destination.x < SIDEBAR_WIDTH && enemy->position.x <= destination.x) {
         remove = true;
     } else if (destination.x > SCREEN_WIDTH - SIDEBAR_WIDTH && enemy->position.x >= destination.x) {
          remove = true;
