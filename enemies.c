@@ -98,7 +98,18 @@ void handleEnemiesCollisions(GameContext* ctx) {
 
         if (!enemyObject->active) continue;
 
-        if (CheckCollisionCircles(enemyObject->enemy.position, enemyObject->enemy.size / 2, ctx->ship.position, SHIP_SIZE / 2)) {
+        if (ctx->ship.isShieldActive && CheckCollisionCircles(enemyObject->enemy.position, enemyObject->enemy.size / 2, ctx->ship.position, SHIELD_SIZE / 2)) {
+
+            newExplosion(ctx, enemyObject->enemy.position);
+            dropNewBonus(ctx, &enemyObject->enemy);
+
+            ctx->player.score += enemyObject->enemy.score;
+            ctx->player.levelBonus += enemyObject->enemy.score * ctx->player.timeBonusMultiplier; 
+
+            enemyObject->active = false;
+            enemyPoolHasChanges = true;
+
+        } else if (CheckCollisionCircles(enemyObject->enemy.position, enemyObject->enemy.size / 2, ctx->ship.position, SHIP_SIZE / 2)) {
             
             newExplosion(ctx, ctx->ship.position);
             newExplosion(ctx, enemyObject->enemy.position);
