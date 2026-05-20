@@ -85,6 +85,37 @@ void compactEnemySpawnPool(EnemySpawnPool* pool) {
     pool->activeCount = write;
 }
 
+void handleEnemiesCollisions(GameContext* ctx) {
+    
+    EnemyObjectPool* enemyPool = &ctx->objectPools.enemies;
+
+    if (enemyPool->activeCount == 0) return;
+    
+    bool enemyPoolHasChanges = false;
+
+    for (int i = 0; i < enemyPool->activeCount; i++) {
+        EnemyPoolObject* enemyObject = &enemyPool->enemies[i]; 
+
+        if (!enemyObject->active) continue;
+
+        if (CheckCollisionCircles(enemyObject->enemy.position, enemyObject->enemy.size / 2, ctx->ship.position, SHIP_SIZE / 2)) {
+            
+            newExplosion(ctx, ctx->ship.position);
+            newExplosion(ctx, enemyObject->enemy.position);
+
+            if (!ctx->ship.destroyed) destroyShip(ctx);
+            
+            enemyObject->active = false;
+            enemyPoolHasChanges = true;
+
+        }
+    }
+
+    if (enemyPoolHasChanges) {
+        compactEnemyPool(&ctx->objectPools.enemies);
+    }
+}
+
 void handleEnemiesHitDetection(GameContext* ctx) {
 
     bool enemyPoolHasChanges = false;
