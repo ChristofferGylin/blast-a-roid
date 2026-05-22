@@ -96,7 +96,7 @@ void initBonuses(Bonuses* bonuses);
 void initBonusPool(BonusObjectPool* pool);
 void initBonusSpawnPool(GameContext* ctx);
 void renderBonuses(Bonuses* bonuses, BonusObjectPool* pool);
-void renderBonusMultiplier(int level, Vector2 position);
+void renderBonusMultiplier(int level, Vector2 position, bool monochrome);
 void resetPowerups(Player* player);
 void updateBonuses(GameContext* ctx);
 
