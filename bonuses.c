@@ -1,4 +1,5 @@
 #include "bonuses.h"
+#include "colors.h"
 #include "enemies.h"
 #include "raylib.h"
 #include "player.h"
@@ -420,7 +421,7 @@ void initBonusSpawnPool(GameContext* ctx) {
 
 void renderBonuses(Bonuses* bonuses, BonusObjectPool* pool) {
     if (bonuses->bonusMultiplier.base.isActive) {
-        renderBonusMultiplier(bonuses->bonusMultiplier.level, bonuses->bonusMultiplier.base.position);
+        renderBonusMultiplier(bonuses->bonusMultiplier.level, bonuses->bonusMultiplier.base.position, false);
     }
 
     for (int i = 0; i < pool->activeCount; i++) {
@@ -444,15 +445,22 @@ void renderBonuses(Bonuses* bonuses, BonusObjectPool* pool) {
     }
 }
 
-void renderBonusMultiplier(int level, Vector2 position) {
+void renderBonusMultiplier(int level, Vector2 position, bool monochrome) {
     BonusMultiplierIcon icon = getBonusMultiplierIcon(level);
 
     Vector2 textSize = MeasureTextEx(GetFontDefault(), icon.text, 12, 2);
     Vector2 textPos = {position.x - (textSize.x / 2), position.y - (textSize.y / 2)};
 
-    DrawCircleV(position, BONUS_MULTIPLIER_RADIUS, icon.color);
-    DrawTextPro(GetFontDefault(), icon.text, textPos, (Vector2){0, 0}, 0, 12, 2, RAYWHITE);
+    if (monochrome) {
+        DrawCircleLinesV(position, BONUS_MULTIPLIER_RADIUS, primaryColor);
+        DrawTextPro(GetFontDefault(), icon.text, textPos, (Vector2){0, 0}, 0, 12, 2, primaryColor);
+    } else {
+        DrawCircleV(position, BONUS_MULTIPLIER_RADIUS, icon.color);
+        DrawTextPro(GetFontDefault(), icon.text, textPos, (Vector2){0, 0}, 0, 12, 2, BLACK);
+    }
 }
+
+    
 
 void resetPowerups(Player* player) {
     Powerups* powerups = &player->powerups;

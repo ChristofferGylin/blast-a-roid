@@ -234,7 +234,7 @@ void renderSidebarLeft(GameContext* ctx) {
             scorePosition.endYPosition + padding + (BONUS_MULTIPLIER_RADIUS * 2)
         };
 
-        renderBonusMultiplier(ctx->player.powerups.levelBonusMultiplier, multiplierIconPosition);
+        renderBonusMultiplier(ctx->player.powerups.levelBonusMultiplier, multiplierIconPosition, true);
     }
 }
 
