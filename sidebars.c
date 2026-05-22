@@ -1,5 +1,6 @@
 #include "raylib.h"
 #include "constants.h"
+#include "colors.h"
 #include "bonuses.h"
 #include "sidebars.h"
 #include "player.h"
@@ -11,12 +12,6 @@
 
 void renderSidebarLeft(GameContext* ctx);
 void renderSidebarRight(GameContext* ctx);
-
-Color topColor = {0, 25, 38, 255};
-Color bottomColor = {0, 13, 36, 255};
-Color lineColor = {156, 192, 255, 128};
-Color primaryColor = {0, 218, 255, 255};
-Color primaryColorDimmed = {0, 218, 255, 78};
 
 void renderLives(GameContext* ctx, Vector2 position, Vector2 size) {
     
