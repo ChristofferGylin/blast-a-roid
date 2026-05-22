@@ -9,6 +9,9 @@
 #include <stdbool.h>
 #include "gameContext.h"
 
+void renderSidebarLeft(GameContext* ctx);
+void renderSidebarRight(GameContext* ctx);
+
 Color topColor = {0, 25, 38, 255};
 Color bottomColor = {0, 13, 36, 255};
 Color lineColor = {156, 192, 255, 128};
@@ -242,13 +245,23 @@ int renderStats(uint64_t value, char title[], int startY, int bonusMultiplierLev
     return valuePosition.y + valueSize.y;
 }
 
-void renderSidebars(GameContext* ctx) {
+void renderSidebarLeft(GameContext* ctx) {
     int startY = 20;
     int statsBlockGap = 25;
 
     DrawRectangleGradientV(0, 0, SIDEBAR_WIDTH, SCREEN_HEIGHT, topColor, bottomColor);
-    DrawRectangleGradientV(SCREEN_WIDTH - SIDEBAR_WIDTH, 0, SIDEBAR_WIDTH, SCREEN_HEIGHT, topColor, bottomColor);
     DrawLine(SIDEBAR_WIDTH, 0, SIDEBAR_WIDTH, SCREEN_HEIGHT, lineColor);
+
+    startY = renderStats(ctx->player.score, "SCORE", startY, ctx->player.powerups.levelBonusMultiplier, false) + statsBlockGap;
+    startY = renderStats(ctx->player.levelBonus, "BONUS", startY, ctx->player.powerups.levelBonusMultiplier, true) + statsBlockGap;
+    startY = renderStats((uint64_t)ctx->player.level, "LEVEL", startY, ctx->player.powerups.levelBonusMultiplier, false) + statsBlockGap;
+}
+
+void renderSidebarRight(GameContext* ctx) {
+    int startY = 20;
+    int statsBlockGap = 25;
+    
+    DrawRectangleGradientV(SCREEN_WIDTH - SIDEBAR_WIDTH, 0, SIDEBAR_WIDTH, SCREEN_HEIGHT, topColor, bottomColor);
     DrawLine(SCREEN_WIDTH - SIDEBAR_WIDTH, 0, SCREEN_WIDTH - SIDEBAR_WIDTH, SCREEN_HEIGHT, lineColor);
 
     RenderPositions shieldPowerPosition = renderBlock("SHIELD", 0, false);
@@ -259,8 +272,9 @@ void renderSidebars(GameContext* ctx) {
     
     RenderPositions livesPosition = renderBlock("LIVES", powerupsPosition.endYPosition, false);
     renderLives(ctx, livesPosition.contentPosition, livesPosition.contentSize);
+}
 
-    startY = renderStats(ctx->player.score, "SCORE", startY, ctx->player.powerups.levelBonusMultiplier, false) + statsBlockGap;
-    startY = renderStats(ctx->player.levelBonus, "BONUS", startY, ctx->player.powerups.levelBonusMultiplier, true) + statsBlockGap;
-    startY = renderStats((uint64_t)ctx->player.level, "LEVEL", startY, ctx->player.powerups.levelBonusMultiplier, false) + statsBlockGap;
+void renderSidebars(GameContext* ctx) {
+    renderSidebarLeft(ctx);
+    renderSidebarRight(ctx);
 }
