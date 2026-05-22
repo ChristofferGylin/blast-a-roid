@@ -162,7 +162,7 @@ RenderPositions renderBlock(char text[], int startY, bool isLeftSide) {
     };
 
     Vector2 textOrigin = {textSize.x / 2, 0};
-    Vector2 textPosition = {zeroX + (SIDEBAR_WIDTH / 2), startY + lineThickness + padding};
+    Vector2 textPosition = {zeroX + (SIDEBAR_WIDTH / 2), startY + margin + lineThickness + padding};
 
     float roundnessRadius = 8.0f;
     int segments = 10;
