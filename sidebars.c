@@ -142,7 +142,7 @@ void renderShieldPower(float shieldPower, Vector2 position, Vector2 size) {
 
 RenderPositions renderBlock(char text[], int startY, bool isLeftSide) {
     
-    int margin = 4;
+    int margin = 5;
     int padding = 6;
     float lineThickness = 2;
     int fontSize = 18;
@@ -156,7 +156,7 @@ RenderPositions renderBlock(char text[], int startY, bool isLeftSide) {
 
     Rectangle container = {
         zeroX + margin,
-        startY + margin,
+        startY + margin + lineThickness,
         SIDEBAR_WIDTH - (margin * 2),
         (padding * 4) + textSize.y + contentHeight
     };
