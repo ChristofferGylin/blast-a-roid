@@ -194,67 +194,53 @@ RenderPositions renderBlock(char text[], int startY, bool isLeftSide) {
     return (RenderPositions){contentPosition, contentSize, endYPosition};
 }
 
-int renderStats(uint64_t value, char title[], int startY, int bonusMultiplierLevel, bool isMultiplierRendered) {
-    
-    int sideOffset = 30;
-    int fontSize = 22;
-    int fontSpacing = 4;
-    int gap = 12;
-    int underlineGap = 2;
 
+void renderStats(uint64_t value, Vector2 position, Vector2 size) {
+
+    const int fontSize = 18;
+    const int fontSpacing = 8;
+    const int padding = 6;
     char valueText[32];
+
     snprintf(valueText, sizeof(valueText), "%" PRIu64, value);
 
     Vector2 valueSize = MeasureTextEx(GetFontDefault(), valueText, fontSize, fontSpacing);
-    Vector2 titleSize = MeasureTextEx(GetFontDefault(), title, fontSize, fontSpacing);
 
     Vector2 valuePosition = {
-        (SIDEBAR_WIDTH - sideOffset) - valueSize.x,
-        startY + titleSize.y + gap
-    };
-
-    Vector2 titlePosition = {
-        SIDEBAR_WIDTH / 2,
-        startY
-    };
-
-    Vector2 titleOrigin = {
-        titleSize.x / 2,
-        0
+        position.x + size.x - valueSize.x,
+        position.y 
     };
 
     Vector2 valueOrigin = {0, 0};
 
-    float underlineY = titlePosition.y + titleSize.y + underlineGap;
-    float underLineStartX = titlePosition.x - (titleSize.x / 2);
-    float underLineEndX = titlePosition.x + (titleSize.x / 2);
-
-    DrawTextPro(GetFontDefault(), title, titlePosition, titleOrigin, 0, fontSize, fontSpacing, RAYWHITE);
-    DrawLine(underLineStartX, underlineY, underLineEndX, underlineY, RAYWHITE);
-    DrawTextPro(GetFontDefault(), valueText, valuePosition, valueOrigin, 0, fontSize, fontSpacing, RAYWHITE);
-
-    if (bonusMultiplierLevel > 1 && isMultiplierRendered) {
-        Vector2 multiplierIconPosition = {
-            SIDEBAR_WIDTH - (sideOffset / 2),
-            valuePosition.y + BONUS_MULTIPLIER_RADIUS
-        };
-
-        renderBonusMultiplier(bonusMultiplierLevel, multiplierIconPosition);
-    }
-
-    return valuePosition.y + valueSize.y;
+    DrawTextPro(GetFontDefault(), valueText, valuePosition, valueOrigin, 0, fontSize, fontSpacing, primaryColor);
 }
 
 void renderSidebarLeft(GameContext* ctx) {
     int startY = 20;
     int statsBlockGap = 25;
+    int padding = 4;
 
     DrawRectangleGradientV(0, 0, SIDEBAR_WIDTH, SCREEN_HEIGHT, topColor, bottomColor);
     DrawLine(SIDEBAR_WIDTH, 0, SIDEBAR_WIDTH, SCREEN_HEIGHT, lineColor);
 
-    startY = renderStats(ctx->player.score, "SCORE", startY, ctx->player.powerups.levelBonusMultiplier, false) + statsBlockGap;
-    startY = renderStats(ctx->player.levelBonus, "BONUS", startY, ctx->player.powerups.levelBonusMultiplier, true) + statsBlockGap;
-    startY = renderStats((uint64_t)ctx->player.level, "LEVEL", startY, ctx->player.powerups.levelBonusMultiplier, false) + statsBlockGap;
+    RenderPositions scorePosition = renderBlock("SCORE", 0, true);
+    renderStats(ctx->player.score, scorePosition.contentPosition, scorePosition.contentSize);
+
+    RenderPositions bonusPosition = renderBlock("BONUS", scorePosition.endYPosition, true);
+    renderStats(ctx->player.levelBonus, bonusPosition.contentPosition, bonusPosition.contentSize);
+    
+    RenderPositions levelPosition = renderBlock("LEVEL", bonusPosition.endYPosition, true);
+    renderStats((uint64_t)ctx->player.level, levelPosition.contentPosition, levelPosition.contentSize);
+
+    if (ctx->player.powerups.levelBonusMultiplier > 1) {
+        Vector2 multiplierIconPosition = {
+            scorePosition.contentPosition.x + scorePosition.contentSize.x - (padding * 2),
+            scorePosition.endYPosition + padding + (BONUS_MULTIPLIER_RADIUS * 2)
+        };
+
+        renderBonusMultiplier(ctx->player.powerups.levelBonusMultiplier, multiplierIconPosition);
+    }
 }
 
 void renderSidebarRight(GameContext* ctx) {
