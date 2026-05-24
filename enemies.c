@@ -435,7 +435,7 @@ void initUfo2(GameContext* ctx, Enemy* enemy) {
 
     AnimationInstance instance;
 
-    initAnimtionInstance(&instance, &ctx->assets.animations.ufo1, enemy->position, enemy->rotation);
+    initAnimtionInstance(&instance, &ctx->assets.animations.ufo2, enemy->position, enemy->rotation);
 
     enemy->animation = instance;
 }
