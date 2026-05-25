@@ -38,14 +38,43 @@ void handleShipControls(GameContext* ctx)
 
     if (ship->destroyed) return;
 
-    if (IsKeyDown(KEY_A))
-    {
+    const float BRAKE_FACTOR = 2.0f;
+    const float MAX_VELOCITY = 300.0f;
+    const int NUDGE_DELAY = 50;
+    const double NOW_MILLIS = GetTime() * 1000;
+    const float ROTATION_NUDGE_SPEED = 200.0f;
+    const float ROTATION_SPEED = 270.0f;
+    const float THRUST_FACTOR = 2.5f;
+
+    bool nudgeActive = NOW_MILLIS < ship->timeRotateActivated + NUDGE_DELAY;
+
+    if (IsKeyPressed(KEY_A) || IsKeyPressed(KEY_D)) {
+        ship->isRotateActive = true;
+        ship->timeRotateActivated = NOW_MILLIS;
+    } else {
+        if (IsKeyDown(KEY_A) && !nudgeActive) {
             ship->rotation -= GetFrameTime() * ROTATION_SPEED;
+        }
+
+        if (IsKeyDown(KEY_D) && !nudgeActive) {
+            ship->rotation += GetFrameTime() * ROTATION_SPEED;
+        }
     }
 
-    if (IsKeyDown(KEY_D))
-    {
-            ship->rotation += GetFrameTime() * ROTATION_SPEED;
+    if (ship->isRotateActive && IsKeyReleased(KEY_A)) {
+        ship->isRotateActive = false;
+
+        if (nudgeActive) {
+            ship->rotation -= GetFrameTime() * ROTATION_NUDGE_SPEED;
+        }
+    }
+
+    if (ship->isRotateActive && IsKeyReleased(KEY_D)) {
+        ship->isRotateActive = false;
+
+        if (nudgeActive) {
+            ship->rotation += GetFrameTime() * ROTATION_NUDGE_SPEED;
+        }
     }
 
     ship->rotation = fmodf(ship->rotation, 360.0f);
