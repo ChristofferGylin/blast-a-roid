@@ -1,3 +1,4 @@
+#include "colors.h"
 #include "raylib.h"
 #include <stdio.h>
 #include <stdlib.h>
@@ -33,7 +34,7 @@ void gameOver(Player* player) {
 
         BeginDrawing();
             ClearBackground(BLACK);
-            DrawTextPro(GetFontDefault(), "GAME OVER", textPosition, textOrigin, 0, fontSize, fontSpacing, RAYWHITE);
+            DrawTextPro(GetFontDefault(), "GAME OVER", textPosition, textOrigin, 0, fontSize, fontSpacing, primaryColor);
             
             if (!isFadeInComplete) {
                 isFadeInComplete = fadeIn(&fadeInValue);
