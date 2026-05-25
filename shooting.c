@@ -138,7 +138,10 @@ void handleShooting(GameContext* ctx) {
                 &ctx->assets.sprites.shot,
                 SHOT_SIZE,
                 ctx->ship.position,
-                {cosf(radians[i]) * SHOT_VELOCITY, sinf(radians[i]) * SHOT_VELOCITY},
+                {
+                    ctx->ship.velocity.x + cosf(radians[i]) * SHOT_VELOCITY,
+                    ctx->ship.velocity.y + sinf(radians[i]) * SHOT_VELOCITY
+                },
                 lifetime,
                 false
             };

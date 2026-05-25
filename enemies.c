@@ -239,7 +239,7 @@ void handleEnemyShooting(GameContext* ctx, Enemy* enemy) {
         Vector2 aimPos = ctx->ship.position;
 
         if (GetRandomValue(1, 10) > shotProps->perfectHitChance) {
-            float theta = GetRandomValue(0, 360);
+            float theta = GetRandomValue(0, 1000) / 1000.0f * 2.0f * PI;
             float radius = sqrtf(GetRandomValue(0, 1000) / 1000.0f) * shotProps->spreadRadian;
 
             aimPos.x += cosf(theta) * radius;
