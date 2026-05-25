@@ -46,6 +46,14 @@ void handleShipControls(GameContext* ctx)
     if (IsKeyPressed(KEY_A) || IsKeyPressed(KEY_D)) {
         ship->isRotateActive = true;
         ship->timeRotateActivated = nowMillis;
+    } else {
+        if (IsKeyDown(KEY_A) && !nudgeActive) {
+            ship->rotation -= GetFrameTime() * ROTATION_SPEED;
+        }
+
+        if (IsKeyDown(KEY_D) && !nudgeActive) {
+            ship->rotation += GetFrameTime() * ROTATION_SPEED;
+        }
     }
 
     if (ship->isRotateActive && IsKeyReleased(KEY_A)) {
@@ -62,16 +70,6 @@ void handleShipControls(GameContext* ctx)
         if (nudgeActive) {
             ship->rotation += GetFrameTime() * ROTATION_NUDGE_SPEED;
         }
-    }
-
-    if (IsKeyDown(KEY_A) && !nudgeActive)
-    {
-            ship->rotation -= GetFrameTime() * ROTATION_SPEED;
-    }
-
-    if (IsKeyDown(KEY_D) && !nudgeActive)
-    {
-            ship->rotation += GetFrameTime() * ROTATION_SPEED;
     }
 
     ship->rotation = fmodf(ship->rotation, 360.0f);
