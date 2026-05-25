@@ -1,3 +1,4 @@
+#include "colors.h"
 #include "raylib.h"
 #include <stdbool.h>
 #include "fader.h"
@@ -90,8 +91,8 @@ int renderScoreLine(uint64_t value, char title[], int startY, bool hasUnderline,
 
     Vector2 origin = {0, 0};
 
-    DrawTextPro(GetFontDefault(), title, titlePosition, origin, 0, SCORE_FONT_SIZE, FONT_SPACING, RAYWHITE);
-    DrawTextPro(GetFontDefault(), valueText, valuePosition, origin, 0, SCORE_FONT_SIZE, FONT_SPACING, RAYWHITE);
+    DrawTextPro(GetFontDefault(), title, titlePosition, origin, 0, SCORE_FONT_SIZE, FONT_SPACING, primaryColor);
+    DrawTextPro(GetFontDefault(), valueText, valuePosition, origin, 0, SCORE_FONT_SIZE, FONT_SPACING, primaryColor);
 
     if (bonusMultiplierLevel > 1) {
         Vector2 multiplierIconPosition = {
@@ -106,7 +107,7 @@ int renderScoreLine(uint64_t value, char title[], int startY, bool hasUnderline,
         float underlineY = titlePosition.y + titleSize.y + underlineGap;
         float underLineStartX = titlePosition.x;
         float underLineEndX = valuePosition.x + valueSize.x;
-        DrawLine(underLineStartX, underlineY, underLineEndX, underlineY, RAYWHITE);
+        DrawLine(underLineStartX, underlineY, underLineEndX, underlineY, primaryColor);
 
         return underlineY;
     }
@@ -211,7 +212,7 @@ void scoreScreen(Player* player) {
 
         BeginDrawing();
             ClearBackground(BLACK);
-            DrawTextPro(GetFontDefault(), headingText, headingPosition, headingOrigin, 0, HEADING_FONT_SIZE, FONT_SPACING, RAYWHITE);
+            DrawTextPro(GetFontDefault(), headingText, headingPosition, headingOrigin, 0, HEADING_FONT_SIZE, FONT_SPACING, primaryColor);
             yOffset = renderScoreLine(displayBonus, "BONUS:", yOffset, true, currentMultiplier, bonusCountUpState.isZeroPadded);
             yOffset = yOffset + GAP;
             yOffset = renderScoreLine(displayScore, "SCORE:", yOffset, false, 0, false);
