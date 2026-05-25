@@ -164,6 +164,8 @@ void resetDestroyedPieces(Ship* ship) {
 
 void resetShip(Ship* ship) {
     ship->isAutoShieldActive = true;
+    ship->isShieldActive = false;
+    ship->isRotateActive = false;
     ship->destroyed = false;
     ship->position.x = GetScreenWidth() / 2;
     ship->position.y = GetScreenHeight() / 2;
