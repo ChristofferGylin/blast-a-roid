@@ -46,9 +46,11 @@ void initShip(GameContext* ctx) {
 
     ship->isAutoShieldActive = true;
     ship->isShieldActive = false;
+    ship->isRotateActive = false;
     ship->destroyed = false;
-    ship->timeDestroyed = 0.0;
+    ship->timeDestroyed = 0.0f;
     ship->timeSpawned = GetTime();
+    ship->timeRotateActivated = 0.0f;
     ship->position.x = GetScreenWidth() / 2;
     ship->position.y = GetScreenHeight() / 2;
     ship->rotation = 0;
