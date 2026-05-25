@@ -254,7 +254,10 @@ void handleEnemyShooting(GameContext* ctx, Enemy* enemy) {
             shotProps->shot.sprite,
             shotProps->shot.size,
             enemy->position,
-            {cosf(angle) * shotProps->shot.velocity, sinf(angle) * shotProps->shot.velocity},
+            {
+                enemy->velocity.x + cosf(angle) * shotProps->shot.velocity,
+                enemy->velocity.y + sinf(angle) * shotProps->shot.velocity
+            },
             (GetTime() * 1000.0) + shotProps->shot.lifetime,
             false
         };
