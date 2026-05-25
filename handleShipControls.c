@@ -36,16 +36,21 @@ void handleShipControls(GameContext* ctx)
 
     Ship* ship = &ctx->ship;
 
-    const int nudgeDelay = 50;
-    const double nowMillis = GetTime() * 1000;
-
     if (ship->destroyed) return;
 
-    bool nudgeActive = nowMillis < ship->timeRotateActivated + nudgeDelay;
+    const float BRAKE_FACTOR = 2.0f;
+    const float MAX_VELOCITY = 300.0f;
+    const int NUDGE_DELAY = 50;
+    const double NOW_MILLIS = GetTime() * 1000;
+    const float ROTATION_NUDGE_SPEED = 200.0f;
+    const float ROTATION_SPEED = 270.0f;
+    const float THRUST_FACTOR = 2.5f;
+
+    bool nudgeActive = NOW_MILLIS < ship->timeRotateActivated + NUDGE_DELAY;
 
     if (IsKeyPressed(KEY_A) || IsKeyPressed(KEY_D)) {
         ship->isRotateActive = true;
-        ship->timeRotateActivated = nowMillis;
+        ship->timeRotateActivated = NOW_MILLIS;
     } else {
         if (IsKeyDown(KEY_A) && !nudgeActive) {
             ship->rotation -= GetFrameTime() * ROTATION_SPEED;
