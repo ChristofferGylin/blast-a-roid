@@ -15,6 +15,7 @@ typedef struct Animations {
     Animation explosion;
     Animation ufo1;
     Animation ufo2;
+    Animation ufo3;
 }Animations;
 
 typedef struct Samples {
