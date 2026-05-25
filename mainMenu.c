@@ -1,4 +1,5 @@
 #include "constants.h"
+#include "colors.h"
 #include "raylib.h"
 #include "player.h"
 #include "gameContext.h"
@@ -67,7 +68,7 @@ void drawLayoutContainers() {
         0,
         logoFontSize,
         logoFontSpacing,
-        RAYWHITE
+        primaryColor
     );
 
     DrawTextPro(
@@ -78,7 +79,7 @@ void drawLayoutContainers() {
         0,
         logoFontSize,
         logoFontSpacing,
-        RAYWHITE
+        primaryColor
     );
 
     Vector2 highscoresLinePos = {
@@ -91,11 +92,11 @@ void drawLayoutContainers() {
         3
     };
 
-    DrawRectangle(highscoresLinePos.x, highscoresLinePos.y, highscoresLineSize.x, highscoresLineSize.y, RAYWHITE);
+    DrawRectangle(highscoresLinePos.x, highscoresLinePos.y, highscoresLineSize.x, highscoresLineSize.y, primaryColor);
 
-    DrawRectangleRoundedLinesEx(highScoreContainer, getRoundness(highScoreContainer, roundnessRadius), 10, 3, RAYWHITE);
-    DrawRectangleRoundedLinesEx(logoContainer, getRoundness(logoContainer, roundnessRadius), 10, 3, RAYWHITE);
-    DrawRectangleRoundedLinesEx(menuContainer, getRoundness(menuContainer, roundnessRadius), 10, 3, RAYWHITE);
+    DrawRectangleRoundedLinesEx(highScoreContainer, getRoundness(highScoreContainer, roundnessRadius), 10, 3, primaryColor);
+    DrawRectangleRoundedLinesEx(logoContainer, getRoundness(logoContainer, roundnessRadius), 10, 3, primaryColor);
+    DrawRectangleRoundedLinesEx(menuContainer, getRoundness(menuContainer, roundnessRadius), 10, 3, primaryColor);
 }
 
 void drawMenu(Menu* menu) {
@@ -115,7 +116,7 @@ void drawMenu(Menu* menu) {
             0,
             fontSize,
             fontSpacing,
-            RAYWHITE
+            primaryColor
         );
 
         if (item->isHovered) {
@@ -124,7 +125,7 @@ void drawMenu(Menu* menu) {
                 pos.y + item->size.y + underLineOffset,
                 item->size.x,
                 underLineHeight,
-                RAYWHITE
+                primaryColor
             );
         }
     }
