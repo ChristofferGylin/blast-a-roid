@@ -443,7 +443,7 @@ void initUfo2(GameContext* ctx, Enemy* enemy) {
 void initUfo3(GameContext* ctx, Enemy* enemy) {
 
     float y = 50.0f;
-    int size = 32;
+    int size = UFO_3_COLLISION_SIZE;
 
     enemy->startPosition = getRandomPositionOffScreen(size);
     enemy->endPosition = getRandomPositionOffScreen(size);
@@ -473,7 +473,7 @@ void initUfo3(GameContext* ctx, Enemy* enemy) {
 
     AnimationInstance instance;
 
-    initAnimtionInstance(&instance, &ctx->assets.animations.ufo1, enemy->position, enemy->rotation);
+    initAnimtionInstance(&instance, &ctx->assets.animations.ufo3, enemy->position, enemy->rotation);
 
     enemy->animation = instance;
 }
