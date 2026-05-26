@@ -57,16 +57,16 @@ void destroyAsteroid(DestroyedAsteroidPool* pool, AsteroidPoolObject* ast) {
     pool->activeCount++;
 }
 
-int getAsteroidSize(int level) {
+int getAsteroidSize(AsteroidType type) {
     
     int size = 0;
     
-    switch (level)
+    switch (type)
     {
-        case 1: size = ASTEROID_SIZE_1; break;
-        case 2: size = ASTEROID_SIZE_2; break;
-        case 3: size = ASTEROID_SIZE_3; break;
-        default: printf("Error: Invalid asteroid level (%d) in getAsteroidSize\n", level);
+        case ASTEROID_LEVEL_1: size = ASTEROID_SIZE_1; break;
+        case ASTEROID_LEVEL_2: size = ASTEROID_SIZE_2; break;
+        case ASTEROID_LEVEL_3: size = ASTEROID_SIZE_3; break;
+        default: printf("Error: Invalid asteroid type (%d) in getAsteroidSize\n", type);
     }
 
     return size;
@@ -84,7 +84,7 @@ void handleAsteroidCollisions(GameContext* ctx) {
 
         if (ast->destroyed) continue;
 
-        float asteroidRadius = getAsteroidSize(ast->level) / 2.0f;
+        float asteroidRadius = getAsteroidSize(ast->type) / 2.0f;
 
         if (ctx->ship.isShieldActive) {
             if (CheckCollisionCircles(ctx->ship.position, SHIELD_SIZE / 2.0f, ast->position, asteroidRadius)) {
@@ -137,7 +137,7 @@ void handleAsteroidsMovement(AsteroidPool* pool) {
         updateRotation(&ast->rotation, ast->rotationSpeed);
         updatePosition(&ast->position, ast->velocity);
 
-        int asteroidSize = getAsteroidSize(ast->level);
+        int asteroidSize = getAsteroidSize(ast->type);
 
         outOfBoundsCheck(&ast->position, asteroidSize);
     }
@@ -211,7 +211,7 @@ void renderAsteroids(GameContext* ctx) {
 
         if (ast->destroyed) continue;
 
-        int asteroidSize = getAsteroidSize(ast->level);
+        int asteroidSize = getAsteroidSize(ast->type);
 
         DrawTexturePro(
             ctx->assets.sprites.asteroid,
