@@ -10,8 +10,16 @@ typedef struct Player Player;
 typedef struct AnimationPool AnimationPool;
 typedef struct Animation Animation;
 
+typedef enum AsteroidType {
+    ASTEROID_LEVEL_1,
+    ASTEROID_LEVEL_2,
+    ASTEROID_LEVEL_3,
+    METAL_ASTEROID,
+    SPIKY_ASTEROID
+}AsteroidType;
+
 typedef struct Asteroid {
-    int level;
+    AsteroidType type;
     float rotation;
     float rotationSpeed;
     Vector2 velocity;
