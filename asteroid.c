@@ -148,9 +148,6 @@ void handleDestroyedAsteroids(GameContext* ctx) {
 
     for (int i = 0; i < ctx->objectPools.destroyedAsteroids.activeCount; i++) {
         ctx->objectPools.destroyedAsteroids.asteroids[i]->active = false;
-    }
-
-    for (int i = 0; i < ctx->objectPools.destroyedAsteroids.activeCount; i++) {
         int numberOfNew = 0;
         int astLevel = ctx->objectPools.destroyedAsteroids.asteroids[i]->asteroid.level;
 
