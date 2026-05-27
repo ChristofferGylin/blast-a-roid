@@ -148,20 +148,54 @@ void handleDestroyedAsteroids(GameContext* ctx) {
 
     for (int i = 0; i < ctx->objectPools.destroyedAsteroids.activeCount; i++) {
         ctx->objectPools.destroyedAsteroids.asteroids[i]->active = false;
-        int numberOfNew = 0;
-        int astLevel = ctx->objectPools.destroyedAsteroids.asteroids[i]->asteroid.level;
+        Asteroid* ast = &ctx->objectPools.destroyedAsteroids.asteroids[i];
 
-        switch (astLevel) {
-            case 1: numberOfNew = 3; break;
-            case 2: numberOfNew = 2; break;
-            case 3: numberOfNew = 0; break; 
-            default: printf("Error: Invalid asteroid level (%d) in handleDestroyedAsteroids\n", astLevel);
+        int numberOfNew = 0;
+        AsteroidType newType = 0;
+
+        switch (ast->type) {
+            case ASTEROID_LEVEL_1:
+                numberOfNew = 3;
+                newType = ASTEROID_LEVEL_2;
+                break;
+            case ASTEROID_LEVEL_2:
+                numberOfNew = 2;
+                newType = ASTEROID_LEVEL_3;
+                break;
+            case ASTEROID_LEVEL_3:
+            case SPIKY_ASTEROID:
+                break;
+            case METAL_ASTEROID:
+
+                int levelSquared = ctx->player.level * ctx->player.level;
+                int chanceOfSpikyAsteroid = levelSquared;
+                int chanceOfNothing = 50 - levelSquared;
+                
+                if (chanceOfSpikyAsteroid > 90) chanceOfSpikyAsteroid = 90;
+                if (chanceOfNothing < 0) chanceOfNothing = 0;
+
+                int chance = GetRandomValue(0, 99);
+
+                if (chance < chanceOfNothing) {
+                    continue;
+                } else if (chance < chanceOfNothing + chanceOfSpikyAsteroid) {
+                    numberOfNew = 1;
+                    newType = SPIKY_ASTEROID;
+                } else {
+                    numberOfNew = 3;
+                    newType = ASTEROID_LEVEL_2;
+                }
+
+                break; 
+            default:
+                printf("Error: Invalid asteroid type (%d) in handleDestroyedAsteroids\n", ast->type);
+                continue;
         }
 
         for (int j = 0; j < numberOfNew; j++) {
             Asteroid newAst = {0};
             resetAsteroid(&newAst);
-            newAst.level = astLevel + 1;
+            newAst.type = newType;
             newAst.position = ctx->objectPools.destroyedAsteroids.asteroids[i]->asteroid.position;
 
             addNewAsteroid(&ctx->objectPools.asteroids, newAst);
