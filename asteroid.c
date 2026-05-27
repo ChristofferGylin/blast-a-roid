@@ -15,6 +15,12 @@
 #include "explosion.h"
 #include "gameContext.h"
 
+static const int ASTEROID_SIZE_1 = 32;
+static const int ASTEROID_SIZE_2 = 24;
+static const int ASTEROID_SIZE_3 = 12;
+static const int METAL_ASTEROID_SIZE = 32;
+static const int SPIKY_ASTEROID_SIZE = 32;
+
 void addNewAsteroid(AsteroidPool* pool, Asteroid ast) {
     
     if (pool->activeCount >= MAX_ASTEROIDS) {
@@ -66,6 +72,8 @@ int getAsteroidSize(AsteroidType type) {
         case ASTEROID_LEVEL_1: size = ASTEROID_SIZE_1; break;
         case ASTEROID_LEVEL_2: size = ASTEROID_SIZE_2; break;
         case ASTEROID_LEVEL_3: size = ASTEROID_SIZE_3; break;
+        case METAL_ASTEROID: size = METAL_ASTEROID_SIZE; break;
+        case SPIKY_ASTEROID: size = SPIKY_ASTEROID_SIZE; break;
         default: printf("Error: Invalid asteroid type (%d) in getAsteroidSize\n", type);
     }
 
