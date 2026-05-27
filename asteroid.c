@@ -281,19 +281,13 @@ void initAsteroids(GameContext* ctx) {
 
     for (int i = 0; i < numberOfAsteroids; i++) {
         Asteroid ast = {0};
-        resetAsteroid(&ast);
-        ast.type = ASTEROID_LEVEL_1;
-        ast.destroyed = false;
-        ast.health = 1;
+        initAsteroid(ctx, &ast, ASTEROID_LEVEL_1);
         addNewAsteroid(&ctx->objectPools.asteroids, ast);
     }
 
     for (int i = 0; i < numberOfMetalAsteroids; i++) {
         Asteroid ast = {0};
-        resetAsteroid(&ast);
-        ast.type = METAL_ASTEROID;
-        ast.destroyed = false;
-        ast.health = 100;
+        initAsteroid(ctx, &ast, METAL_ASTEROID);
         addNewAsteroid(&ctx->objectPools.asteroids, ast);
     }
 }
