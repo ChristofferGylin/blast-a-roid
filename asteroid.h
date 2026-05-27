@@ -58,6 +58,7 @@ void handleAsteroidsMovement(AsteroidPool* pool);
 void handleDestroyedAsteroids(GameContext* ctx);
 void initAsteroidPool(AsteroidPool* pool);
 void initDestroyedAsteroidPool(DestroyedAsteroidPool* pool);
+void initAsteroid(GameContext* ctx, Asteroid* ast, AsteroidType type);
 void initAsteroids(GameContext* ctx);
 void renderAsteroids(GameContext* ctx);
 void resetAllAsteroids(AsteroidPool* pool);

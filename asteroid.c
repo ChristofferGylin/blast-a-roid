@@ -150,7 +150,7 @@ void handleDestroyedAsteroids(GameContext* ctx) {
 
     for (int i = 0; i < ctx->objectPools.destroyedAsteroids.activeCount; i++) {
         ctx->objectPools.destroyedAsteroids.asteroids[i]->active = false;
-        Asteroid* ast = &ctx->objectPools.destroyedAsteroids.asteroids[i];
+        Asteroid* ast = &ctx->objectPools.destroyedAsteroids.asteroids[i]->asteroid;
 
         int numberOfNew = 0;
         AsteroidType newType = 0;
@@ -226,8 +226,7 @@ void initDestroyedAsteroidPool(DestroyedAsteroidPool* pool) {
 }
 
 void initAsteroid(GameContext* ctx, Asteroid* ast, AsteroidType type) {
-    Asteroid ast = {0};
-    resetAsteroid(&ast);
+    resetAsteroid(ast);
     ast->type = type;
     ast->destroyed = false;
 
