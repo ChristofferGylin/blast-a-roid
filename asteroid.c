@@ -229,6 +229,7 @@ void initAsteroid(GameContext* ctx, Asteroid* ast, AsteroidType type) {
     resetAsteroid(ast);
     ast->type = type;
     ast->destroyed = false;
+    ast->size = getAsteroidSize(type);
 
     if (type == METAL_ASTEROID) {
         ast->health = 100;
@@ -299,16 +300,18 @@ void renderAsteroids(GameContext* ctx) {
 
         if (ast->destroyed) continue;
 
-        int asteroidSize = getAsteroidSize(ast->type);
-
-        DrawTexturePro(
-            ctx->assets.sprites.asteroid,
-            (Rectangle){0, 0, ctx->assets.sprites.asteroid.width, ctx->assets.sprites.asteroid.height},
-            (Rectangle){ast->position.x, ast->position.y, asteroidSize, asteroidSize},
-            (Vector2){asteroidSize / 2.0f, asteroidSize / 2.0f},
-            ast->rotation,
-            WHITE  
-        );
+        if (ast->visualType == VISUAL_ANIMATION) {
+            renderAnimation(&ast->animation);
+        } else {
+            DrawTexturePro(
+                *ast->sprite,
+                (Rectangle){0, 0, ast->sprite->width, ast->sprite->height},
+                (Rectangle){ast->position.x, ast->position.y, ast->size, ast->size},
+                (Vector2){ast->size / 2.0f, ast->size / 2.0f},
+                ast->rotation,
+                WHITE  
+            );
+        }
     }
 }
 

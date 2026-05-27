@@ -23,6 +23,7 @@ typedef enum AsteroidType {
 
 typedef struct Asteroid {
     AsteroidType type;
+    int size;
     float rotation;
     float rotationSpeed;
     int health;
