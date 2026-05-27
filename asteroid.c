@@ -228,7 +228,7 @@ void initAsteroids(GameContext* ctx) {
     for (int i = 0; i < numberOfAsteroids; i++) {
         Asteroid ast = {0};
         resetAsteroid(&ast);
-        ast.level = 1;
+        ast.type = ASTEROID_LEVEL_1;
         ast.destroyed = false;
         addNewAsteroid(&ctx->objectPools.asteroids, ast);
     }
