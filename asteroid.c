@@ -267,7 +267,7 @@ void initAsteroids(GameContext* ctx) {
 
     if (chance < chanceOfMetal) {
         int minNumberOfMetal = 1;
-        int maxNumberOfMetal = numberOfAsteroids * chanceOfMetal;
+        float maxNumberOfMetal = round(numberOfAsteroids * (chanceOfMetal / 100.0f));
 
         if (maxNumberOfMetal < minNumberOfMetal) {
             maxNumberOfMetal = minNumberOfMetal;
@@ -280,13 +280,13 @@ void initAsteroids(GameContext* ctx) {
     }
 
     for (int i = 0; i < numberOfAsteroids; i++) {
-        Asteroid ast = {0};
+        Asteroid ast;
         initAsteroid(ctx, &ast, ASTEROID_LEVEL_1);
         addNewAsteroid(&ctx->objectPools.asteroids, ast);
     }
 
     for (int i = 0; i < numberOfMetalAsteroids; i++) {
-        Asteroid ast = {0};
+        Asteroid ast;
         initAsteroid(ctx, &ast, METAL_ASTEROID);
         addNewAsteroid(&ctx->objectPools.asteroids, ast);
     }
@@ -339,7 +339,13 @@ void resetAsteroid(Asteroid* ast) {
 
     ast->position = position;
     ast->rotation = 0;
-    ast->rotationSpeed = GetRandomValue(-100, 100);
+
+    if (ast->type == METAL_ASTEROID || ast->type == SPIKY_ASTEROID) {
+        ast->rotationSpeed = 0;
+    } else {
+        ast->rotationSpeed = GetRandomValue(-100, 100);
+    }
+    
     ast->velocity = velocity;
 }
 
