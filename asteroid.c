@@ -149,7 +149,6 @@ void handleDestroyedAsteroids(GameContext* ctx) {
     if (ctx->objectPools.destroyedAsteroids.activeCount == 0) return;
 
     for (int i = 0; i < ctx->objectPools.destroyedAsteroids.activeCount; i++) {
-        ctx->objectPools.destroyedAsteroids.asteroids[i]->active = false;
         Asteroid* ast = &ctx->objectPools.destroyedAsteroids.asteroids[i]->asteroid;
 
         int numberOfNew = 0;
@@ -201,6 +200,10 @@ void handleDestroyedAsteroids(GameContext* ctx) {
 
             addNewAsteroid(&ctx->objectPools.asteroids, newAst);
         }
+    }
+
+    for (int i = 0; i < ctx->objectPools.destroyedAsteroids.activeCount; i++) {
+        ctx->objectPools.destroyedAsteroids.asteroids[i]->active = false;
     }
 
     compactAsteroidPool(&ctx->objectPools.asteroids);
