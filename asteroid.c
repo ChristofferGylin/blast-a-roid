@@ -225,10 +225,40 @@ void initDestroyedAsteroidPool(DestroyedAsteroidPool* pool) {
 
 void initAsteroids(GameContext* ctx) {
     int numberOfAsteroids = getNumberOfAsteroids(ctx->player.level);
+    int numberOfMetalAsteroids = 0;
+
+    int chanceOfMetal = ctx->player.level * ctx->player.level;
+
+    if (chanceOfMetal > 100) chanceOfMetal = 100;
+
+    int chance = GetRandomValue(0, 99);
+
+    if (chance < chanceOfMetal) {
+        int minNumberOfMetal = 1;
+        int maxNumberOfMetal = numberOfAsteroids * chanceOfMetal;
+
+        if (maxNumberOfMetal < minNumberOfMetal) {
+            maxNumberOfMetal = minNumberOfMetal;
+        } else if (maxNumberOfMetal >= numberOfAsteroids) {
+            maxNumberOfMetal = numberOfAsteroids - 1;
+        }
+
+        numberOfMetalAsteroids = GetRandomValue(minNumberOfMetal, maxNumberOfMetal);
+        numberOfAsteroids = numberOfAsteroids - numberOfMetalAsteroids;
+    }
+
     for (int i = 0; i < numberOfAsteroids; i++) {
         Asteroid ast = {0};
         resetAsteroid(&ast);
         ast.type = ASTEROID_LEVEL_1;
+        ast.destroyed = false;
+        addNewAsteroid(&ctx->objectPools.asteroids, ast);
+    }
+
+    for (int i = 0; i < numberOfMetalAsteroids; i++) {
+        Asteroid ast = {0};
+        resetAsteroid(&ast);
+        ast.type = METAL_ASTEROID;
         ast.destroyed = false;
         addNewAsteroid(&ctx->objectPools.asteroids, ast);
     }
