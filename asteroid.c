@@ -228,10 +228,11 @@ void initDestroyedAsteroidPool(DestroyedAsteroidPool* pool) {
 }
 
 void initAsteroid(GameContext* ctx, Asteroid* ast, AsteroidType type) {
-    resetAsteroid(ast);
+    
     ast->type = type;
     ast->destroyed = false;
     ast->size = getAsteroidSize(type);
+    resetAsteroid(ast);
 
     if (type == METAL_ASTEROID) {
         ast->health = 100;
@@ -259,7 +260,7 @@ void initAsteroid(GameContext* ctx, Asteroid* ast, AsteroidType type) {
 
 void initAsteroids(GameContext* ctx) {
     int numberOfAsteroids = getNumberOfAsteroids(ctx->player.level);
-    int numberOfMetalAsteroids = 0;
+    int numberOfMetalAsteroids = 1;
 
     int chanceOfMetal = ctx->player.level * ctx->player.level;
 
@@ -353,6 +354,23 @@ void resetAsteroid(Asteroid* ast) {
     ast->velocity = velocity;
 }
 
+void updateAsteroidsAnimations(GameContext* ctx) {
+    
+    AsteroidPool* pool = &ctx->objectPools.asteroids;
+
+    if (pool->activeCount == 0) return;
+    
+    for (int i = 0; i < pool->activeCount; i++) {
+        if (!pool->asteroids[i].active) continue;
+
+        Asteroid* ast = &pool->asteroids[i].asteroid;
+
+        if (ast->visualType == VISUAL_ANIMATION) {
+            updateAnimation(&ast->animation);
+            ast->animation.position = ast->position;
+        }
+    }
+}
 
 
 

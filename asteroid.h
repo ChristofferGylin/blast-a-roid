@@ -64,5 +64,6 @@ void initAsteroids(GameContext* ctx);
 void renderAsteroids(GameContext* ctx);
 void resetAllAsteroids(AsteroidPool* pool);
 void resetAsteroid(Asteroid* ast);
+void updateAsteroidsAnimations(GameContext* ctx)
 
 #endif
