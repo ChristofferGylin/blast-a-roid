@@ -252,6 +252,7 @@ void initAsteroids(GameContext* ctx) {
         resetAsteroid(&ast);
         ast.type = ASTEROID_LEVEL_1;
         ast.destroyed = false;
+        ast.health = 1;
         addNewAsteroid(&ctx->objectPools.asteroids, ast);
     }
 
@@ -260,6 +261,7 @@ void initAsteroids(GameContext* ctx) {
         resetAsteroid(&ast);
         ast.type = METAL_ASTEROID;
         ast.destroyed = false;
+        ast.health = 100;
         addNewAsteroid(&ctx->objectPools.asteroids, ast);
     }
 }

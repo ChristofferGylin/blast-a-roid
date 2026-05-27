@@ -22,6 +22,7 @@ typedef struct Asteroid {
     AsteroidType type;
     float rotation;
     float rotationSpeed;
+    int health;
     Vector2 velocity;
     Vector2 position;
     bool destroyed;
