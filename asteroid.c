@@ -86,7 +86,7 @@ void handleAsteroidCollisions(GameContext* ctx) {
 
         if (ast->destroyed) continue;
 
-        float asteroidRadius = getAsteroidSize(ast->type) / 2.0f;
+        float asteroidRadius = ast->size / 2.0f;
 
         if (ctx->ship.isShieldActive) {
             if (CheckCollisionCircles(ctx->ship.position, SHIELD_SIZE / 2.0f, ast->position, asteroidRadius)) {
@@ -195,9 +195,8 @@ void handleDestroyedAsteroids(GameContext* ctx) {
         }
 
         for (int j = 0; j < numberOfNew; j++) {
-            Asteroid newAst = {0};
-            resetAsteroid(&newAst);
-            newAst.type = newType;
+            Asteroid newAst;
+            initAsteroid(ctx, &newAst, newType);
             newAst.position = ctx->objectPools.destroyedAsteroids.asteroids[i]->asteroid.position;
 
             addNewAsteroid(&ctx->objectPools.asteroids, newAst);
