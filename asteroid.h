@@ -2,10 +2,13 @@
 #define ASTEROID_H
 #define MAX_ASTEROIDS 128
 
+#include "animation.h"
 #include "raylib.h"
 #include "ship.h"
 #include "shooting.h"
 #include <stdbool.h>
+#include "utils.h"
+
 typedef struct Player Player;
 typedef struct AnimationPool AnimationPool;
 typedef struct Animation Animation;
@@ -26,6 +29,11 @@ typedef struct Asteroid {
     Vector2 velocity;
     Vector2 position;
     bool destroyed;
+    VisualType visualType;
+    union {
+        Texture2D* sprite;
+        AnimationInstance animation;
+    };
 }Asteroid;
 
 typedef struct {

@@ -15,12 +15,6 @@
 #include "explosion.h"
 #include "gameContext.h"
 
-static const int ASTEROID_SIZE_1 = 32;
-static const int ASTEROID_SIZE_2 = 24;
-static const int ASTEROID_SIZE_3 = 12;
-static const int METAL_ASTEROID_SIZE = 32;
-static const int SPIKY_ASTEROID_SIZE = 32;
-
 void addNewAsteroid(AsteroidPool* pool, Asteroid ast) {
     
     if (pool->activeCount >= MAX_ASTEROIDS) {
@@ -229,6 +223,36 @@ void initDestroyedAsteroidPool(DestroyedAsteroidPool* pool) {
     }
 
     pool->activeCount = 0;
+}
+
+void initAsteroid(GameContext* ctx, Asteroid* ast, AsteroidType type) {
+    Asteroid ast = {0};
+    resetAsteroid(&ast);
+    ast->type = type;
+    ast->destroyed = false;
+
+    if (type == METAL_ASTEROID) {
+        ast->health = 100;
+        ast->visualType = VISUAL_ANIMATION;
+        
+        AnimationInstance aniInst;
+        initAnimtionInstance(&aniInst, &ctx->assets.animations.metalAsteroid, ast->position, 0);
+        ast->animation = aniInst;
+
+    } else  if (type == SPIKY_ASTEROID) {
+        ast->health = 30;
+        ast->visualType = VISUAL_ANIMATION;
+
+        AnimationInstance aniInst;
+        initAnimtionInstance(&aniInst, &ctx->assets.animations.metalAsteroid, ast->position, 0);
+        ast->animation = aniInst;
+    } else {
+        ast->health = 1;
+        ast->visualType = VISUAL_SPRITE;
+
+        ast->sprite = &ctx->assets.sprites.asteroid;
+    }
+    
 }
 
 void initAsteroids(GameContext* ctx) {
