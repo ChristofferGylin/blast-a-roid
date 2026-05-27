@@ -105,6 +105,7 @@ GameResult gameLoop(GameContext* ctx) {
             updateAnimationPool(&ctx->objectPools.explosions);
             updateEnemies(ctx);
             updateBonuses(ctx);
+            updateAsteroidsAnimations(ctx);
 
             if (ctx->ship.isShieldActive) {
                 updateShieldAnimation();
