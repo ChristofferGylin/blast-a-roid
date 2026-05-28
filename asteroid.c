@@ -94,7 +94,7 @@ void handleAsteroidCollisions(GameContext* ctx) {
             if (CheckCollisionCircles(ship->position, SHIELD_SIZE / 2.0f, ast->position, asteroidRadius)) {
                 
                 if (ast->type == METAL_ASTEROID || ast->type == SPIKY_ASTEROID) {
-                    // TODO: Knockback ship
+                    knockbackByImpact(ship->position, &ship->velocity, ast->position, ast->velocity);
                 } else {
                     newExplosion(ctx, ast->position);
                     destroyAsteroid(&ctx->objectPools.destroyedAsteroids, &ctx->objectPools.asteroids.asteroids[i]);

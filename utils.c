@@ -81,6 +81,29 @@ void knockback(Vector2 targetPosition, Vector2* targetVelocity, Vector2 forcePos
     targetVelocity->y += hitDirection.y * force;
 }
 
+void knockbackByImpact(
+    Vector2 targetPosition,
+    Vector2* targetVelocity,
+    Vector2 forcePosition,
+    Vector2 forceVelocity
+) {
+    Vector2 normal =
+        Vector2Subtract(targetPosition, forcePosition);
+
+    normal = Vector2Normalize(normal);
+
+    Vector2 relativeVelocity =
+        Vector2Subtract(*targetVelocity, forceVelocity);
+
+    float speed =
+        Vector2DotProduct(relativeVelocity, normal);
+
+    if (speed < 0) {
+        targetVelocity->x -= normal.x * speed;
+        targetVelocity->y -= normal.y * speed;
+    }
+}
+
 void updatePosition(Vector2* position, Vector2 velocity) {
     position->x += GetFrameTime() * velocity.x;
     position->y += GetFrameTime() * velocity.y;
