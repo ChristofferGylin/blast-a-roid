@@ -144,7 +144,7 @@ void handleAsteroidCollisions(GameContext* ctx) {
                         newExplosion(ctx, ast->position);
                         destroyAsteroid(&ctx->objectPools.destroyedAsteroids, &ctx->objectPools.asteroids.asteroids[i]);
                     } else {
-                        const int knockbackForce = 50;
+                        const int knockbackForce = 200;
                         knockback(ast->position, &ast->velocity, shotObj->shot.position, knockbackForce);
                     }
                 } 
