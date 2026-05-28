@@ -120,7 +120,7 @@ GameResult gameLoop(GameContext* ctx) {
             } else {
                 reset = true;
             }
-        } else if (ctx->objectPools.asteroids.activeCount == 0 && !waitForExit) {
+        } else if (countAsteroids(&ctx->objectPools.asteroids) == 0 && !waitForExit) {
             waitForExit = true;
             waitForExitTime = GetTime() + WAIT_TIME;
         }
