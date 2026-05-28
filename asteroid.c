@@ -76,7 +76,9 @@ int getAsteroidSize(AsteroidType type) {
 
 void handleAsteroidCollisions(GameContext* ctx) {
 
-    if (ctx->ship.destroyed) return; 
+    Ship* ship = &ctx->ship;
+
+    if (ship->destroyed) return; 
 
     for (int i = 0; i < ctx->objectPools.asteroids.activeCount; i++) {
 
@@ -88,10 +90,16 @@ void handleAsteroidCollisions(GameContext* ctx) {
 
         float asteroidRadius = ast->size / 2.0f;
 
-        if (ctx->ship.isShieldActive) {
-            if (CheckCollisionCircles(ctx->ship.position, SHIELD_SIZE / 2.0f, ast->position, asteroidRadius)) {
-                newExplosion(ctx, ast->position);
-                destroyAsteroid(&ctx->objectPools.destroyedAsteroids, &ctx->objectPools.asteroids.asteroids[i]);
+        if (ship->isShieldActive) {
+            if (CheckCollisionCircles(ship->position, SHIELD_SIZE / 2.0f, ast->position, asteroidRadius)) {
+                
+                if (ast->type == METAL_ASTEROID || ast->type == SPIKY_ASTEROID) {
+                    // TODO: Knockback ship
+                } else {
+                    newExplosion(ctx, ast->position);
+                    destroyAsteroid(&ctx->objectPools.destroyedAsteroids, &ctx->objectPools.asteroids.asteroids[i]);
+                }
+            
                 continue;
             }
         } else {
@@ -119,7 +127,8 @@ void handleAsteroidCollisions(GameContext* ctx) {
                         newExplosion(ctx, ast->position);
                         destroyAsteroid(&ctx->objectPools.destroyedAsteroids, &ctx->objectPools.asteroids.asteroids[i]);
                     } else {
-                        //nudge
+                        const int knockbackForce = 50;
+                        knockback(ast->position, &ast->velocity, shotObj->shot.position, knockbackForce);
                     }
                 } 
 
@@ -267,7 +276,7 @@ void initAsteroid(GameContext* ctx, Asteroid* ast, AsteroidType type) {
 
 void initAsteroids(GameContext* ctx) {
     int numberOfAsteroids = getNumberOfAsteroids(ctx->player.level);
-    int numberOfMetalAsteroids = 0;
+    int numberOfMetalAsteroids = 1;
     int level = ctx->player.level;
 
     int chanceOfMetal = (level + 1) * (level + 1);
