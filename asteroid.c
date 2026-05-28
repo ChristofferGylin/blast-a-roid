@@ -112,8 +112,15 @@ void handleAsteroidCollisions(GameContext* ctx) {
                 }
 
                 if (shotObj->shot.level >= 1) {
-                    newExplosion(ctx, ast->position);
-                    destroyAsteroid(&ctx->objectPools.destroyedAsteroids, &ctx->objectPools.asteroids.asteroids[i]);
+
+                    ast->health--;
+
+                    if (ast->health <= 0) {
+                        newExplosion(ctx, ast->position);
+                        destroyAsteroid(&ctx->objectPools.destroyedAsteroids, &ctx->objectPools.asteroids.asteroids[i]);
+                    } else {
+                        //nudge
+                    }
                 } 
 
                 if (shotObj->shot.level <= 1) {
