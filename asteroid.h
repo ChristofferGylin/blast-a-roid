@@ -53,6 +53,7 @@ typedef struct {
 }DestroyedAsteroidPool;
 
 void addNewAsteroid(AsteroidPool* pool, Asteroid ast);
+int countAsteroids(AsteroidPool* pool);
 int getAsteroidSize(AsteroidType type);
 void handleAsteroidCollisions(GameContext* ctx);
 void handleAsteroidsMovement(AsteroidPool* pool);

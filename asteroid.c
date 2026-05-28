@@ -51,6 +51,23 @@ void compactAsteroidPool(AsteroidPool* pool) {
     pool->activeCount = write;
 }
 
+int countAsteroids(AsteroidPool* pool) {
+    int count = 0;
+
+    for (int i = 0; i < pool->activeCount; i++) {
+        if (!pool->asteroids[i].active) continue;
+
+        if (
+            pool->asteroids[i].asteroid.type != METAL_ASTEROID &&
+            pool->asteroids[i].asteroid.type != SPIKY_ASTEROID
+        ) {
+            count++;
+        }
+    }
+
+    return count;
+}
+
 void destroyAsteroid(DestroyedAsteroidPool* pool, AsteroidPoolObject* ast) {
     ast->asteroid.destroyed = true;
     pool->asteroids[pool->activeCount] = ast;
