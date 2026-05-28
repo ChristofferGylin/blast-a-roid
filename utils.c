@@ -73,12 +73,12 @@ float getRoundness(Rectangle rect, float radiusPx) {
     return (radiusPx * 2.0f) / minDim;
 }
 
-void knockback(Vector2 targetPosition, Vector2 targetVelocity, Vector2 forcePosition, int force) {
+void knockback(Vector2 targetPosition, Vector2* targetVelocity, Vector2 forcePosition, int force) {
     Vector2 hitDirection = Vector2Subtract(targetPosition, forcePosition);
     hitDirection = Vector2Normalize(hitDirection);
 
-    targetVelocity.x += hitDirection.x * force;
-    targetVelocity.y += hitDirection.y * force;
+    targetVelocity->x += hitDirection.x * force;
+    targetVelocity->y += hitDirection.y * force;
 }
 
 void updatePosition(Vector2* position, Vector2 velocity) {
