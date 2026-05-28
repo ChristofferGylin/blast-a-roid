@@ -155,6 +155,7 @@ GameResult gameLoop(GameContext* ctx) {
         } else if (reset && isFadeOutComplete) {
             resetShip(&ctx->ship);
             resetAllAsteroids(&ctx->objectPools.asteroids);
+            updateAsteroidsAnimations(ctx);
             resetPowerups(&ctx->player);
             initBonusSpawnPool(ctx);
             initEnemyPool(&ctx->objectPools.enemies);
