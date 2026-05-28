@@ -28,6 +28,7 @@ Vector2 getRandomPosition();
 Vector2 getRandomPositionOffScreen(int size);
 Vector2 getRandomVelocity(FloatRange range);
 float getRoundness(Rectangle rect, float radiusPx);
+void knockback(Vector2 targetPosition, Vector2 targetVelocity, Vector2 forcePosition, int force);
 void updatePosition(Vector2* position, Vector2 velocity);
 void updateRotation(float* rotation, float rotationSpeed);
 
