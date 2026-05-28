@@ -260,22 +260,23 @@ void initAsteroid(GameContext* ctx, Asteroid* ast, AsteroidType type) {
 
 void initAsteroids(GameContext* ctx) {
     int numberOfAsteroids = getNumberOfAsteroids(ctx->player.level);
-    int numberOfMetalAsteroids = 1;
+    int numberOfMetalAsteroids = 0;
+    int level = ctx->player.level;
 
-    int chanceOfMetal = ctx->player.level * ctx->player.level;
+    int chanceOfMetal = (level + 1) * (level + 1);
 
-    if (chanceOfMetal > 100) chanceOfMetal = 100;
+    if (chanceOfMetal > 70) chanceOfMetal = 70;
 
     int chance = GetRandomValue(0, 99);
 
     if (chance < chanceOfMetal) {
         int minNumberOfMetal = 1;
-        float maxNumberOfMetal = round(numberOfAsteroids * (chanceOfMetal / 100.0f));
+        float maxNumberOfMetal = ceil(level / 2.0f);
 
         if (maxNumberOfMetal < minNumberOfMetal) {
             maxNumberOfMetal = minNumberOfMetal;
-        } else if (maxNumberOfMetal >= numberOfAsteroids) {
-            maxNumberOfMetal = numberOfAsteroids - 1;
+        } else if (maxNumberOfMetal > numberOfAsteroids / 2.0f) {
+            maxNumberOfMetal = numberOfAsteroids / 2.0f;
         }
 
         numberOfMetalAsteroids = GetRandomValue(minNumberOfMetal, maxNumberOfMetal);
