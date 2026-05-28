@@ -1,5 +1,6 @@
 #include "utils.h"
 #include "raylib.h"
+#include "raymath.h"
 #include "math.h"
 #include "constants.h"
 #include "stdio.h"
@@ -70,6 +71,37 @@ Vector2 getRandomVelocity(FloatRange range) {
 float getRoundness(Rectangle rect, float radiusPx) {
     float minDim = rect.width < rect.height ? rect.width : rect.height;
     return (radiusPx * 2.0f) / minDim;
+}
+
+void knockback(Vector2 targetPosition, Vector2* targetVelocity, Vector2 forcePosition, int force) {
+    Vector2 hitDirection = Vector2Subtract(targetPosition, forcePosition);
+    hitDirection = Vector2Normalize(hitDirection);
+
+    targetVelocity->x += hitDirection.x * force;
+    targetVelocity->y += hitDirection.y * force;
+}
+
+void knockbackByImpact(
+    Vector2 targetPosition,
+    Vector2* targetVelocity,
+    Vector2 forcePosition,
+    Vector2 forceVelocity
+) {
+    Vector2 normal =
+        Vector2Subtract(targetPosition, forcePosition);
+
+    normal = Vector2Normalize(normal);
+
+    Vector2 relativeVelocity =
+        Vector2Subtract(*targetVelocity, forceVelocity);
+
+    float speed =
+        Vector2DotProduct(relativeVelocity, normal);
+
+    if (speed < 0) {
+        targetVelocity->x -= normal.x * speed;
+        targetVelocity->y -= normal.y * speed;
+    }
 }
 
 void updatePosition(Vector2* position, Vector2 velocity) {

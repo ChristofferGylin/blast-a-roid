@@ -4,8 +4,40 @@
 #include <inttypes.h>
 #include <stdio.h>
 
+static const int ASTEROID_POINTS_1 = 50;
+static const int ASTEROID_POINTS_2 = 100;
+static const int ASTEROID_POINTS_3 = 300;
+static const int METAL_ASTEROID_POINTS = 1000;
+static const int SPIKY_ASTEROID_POINTS = 2000;
+
 void addScore(Player* player, Asteroid* ast) {
-    int score = ast->level == 1 ? ASTEROID_POINTS_1 : ast->level == 2 ? ASTEROID_POINTS_2 : ASTEROID_POINTS_3;
+    int score = 0;
+    
+    switch (ast->type) {
+        case ASTEROID_LEVEL_1:
+            score = ASTEROID_POINTS_1;
+            break;
+        
+        case ASTEROID_LEVEL_2:
+            score = ASTEROID_POINTS_2;
+            break;
+                    
+        case ASTEROID_LEVEL_3:
+            score = ASTEROID_POINTS_3;
+            break;
+                    
+        case METAL_ASTEROID:
+            score = METAL_ASTEROID_POINTS;
+            break;
+                    
+        case SPIKY_ASTEROID:
+            score = SPIKY_ASTEROID_POINTS;
+            break;
+            
+        default:
+            break;
+    }
+    
     player->score += score;
     player->levelBonus += score * player->timeBonusMultiplier;
 

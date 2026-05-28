@@ -178,13 +178,8 @@ void handleEnemiesHitDetection(GameContext* ctx) {
                 } else {
 
                     if (enemy->isMoveable) {
-
                         const int knockbackForce = 35;
-                        Vector2 hitDirection = Vector2Subtract(enemy->position, shotObj->shot.position);
-                        hitDirection = Vector2Normalize(hitDirection);
-
-                        enemy->velocity.x += hitDirection.x * knockbackForce;
-                        enemy->velocity.y += hitDirection.y * knockbackForce;
+                        knockback(enemy->position, &enemy->velocity, shotObj->shot.position, knockbackForce);
                     }
 
                     destroyShot(shotObj);

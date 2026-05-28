@@ -105,6 +105,7 @@ GameResult gameLoop(GameContext* ctx) {
             updateAnimationPool(&ctx->objectPools.explosions);
             updateEnemies(ctx);
             updateBonuses(ctx);
+            updateAsteroidsAnimations(ctx);
 
             if (ctx->ship.isShieldActive) {
                 updateShieldAnimation();
@@ -119,7 +120,7 @@ GameResult gameLoop(GameContext* ctx) {
             } else {
                 reset = true;
             }
-        } else if (ctx->objectPools.asteroids.activeCount == 0 && !waitForExit) {
+        } else if (countAsteroids(&ctx->objectPools.asteroids) == 0 && !waitForExit) {
             waitForExit = true;
             waitForExitTime = GetTime() + WAIT_TIME;
         }
@@ -154,6 +155,7 @@ GameResult gameLoop(GameContext* ctx) {
         } else if (reset && isFadeOutComplete) {
             resetShip(&ctx->ship);
             resetAllAsteroids(&ctx->objectPools.asteroids);
+            updateAsteroidsAnimations(ctx);
             resetPowerups(&ctx->player);
             initBonusSpawnPool(ctx);
             initEnemyPool(&ctx->objectPools.enemies);

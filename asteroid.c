@@ -51,22 +51,41 @@ void compactAsteroidPool(AsteroidPool* pool) {
     pool->activeCount = write;
 }
 
+int countAsteroids(AsteroidPool* pool) {
+    int count = 0;
+
+    for (int i = 0; i < pool->activeCount; i++) {
+        if (!pool->asteroids[i].active) continue;
+
+        if (
+            pool->asteroids[i].asteroid.type != METAL_ASTEROID &&
+            pool->asteroids[i].asteroid.type != SPIKY_ASTEROID
+        ) {
+            count++;
+        }
+    }
+
+    return count;
+}
+
 void destroyAsteroid(DestroyedAsteroidPool* pool, AsteroidPoolObject* ast) {
     ast->asteroid.destroyed = true;
     pool->asteroids[pool->activeCount] = ast;
     pool->activeCount++;
 }
 
-int getAsteroidSize(int level) {
+int getAsteroidSize(AsteroidType type) {
     
     int size = 0;
     
-    switch (level)
+    switch (type)
     {
-        case 1: size = ASTEROID_SIZE_1; break;
-        case 2: size = ASTEROID_SIZE_2; break;
-        case 3: size = ASTEROID_SIZE_3; break;
-        default: printf("Error: Invalid asteroid level (%d) in getAsteroidSize\n", level);
+        case ASTEROID_LEVEL_1: size = ASTEROID_SIZE_1; break;
+        case ASTEROID_LEVEL_2: size = ASTEROID_SIZE_2; break;
+        case ASTEROID_LEVEL_3: size = ASTEROID_SIZE_3; break;
+        case METAL_ASTEROID: size = METAL_ASTEROID_SIZE; break;
+        case SPIKY_ASTEROID: size = SPIKY_ASTEROID_SIZE; break;
+        default: printf("Error: Invalid asteroid type (%d) in getAsteroidSize\n", type);
     }
 
     return size;
@@ -74,7 +93,9 @@ int getAsteroidSize(int level) {
 
 void handleAsteroidCollisions(GameContext* ctx) {
 
-    if (ctx->ship.destroyed) return; 
+    Ship* ship = &ctx->ship;
+
+    if (ship->destroyed) return; 
 
     for (int i = 0; i < ctx->objectPools.asteroids.activeCount; i++) {
 
@@ -84,12 +105,18 @@ void handleAsteroidCollisions(GameContext* ctx) {
 
         if (ast->destroyed) continue;
 
-        float asteroidRadius = getAsteroidSize(ast->level) / 2.0f;
+        float asteroidRadius = ast->size / 2.0f;
 
-        if (ctx->ship.isShieldActive) {
-            if (CheckCollisionCircles(ctx->ship.position, SHIELD_SIZE / 2.0f, ast->position, asteroidRadius)) {
-                newExplosion(ctx, ast->position);
-                destroyAsteroid(&ctx->objectPools.destroyedAsteroids, &ctx->objectPools.asteroids.asteroids[i]);
+        if (ship->isShieldActive) {
+            if (CheckCollisionCircles(ship->position, SHIELD_SIZE / 2.0f, ast->position, asteroidRadius)) {
+                
+                if (ast->type == METAL_ASTEROID || ast->type == SPIKY_ASTEROID) {
+                    knockbackByImpact(ship->position, &ship->velocity, ast->position, ast->velocity);
+                } else {
+                    newExplosion(ctx, ast->position);
+                    destroyAsteroid(&ctx->objectPools.destroyedAsteroids, &ctx->objectPools.asteroids.asteroids[i]);
+                }
+            
                 continue;
             }
         } else {
@@ -110,8 +137,16 @@ void handleAsteroidCollisions(GameContext* ctx) {
                 }
 
                 if (shotObj->shot.level >= 1) {
-                    newExplosion(ctx, ast->position);
-                    destroyAsteroid(&ctx->objectPools.destroyedAsteroids, &ctx->objectPools.asteroids.asteroids[i]);
+
+                    ast->health--;
+
+                    if (ast->health <= 0) {
+                        newExplosion(ctx, ast->position);
+                        destroyAsteroid(&ctx->objectPools.destroyedAsteroids, &ctx->objectPools.asteroids.asteroids[i]);
+                    } else {
+                        const int knockbackForce = 200;
+                        knockback(ast->position, &ast->velocity, shotObj->shot.position, knockbackForce);
+                    }
                 } 
 
                 if (shotObj->shot.level <= 1) {
@@ -137,7 +172,7 @@ void handleAsteroidsMovement(AsteroidPool* pool) {
         updateRotation(&ast->rotation, ast->rotationSpeed);
         updatePosition(&ast->position, ast->velocity);
 
-        int asteroidSize = getAsteroidSize(ast->level);
+        int asteroidSize = getAsteroidSize(ast->type);
 
         outOfBoundsCheck(&ast->position, asteroidSize);
     }
@@ -147,28 +182,61 @@ void handleDestroyedAsteroids(GameContext* ctx) {
     if (ctx->objectPools.destroyedAsteroids.activeCount == 0) return;
 
     for (int i = 0; i < ctx->objectPools.destroyedAsteroids.activeCount; i++) {
-        ctx->objectPools.destroyedAsteroids.asteroids[i]->active = false;
-    }
+        Asteroid* ast = &ctx->objectPools.destroyedAsteroids.asteroids[i]->asteroid;
 
-    for (int i = 0; i < ctx->objectPools.destroyedAsteroids.activeCount; i++) {
         int numberOfNew = 0;
-        int astLevel = ctx->objectPools.destroyedAsteroids.asteroids[i]->asteroid.level;
+        AsteroidType newType = 0;
 
-        switch (astLevel) {
-            case 1: numberOfNew = 3; break;
-            case 2: numberOfNew = 2; break;
-            case 3: numberOfNew = 0; break; 
-            default: printf("Error: Invalid asteroid level (%d) in handleDestroyedAsteroids\n", astLevel);
+        switch (ast->type) {
+            case ASTEROID_LEVEL_1:
+                numberOfNew = 3;
+                newType = ASTEROID_LEVEL_2;
+                break;
+            case ASTEROID_LEVEL_2:
+                numberOfNew = 2;
+                newType = ASTEROID_LEVEL_3;
+                break;
+            case ASTEROID_LEVEL_3:
+            case SPIKY_ASTEROID:
+                break;
+            case METAL_ASTEROID:
+
+                int levelSquared = ctx->player.level * ctx->player.level;
+                int chanceOfSpikyAsteroid = levelSquared;
+                int chanceOfNothing = 50 - levelSquared;
+                
+                if (chanceOfSpikyAsteroid > 90) chanceOfSpikyAsteroid = 90;
+                if (chanceOfNothing < 0) chanceOfNothing = 0;
+
+                int chance = GetRandomValue(0, 99);
+
+                if (chance < chanceOfNothing) {
+                    continue;
+                } else if (chance < chanceOfNothing + chanceOfSpikyAsteroid) {
+                    numberOfNew = 1;
+                    newType = SPIKY_ASTEROID;
+                } else {
+                    numberOfNew = 3;
+                    newType = ASTEROID_LEVEL_2;
+                }
+
+                break; 
+            default:
+                printf("Error: Invalid asteroid type (%d) in handleDestroyedAsteroids\n", ast->type);
+                continue;
         }
 
         for (int j = 0; j < numberOfNew; j++) {
-            Asteroid newAst = {0};
-            resetAsteroid(&newAst);
-            newAst.level = astLevel + 1;
+            Asteroid newAst;
+            initAsteroid(ctx, &newAst, newType);
             newAst.position = ctx->objectPools.destroyedAsteroids.asteroids[i]->asteroid.position;
 
             addNewAsteroid(&ctx->objectPools.asteroids, newAst);
         }
+    }
+
+    for (int i = 0; i < ctx->objectPools.destroyedAsteroids.activeCount; i++) {
+        ctx->objectPools.destroyedAsteroids.asteroids[i]->active = false;
     }
 
     compactAsteroidPool(&ctx->objectPools.asteroids);
@@ -192,13 +260,71 @@ void initDestroyedAsteroidPool(DestroyedAsteroidPool* pool) {
     pool->activeCount = 0;
 }
 
+void initAsteroid(GameContext* ctx, Asteroid* ast, AsteroidType type) {
+    
+    ast->type = type;
+    ast->destroyed = false;
+    ast->size = getAsteroidSize(type);
+    resetAsteroid(ast);
+
+    if (type == METAL_ASTEROID) {
+        ast->health = 100;
+        ast->visualType = VISUAL_ANIMATION;
+        
+        AnimationInstance aniInst;
+        initAnimtionInstance(&aniInst, &ctx->assets.animations.metalAsteroid, ast->position, 0);
+        ast->animation = aniInst;
+
+    } else  if (type == SPIKY_ASTEROID) {
+        ast->health = 30;
+        ast->visualType = VISUAL_ANIMATION;
+
+        AnimationInstance aniInst;
+        initAnimtionInstance(&aniInst, &ctx->assets.animations.metalAsteroid, ast->position, 0);
+        ast->animation = aniInst;
+    } else {
+        ast->health = 1;
+        ast->visualType = VISUAL_SPRITE;
+
+        ast->sprite = &ctx->assets.sprites.asteroid;
+    }
+    
+}
+
 void initAsteroids(GameContext* ctx) {
     int numberOfAsteroids = getNumberOfAsteroids(ctx->player.level);
+    int numberOfMetalAsteroids = 1;
+    int level = ctx->player.level;
+
+    int chanceOfMetal = (level + 1) * (level + 1);
+
+    if (chanceOfMetal > 70) chanceOfMetal = 70;
+
+    int chance = GetRandomValue(0, 99);
+
+    if (chance < chanceOfMetal) {
+        int minNumberOfMetal = 1;
+        float maxNumberOfMetal = ceil(level / 2.0f);
+
+        if (maxNumberOfMetal < minNumberOfMetal) {
+            maxNumberOfMetal = minNumberOfMetal;
+        } else if (maxNumberOfMetal > numberOfAsteroids / 2.0f) {
+            maxNumberOfMetal = numberOfAsteroids / 2.0f;
+        }
+
+        numberOfMetalAsteroids = GetRandomValue(minNumberOfMetal, maxNumberOfMetal);
+        numberOfAsteroids = numberOfAsteroids - numberOfMetalAsteroids;
+    }
+
     for (int i = 0; i < numberOfAsteroids; i++) {
-        Asteroid ast = {0};
-        resetAsteroid(&ast);
-        ast.level = 1;
-        ast.destroyed = false;
+        Asteroid ast;
+        initAsteroid(ctx, &ast, ASTEROID_LEVEL_1);
+        addNewAsteroid(&ctx->objectPools.asteroids, ast);
+    }
+
+    for (int i = 0; i < numberOfMetalAsteroids; i++) {
+        Asteroid ast;
+        initAsteroid(ctx, &ast, METAL_ASTEROID);
         addNewAsteroid(&ctx->objectPools.asteroids, ast);
     }
 }
@@ -211,16 +337,18 @@ void renderAsteroids(GameContext* ctx) {
 
         if (ast->destroyed) continue;
 
-        int asteroidSize = getAsteroidSize(ast->level);
-
-        DrawTexturePro(
-            ctx->assets.sprites.asteroid,
-            (Rectangle){0, 0, ctx->assets.sprites.asteroid.width, ctx->assets.sprites.asteroid.height},
-            (Rectangle){ast->position.x, ast->position.y, asteroidSize, asteroidSize},
-            (Vector2){asteroidSize / 2.0f, asteroidSize / 2.0f},
-            ast->rotation,
-            WHITE  
-        );
+        if (ast->visualType == VISUAL_ANIMATION) {
+            renderAnimation(&ast->animation);
+        } else {
+            DrawTexturePro(
+                *ast->sprite,
+                (Rectangle){0, 0, ast->sprite->width, ast->sprite->height},
+                (Rectangle){ast->position.x, ast->position.y, ast->size, ast->size},
+                (Vector2){ast->size / 2.0f, ast->size / 2.0f},
+                ast->rotation,
+                WHITE  
+            );
+        }
     }
 }
 
@@ -250,10 +378,33 @@ void resetAsteroid(Asteroid* ast) {
 
     ast->position = position;
     ast->rotation = 0;
-    ast->rotationSpeed = GetRandomValue(-100, 100);
+
+    if (ast->type == METAL_ASTEROID || ast->type == SPIKY_ASTEROID) {
+        ast->rotationSpeed = 0;
+    } else {
+        ast->rotationSpeed = GetRandomValue(-100, 100);
+    }
+    
     ast->velocity = velocity;
 }
 
+void updateAsteroidsAnimations(GameContext* ctx) {
+    
+    AsteroidPool* pool = &ctx->objectPools.asteroids;
+
+    if (pool->activeCount == 0) return;
+    
+    for (int i = 0; i < pool->activeCount; i++) {
+        if (!pool->asteroids[i].active) continue;
+
+        Asteroid* ast = &pool->asteroids[i].asteroid;
+
+        if (ast->visualType == VISUAL_ANIMATION) {
+            updateAnimation(&ast->animation);
+            ast->animation.position = ast->position;
+        }
+    }
+}
 
 
 
