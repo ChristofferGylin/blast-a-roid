@@ -18,12 +18,7 @@ void addNewAnimation(AnimationPool* pool, Animation* animation, Vector2 position
     
     AnimationInstance aniInstance;
 
-    aniInstance.animation = animation;
-    aniInstance.currentFrame = 0;
-    aniInstance.frameTimer = 0.0f;
-    aniInstance.isFinished = false;
-    aniInstance.position = position;
-    aniInstance.rotation = rotation;
+    initAnimtionInstance(&aniInstance, animation, position, rotation, animation->fps, false);
 
     pool->animations[pool->activeCount].aniInstance = aniInstance;
     pool->animations[pool->activeCount].active = true;
@@ -104,11 +99,13 @@ void initAnimation(Animation* animation, char* spritesheetPath, const char* json
 
 }
 
-void initAnimtionInstance(AnimationInstance* instance, Animation* animation, Vector2 position, float rotation) {
+void initAnimtionInstance(AnimationInstance* instance, Animation* animation, Vector2 position, float rotation, int fps, bool isReversed) {
     instance->animation = animation;
-    instance->currentFrame = 0;
+    instance->currentFrame = isReversed ? animation->frameCount - 1 : 0;
+    instance->fps = fps;
     instance->frameTimer = 0.0f;
     instance->isFinished = false;
+    instance->isReversed = isReversed;
     instance->position = position;
     instance->rotation = rotation;
 }
@@ -149,14 +146,26 @@ void updateAnimation(AnimationInstance* aniInst) {
 
     aniInst->frameTimer += GetFrameTime();
 
-    if (aniInst->frameTimer >= (1.0f / aniInst->animation->fps)) {
+    if (aniInst->frameTimer >= (1.0f / aniInst->fps)) {
         aniInst->frameTimer = 0.0f;
-        aniInst->currentFrame++;
 
-        if ((aniInst->currentFrame >= aniInst->animation->frameCount) && !aniInst->animation->isLoop) {
-            aniInst->isFinished = true;
-        } else if ((aniInst->currentFrame >= aniInst->animation->frameCount) && aniInst->animation->isLoop) {
-            aniInst->currentFrame = 0;
+        if (aniInst->isReversed) {
+            aniInst->currentFrame--;
+
+            if ((aniInst->currentFrame <= 0) && !aniInst->animation->isLoop) {
+                aniInst->isFinished = true;
+            } else if ((aniInst->currentFrame <= 0) && aniInst->animation->isLoop) {
+                aniInst->currentFrame = aniInst->animation->frameCount - 1;
+            }
+
+        } else {
+            aniInst->currentFrame++;
+
+            if ((aniInst->currentFrame >= aniInst->animation->frameCount) && !aniInst->animation->isLoop) {
+                aniInst->isFinished = true;
+            } else if ((aniInst->currentFrame >= aniInst->animation->frameCount) && aniInst->animation->isLoop) {
+                aniInst->currentFrame = 0;
+            }
         }
     }
 }

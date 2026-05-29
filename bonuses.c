@@ -333,7 +333,7 @@ void initBonus(GameContext* ctx, Bonus* bonus, BonusType type, Vector2 position)
         bonus->visualType = VISUAL_SPRITE;
     } else {
         AnimationInstance animationInstance;
-        initAnimtionInstance(&animationInstance, &ctx->assets.animations.crate, position, 0.0f);
+        initAnimtionInstance(&animationInstance, &ctx->assets.animations.crate, position, 0.0f, ctx->assets.animations.crate.fps, false);
         
         bonus->animation = animationInstance;
         bonus->size = (Vector2){CRATE_COLLISION_SIZE, CRATE_COLLISION_SIZE};
