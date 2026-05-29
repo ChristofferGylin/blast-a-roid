@@ -296,7 +296,7 @@ void initAsteroid(GameContext* ctx, Asteroid* ast, AsteroidType type) {
 
 void initAsteroids(GameContext* ctx) {
     int numberOfAsteroids = getNumberOfAsteroids(ctx->player.level);
-    int numberOfMetalAsteroids = 4;
+    int numberOfMetalAsteroids = 0;
     int level = ctx->player.level;
 
     int chanceOfMetal = (level + 1) * (level + 1);
