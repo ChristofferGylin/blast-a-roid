@@ -106,7 +106,7 @@ void initAnimation(Animation* animation, char* spritesheetPath, const char* json
 
 void initAnimtionInstance(AnimationInstance* instance, Animation* animation, Vector2 position, float rotation, int fps, bool isReversed) {
     instance->animation = animation;
-    instance->currentFrame = 0;
+    instance->currentFrame = isReversed ? animation->frameCount : 0;
     instance->fps = fps;
     instance->frameTimer = 0.0f;
     instance->isFinished = false;
@@ -153,12 +153,24 @@ void updateAnimation(AnimationInstance* aniInst) {
 
     if (aniInst->frameTimer >= (1.0f / aniInst->animation->fps)) {
         aniInst->frameTimer = 0.0f;
-        aniInst->currentFrame++;
 
-        if ((aniInst->currentFrame >= aniInst->animation->frameCount) && !aniInst->animation->isLoop) {
-            aniInst->isFinished = true;
-        } else if ((aniInst->currentFrame >= aniInst->animation->frameCount) && aniInst->animation->isLoop) {
-            aniInst->currentFrame = 0;
+        if (aniInst->isReversed) {
+            aniInst->currentFrame--;
+
+            if ((aniInst->currentFrame <= 0) && !aniInst->animation->isLoop) {
+                aniInst->isFinished = true;
+            } else if ((aniInst->currentFrame <= 0) && aniInst->animation->isLoop) {
+                aniInst->currentFrame = aniInst->animation->frameCount;
+            }
+
+        } else {
+            aniInst->currentFrame++;
+
+            if ((aniInst->currentFrame >= aniInst->animation->frameCount) && !aniInst->animation->isLoop) {
+                aniInst->isFinished = true;
+            } else if ((aniInst->currentFrame >= aniInst->animation->frameCount) && aniInst->animation->isLoop) {
+                aniInst->currentFrame = 0;
+            }
         }
     }
 }
