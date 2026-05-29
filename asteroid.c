@@ -270,9 +270,12 @@ void initAsteroid(GameContext* ctx, Asteroid* ast, AsteroidType type) {
     if (type == METAL_ASTEROID) {
         ast->health = 100;
         ast->visualType = VISUAL_ANIMATION;
-        
+
+        int fps = GetRandomValue(20, 60);
+        bool isReversed = GetRandomValue(0, 1);
+
         AnimationInstance aniInst;
-        initAnimtionInstance(&aniInst, &ctx->assets.animations.metalAsteroid, ast->position, 0, 12.0f, true);
+        initAnimtionInstance(&aniInst, &ctx->assets.animations.metalAsteroid, ast->position, 0, (float)fps, isReversed);
         ast->animation = aniInst;
 
     } else  if (type == SPIKY_ASTEROID) {
@@ -293,7 +296,7 @@ void initAsteroid(GameContext* ctx, Asteroid* ast, AsteroidType type) {
 
 void initAsteroids(GameContext* ctx) {
     int numberOfAsteroids = getNumberOfAsteroids(ctx->player.level);
-    int numberOfMetalAsteroids = 1;
+    int numberOfMetalAsteroids = 0;
     int level = ctx->player.level;
 
     int chanceOfMetal = (level + 1) * (level + 1);
