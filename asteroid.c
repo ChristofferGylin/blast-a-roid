@@ -272,7 +272,7 @@ void initAsteroid(GameContext* ctx, Asteroid* ast, AsteroidType type) {
         ast->visualType = VISUAL_ANIMATION;
         
         AnimationInstance aniInst;
-        initAnimtionInstance(&aniInst, &ctx->assets.animations.metalAsteroid, ast->position, 0);
+        initAnimtionInstance(&aniInst, &ctx->assets.animations.metalAsteroid, ast->position, 0, 24.0f, false);
         ast->animation = aniInst;
 
     } else  if (type == SPIKY_ASTEROID) {
@@ -280,7 +280,7 @@ void initAsteroid(GameContext* ctx, Asteroid* ast, AsteroidType type) {
         ast->visualType = VISUAL_ANIMATION;
 
         AnimationInstance aniInst;
-        initAnimtionInstance(&aniInst, &ctx->assets.animations.metalAsteroid, ast->position, 0);
+        initAnimtionInstance(&aniInst, &ctx->assets.animations.metalAsteroid, ast->position, 0, 24.0f, false);
         ast->animation = aniInst;
     } else {
         ast->health = 1;

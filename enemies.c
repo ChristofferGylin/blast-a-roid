@@ -392,7 +392,7 @@ void initUfo1(GameContext* ctx, Enemy* enemy) {
 
     AnimationInstance instance;
 
-    initAnimtionInstance(&instance, &ctx->assets.animations.ufo1, enemy->position, enemy->rotation);
+    initAnimtionInstance(&instance, &ctx->assets.animations.ufo1, enemy->position, enemy->rotation, ctx->assets.animations.ufo1.fps, false);
 
     enemy->animation = instance;
 }
@@ -430,7 +430,7 @@ void initUfo2(GameContext* ctx, Enemy* enemy) {
 
     AnimationInstance instance;
 
-    initAnimtionInstance(&instance, &ctx->assets.animations.ufo2, enemy->position, enemy->rotation);
+    initAnimtionInstance(&instance, &ctx->assets.animations.ufo2, enemy->position, enemy->rotation, ctx->assets.animations.ufo2.fps, false);
 
     enemy->animation = instance;
 }
@@ -468,7 +468,7 @@ void initUfo3(GameContext* ctx, Enemy* enemy) {
 
     AnimationInstance instance;
 
-    initAnimtionInstance(&instance, &ctx->assets.animations.ufo3, enemy->position, enemy->rotation);
+    initAnimtionInstance(&instance, &ctx->assets.animations.ufo3, enemy->position, enemy->rotation, ctx->assets.animations.ufo1.fps, false);
 
     enemy->animation = instance;
 }
