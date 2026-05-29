@@ -19,10 +19,12 @@ typedef struct Animation {
 typedef struct AnimationInstance {
     Animation* animation;
     Vector2 position;
+    int fps;
     float rotation;
     int currentFrame;
     float frameTimer;
     bool isFinished;
+    bool isReversed;
 }AnimationInstance;
 
 typedef struct AnimationPoolObject {
