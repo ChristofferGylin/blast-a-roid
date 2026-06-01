@@ -64,6 +64,7 @@ void loadAssets(GameContext* ctx) {
 void unloadAssets(GameContext* ctx) {
     unloadAnimation(&ctx->assets.animations.crate);
     unloadAnimation(&ctx->assets.animations.explosion);
+    unloadAnimation(&ctx->assets.animations.metalAsteroid);
     unloadAnimation(&ctx->assets.animations.spikyAsteroid);
     unloadAnimation(&ctx->assets.animations.ufo1);
     unloadAnimation(&ctx->assets.animations.ufo2);
