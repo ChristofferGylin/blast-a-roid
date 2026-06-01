@@ -282,8 +282,10 @@ void initAsteroid(GameContext* ctx, Asteroid* ast, AsteroidType type) {
         ast->health = 30;
         ast->visualType = VISUAL_ANIMATION;
 
+        bool isReversed = GetRandomValue(0, 1);
+
         AnimationInstance aniInst;
-        initAnimtionInstance(&aniInst, &ctx->assets.animations.metalAsteroid, ast->position, 0, ctx->assets.animations.metalAsteroid.fps, false);
+        initAnimtionInstance(&aniInst, &ctx->assets.animations.spikyAsteroid, ast->position, 0, ctx->assets.animations.spikyAsteroid.fps, isReversed);
         ast->animation = aniInst;
     } else {
         ast->health = 1;
