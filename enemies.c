@@ -635,6 +635,7 @@ void updateEnemies(GameContext* ctx) {
         {
         case SPIKY_ASTEROID:
             updateSpikyAsteroid(ctx, enemy);
+            break;
         case UFO_1:
             change = updateUfo1(ctx, enemy);
             break;
