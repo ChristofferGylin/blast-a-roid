@@ -167,10 +167,8 @@ void handleEnemiesHitDetection(GameContext* ctx) {
             Enemy* enemy = &ctx->objectPools.enemies.enemies[j].enemy;
 
             if (CheckCollisionCircles(enemy->position, enemy->size / 2.0f, shotObj->shot.position, shotObj->shot.size / 2.0f)) {
-                // TODO: Simpify damage. 1 shot = 1 damage. Also change health for enemies to match
-                int damage = 10 + (shotObj->shot.level * 10);
                 
-                enemy->health -= damage;
+                enemy->health--;
 
                 if (enemy->health <= 0) {
                     newExplosion(ctx, enemy->position);
