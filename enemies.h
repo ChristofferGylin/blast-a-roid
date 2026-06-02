@@ -79,34 +79,34 @@ typedef struct EnemySpawnPool {
 
 static EnemySpawnOption levelsEnemyOptions[NUMBER_OF_LEVEL_ENEMY_OPTIONS][NUMBER_OF_ENEMY_TYPES] = {
     {
-        {UFO_1, 100.0f, 0, 0},
+        {UFO_1, 100.0f, 0, 1},
         {UFO_2, 100.0f, 0, 0},
         {UFO_3, 100.0f, 0, 0},
-        {SPIKY_ASTEROID, 100.0f, 0, 1},
-    },
-    {
-        {UFO_1, 100.0f, 0, 0},
-        {UFO_2, 70.0f, 0, 0},
-        {UFO_3, 70.0f, 0, 0},
-        {SPIKY_ASTEROID, 100.0f, 0, 1},
+        {SPIKY_ASTEROID, 0.0f, 0, 0},
     },
     {
         {UFO_1, 100.0f, 0, 1},
         {UFO_2, 70.0f, 0, 1},
-        {UFO_3, 50.0f, 0, 1},
-        {SPIKY_ASTEROID, 100.0f, 0, 0},
+        {UFO_3, 50.0f, 0, 0},
+        {SPIKY_ASTEROID, 50.0f, 0, 1},
     },
     {
-        {UFO_1, 70.0f, 0, 1},
+        {UFO_1, 50.0f, 0, 1},
+        {UFO_2, 70.0f, 0, 1},
+        {UFO_3, 70.0f, 0, 1},
+        {SPIKY_ASTEROID, 70.0f, 0, 1},
+    },
+    {
+        {UFO_1, 50.0f, 0, 1},
         {UFO_2, 100.0f, 0, 2},
         {UFO_3, 70.0f, 0, 1},
-        {SPIKY_ASTEROID, 100.0f, 0, 0},
+        {SPIKY_ASTEROID, 70.0f, 0, 2},
     },    
     {
         {UFO_1, 50.0f, 0, 1},
         {UFO_2, 70.0f, 0, 2},
         {UFO_3, 100.0f, 0, 2},
-        {SPIKY_ASTEROID, 100.0f, 0, 0},
+        {SPIKY_ASTEROID, 100.0f, 0, 3},
     },
 };
 
