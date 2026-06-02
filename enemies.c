@@ -13,19 +13,21 @@
 void compactEnemyPool(EnemyObjectPool* pool);
 void compactEnemySpawnPool(EnemySpawnPool* pool);
 void initEnemy(GameContext* ctx, Enemy* enemy, EnemyType type);
+void initSpikyAsteroid(GameContext* ctx, Enemy* enemy);
 void initUfo1(GameContext* ctx, Enemy* enemy);
 void initUfo2(GameContext* ctx, Enemy* enemy);
 void initUfo3(GameContext* ctx, Enemy* enemy);
 void handleEnemyShooting(GameContext* ctx, Enemy* enemy);
 void handleUfoMovement(GameContext* ctx, Enemy* enemy);
 bool ufoGoOffScreen(GameContext* ctx, Enemy* enemy);
+void updateSpikyAsteroid(GameContext* ctx, Enemy* enemy);
 bool updateUfo1(GameContext* ctx, Enemy* enemy);
 bool updateUfo2(GameContext* ctx, Enemy* enemy);
 bool updateUfo3(GameContext* ctx, Enemy* enemy);
 
 void addNewEnemy(GameContext* ctx, EnemyType type) {
 
-    EnemyObjectPool* pool = &ctx->objectPools.enemies; 
+    EnemyObjectPool* pool = &ctx->objectPools.enemies;
 
     if (pool->activeCount >= MAX_ENEMIES) {
         printf("Error: Memory overflow in addNewEnemy\n");
@@ -99,7 +101,7 @@ void handleEnemiesCollisions(GameContext* ctx) {
         if (!enemyObject->active) continue;
 
         if (ctx->ship.isShieldActive && CheckCollisionCircles(enemyObject->enemy.position, enemyObject->enemy.size / 2, ctx->ship.position, SHIELD_SIZE / 2)) {
-
+            // TODO: knockback ship if enemy type is SPIKY_ASTEROID
             newExplosion(ctx, enemyObject->enemy.position);
             dropNewBonus(ctx, &enemyObject->enemy);
 
@@ -158,7 +160,7 @@ void handleEnemiesHitDetection(GameContext* ctx) {
             Enemy* enemy = &ctx->objectPools.enemies.enemies[j].enemy;
 
             if (CheckCollisionCircles(enemy->position, enemy->size / 2.0f, shotObj->shot.position, shotObj->shot.size / 2.0f)) {
-                
+                // TODO: Simpify damage. 1 shot = 1 damage. Also change health for enemies to match
                 int damage = 10 + (shotObj->shot.level * 10);
                 
                 enemy->health -= damage;
@@ -203,6 +205,7 @@ void handleEnemiesMovement(GameContext* ctx) {
         Enemy* enemy = &pool->enemies[i].enemy;
 
         switch (enemy->type) {
+            case SPIKY_ASTEROID:
             case UFO_1:
             case UFO_2:
             case UFO_3:
@@ -303,6 +306,10 @@ void initEnemy(GameContext* ctx, Enemy* enemy, EnemyType type) {
 
     switch (type)
     {
+    case SPIKY_ASTEROID:
+        initSpikyAsteroid(ctx, enemy);
+        break;
+
     case UFO_1:
         initUfo1(ctx, enemy);
         break;
@@ -350,14 +357,56 @@ void initEnemySpawnPool(GameContext* ctx) {
 
     EnemySpawnOption* spawnOptions = levelsEnemyOptions[index];
 
+    int activeIndex = 0;
+
     for (int i = 0; i < NUMBER_OF_ENEMY_TYPES; i++) {
         
         if (spawnOptions[i].maxCount > 0) {
-            pool->options[i].option = spawnOptions[i];
-            pool->options[i].active = true;
-            pool->activeCount++;
-        } 
+            pool->options[activeIndex].option = spawnOptions[i];
+            pool->options[activeIndex].active = true;
+            activeIndex++;
+        }
     }
+
+    pool->activeCount = activeIndex;
+}
+
+void initSpikyAsteroid(GameContext* ctx, Enemy* enemy) {
+
+    enemy->endPosition = (Vector2){0, 0};
+    enemy->startPosition = getRandomPositionOffScreen(SPIKY_ASTEROID_SIZE);
+
+    enemy->acceleration = 300.0f;
+    enemy->brakeFactor = 3.0f;
+    enemy->attackRange = 0;
+    enemy->destination = ctx->ship.position;
+    enemy->health = 30;
+    enemy->maxVelocity = 300.0f;
+    enemy->isAttacking = true;
+    enemy->isMoveable = true;
+    enemy->position = enemy->startPosition;
+    enemy->reactionTime = 0.3f;
+    enemy->size = SPIKY_ASTEROID_SIZE;
+    enemy->score = 2000;
+    enemy->type = SPIKY_ASTEROID;
+    enemy->velocity = (Vector2){0, 0};
+    enemy->visualType = VISUAL_ANIMATION;
+
+    enemy->shooting.fireRate = 500;
+    enemy->shooting.perfectHitChance = 3;
+    enemy->shooting.salvoRate = 3000;
+    enemy->shooting.salvoSize = 0;
+    enemy->shooting.spreadRadian = 0;
+
+    enemy->shooting.shot = getShotProps(ctx, GREEN_SHOT_1);
+
+    AnimationInstance instance;
+
+    bool isReversed = GetRandomValue(0, 1);
+
+    initAnimtionInstance(&instance, &ctx->assets.animations.spikyAsteroid, enemy->position, enemy->rotation, ctx->assets.animations.spikyAsteroid.fps, isReversed);
+
+    enemy->animation = instance;
 }
 
 void initUfo1(GameContext* ctx, Enemy* enemy) {
@@ -532,7 +581,6 @@ void spawnEnemy(GameContext* ctx) {
     EnemySpawnPool* pool = &ctx->objectPools.spawnableEnemies;
     
     if (pool->activeCount == 0 || ctx->spawning.nextSpawn > GetTime()) return;
-
     setNextEnemySpawnTime(ctx);
 
     float sumOfWeight = 0.0f;
@@ -562,7 +610,6 @@ void spawnEnemy(GameContext* ctx) {
 
         randomSelect -= option->weight;
     }
-
 }
 
 void updateEnemies(GameContext* ctx) {
@@ -584,6 +631,9 @@ void updateEnemies(GameContext* ctx) {
 
         switch (enemy->type)
         {
+        case SPIKY_ASTEROID:
+            updateSpikyAsteroid(ctx, enemy);
+            break;
         case UFO_1:
             change = updateUfo1(ctx, enemy);
             break;
@@ -637,6 +687,10 @@ bool ufoGoOffScreen(GameContext* ctx, Enemy* enemy) {
     if (remove) removeEnemy(&ctx->objectPools.enemies, enemy);
 
     return remove;
+}
+
+void updateSpikyAsteroid(GameContext* ctx, Enemy* enemy) {
+    enemy->destination = ctx->ship.position;
 }
 
 bool updateUfo1(GameContext* ctx, Enemy* enemy) {

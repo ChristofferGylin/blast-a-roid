@@ -8,7 +8,6 @@ static const int ASTEROID_POINTS_1 = 50;
 static const int ASTEROID_POINTS_2 = 100;
 static const int ASTEROID_POINTS_3 = 300;
 static const int METAL_ASTEROID_POINTS = 1000;
-static const int SPIKY_ASTEROID_POINTS = 2000;
 
 void addScore(Player* player, Asteroid* ast) {
     int score = 0;
@@ -29,11 +28,7 @@ void addScore(Player* player, Asteroid* ast) {
         case METAL_ASTEROID:
             score = METAL_ASTEROID_POINTS;
             break;
-                    
-        case SPIKY_ASTEROID:
-            score = SPIKY_ASTEROID_POINTS;
-            break;
-            
+                        
         default:
             break;
     }

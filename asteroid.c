@@ -57,10 +57,7 @@ int countAsteroids(AsteroidPool* pool) {
     for (int i = 0; i < pool->activeCount; i++) {
         if (!pool->asteroids[i].active) continue;
 
-        if (
-            pool->asteroids[i].asteroid.type != METAL_ASTEROID &&
-            pool->asteroids[i].asteroid.type != SPIKY_ASTEROID
-        ) {
+        if (pool->asteroids[i].asteroid.type != METAL_ASTEROID) {
             count++;
         }
     }
@@ -84,7 +81,6 @@ int getAsteroidSize(AsteroidType type) {
         case ASTEROID_LEVEL_2: size = ASTEROID_SIZE_2; break;
         case ASTEROID_LEVEL_3: size = ASTEROID_SIZE_3; break;
         case METAL_ASTEROID: size = METAL_ASTEROID_SIZE; break;
-        case SPIKY_ASTEROID: size = SPIKY_ASTEROID_SIZE; break;
         default: printf("Error: Invalid asteroid type (%d) in getAsteroidSize\n", type);
     }
 
@@ -110,7 +106,7 @@ void handleAsteroidCollisions(GameContext* ctx) {
         if (ship->isShieldActive) {
             if (CheckCollisionCircles(ship->position, SHIELD_SIZE / 2.0f, ast->position, asteroidRadius)) {
                 
-                if (ast->type == METAL_ASTEROID || ast->type == SPIKY_ASTEROID) {
+                if (ast->type == METAL_ASTEROID) {
                     knockbackByImpact(ship->position, &ship->velocity, ast->position, ast->velocity);
                 } else {
                     newExplosion(ctx, ast->position);
@@ -197,7 +193,6 @@ void handleDestroyedAsteroids(GameContext* ctx) {
                 newType = ASTEROID_LEVEL_3;
                 break;
             case ASTEROID_LEVEL_3:
-            case SPIKY_ASTEROID:
                 break;
             case METAL_ASTEROID:
 
@@ -213,8 +208,7 @@ void handleDestroyedAsteroids(GameContext* ctx) {
                 if (chance < chanceOfNothing) {
                     continue;
                 } else if (chance < chanceOfNothing + chanceOfSpikyAsteroid) {
-                    numberOfNew = 1;
-                    newType = SPIKY_ASTEROID;
+                    // TODO: Spawn SPIKY_ASTEROID enemy
                 } else {
                     numberOfNew = 3;
                     newType = ASTEROID_LEVEL_2;
@@ -278,13 +272,6 @@ void initAsteroid(GameContext* ctx, Asteroid* ast, AsteroidType type) {
         initAnimtionInstance(&aniInst, &ctx->assets.animations.metalAsteroid, ast->position, 0, (float)fps, isReversed);
         ast->animation = aniInst;
 
-    } else  if (type == SPIKY_ASTEROID) {
-        ast->health = 30;
-        ast->visualType = VISUAL_ANIMATION;
-
-        AnimationInstance aniInst;
-        initAnimtionInstance(&aniInst, &ctx->assets.animations.metalAsteroid, ast->position, 0, ctx->assets.animations.metalAsteroid.fps, false);
-        ast->animation = aniInst;
     } else {
         ast->health = 1;
         ast->visualType = VISUAL_SPRITE;
@@ -382,7 +369,7 @@ void resetAsteroid(Asteroid* ast) {
     ast->position = position;
     ast->rotation = 0;
 
-    if (ast->type == METAL_ASTEROID || ast->type == SPIKY_ASTEROID) {
+    if (ast->type == METAL_ASTEROID) {
         ast->rotationSpeed = 0;
     } else {
         ast->rotationSpeed = GetRandomValue(-100, 100);
