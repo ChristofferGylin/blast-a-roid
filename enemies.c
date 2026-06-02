@@ -164,13 +164,13 @@ void handleEnemiesHitDetection(GameContext* ctx) {
 
         for (int j = 0; j < ctx->objectPools.enemies.activeCount; j++) {
 
+            if (!ctx->objectPools.enemies.enemies[j].active) continue;
+
             Enemy* enemy = &ctx->objectPools.enemies.enemies[j].enemy;
 
             if (CheckCollisionCircles(enemy->position, enemy->size / 2.0f, shotObj->shot.position, shotObj->shot.size / 2.0f)) {
-                // TODO: Simpify damage. 1 shot = 1 damage. Also change health for enemies to match
-                int damage = 10 + (shotObj->shot.level * 10);
                 
-                enemy->health -= damage;
+                enemy->health--;
 
                 if (enemy->health <= 0) {
                     newExplosion(ctx, enemy->position);
@@ -425,7 +425,7 @@ void initUfo1(GameContext* ctx, Enemy* enemy) {
     enemy->brakeFactor = 3.0f;
     enemy->attackRange = 0;
     enemy->destination = enemy->endPosition;
-    enemy->health = 100;
+    enemy->health = 5;
     enemy->maxVelocity = 50.0f;
     enemy->isMoveable = true;
     enemy->position = enemy->startPosition;
@@ -463,7 +463,7 @@ void initUfo2(GameContext* ctx, Enemy* enemy) {
     enemy->brakeFactor = 0.5f;
     enemy->attackRange = 200;
     enemy->destination = ctx->ship.position;
-    enemy->health = 100;
+    enemy->health = 10;
     enemy->maxVelocity = 70.0f;
     enemy->isMoveable = true;
     enemy->position = enemy->startPosition;
@@ -501,7 +501,7 @@ void initUfo3(GameContext* ctx, Enemy* enemy) {
     enemy->brakeFactor = 0.5f;
     enemy->attackRange = 0;
     enemy->destination = ctx->ship.position;
-    enemy->health = 150;
+    enemy->health = 15;
     enemy->maxVelocity = 100.0f;
     enemy->isMoveable = true;
     enemy->position = enemy->startPosition;
