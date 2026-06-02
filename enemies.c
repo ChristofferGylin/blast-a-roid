@@ -13,12 +13,14 @@
 void compactEnemyPool(EnemyObjectPool* pool);
 void compactEnemySpawnPool(EnemySpawnPool* pool);
 void initEnemy(GameContext* ctx, Enemy* enemy, EnemyType type);
+void initSpikyAsteroid(GameContext* ctx, Enemy* enemy);
 void initUfo1(GameContext* ctx, Enemy* enemy);
 void initUfo2(GameContext* ctx, Enemy* enemy);
 void initUfo3(GameContext* ctx, Enemy* enemy);
 void handleEnemyShooting(GameContext* ctx, Enemy* enemy);
 void handleUfoMovement(GameContext* ctx, Enemy* enemy);
 bool ufoGoOffScreen(GameContext* ctx, Enemy* enemy);
+void updateSpikyAsteroid(GameContext* ctx, Enemy* enemy);
 bool updateUfo1(GameContext* ctx, Enemy* enemy);
 bool updateUfo2(GameContext* ctx, Enemy* enemy);
 bool updateUfo3(GameContext* ctx, Enemy* enemy);
@@ -99,7 +101,7 @@ void handleEnemiesCollisions(GameContext* ctx) {
         if (!enemyObject->active) continue;
 
         if (ctx->ship.isShieldActive && CheckCollisionCircles(enemyObject->enemy.position, enemyObject->enemy.size / 2, ctx->ship.position, SHIELD_SIZE / 2)) {
-
+            // TODO: knockback ship if enemy type is SPIKY_ASTEROID
             newExplosion(ctx, enemyObject->enemy.position);
             dropNewBonus(ctx, &enemyObject->enemy);
 
@@ -158,7 +160,7 @@ void handleEnemiesHitDetection(GameContext* ctx) {
             Enemy* enemy = &ctx->objectPools.enemies.enemies[j].enemy;
 
             if (CheckCollisionCircles(enemy->position, enemy->size / 2.0f, shotObj->shot.position, shotObj->shot.size / 2.0f)) {
-                
+                // TODO: Simpify damage. 1 shot = 1 damage. Also change health for enemies to match
                 int damage = 10 + (shotObj->shot.level * 10);
                 
                 enemy->health -= damage;
@@ -203,6 +205,7 @@ void handleEnemiesMovement(GameContext* ctx) {
         Enemy* enemy = &pool->enemies[i].enemy;
 
         switch (enemy->type) {
+            case SPIKY_ASTEROID:
             case UFO_1:
             case UFO_2:
             case UFO_3:
@@ -303,6 +306,10 @@ void initEnemy(GameContext* ctx, Enemy* enemy, EnemyType type) {
 
     switch (type)
     {
+    case SPIKY_ASTEROID:
+        initSpikyAsteroid(ctx, enemy);
+        break;
+
     case UFO_1:
         initUfo1(ctx, enemy);
         break;
@@ -371,6 +378,7 @@ void initSpikyAsteroid(GameContext* ctx, Enemy* enemy) {
     enemy->destination = enemy->endPosition;
     enemy->health = 30;
     enemy->maxVelocity = 200.0f;
+    enemy->isAttacking = true;
     enemy->isMoveable = true;
     enemy->position = enemy->startPosition;
     enemy->reactionTime = 0.3f;
@@ -621,6 +629,8 @@ void updateEnemies(GameContext* ctx) {
 
         switch (enemy->type)
         {
+        case SPIKY_ASTEROID:
+            updateSpikyAsteroid(ctx, enemy);
         case UFO_1:
             change = updateUfo1(ctx, enemy);
             break;
@@ -674,6 +684,10 @@ bool ufoGoOffScreen(GameContext* ctx, Enemy* enemy) {
     if (remove) removeEnemy(&ctx->objectPools.enemies, enemy);
 
     return remove;
+}
+
+void updateSpikyAsteroid(GameContext* ctx, Enemy* enemy) {
+    enemy->destination = ctx->ship.position;
 }
 
 bool updateUfo1(GameContext* ctx, Enemy* enemy) {
