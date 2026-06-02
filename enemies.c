@@ -27,7 +27,9 @@ bool updateUfo3(GameContext* ctx, Enemy* enemy);
 
 void addNewEnemy(GameContext* ctx, EnemyType type) {
 
-    EnemyObjectPool* pool = &ctx->objectPools.enemies; 
+    printf("Add new enemy type# %d\n", type);
+
+    EnemyObjectPool* pool = &ctx->objectPools.enemies;
 
     if (pool->activeCount >= MAX_ENEMIES) {
         printf("Error: Memory overflow in addNewEnemy\n");
@@ -357,14 +359,18 @@ void initEnemySpawnPool(GameContext* ctx) {
 
     EnemySpawnOption* spawnOptions = levelsEnemyOptions[index];
 
+    int activeIndex = 0;
+
     for (int i = 0; i < NUMBER_OF_ENEMY_TYPES; i++) {
         
         if (spawnOptions[i].maxCount > 0) {
-            pool->options[i].option = spawnOptions[i];
-            pool->options[i].active = true;
-            pool->activeCount++;
-        } 
+            pool->options[activeIndex].option = spawnOptions[i];
+            pool->options[activeIndex].active = true;
+            activeIndex++;
+        }
     }
+
+    pool->activeCount = activeIndex;
 }
 
 void initSpikyAsteroid(GameContext* ctx, Enemy* enemy) {
@@ -375,7 +381,7 @@ void initSpikyAsteroid(GameContext* ctx, Enemy* enemy) {
     enemy->acceleration = 100.0f;
     enemy->brakeFactor = 3.0f;
     enemy->attackRange = 0;
-    enemy->destination = enemy->endPosition;
+    enemy->destination = ctx->ship.position;
     enemy->health = 30;
     enemy->maxVelocity = 200.0f;
     enemy->isAttacking = true;
@@ -577,7 +583,6 @@ void spawnEnemy(GameContext* ctx) {
     EnemySpawnPool* pool = &ctx->objectPools.spawnableEnemies;
     
     if (pool->activeCount == 0 || ctx->spawning.nextSpawn > GetTime()) return;
-
     setNextEnemySpawnTime(ctx);
 
     float sumOfWeight = 0.0f;
@@ -607,7 +612,6 @@ void spawnEnemy(GameContext* ctx) {
 
         randomSelect -= option->weight;
     }
-
 }
 
 void updateEnemies(GameContext* ctx) {
