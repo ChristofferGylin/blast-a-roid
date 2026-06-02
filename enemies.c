@@ -425,7 +425,7 @@ void initUfo1(GameContext* ctx, Enemy* enemy) {
     enemy->brakeFactor = 3.0f;
     enemy->attackRange = 0;
     enemy->destination = enemy->endPosition;
-    enemy->health = 100;
+    enemy->health = 5;
     enemy->maxVelocity = 50.0f;
     enemy->isMoveable = true;
     enemy->position = enemy->startPosition;
@@ -463,7 +463,7 @@ void initUfo2(GameContext* ctx, Enemy* enemy) {
     enemy->brakeFactor = 0.5f;
     enemy->attackRange = 200;
     enemy->destination = ctx->ship.position;
-    enemy->health = 100;
+    enemy->health = 10;
     enemy->maxVelocity = 70.0f;
     enemy->isMoveable = true;
     enemy->position = enemy->startPosition;
@@ -501,7 +501,7 @@ void initUfo3(GameContext* ctx, Enemy* enemy) {
     enemy->brakeFactor = 0.5f;
     enemy->attackRange = 0;
     enemy->destination = ctx->ship.position;
-    enemy->health = 150;
+    enemy->health = 15;
     enemy->maxVelocity = 100.0f;
     enemy->isMoveable = true;
     enemy->position = enemy->startPosition;
