@@ -193,6 +193,7 @@ void handleDestroyedAsteroids(GameContext* ctx) {
                 newType = ASTEROID_LEVEL_3;
                 break;
             case ASTEROID_LEVEL_3:
+                break;
             case METAL_ASTEROID:
 
                 int levelSquared = ctx->player.level * ctx->player.level;

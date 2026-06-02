@@ -79,10 +79,10 @@ typedef struct EnemySpawnPool {
 
 static EnemySpawnOption levelsEnemyOptions[NUMBER_OF_LEVEL_ENEMY_OPTIONS][NUMBER_OF_ENEMY_TYPES] = {
     {
-        {UFO_1, 100.0f, 0, 1},
+        {UFO_1, 100.0f, 0, 0},
         {UFO_2, 100.0f, 0, 0},
         {UFO_3, 100.0f, 0, 0},
-        {SPIKY_ASTEROID, 100.0f, 0, 0},
+        {SPIKY_ASTEROID, 100.0f, 0, 3},
     },
     {
         {UFO_1, 100.0f, 0, 1},
