@@ -91,6 +91,7 @@ void compactEnemySpawnPool(EnemySpawnPool* pool) {
 void handleEnemiesCollisions(GameContext* ctx) {
     
     EnemyObjectPool* enemyPool = &ctx->objectPools.enemies;
+    Ship* ship = &ctx->ship;
 
     if (enemyPool->activeCount == 0) return;
     
@@ -101,23 +102,28 @@ void handleEnemiesCollisions(GameContext* ctx) {
 
         if (!enemyObject->active) continue;
 
-        if (ctx->ship.isShieldActive && CheckCollisionCircles(enemyObject->enemy.position, enemyObject->enemy.size / 2, ctx->ship.position, SHIELD_SIZE / 2)) {
-            // TODO: knockback ship if enemy type is SPIKY_ASTEROID
-            newExplosion(ctx, enemyObject->enemy.position);
-            dropNewBonus(ctx, &enemyObject->enemy);
+        Enemy* enemy = &enemyObject->enemy;
 
-            ctx->player.score += enemyObject->enemy.score;
-            ctx->player.levelBonus += enemyObject->enemy.score * ctx->player.timeBonusMultiplier; 
-
-            enemyObject->active = false;
-            enemyPoolHasChanges = true;
-
-        } else if (CheckCollisionCircles(enemyObject->enemy.position, enemyObject->enemy.size / 2, ctx->ship.position, SHIP_SIZE / 2)) {
+        if (ship->isShieldActive && CheckCollisionCircles(enemy->position, enemy->size / 2, ship->position, SHIELD_SIZE / 2)) {
             
-            newExplosion(ctx, ctx->ship.position);
-            newExplosion(ctx, enemyObject->enemy.position);
+            if (enemy->type == SPIKY_ASTEROID) {
+                knockbackByImpact(ship->position, &ship->velocity, enemy->position, enemy->velocity);
+            } else {
+                newExplosion(ctx, enemy->position);
+                dropNewBonus(ctx, &enemyObject->enemy);
 
-            if (!ctx->ship.destroyed) destroyShip(ctx);
+                ctx->player.score += enemy->score;
+                ctx->player.levelBonus += enemy->score * ctx->player.timeBonusMultiplier; 
+
+                enemyObject->active = false;
+                enemyPoolHasChanges = true;
+            }
+        } else if (CheckCollisionCircles(enemy->position, enemy->size / 2, ship->position, SHIP_SIZE / 2)) {
+            
+            newExplosion(ctx, ship->position);
+            newExplosion(ctx, enemy->position);
+
+            if (!ship->destroyed) destroyShip(ctx);
             
             enemyObject->active = false;
             enemyPoolHasChanges = true;
