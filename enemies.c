@@ -369,13 +369,13 @@ void initSpikyAsteroid(GameContext* ctx, Enemy* enemy) {
     enemy->brakeFactor = 3.0f;
     enemy->attackRange = 0;
     enemy->destination = enemy->endPosition;
-    enemy->health = 100;
-    enemy->maxVelocity = 50.0f;
+    enemy->health = 30;
+    enemy->maxVelocity = 200.0f;
     enemy->isMoveable = true;
     enemy->position = enemy->startPosition;
     enemy->reactionTime = 0.3f;
     enemy->size = SPIKY_ASTEROID_SIZE;
-    enemy->score = 500;
+    enemy->score = 2000;
     enemy->type = SPIKY_ASTEROID;
     enemy->velocity = (Vector2){0, 0};
     enemy->visualType = VISUAL_ANIMATION;
