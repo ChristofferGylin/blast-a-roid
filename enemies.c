@@ -703,7 +703,7 @@ bool ufoGoOffScreen(GameContext* ctx, Enemy* enemy) {
 }
 
 void updateSpikyAsteroid(GameContext* ctx, Enemy* enemy) {
-    enemy->destination = predictiveAim(ctx->ship.position, ctx->ship.velocity, enemy->position, 1.0f);
+    enemy->destination = predictiveAim(ctx->ship.position, ctx->ship.velocity, enemy->position, 0.5f);
 }
 
 bool updateUfo1(GameContext* ctx, Enemy* enemy) {
@@ -721,7 +721,7 @@ bool updateUfo2(GameContext* ctx, Enemy* enemy) {
 
     if (now <= enemy->spawnTime + attackDurationTime) {
         enemy->isAttacking = true;
-        enemy->destination = ctx->ship.position;
+        enemy->destination = predictiveAim(ctx->ship.position, ctx->ship.velocity, enemy->position, 0.5f);
     } else {
         enemy->isAttacking = false;
        hasBeenRemoved = ufoGoOffScreen(ctx, enemy);
