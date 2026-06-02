@@ -164,6 +164,8 @@ void handleEnemiesHitDetection(GameContext* ctx) {
 
         for (int j = 0; j < ctx->objectPools.enemies.activeCount; j++) {
 
+            if (!ctx->objectPools.enemies.enemies[j].active) continue;
+
             Enemy* enemy = &ctx->objectPools.enemies.enemies[j].enemy;
 
             if (CheckCollisionCircles(enemy->position, enemy->size / 2.0f, shotObj->shot.position, shotObj->shot.size / 2.0f)) {
