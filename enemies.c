@@ -19,6 +19,7 @@ void initUfo2(GameContext* ctx, Enemy* enemy);
 void initUfo3(GameContext* ctx, Enemy* enemy);
 void handleEnemyShooting(GameContext* ctx, Enemy* enemy);
 void handleUfoMovement(GameContext* ctx, Enemy* enemy);
+Vector2 predictiveAim(Vector2 targetPosition, Vector2 targetVelocity, Vector2 sourcePosition, float time);
 bool ufoGoOffScreen(GameContext* ctx, Enemy* enemy);
 void updateSpikyAsteroid(GameContext* ctx, Enemy* enemy);
 bool updateUfo1(GameContext* ctx, Enemy* enemy);
@@ -272,22 +273,20 @@ void handleUfoMovement(GameContext* ctx, Enemy* enemy) {
     if (enemy->isAttacking && CheckCollisionCircles(enemy->position, (float)enemy->attackRange, ctx->ship.position, SHIP_SIZE / 2)) {
         brakeShip(&enemy->velocity, enemy->brakeFactor);
     } else {
-        float angle = atan2(enemy->destination.y - enemy->position.y, enemy->destination.x - enemy->position.x);
 
-        enemy->velocity.x += GetFrameTime() * (cosf(angle) * enemy->acceleration);
-        enemy->velocity.y += GetFrameTime() * (sinf(angle) * enemy->acceleration);
+        Vector2 toDestination = Vector2Subtract(enemy->destination, enemy->position);
+        Vector2 desiredVelocity = Vector2Scale(Vector2Normalize(toDestination), enemy->maxVelocity);
+        Vector2 steering = Vector2Subtract(desiredVelocity, enemy->velocity);
 
-        if (enemy->velocity.x < -enemy->maxVelocity) {
-            enemy->velocity.x = -enemy->maxVelocity;
-        } else if (enemy->velocity.x > enemy->maxVelocity) {
-            enemy->velocity.x = enemy->maxVelocity;
+        float steerLength = Vector2Length(steering);
+
+        if (steerLength > enemy->acceleration) {
+            steering = Vector2Scale(Vector2Normalize(steering), enemy->acceleration);
         }
 
-        if (enemy->velocity.y < -enemy->maxVelocity) {
-            enemy->velocity.y = -enemy->maxVelocity;
-        } else if (enemy->velocity.y > enemy->maxVelocity) {
-            enemy->velocity.y = enemy->maxVelocity;
-        }
+        enemy->velocity.x += steering.x * GetFrameTime();
+        enemy->velocity.y += steering.y * GetFrameTime();
+
     }
     
     enemy->position.x += GetFrameTime() * enemy->velocity.x;
@@ -522,6 +521,20 @@ void initUfo3(GameContext* ctx, Enemy* enemy) {
     enemy->animation = instance;
 }
 
+Vector2 predictiveAim(Vector2 targetPosition, Vector2 targetVelocity, Vector2 sourcePosition, float time) {
+    Vector2 target = targetPosition;
+
+    target.x += targetVelocity.x * time;
+    target.y += targetVelocity.y * time;
+
+    float angle = atan2f(
+        target.y - sourcePosition.y,
+        target.x - sourcePosition.x
+    );
+
+    return target;
+}
+
 void removeEnemy(EnemyObjectPool* pool, Enemy* enemy) {
     for (int i = 0; i < pool->activeCount; i++) {
         if (&pool->enemies[i].enemy == enemy) {
@@ -690,7 +703,7 @@ bool ufoGoOffScreen(GameContext* ctx, Enemy* enemy) {
 }
 
 void updateSpikyAsteroid(GameContext* ctx, Enemy* enemy) {
-    enemy->destination = ctx->ship.position;
+    enemy->destination = predictiveAim(ctx->ship.position, ctx->ship.velocity, enemy->position, 0.5f);
 }
 
 bool updateUfo1(GameContext* ctx, Enemy* enemy) {
@@ -708,7 +721,7 @@ bool updateUfo2(GameContext* ctx, Enemy* enemy) {
 
     if (now <= enemy->spawnTime + attackDurationTime) {
         enemy->isAttacking = true;
-        enemy->destination = ctx->ship.position;
+        enemy->destination = predictiveAim(ctx->ship.position, ctx->ship.velocity, enemy->position, 0.5f);
     } else {
         enemy->isAttacking = false;
        hasBeenRemoved = ufoGoOffScreen(ctx, enemy);
