@@ -27,8 +27,6 @@ bool updateUfo3(GameContext* ctx, Enemy* enemy);
 
 void addNewEnemy(GameContext* ctx, EnemyType type) {
 
-    printf("Add new enemy type# %d\n", type);
-
     EnemyObjectPool* pool = &ctx->objectPools.enemies;
 
     if (pool->activeCount >= MAX_ENEMIES) {
