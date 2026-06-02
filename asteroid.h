@@ -17,8 +17,7 @@ typedef enum AsteroidType {
     ASTEROID_LEVEL_1,
     ASTEROID_LEVEL_2,
     ASTEROID_LEVEL_3,
-    METAL_ASTEROID,
-    SPIKY_ASTEROID
+    METAL_ASTEROID
 }AsteroidType;
 
 typedef struct Asteroid {

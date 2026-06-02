@@ -360,6 +360,43 @@ void initEnemySpawnPool(GameContext* ctx) {
     }
 }
 
+void initSpikyAsteroid(GameContext* ctx, Enemy* enemy) {
+
+    enemy->endPosition = (Vector2){0, 0};
+    enemy->startPosition = getRandomPositionOffScreen(SPIKY_ASTEROID_SIZE);
+
+    enemy->acceleration = 100.0f;
+    enemy->brakeFactor = 3.0f;
+    enemy->attackRange = 0;
+    enemy->destination = enemy->endPosition;
+    enemy->health = 100;
+    enemy->maxVelocity = 50.0f;
+    enemy->isMoveable = true;
+    enemy->position = enemy->startPosition;
+    enemy->reactionTime = 0.3f;
+    enemy->size = SPIKY_ASTEROID_SIZE;
+    enemy->score = 500;
+    enemy->type = SPIKY_ASTEROID;
+    enemy->velocity = (Vector2){0, 0};
+    enemy->visualType = VISUAL_ANIMATION;
+
+    enemy->shooting.fireRate = 500;
+    enemy->shooting.perfectHitChance = 3;
+    enemy->shooting.salvoRate = 3000;
+    enemy->shooting.salvoSize = 0;
+    enemy->shooting.spreadRadian = 0;
+
+    enemy->shooting.shot = getShotProps(ctx, GREEN_SHOT_1);
+
+    AnimationInstance instance;
+
+    bool isReversed = GetRandomValue(0, 1);
+
+    initAnimtionInstance(&instance, &ctx->assets.animations.spikyAsteroid, enemy->position, enemy->rotation, ctx->assets.animations.spikyAsteroid.fps, isReversed);
+
+    enemy->animation = instance;
+}
+
 void initUfo1(GameContext* ctx, Enemy* enemy) {
 
     float y = 50.0f;
