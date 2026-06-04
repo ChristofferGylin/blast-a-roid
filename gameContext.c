@@ -32,13 +32,13 @@ void initObjectPools(GameContext* ctx) {
 }
 
 void loadAssets(GameContext* ctx) {
-    initAnimation(&ctx->assets.animations.crate, "./assets/crate.png", "./assets/crate.json", 24.0f, (Vector2){CRATE_RENDER_SIZE, CRATE_RENDER_SIZE}, true);
-    initAnimation(&ctx->assets.animations.explosion, "./assets/explosion.png", "./assets/explosion.json", 24.0f, (Vector2){EXPLOSION_SIZE, EXPLOSION_SIZE}, false);
-    initAnimation(&ctx->assets.animations.metalAsteroid, "./assets/metal_asteroid.png", "./assets/metal_asteroid.json", 24.0f, (Vector2){METAL_ASTEROID_SIZE, METAL_ASTEROID_SIZE}, true);
-    initAnimation(&ctx->assets.animations.spikyAsteroid, "./assets/spiky_asteroid.png", "./assets/spiky_asteroid.json", 30.0f, (Vector2){SPIKY_ASTEROID_SIZE, SPIKY_ASTEROID_SIZE}, true);
-    initAnimation(&ctx->assets.animations.ufo1, "./assets/ufo1.png", "./assets/ufo1.json", 24.0f, (Vector2){UFO_1_SIZE, UFO_1_SIZE}, true);
-    initAnimation(&ctx->assets.animations.ufo2, "./assets/ufo2.png", "./assets/ufo2.json", 24.0f, (Vector2){UFO_1_SIZE, UFO_1_SIZE}, true);
-    initAnimation(&ctx->assets.animations.ufo3, "./assets/ufo3.png", "./assets/ufo3.json", 24.0f, (Vector2){UFO_3_RENDER_SIZE, UFO_3_RENDER_SIZE}, true);
+    initAnimation(&ctx->assets.animations.crate, "./assets/animations/crate.png", "./assets/animations/crate.json", 24.0f, (Vector2){CRATE_RENDER_SIZE, CRATE_RENDER_SIZE}, true);
+    initAnimation(&ctx->assets.animations.explosion, "./assets/animations/explosion.png", "./assets/animations/explosion.json", 24.0f, (Vector2){EXPLOSION_SIZE, EXPLOSION_SIZE}, false);
+    initAnimation(&ctx->assets.animations.metalAsteroid, "./assets/animations/metal_asteroid.png", "./assets/animations/metal_asteroid.json", 24.0f, (Vector2){METAL_ASTEROID_SIZE, METAL_ASTEROID_SIZE}, true);
+    initAnimation(&ctx->assets.animations.spikyAsteroid, "./assets/animations/spiky_asteroid.png", "./assets/animations/spiky_asteroid.json", 30.0f, (Vector2){SPIKY_ASTEROID_SIZE, SPIKY_ASTEROID_SIZE}, true);
+    initAnimation(&ctx->assets.animations.ufo1, "./assets/animations/ufo1.png", "./assets/animations/ufo1.json", 24.0f, (Vector2){UFO_1_SIZE, UFO_1_SIZE}, true);
+    initAnimation(&ctx->assets.animations.ufo2, "./assets/animations/ufo2.png", "./assets/animations/ufo2.json", 24.0f, (Vector2){UFO_1_SIZE, UFO_1_SIZE}, true);
+    initAnimation(&ctx->assets.animations.ufo3, "./assets/animations/ufo3.png", "./assets/animations/ufo3.json", 24.0f, (Vector2){UFO_3_RENDER_SIZE, UFO_3_RENDER_SIZE}, true);
     
     ctx->assets.samples.alarm = LoadSound("./assets/samples/alarm.wav");
     ctx->assets.samples.explosion = LoadSound("./assets/samples/explosion.wav");
@@ -47,19 +47,19 @@ void loadAssets(GameContext* ctx) {
     ctx->assets.samples.shieldUp = LoadSound("./assets/samples/shield_up.wav");
     ctx->assets.samples.shot = LoadSound("./assets/samples/laser_pew.wav");
 
-    ctx->assets.sprites.asteroid = LoadTexture("./assets/asteroid.png");
-    ctx->assets.sprites.autoShotIcon = LoadTexture("./assets/auto_shot_icon.png");
-    ctx->assets.sprites.blueGem = LoadTexture("./assets/blue_gem.png");
-    ctx->assets.sprites.destroyedShip1 = LoadTexture("./assets/ship_destroyed_1.png");
-    ctx->assets.sprites.destroyedShip2 = LoadTexture("./assets/ship_destroyed_2.png");
-    ctx->assets.sprites.destroyedShip3 = LoadTexture("./assets/ship_destroyed_3.png");
-    ctx->assets.sprites.enemyShot1 = LoadTexture("./assets/enemy_shot_1.png");
-    ctx->assets.sprites.lockIcon = LoadTexture("./assets/lock_icon.png");
-    ctx->assets.sprites.longShotIcon = LoadTexture("./assets/long_shot_icon.png");
-    ctx->assets.sprites.ship = LoadTexture("./assets/ship.png");
-    ctx->assets.sprites.shot = LoadTexture("./assets/shot.png");
-    ctx->assets.sprites.stopIcon = LoadTexture("./assets/stop_icon.png");
-    ctx->assets.sprites.triShotIcon = LoadTexture("./assets/tri_shot_icon.png");
+    ctx->assets.sprites.asteroid = LoadTexture("./assets/sprites/asteroid.png");
+    ctx->assets.sprites.autoShotIcon = LoadTexture("./assets/sprites/auto_shot_icon.png");
+    ctx->assets.sprites.blueGem = LoadTexture("./assets/sprites/blue_gem.png");
+    ctx->assets.sprites.destroyedShip1 = LoadTexture("./assets/sprites/ship_destroyed_1.png");
+    ctx->assets.sprites.destroyedShip2 = LoadTexture("./assets/sprites/ship_destroyed_2.png");
+    ctx->assets.sprites.destroyedShip3 = LoadTexture("./assets/sprites/ship_destroyed_3.png");
+    ctx->assets.sprites.enemyShot1 = LoadTexture("./assets/sprites/enemy_shot_1.png");
+    ctx->assets.sprites.lockIcon = LoadTexture("./assets/sprites/lock_icon.png");
+    ctx->assets.sprites.longShotIcon = LoadTexture("./assets/sprites/long_shot_icon.png");
+    ctx->assets.sprites.ship = LoadTexture("./assets/sprites/ship.png");
+    ctx->assets.sprites.shot = LoadTexture("./assets/sprites/shot.png");
+    ctx->assets.sprites.stopIcon = LoadTexture("./assets/sprites/stop_icon.png");
+    ctx->assets.sprites.triShotIcon = LoadTexture("./assets/sprites/tri_shot_icon.png");
 }
 
 void unloadAssets(GameContext* ctx) {
