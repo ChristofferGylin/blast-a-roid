@@ -110,7 +110,7 @@ static EnemySpawnOption levelsEnemyOptions[NUMBER_OF_LEVEL_ENEMY_OPTIONS][NUMBER
     },
 };
 
-void addNewEnemy(GameContext* ctx, EnemyType type);
+bool addNewEnemy(GameContext* ctx, EnemyType type);
 void handleEnemiesCollisions(GameContext* ctx);
 void handleEnemiesHitDetection(GameContext* ctx);
 void handleEnemiesMovement(GameContext* ctx);
