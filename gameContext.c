@@ -73,6 +73,9 @@ void unloadAssets(GameContext* ctx) {
 
     UnloadSound(ctx->assets.samples.alarm);
     UnloadSound(ctx->assets.samples.explosion);
+    UnloadSound(ctx->assets.samples.multiplier_collect);
+    UnloadSound(ctx->assets.samples.multiplier_spawn);
+    UnloadSound(ctx->assets.samples.shieldUp);
     UnloadSound(ctx->assets.samples.shot);
 
     UnloadTexture(ctx->assets.sprites.asteroid);
