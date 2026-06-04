@@ -621,13 +621,20 @@ void spawnEnemy(GameContext* ctx) {
         EnemySpawnOption* option = &pool->options[i].option;
 
         if (randomSelect < option->weight) {
-            addNewEnemy(ctx, option->type);
-            option->count++;
 
-            if (option->count >= option->maxCount) {
-                pool->options[i].active = false;
+            bool addSuccess = addNewEnemy(ctx, option->type);
 
-                compactEnemySpawnPool(pool);
+            if (addSuccess) {
+
+                PlaySound(ctx->assets.samples.alarm);
+
+                option->count++;
+
+                if (option->count >= option->maxCount) {
+                    pool->options[i].active = false;
+
+                    compactEnemySpawnPool(pool);
+                }
             }
 
             return;
