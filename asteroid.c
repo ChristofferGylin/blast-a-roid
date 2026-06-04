@@ -208,7 +208,14 @@ void handleDestroyedAsteroids(GameContext* ctx) {
                 if (chance < chanceOfNothing) {
                     continue;
                 } else if (chance < chanceOfNothing + chanceOfSpikyAsteroid) {
-                    // TODO: Spawn SPIKY_ASTEROID enemy
+                    bool addSuccess = addNewEnemy(ctx, SPIKY_ASTEROID, true, ast->position);
+
+                    if (addSuccess) {
+                        PlaySound(ctx->assets.samples.alarm);
+                    }
+
+                    continue;
+
                 } else {
                     numberOfNew = 3;
                     newType = ASTEROID_LEVEL_2;

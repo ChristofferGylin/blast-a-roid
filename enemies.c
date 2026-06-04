@@ -26,7 +26,7 @@ bool updateUfo1(GameContext* ctx, Enemy* enemy);
 bool updateUfo2(GameContext* ctx, Enemy* enemy);
 bool updateUfo3(GameContext* ctx, Enemy* enemy);
 
-bool addNewEnemy(GameContext* ctx, EnemyType type) {
+bool addNewEnemy(GameContext* ctx, EnemyType type, bool atPosition, Vector2 position) {
 
     bool success = false;
 
@@ -47,6 +47,10 @@ bool addNewEnemy(GameContext* ctx, EnemyType type) {
     Enemy newEnemy;
 
     initEnemy(ctx, &newEnemy, type);
+
+    if (atPosition) {
+        newEnemy.position = position;
+    }
 
     pool->enemies[pool->activeCount].enemy = newEnemy;
     pool->enemies[pool->activeCount].active = true;
@@ -622,7 +626,7 @@ void spawnEnemy(GameContext* ctx) {
 
         if (randomSelect < option->weight) {
 
-            bool addSuccess = addNewEnemy(ctx, option->type);
+            bool addSuccess = addNewEnemy(ctx, option->type, false, (Vector2){0, 0});
 
             if (addSuccess) {
 
