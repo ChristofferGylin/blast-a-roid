@@ -32,13 +32,13 @@ void initObjectPools(GameContext* ctx) {
 }
 
 void loadAssets(GameContext* ctx) {
-    initAnimation(&ctx->assets.animations.crate, "./assets/crate.png", "./assets/crate.json", 24.0f, (Vector2){CRATE_RENDER_SIZE, CRATE_RENDER_SIZE}, true);
-    initAnimation(&ctx->assets.animations.explosion, "./assets/explosion.png", "./assets/explosion.json", 24.0f, (Vector2){EXPLOSION_SIZE, EXPLOSION_SIZE}, false);
-    initAnimation(&ctx->assets.animations.metalAsteroid, "./assets/metal_asteroid.png", "./assets/metal_asteroid.json", 24.0f, (Vector2){METAL_ASTEROID_SIZE, METAL_ASTEROID_SIZE}, true);
-    initAnimation(&ctx->assets.animations.spikyAsteroid, "./assets/spiky_asteroid.png", "./assets/spiky_asteroid.json", 30.0f, (Vector2){SPIKY_ASTEROID_SIZE, SPIKY_ASTEROID_SIZE}, true);
-    initAnimation(&ctx->assets.animations.ufo1, "./assets/ufo1.png", "./assets/ufo1.json", 24.0f, (Vector2){UFO_1_SIZE, UFO_1_SIZE}, true);
-    initAnimation(&ctx->assets.animations.ufo2, "./assets/ufo2.png", "./assets/ufo2.json", 24.0f, (Vector2){UFO_1_SIZE, UFO_1_SIZE}, true);
-    initAnimation(&ctx->assets.animations.ufo3, "./assets/ufo3.png", "./assets/ufo3.json", 24.0f, (Vector2){UFO_3_RENDER_SIZE, UFO_3_RENDER_SIZE}, true);
+    initAnimation(&ctx->assets.animations.crate, "./assets/animations/crate.png", "./assets/animations/crate.json", 24.0f, (Vector2){CRATE_RENDER_SIZE, CRATE_RENDER_SIZE}, true);
+    initAnimation(&ctx->assets.animations.explosion, "./assets/animations/explosion.png", "./assets/animations/explosion.json", 24.0f, (Vector2){EXPLOSION_SIZE, EXPLOSION_SIZE}, false);
+    initAnimation(&ctx->assets.animations.metalAsteroid, "./assets/animations/metal_asteroid.png", "./assets/animations/metal_asteroid.json", 24.0f, (Vector2){METAL_ASTEROID_SIZE, METAL_ASTEROID_SIZE}, true);
+    initAnimation(&ctx->assets.animations.spikyAsteroid, "./assets/animations/spiky_asteroid.png", "./assets/animations/spiky_asteroid.json", 30.0f, (Vector2){SPIKY_ASTEROID_SIZE, SPIKY_ASTEROID_SIZE}, true);
+    initAnimation(&ctx->assets.animations.ufo1, "./assets/animations/ufo1.png", "./assets/animations/ufo1.json", 24.0f, (Vector2){UFO_1_SIZE, UFO_1_SIZE}, true);
+    initAnimation(&ctx->assets.animations.ufo2, "./assets/animations/ufo2.png", "./assets/animations/ufo2.json", 24.0f, (Vector2){UFO_1_SIZE, UFO_1_SIZE}, true);
+    initAnimation(&ctx->assets.animations.ufo3, "./assets/animations/ufo3.png", "./assets/animations/ufo3.json", 24.0f, (Vector2){UFO_3_RENDER_SIZE, UFO_3_RENDER_SIZE}, true);
     
     ctx->assets.samples.alarm = LoadSound("./assets/samples/alarm.wav");
     ctx->assets.samples.explosion = LoadSound("./assets/samples/explosion.wav");
