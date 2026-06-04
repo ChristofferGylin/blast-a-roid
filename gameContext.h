@@ -21,6 +21,7 @@ typedef struct Animations {
 }Animations;
 
 typedef struct Samples {
+    Sound alarm;
     Sound explosion;
     Sound multiplier_collect;
     Sound multiplier_spawn;
