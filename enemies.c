@@ -26,19 +26,23 @@ bool updateUfo1(GameContext* ctx, Enemy* enemy);
 bool updateUfo2(GameContext* ctx, Enemy* enemy);
 bool updateUfo3(GameContext* ctx, Enemy* enemy);
 
-void addNewEnemy(GameContext* ctx, EnemyType type) {
+bool addNewEnemy(GameContext* ctx, EnemyType type) {
+
+    bool success = false;
 
     EnemyObjectPool* pool = &ctx->objectPools.enemies;
 
     if (pool->activeCount >= MAX_ENEMIES) {
         printf("Error: Memory overflow in addNewEnemy\n");
-        return;
+        return success;
     }
 
     if (pool->enemies[pool->activeCount].active) {
         printf("Error: Could not add new enemy, index allready in use in addNewEnemy\n");
-        return;
+        return success;
     }
+
+    success = true;
 
     Enemy newEnemy;
 
@@ -47,6 +51,8 @@ void addNewEnemy(GameContext* ctx, EnemyType type) {
     pool->enemies[pool->activeCount].enemy = newEnemy;
     pool->enemies[pool->activeCount].active = true;
     pool->activeCount++;
+
+    return success;
 
 }
 
@@ -615,13 +621,20 @@ void spawnEnemy(GameContext* ctx) {
         EnemySpawnOption* option = &pool->options[i].option;
 
         if (randomSelect < option->weight) {
-            addNewEnemy(ctx, option->type);
-            option->count++;
 
-            if (option->count >= option->maxCount) {
-                pool->options[i].active = false;
+            bool addSuccess = addNewEnemy(ctx, option->type);
 
-                compactEnemySpawnPool(pool);
+            if (addSuccess) {
+
+                PlaySound(ctx->assets.samples.alarm);
+
+                option->count++;
+
+                if (option->count >= option->maxCount) {
+                    pool->options[i].active = false;
+
+                    compactEnemySpawnPool(pool);
+                }
             }
 
             return;
