@@ -47,19 +47,19 @@ void loadAssets(GameContext* ctx) {
     ctx->assets.samples.shieldUp = LoadSound("./assets/samples/shield_up.wav");
     ctx->assets.samples.shot = LoadSound("./assets/samples/laser_pew.wav");
 
-    ctx->assets.sprites.asteroid = LoadTexture("./assets/asteroid.png");
-    ctx->assets.sprites.autoShotIcon = LoadTexture("./assets/auto_shot_icon.png");
-    ctx->assets.sprites.blueGem = LoadTexture("./assets/blue_gem.png");
-    ctx->assets.sprites.destroyedShip1 = LoadTexture("./assets/ship_destroyed_1.png");
-    ctx->assets.sprites.destroyedShip2 = LoadTexture("./assets/ship_destroyed_2.png");
-    ctx->assets.sprites.destroyedShip3 = LoadTexture("./assets/ship_destroyed_3.png");
-    ctx->assets.sprites.enemyShot1 = LoadTexture("./assets/enemy_shot_1.png");
-    ctx->assets.sprites.lockIcon = LoadTexture("./assets/lock_icon.png");
-    ctx->assets.sprites.longShotIcon = LoadTexture("./assets/long_shot_icon.png");
-    ctx->assets.sprites.ship = LoadTexture("./assets/ship.png");
-    ctx->assets.sprites.shot = LoadTexture("./assets/shot.png");
-    ctx->assets.sprites.stopIcon = LoadTexture("./assets/stop_icon.png");
-    ctx->assets.sprites.triShotIcon = LoadTexture("./assets/tri_shot_icon.png");
+    ctx->assets.sprites.asteroid = LoadTexture("./assets/sprites/asteroid.png");
+    ctx->assets.sprites.autoShotIcon = LoadTexture("./assets/sprites/auto_shot_icon.png");
+    ctx->assets.sprites.blueGem = LoadTexture("./assets/sprites/blue_gem.png");
+    ctx->assets.sprites.destroyedShip1 = LoadTexture("./assets/sprites/ship_destroyed_1.png");
+    ctx->assets.sprites.destroyedShip2 = LoadTexture("./assets/sprites/ship_destroyed_2.png");
+    ctx->assets.sprites.destroyedShip3 = LoadTexture("./assets/sprites/ship_destroyed_3.png");
+    ctx->assets.sprites.enemyShot1 = LoadTexture("./assets/sprites/enemy_shot_1.png");
+    ctx->assets.sprites.lockIcon = LoadTexture("./assets/sprites/lock_icon.png");
+    ctx->assets.sprites.longShotIcon = LoadTexture("./assets/sprites/long_shot_icon.png");
+    ctx->assets.sprites.ship = LoadTexture("./assets/sprites/ship.png");
+    ctx->assets.sprites.shot = LoadTexture("./assets/sprites/shot.png");
+    ctx->assets.sprites.stopIcon = LoadTexture("./assets/sprites/stop_icon.png");
+    ctx->assets.sprites.triShotIcon = LoadTexture("./assets/sprites/tri_shot_icon.png");
 }
 
 void unloadAssets(GameContext* ctx) {
