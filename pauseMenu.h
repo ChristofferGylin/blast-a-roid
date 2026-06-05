@@ -7,7 +7,6 @@ typedef struct PausMenuItem {
     char text[32];
     Vector2 basePosition;
     Vector2 size;
-    
     bool isHovered;
 }PausMenuItem;
 
@@ -16,11 +15,6 @@ typedef struct PausMenuRects {
     Rectangle menuContainer;
 }PausMenuRects;
 
-typedef struct PauseMenuColors {
-    Color background;
-    Color menu;
-    Color text;
-}PauseMenuColors;
 
 typedef struct PausMenu {
     PausMenuItem items[4];
@@ -28,7 +22,6 @@ typedef struct PausMenu {
     int selected;
     int menuOffset;
     PausMenuRects rects;
-    PauseMenuColors colors;
 }PausMenu; 
 
 void drawPausMenu(PausMenu* menu);

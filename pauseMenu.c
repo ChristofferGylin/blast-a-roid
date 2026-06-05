@@ -18,8 +18,9 @@ int pausMenuRoundnessRadius = 12.0f;
 
 void drawPausMenu(PausMenu* menu) {
     Vector2 origin = {0, 0};
+    Color backgroundColor = Fade(BLACK, 0.6f);
     
-    DrawRectanglePro(menu->rects.background, origin, 0, menu->colors.background);
+    DrawRectanglePro(menu->rects.background, origin, 0, backgroundColor);
 
     DrawRectangleGradientV(
         menu->rects.menuContainer.x,
@@ -86,10 +87,6 @@ void initPausMenu(PausMenu* menu) {
         menuWidth,
         menuHeight
     };
-
-    menu->colors.background = (Color) Fade(BLACK, 0.6f);
-    menu->colors.menu = (Color) Fade(DARKBLUE, 0.6f);
-    menu->colors.text = (Color) RAYWHITE;
 
     for (int i = 0; i < 4; i++) {
         Vector2 size = MeasureTextEx(GetFontDefault(), titles[i], pausMenuFontSize, pausMenuFontSpacing);
