@@ -25,6 +25,13 @@ int logoFontSpacing = 8;
 
 void drawLayoutContainers() {
 
+    Rectangle background = {
+        0,
+        0,
+        SCREEN_WIDTH,
+        SCREEN_HEIGHT
+    };
+
     Rectangle highScoreContainer = {
         margin,
         margin,
@@ -59,6 +66,8 @@ void drawLayoutContainers() {
         highScoreContainer.x + (highScoreContainer.width / 2) - highScoreHeadingSize.x / 2,
         highScoreContainer.y + margin
     };
+
+    DrawRectangleGradientV(background.x, background.y, background.width, background.height, topColor, bottomColor);
     
     DrawTextPro(
         GetFontDefault(),
