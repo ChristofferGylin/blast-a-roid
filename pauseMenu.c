@@ -1,12 +1,14 @@
 #include "pauseMenu.h"
 #include "raylib.h"
+#include "colors.h"
 #include "constants.h"
 #include <stdbool.h>
 #include "utils.h"
 #include <string.h>
 
+float lineThickness = 4.0f;
 int menuWidth = 400;
-int menuHeight = 500;
+int menuHeight = 400;
 int pausMenuFontSize = 32;
 int pausMenuFontSpacing = 6;
 int pausMenuNextItemGap = 20;
@@ -16,10 +18,21 @@ int pausMenuRoundnessRadius = 12.0f;
 
 void drawPausMenu(PausMenu* menu) {
     Vector2 origin = {0, 0};
+    Color backgroundColor = Fade(BLACK, 0.6f);
+    
+    DrawRectanglePro(menu->rects.background, origin, 0, backgroundColor);
 
-    DrawRectanglePro(menu->rects.background, origin, 0, menu->colors.background);
-    DrawRectangleRounded(menu->rects.menuContainer, getRoundness(menu->rects.menuContainer, pausMenuRoundnessRadius), 10, menu->colors.menu);
+    DrawRectangleGradientV(
+        menu->rects.menuContainer.x,
+        menu->rects.menuContainer.y,
+        menuWidth,
+        menuHeight,
+        topColor,
+        bottomColor
+    );
 
+    DrawRectangleRoundedLinesEx(menu->rects.menuContainer, getRoundness(menu->rects.menuContainer, pausMenuRoundnessRadius), 10, lineThickness, primaryColor);
+    
     for (int i = 0; i < menu->count; i++) {
         PausMenuItem* item = &menu->items[i];
 
@@ -36,7 +49,7 @@ void drawPausMenu(PausMenu* menu) {
             0,
             pausMenuFontSize,
             pausMenuFontSpacing,
-            menu->colors.text
+            primaryColor
         );
 
         if (item->isHovered) {
@@ -45,7 +58,7 @@ void drawPausMenu(PausMenu* menu) {
                 pos.y + item->size.y + pausMenuUnderlineOffset,
                 item->size.x,
                 pausMenuUnderlineHHeight,
-                menu->colors.text
+                primaryColor
             );
         }
     }
@@ -74,10 +87,6 @@ void initPausMenu(PausMenu* menu) {
         menuWidth,
         menuHeight
     };
-
-    menu->colors.background = (Color) Fade(BLACK, 0.6f);
-    menu->colors.menu = (Color) Fade(DARKBLUE, 0.6f);
-    menu->colors.text = (Color) RAYWHITE;
 
     for (int i = 0; i < 4; i++) {
         Vector2 size = MeasureTextEx(GetFontDefault(), titles[i], pausMenuFontSize, pausMenuFontSpacing);
