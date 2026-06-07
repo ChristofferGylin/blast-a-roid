@@ -41,6 +41,7 @@ void loadAssets(GameContext* ctx) {
     initAnimation(&ctx->assets.animations.ufo3, "./assets/animations/ufo3.png", "./assets/animations/ufo3.json", 24.0f, (Vector2){UFO_3_RENDER_SIZE, UFO_3_RENDER_SIZE}, true);
     
     ctx->assets.samples.alarm = LoadSound("./assets/samples/alarm.wav");
+    ctx->assets.samples.enemyShot1 = LoadSound("./assets/samples/laser_pew2.wav");
     ctx->assets.samples.explosion = LoadSound("./assets/samples/explosion.wav");
     ctx->assets.samples.metalPlink = LoadSound("./assets/samples/metal_plink.wav");
     ctx->assets.samples.multiplier_collect = LoadSound("./assets/samples/multiplier_collect.wav");
@@ -74,6 +75,7 @@ void unloadAssets(GameContext* ctx) {
 
     UnloadSound(ctx->assets.samples.alarm);
     UnloadSound(ctx->assets.samples.explosion);
+    UnloadSound(ctx->assets.samples.enemyShot1);
     UnloadSound(ctx->assets.samples.metalPlink);
     UnloadSound(ctx->assets.samples.multiplier_collect);
     UnloadSound(ctx->assets.samples.multiplier_spawn);
