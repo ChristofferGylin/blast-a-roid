@@ -42,6 +42,7 @@ void loadAssets(GameContext* ctx) {
     
     ctx->assets.samples.alarm = LoadSound("./assets/samples/alarm.wav");
     ctx->assets.samples.explosion = LoadSound("./assets/samples/explosion.wav");
+    ctx->assets.samples.metalPlink = LoadSound("./assets/samples/metal_plink.wav");
     ctx->assets.samples.multiplier_collect = LoadSound("./assets/samples/multiplier_collect.wav");
     ctx->assets.samples.multiplier_spawn = LoadSound("./assets/samples/multiplier_spawn.wav");
     ctx->assets.samples.shieldUp = LoadSound("./assets/samples/shield_up.wav");
@@ -73,6 +74,7 @@ void unloadAssets(GameContext* ctx) {
 
     UnloadSound(ctx->assets.samples.alarm);
     UnloadSound(ctx->assets.samples.explosion);
+    UnloadSound(ctx->assets.samples.metalPlink);
     UnloadSound(ctx->assets.samples.multiplier_collect);
     UnloadSound(ctx->assets.samples.multiplier_spawn);
     UnloadSound(ctx->assets.samples.shieldUp);

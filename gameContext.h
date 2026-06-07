@@ -23,6 +23,7 @@ typedef struct Animations {
 typedef struct Samples {
     Sound alarm;
     Sound explosion;
+    Sound metalPlink;
     Sound multiplier_collect;
     Sound multiplier_spawn;
     Sound shieldUp;
