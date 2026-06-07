@@ -199,6 +199,10 @@ void handleEnemiesHitDetection(GameContext* ctx) {
                     if (enemy->isMoveable) {
                         const int knockbackForce = 35;
                         knockback(enemy->position, &enemy->velocity, shotObj->shot.position, knockbackForce);
+
+                        if (enemy->type == SPIKY_ASTEROID) {
+                            PlaySound(ctx->assets.samples.metalPlink);
+                        }
                     }
 
                     destroyShot(shotObj);
