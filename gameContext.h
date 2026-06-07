@@ -28,6 +28,7 @@ typedef struct Samples {
     Sound multiplier_spawn;
     Sound shieldUp;
     Sound shot;
+    Sound enemyShot1;
 }Samples;
 
 typedef struct Sprites {
