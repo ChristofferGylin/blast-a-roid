@@ -108,6 +108,7 @@ void handleAsteroidCollisions(GameContext* ctx) {
                 
                 if (ast->type == METAL_ASTEROID) {
                     knockbackByImpact(ship->position, &ship->velocity, ast->position, ast->velocity);
+                    PlaySound(ctx->assets.samples.metalPlink);
                 } else {
                     newExplosion(ctx, ast->position);
                     destroyAsteroid(&ctx->objectPools.destroyedAsteroids, &ctx->objectPools.asteroids.asteroids[i]);
@@ -140,8 +141,12 @@ void handleAsteroidCollisions(GameContext* ctx) {
                         newExplosion(ctx, ast->position);
                         destroyAsteroid(&ctx->objectPools.destroyedAsteroids, &ctx->objectPools.asteroids.asteroids[i]);
                     } else {
+
+                        // if asteroid has health after hit it is of type METAL_ASTEROID
+                        
                         const int knockbackForce = 200;
                         knockback(ast->position, &ast->velocity, shotObj->shot.position, knockbackForce);
+                        PlaySound(ctx->assets.samples.metalPlink);
                     }
                 } 
 
