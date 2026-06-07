@@ -118,6 +118,7 @@ void handleEnemiesCollisions(GameContext* ctx) {
             
             if (enemy->type == SPIKY_ASTEROID) {
                 knockbackByImpact(ship->position, &ship->velocity, enemy->position, enemy->velocity);
+                PlaySound(ctx->assets.samples.metalPlink);
             } else {
                 newExplosion(ctx, enemy->position);
                 dropNewBonus(ctx, &enemyObject->enemy);
@@ -199,6 +200,10 @@ void handleEnemiesHitDetection(GameContext* ctx) {
                     if (enemy->isMoveable) {
                         const int knockbackForce = 35;
                         knockback(enemy->position, &enemy->velocity, shotObj->shot.position, knockbackForce);
+
+                        if (enemy->type == SPIKY_ASTEROID) {
+                            PlaySound(ctx->assets.samples.metalPlink);
+                        }
                     }
 
                     destroyShot(shotObj);
