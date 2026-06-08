@@ -47,7 +47,7 @@ void loadAssets(GameContext* ctx) {
     ctx->assets.samples.multiplier_collect = LoadSound("./assets/samples/multiplier_collect.wav");
     ctx->assets.samples.multiplier_spawn = LoadSound("./assets/samples/multiplier_spawn.wav");
     ctx->assets.samples.shieldUp = LoadSound("./assets/samples/shield_up.wav");
-    ctx->assets.samples.shot = LoadSound("./assets/samples/laser_pew.wav");
+    ctx->assets.samples.shot = LoadSound("./assets/samples/laser_pew1.wav");
 
     ctx->assets.sprites.asteroid = LoadTexture("./assets/sprites/asteroid.png");
     ctx->assets.sprites.autoShotIcon = LoadTexture("./assets/sprites/auto_shot_icon.png");
