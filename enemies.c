@@ -118,7 +118,7 @@ void handleEnemiesCollisions(GameContext* ctx) {
             
             if (enemy->type == SPIKY_ASTEROID) {
                 knockbackByImpact(ship->position, &ship->velocity, enemy->position, enemy->velocity);
-                PlaySound(ctx->assets.samples.metalPlink);
+                playSoundPositioned(ctx->assets.samples.metalPlink, enemy->position.x);
             } else {
                 newExplosion(ctx, enemy->position);
                 dropNewBonus(ctx, &enemyObject->enemy);
@@ -202,7 +202,7 @@ void handleEnemiesHitDetection(GameContext* ctx) {
                         knockback(enemy->position, &enemy->velocity, shotObj->shot.position, knockbackForce);
 
                         if (enemy->type == SPIKY_ASTEROID) {
-                            PlaySound(ctx->assets.samples.metalPlink);
+                            playSoundPositioned(ctx->assets.samples.metalPlink, enemy->position.x);
                         }
                     }
 
@@ -279,7 +279,7 @@ void handleEnemyShooting(GameContext* ctx, Enemy* enemy) {
             false
         };
 
-        PlaySound(ctx->assets.samples.enemyShot1);
+        playSoundPositioned(ctx->assets.samples.enemyShot1, enemy->position.x);
         addNewShot(&ctx->objectPools.shots, newShot);
         shotProps->lastShot = GetTime() * 1000.0;
         shotProps->shotCount++;

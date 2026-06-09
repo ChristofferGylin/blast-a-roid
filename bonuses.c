@@ -224,12 +224,12 @@ void handleBonuses(GameContext* ctx, Bonuses* bonuses) {
             bonuses->bonusMultiplier.base.spawnTime = now;
             bonuses->bonusMultiplier.base.position = getRandomPosition();
             bonuses->bonusMultiplier.level = 2.0f;
-            PlaySound(ctx->assets.samples.multiplier_spawn);
+            playSoundPositioned(ctx->assets.samples.multiplier_spawn, bonuses->bonusMultiplier.base.position.x);
 
         } else if (randomSelect < 85) {
-            // spawn powerup or shield
+            // TODO: spawn powerup or shield
         } else {
-            // spawn extra life or extra ship
+            // TODO: spawn extra life or extra ship
         }
 
     }
@@ -245,7 +245,7 @@ void handleBonusesCollisions(GameContext* ctx, Bonuses* bonuses) {
             ctx->player.powerups.levelBonusMultiplier = round(bonuses->bonusMultiplier.level);
             bonuses->bonusMultiplier.base.isActive = false;
             destroyShot(&ctx->objectPools.shots.shots[i]);
-            PlaySound(ctx->assets.samples.multiplier_collect);
+            playSoundPositioned(ctx->assets.samples.multiplier_collect, bonuses->bonusMultiplier.base.position.x);
         }
     }
 
@@ -271,37 +271,37 @@ void handleBonusesCollisions(GameContext* ctx, Bonuses* bonuses) {
             case BONUS_POINTS:
                 ctx->player.score += bonus->value;
                 // TODO: Play unique sound
-                PlaySound(ctx->assets.samples.multiplier_collect);
+                playSoundPositioned(ctx->assets.samples.multiplier_collect, bonus->position.x);
                 break;
 
             case FULL_AUTO_POWERUP:
                 ctx->player.powerups.fullAuto = true;
                 // TODO: Play unique sound
-                PlaySound(ctx->assets.samples.multiplier_collect);
+                playSoundPositioned(ctx->assets.samples.multiplier_collect, bonus->position.x);
                 break;
             
             case MULTI_SHOT_POWERUP:
                 ctx->player.powerups.trippleShot = true;
                 // TODO: Play unique sound
-                PlaySound(ctx->assets.samples.multiplier_collect);
+                playSoundPositioned(ctx->assets.samples.multiplier_collect, bonus->position.x);
                 break;
             
             case AUTO_STOP_POWERUP:
                 ctx->player.powerups.autoStop = true;
                 // TODO: Play unique sound
-                PlaySound(ctx->assets.samples.multiplier_collect);
+                playSoundPositioned(ctx->assets.samples.multiplier_collect, bonus->position.x);
                 break;
             
             case LOCK_POWERUP:
                 ctx->player.powerups.lock = true;
                 // TODO: Play unique sound
-                PlaySound(ctx->assets.samples.multiplier_collect);
+                playSoundPositioned(ctx->assets.samples.multiplier_collect, bonus->position.x);
                 break;
             
             case LONG_SHOT_POWERUP:
                 ctx->player.powerups.longShot = true;
                 // TODO: Play unique sound
-                PlaySound(ctx->assets.samples.multiplier_collect);
+                playSoundPositioned(ctx->assets.samples.multiplier_collect, bonus->position.x);
                 break;
             
             default:

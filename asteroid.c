@@ -108,7 +108,7 @@ void handleAsteroidCollisions(GameContext* ctx) {
                 
                 if (ast->type == METAL_ASTEROID) {
                     knockbackByImpact(ship->position, &ship->velocity, ast->position, ast->velocity);
-                    PlaySound(ctx->assets.samples.metalPlink);
+                    playSoundPositioned(ctx->assets.samples.metalPlink, ast->position.x);
                 } else {
                     newExplosion(ctx, ast->position);
                     destroyAsteroid(&ctx->objectPools.destroyedAsteroids, &ctx->objectPools.asteroids.asteroids[i]);
@@ -148,7 +148,7 @@ void handleAsteroidCollisions(GameContext* ctx) {
 
                         const int knockbackForce = 200;
                         knockback(ast->position, &ast->velocity, shotObj->shot.position, knockbackForce);
-                        PlaySound(ctx->assets.samples.metalPlink);
+                        playSoundPositioned(ctx->assets.samples.metalPlink, ast->position.x);
                     }
                 } 
 
