@@ -224,12 +224,12 @@ void handleBonuses(GameContext* ctx, Bonuses* bonuses) {
             bonuses->bonusMultiplier.base.spawnTime = now;
             bonuses->bonusMultiplier.base.position = getRandomPosition();
             bonuses->bonusMultiplier.level = 2.0f;
-            PlaySound(ctx->assets.samples.multiplier_spawn);
+            playSoundPositioned(ctx->assets.samples.multiplier_spawn, bonuses->bonusMultiplier.base.position.x);
 
         } else if (randomSelect < 85) {
-            // spawn powerup or shield
+            // TODO: spawn powerup or shield
         } else {
-            // spawn extra life or extra ship
+            // TODO: spawn extra life or extra ship
         }
 
     }
