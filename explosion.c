@@ -2,8 +2,9 @@
 #include "raylib.h"
 #include "animation.h"
 #include "gameContext.h"
+#include "utils.h"
 
 void newExplosion(GameContext* ctx, Vector2 position) {
     addNewAnimation(&ctx->objectPools.explosions, &ctx->assets.animations.explosion, position, 0.0f);
-    PlaySound(ctx->assets.samples.explosion);
+    playSoundPositioned(ctx->assets.samples.explosion, position.x);
 }

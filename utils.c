@@ -111,6 +111,9 @@ void playSoundPositioned(Sound sound, float positionX) {
     float minPan = -0.8f;
     float maxPan = 0.8f;
 
+    if (positionX < minPosition) positionX = minPosition;
+    if (positionX > maxPosition) positionX = maxPosition;
+
     float pan = scaleFloat(minPosition, maxPosition, minPan, maxPan, positionX);
 
     SetSoundPan(sound, pan);
