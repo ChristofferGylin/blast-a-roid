@@ -118,7 +118,7 @@ void handleEnemiesCollisions(GameContext* ctx) {
             
             if (enemy->type == SPIKY_ASTEROID) {
                 knockbackByImpact(ship->position, &ship->velocity, enemy->position, enemy->velocity);
-                PlaySound(ctx->assets.samples.metalPlink);
+                playSoundPositioned(ctx->assets.samples.metalPlink, enemy->position.x);
             } else {
                 newExplosion(ctx, enemy->position);
                 dropNewBonus(ctx, &enemyObject->enemy);
