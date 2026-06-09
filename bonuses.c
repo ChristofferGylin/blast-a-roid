@@ -245,7 +245,6 @@ void handleBonusesCollisions(GameContext* ctx, Bonuses* bonuses) {
             ctx->player.powerups.levelBonusMultiplier = round(bonuses->bonusMultiplier.level);
             bonuses->bonusMultiplier.base.isActive = false;
             destroyShot(&ctx->objectPools.shots.shots[i]);
-            PlaySound(ctx->assets.samples.multiplier_collect);
             playSoundPositioned(ctx->assets.samples.multiplier_collect, bonuses->bonusMultiplier.base.position.x);
         }
     }

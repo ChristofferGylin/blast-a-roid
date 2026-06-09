@@ -202,7 +202,7 @@ void handleEnemiesHitDetection(GameContext* ctx) {
                         knockback(enemy->position, &enemy->velocity, shotObj->shot.position, knockbackForce);
 
                         if (enemy->type == SPIKY_ASTEROID) {
-                            PlaySound(ctx->assets.samples.metalPlink);
+                            playSoundPositioned(ctx->assets.samples.metalPlink, enemy->position.x);
                         }
                     }
 
