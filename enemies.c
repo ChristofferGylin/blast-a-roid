@@ -279,7 +279,7 @@ void handleEnemyShooting(GameContext* ctx, Enemy* enemy) {
             false
         };
 
-        PlaySound(ctx->assets.samples.enemyShot1);
+        playSoundPositioned(ctx->assets.samples.enemyShot1, enemy->position.x);
         addNewShot(&ctx->objectPools.shots, newShot);
         shotProps->lastShot = GetTime() * 1000.0;
         shotProps->shotCount++;
