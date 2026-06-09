@@ -108,8 +108,8 @@ void playSoundPositioned(Sound sound, float positionX) {
 
     float minPosition = SIDEBAR_WIDTH;
     float maxPosition = SCREEN_WIDTH - SIDEBAR_WIDTH;
-    float minPan = 0.8f;
-    float maxPan = 0.2f;
+    float minPan = 0.7f;
+    float maxPan = 0.3f;
 
     if (positionX < minPosition) positionX = minPosition;
     if (positionX > maxPosition) positionX = maxPosition;
