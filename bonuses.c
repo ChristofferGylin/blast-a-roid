@@ -246,6 +246,7 @@ void handleBonusesCollisions(GameContext* ctx, Bonuses* bonuses) {
             bonuses->bonusMultiplier.base.isActive = false;
             destroyShot(&ctx->objectPools.shots.shots[i]);
             PlaySound(ctx->assets.samples.multiplier_collect);
+            playSoundPositioned(ctx->assets.samples.multiplier_collect, bonuses->bonusMultiplier.base.position.x);
         }
     }
 
@@ -271,37 +272,37 @@ void handleBonusesCollisions(GameContext* ctx, Bonuses* bonuses) {
             case BONUS_POINTS:
                 ctx->player.score += bonus->value;
                 // TODO: Play unique sound
-                PlaySound(ctx->assets.samples.multiplier_collect);
+                playSoundPositioned(ctx->assets.samples.multiplier_collect, bonus->position.x);
                 break;
 
             case FULL_AUTO_POWERUP:
                 ctx->player.powerups.fullAuto = true;
                 // TODO: Play unique sound
-                PlaySound(ctx->assets.samples.multiplier_collect);
+                playSoundPositioned(ctx->assets.samples.multiplier_collect, bonus->position.x);
                 break;
             
             case MULTI_SHOT_POWERUP:
                 ctx->player.powerups.trippleShot = true;
                 // TODO: Play unique sound
-                PlaySound(ctx->assets.samples.multiplier_collect);
+                playSoundPositioned(ctx->assets.samples.multiplier_collect, bonus->position.x);
                 break;
             
             case AUTO_STOP_POWERUP:
                 ctx->player.powerups.autoStop = true;
                 // TODO: Play unique sound
-                PlaySound(ctx->assets.samples.multiplier_collect);
+                playSoundPositioned(ctx->assets.samples.multiplier_collect, bonus->position.x);
                 break;
             
             case LOCK_POWERUP:
                 ctx->player.powerups.lock = true;
                 // TODO: Play unique sound
-                PlaySound(ctx->assets.samples.multiplier_collect);
+                playSoundPositioned(ctx->assets.samples.multiplier_collect, bonus->position.x);
                 break;
             
             case LONG_SHOT_POWERUP:
                 ctx->player.powerups.longShot = true;
                 // TODO: Play unique sound
-                PlaySound(ctx->assets.samples.multiplier_collect);
+                playSoundPositioned(ctx->assets.samples.multiplier_collect, bonus->position.x);
                 break;
             
             default:
