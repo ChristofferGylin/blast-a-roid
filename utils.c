@@ -104,6 +104,19 @@ void knockbackByImpact(
     }
 }
 
+void playSoundPositioned(Sound sound, float positionX) {
+
+    float minPosition = SIDEBAR_WIDTH;
+    float maxPosition = SCREEN_WIDTH - SIDEBAR_WIDTH;
+    float minPan = -0.8f;
+    float maxPan = 0.8f;
+
+    float pan = scaleFloat(minPosition, maxPosition, minPan, maxPan, positionX);
+
+    SetSoundPan(sound, pan);
+    PlaySound(sound);
+}
+
 void updatePosition(Vector2* position, Vector2 velocity) {
     position->x += GetFrameTime() * velocity.x;
     position->y += GetFrameTime() * velocity.y;
