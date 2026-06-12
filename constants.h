@@ -13,6 +13,7 @@ static const int ASTEROID_SIZE_2 = 24;
 static const int ASTEROID_SIZE_3 = 12;
 static const int METAL_ASTEROID_SIZE = 32;
 static const int SPIKY_ASTEROID_SIZE = 48;
+static const int SUPERNOVA_RENDER_SIZE = 64;
 static const int TIME_BONUS_LIMIT = 1000;
 static const int SCREEN_WIDTH = 1280;
 static const int SCREEN_HEIGHT = 720;
