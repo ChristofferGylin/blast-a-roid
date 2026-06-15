@@ -748,7 +748,7 @@ bool updateUfo2(GameContext* ctx, Enemy* enemy) {
     int attackDurationTime = 45;
     bool hasBeenRemoved = false;
 
-    if (now <= enemy->spawnTime + attackDurationTime) {
+    if (now <= enemy->spawnTime + attackDurationTime + ctx->pausTimer) {
         enemy->isAttacking = true;
         enemy->destination = predictiveAim(ctx->ship.position, ctx->ship.velocity, enemy->position, 0.5f);
     } else {
