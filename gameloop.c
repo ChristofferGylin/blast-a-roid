@@ -62,7 +62,7 @@ GameResult gameLoop(GameContext* ctx) {
 
         if (isPaused) {
             updatePausMenu(&pauseMenu);
-            pausTimer += GetFrameTime();
+            ctx->pausTimer += GetFrameTime();
 
             if (pauseMenu.selected != -1) {
                 switch (pauseMenu.selected) {
