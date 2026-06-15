@@ -44,6 +44,7 @@ GameResult gameLoop(GameContext* ctx) {
     initBonuses(&bonuses);
     initSpawning(ctx);
 
+    double pausTimer = 0;
     double waitForExitTime = 0;
     bool waitForExit = false;
 
@@ -61,6 +62,7 @@ GameResult gameLoop(GameContext* ctx) {
 
         if (isPaused) {
             updatePausMenu(&pauseMenu);
+            pausTimer += GetFrameTime();
 
             if (pauseMenu.selected != -1) {
                 switch (pauseMenu.selected) {
