@@ -90,7 +90,7 @@ GameResult gameLoop(GameContext* ctx) {
             resetTimeBonusMultiplier(ctx);
             updateLevelBonus(&ctx->player);
             handleBonuses(ctx, &bonuses);
-            clearShots(&ctx->objectPools.shots);
+            clearShots(ctx);
             handleShooting(ctx);
             handleShipControls(ctx);
             handleShield(ctx);

@@ -46,7 +46,7 @@ void resetTimeBonusMultiplier(GameContext* ctx) {
     
     if (player->timeBonusTimer == 0) return;
 
-    if (((GetTime() - ctx->pausTimer) * 1000.0) >= player->timeBonusTimer + TIME_BONUS_LIMIT) {
+    if ((GetTime() * 1000.0) >= player->timeBonusTimer + TIME_BONUS_LIMIT + (ctx->pausTimer * 1000)) {
         player->timeBonusMultiplier = 1;
         player->timeBonusTimer = 0;
     }

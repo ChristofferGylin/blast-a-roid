@@ -25,8 +25,10 @@ void addNewShot(ShotObjectPool* pool, Shot shot) {
     pool->activeCount++;
 }
 
-void clearShots(ShotObjectPool* pool) {
+void clearShots(GameContext* ctx) {
     
+    ShotObjectPool* pool = &ctx->objectPools.shots;
+
     bool isChanged = false;
     
     for (int i = 0; i < pool->activeCount; i++) {
@@ -37,7 +39,7 @@ void clearShots(ShotObjectPool* pool) {
             isChanged = true;
         }
 
-        if (GetTime() * 1000.0 >= pool->shots[i].shot.destroyTime) {
+        if ((GetTime() * 1000.0) >= pool->shots[i].shot.destroyTime) {
             pool->shots[i].active = false;
             isChanged = true;
         }
