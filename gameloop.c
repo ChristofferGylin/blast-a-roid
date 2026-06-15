@@ -87,7 +87,7 @@ GameResult gameLoop(GameContext* ctx) {
         } else if (isFadeInComplete) {
 
             spawnEnemy(ctx);
-            resetTimeBonusMultiplier(&ctx->player);
+            resetTimeBonusMultiplier(ctx);
             updateLevelBonus(&ctx->player);
             handleBonuses(ctx, &bonuses);
             clearShots(&ctx->objectPools.shots);
