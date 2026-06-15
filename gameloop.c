@@ -43,8 +43,8 @@ GameResult gameLoop(GameContext* ctx) {
     initAsteroids(ctx);
     initBonuses(&bonuses);
     initSpawning(ctx);
+    ctx->pausTimer = 0;
 
-    double pausTimer = 0;
     double waitForExitTime = 0;
     bool waitForExit = false;
 

@@ -76,6 +76,7 @@ typedef struct GameContext {
     Player player;
     Ship ship;
     SpawningEnemies spawning;
+    double pausTimer;
 }GameContext;
 
 void initGameContext(GameContext* ctx);
