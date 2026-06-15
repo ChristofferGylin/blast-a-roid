@@ -199,6 +199,8 @@ void handleBonuses(GameContext* ctx, Bonuses* bonuses) {
     double now = GetTime();
 
     if (bonuses->bonusMultiplier.base.isActive) {
+
+        // TODO: Fix multiplier stays too long if spawn after pause
             
         if (bonuses->bonusMultiplier.base.spawnTime + BONUS_LIFE_TIME + ctx->pausTimer < now) {
             bonuses->bonusMultiplier.base.isActive = false;
@@ -209,7 +211,7 @@ void handleBonuses(GameContext* ctx, Bonuses* bonuses) {
             }
         }
     }
-
+    
     if (bonuses->nextSpawnTime + ctx->pausTimer < now) {
 
         bonuses->nextSpawnTime = getNextSpawnTime();
