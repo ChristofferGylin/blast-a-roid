@@ -615,7 +615,7 @@ void spawnEnemy(GameContext* ctx) {
     
     EnemySpawnPool* pool = &ctx->objectPools.spawnableEnemies;
     
-    if (pool->activeCount == 0 || ctx->spawning.nextSpawn > GetTime()) return;
+    if (pool->activeCount == 0 || ctx->spawning.nextSpawn > GetTime() + ctx->pausTimer) return;
     setNextEnemySpawnTime(ctx);
 
     float sumOfWeight = 0.0f;
