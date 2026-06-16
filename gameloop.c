@@ -43,6 +43,7 @@ GameResult gameLoop(GameContext* ctx) {
     initAsteroids(ctx);
     initBonuses(&bonuses);
     initSpawning(ctx);
+    ctx->pausTimer = 0;
 
     double waitForExitTime = 0;
     bool waitForExit = false;
@@ -61,6 +62,7 @@ GameResult gameLoop(GameContext* ctx) {
 
         if (isPaused) {
             updatePausMenu(&pauseMenu);
+            ctx->pausTimer += GetFrameTime();
 
             if (pauseMenu.selected != -1) {
                 switch (pauseMenu.selected) {
@@ -85,10 +87,10 @@ GameResult gameLoop(GameContext* ctx) {
         } else if (isFadeInComplete) {
 
             spawnEnemy(ctx);
-            resetTimeBonusMultiplier(&ctx->player);
+            resetTimeBonusMultiplier(ctx);
             updateLevelBonus(&ctx->player);
             handleBonuses(ctx, &bonuses);
-            clearShots(&ctx->objectPools.shots);
+            clearShots(ctx);
             handleShooting(ctx);
             handleShipControls(ctx);
             handleShield(ctx);

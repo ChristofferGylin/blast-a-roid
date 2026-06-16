@@ -3,6 +3,7 @@
 #include "raylib.h"
 #include <inttypes.h>
 #include <stdio.h>
+#include "gameContext.h"
 
 static const int ASTEROID_POINTS_1 = 50;
 static const int ASTEROID_POINTS_2 = 100;
@@ -39,10 +40,13 @@ void addScore(Player* player, Asteroid* ast) {
     updateTimeBonusMultiplier(player);
 }
 
-void resetTimeBonusMultiplier(Player* player) {
+void resetTimeBonusMultiplier(GameContext* ctx) {
+    
+    Player* player = &ctx->player;
+    
     if (player->timeBonusTimer == 0) return;
 
-    if ((GetTime() * 1000.0) >= player->timeBonusTimer + TIME_BONUS_LIMIT) {
+    if ((GetTime() * 1000.0) >= player->timeBonusTimer + TIME_BONUS_LIMIT + (ctx->pausTimer * 1000)) {
         player->timeBonusMultiplier = 1;
         player->timeBonusTimer = 0;
     }

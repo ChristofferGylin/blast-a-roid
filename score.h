@@ -7,7 +7,7 @@
 
 void addScore(Player* player, Asteroid* ast);
 
-void resetTimeBonusMultiplier(Player* player);
+void resetTimeBonusMultiplier(GameContext* ctx);
 void updateLevelBonus(Player* player);
 void updateTimeBonusMultiplier(Player* player);
 

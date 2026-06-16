@@ -60,7 +60,7 @@ typedef struct {
 }ShotObjectPool;
 
 void addNewShot(ShotObjectPool* pool, Shot shot);
-void clearShots(ShotObjectPool* pool);
+void clearShots(GameContext* ctx);
 void compactShotPool(ShotObjectPool* pool);
 void destroyShot(ShotPoolObject* shot);
 ShotProperties getShotProps(GameContext* ctx, ShotType type);

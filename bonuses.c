@@ -199,8 +199,10 @@ void handleBonuses(GameContext* ctx, Bonuses* bonuses) {
     double now = GetTime();
 
     if (bonuses->bonusMultiplier.base.isActive) {
+
+        // TODO: Fix multiplier stays too long if spawn after pause
             
-        if (bonuses->bonusMultiplier.base.spawnTime + BONUS_LIFE_TIME < now) {
+        if (bonuses->bonusMultiplier.base.spawnTime + BONUS_LIFE_TIME + ctx->pausTimer < now) {
             bonuses->bonusMultiplier.base.isActive = false;
         } else {
             bonuses->bonusMultiplier.level += GetFrameTime() * BONUS_MULTIPLIER_ROLL_RATE;
@@ -209,8 +211,8 @@ void handleBonuses(GameContext* ctx, Bonuses* bonuses) {
             }
         }
     }
-
-    if (bonuses->nextSpawnTime < now) {
+    
+    if (bonuses->nextSpawnTime + ctx->pausTimer < now) {
 
         bonuses->nextSpawnTime = getNextSpawnTime();
         int randomSelect = GetRandomValue(1, 100);
@@ -324,7 +326,7 @@ void initBonus(GameContext* ctx, Bonus* bonus, BonusType type, Vector2 position)
     bonus->rotation = 0;
     bonus->rotationSpeed = GetRandomValue(-100, 100),
     bonus->type = type;
-    bonus->spawnTime = GetTime();
+    bonus->spawnTime = GetTime() - ctx->pausTimer;
     bonus->velocity = getRandomVelocity((FloatRange){30.0f, 60.0f});
 
     if (type == BONUS_POINTS) {
@@ -485,7 +487,6 @@ void updateBonuses(GameContext* ctx) {
     if (pool->activeCount == 0) return;
 
     const float lifeTime = 30;
-    const double deactivateTime = GetTime() + lifeTime;
 
     bool poolHasChanged = false;
 
@@ -494,8 +495,10 @@ void updateBonuses(GameContext* ctx) {
         if (!pool->bonuses[i].active) continue;
         
         Bonus* bonus = &pool->bonuses[i].bonus;
-        
-        if (bonus->spawnTime + lifeTime <= GetTime()) {
+        const double deactivateTime = bonus->spawnTime + lifeTime;
+        const double gameTime = GetTime() - ctx->pausTimer;
+
+        if (gameTime >= deactivateTime) {
             
             if (bonus->type != BONUS_POINTS && bonus->type != SHIELD_REFILL) {
                 addNewBonusSpawnOption(spawnPool, bonus->type);
