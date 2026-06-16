@@ -1,9 +1,11 @@
 #ifndef SPECIALS_H
 #define SPECIALS_H
 
+#include <stdbool.h>
+
+#include "animation.h"
 #include "raylib.h"
 #include "utils.h"
-#include "animation.h"
 
 static const int NUMBER_OF_SPECIALS = 4;
 
@@ -29,5 +31,30 @@ typedef struct Special {
         AnimationInstance animation;
     };
 }Special;
+
+typedef struct SpecialPoolObject {
+    bool active;
+    Special special;
+}SpecialPoolObject;
+
+typedef struct SpecialsPool {
+    SpecialPoolObject specials[NUMBER_OF_SPECIALS];
+    int activeCount;
+}SpecialsPool;
+
+typedef struct SpecialSpawn {
+    SpecialType type;
+    double spawnTime;
+}SpecialSpawnOption;
+
+typedef struct SpecialSpawnPoolObject {
+    bool active;
+    SpecialSpawnOption special;
+};
+
+typedef struct SpecialsSpawnPool {
+    SpecialSpawnPoolObject specials[NUMBER_OF_SPECIALS];
+    int activeCount;
+}SpecialsSpawnPool;
 
 #endif
