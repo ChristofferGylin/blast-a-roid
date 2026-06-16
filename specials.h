@@ -72,6 +72,7 @@ typedef struct SpecialsSpawnOptionPool {
     int activeCount;
 }SpecialsSpawnOptionPool;
 
-void initSpecialsPool(SpecialsSpawnPool* pool);
+void initSpecialsPool(SpecialsPool* pool);
+void initSpecialsSpawnPool(SpecialsSpawnPool* pool);
 
 #endif
