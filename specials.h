@@ -45,11 +45,11 @@ typedef struct SpecialsPool {
 typedef struct SpecialSpawn {
     SpecialType type;
     double spawnTime;
-}SpecialSpawnOption;
+}SpecialSpawn;
 
 typedef struct SpecialSpawnPoolObject {
     bool active;
-    SpecialSpawnOption special;
+    SpecialSpawn special;
 }SpecialSpawnPoolObject;
 
 typedef struct SpecialsSpawnPool {
@@ -68,11 +68,12 @@ typedef struct SpecialSpawnOptionPoolObject {
 }SpecialSpawnOptionPoolObject;
 
 typedef struct SpecialsSpawnOptionPool {
-    SpecialSpawnOption options[NUMBER_OF_SPECIALS];
+    SpecialSpawnOptionPoolObject options[NUMBER_OF_SPECIALS];
     int activeCount;
 }SpecialsSpawnOptionPool;
 
 void initSpecialsPool(SpecialsPool* pool);
 void initSpecialsSpawnPool(SpecialsSpawnPool* pool);
+void populateSpecialsSpawnPool(GameContext* ctx);
 
 #endif
