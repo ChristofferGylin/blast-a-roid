@@ -26,11 +26,7 @@ typedef struct Special {
     float rotation;
     float rotationSpeed;
     float value;
-    VisualType visualType;
-    union {
-        Texture2D* sprite;
-        AnimationInstance animation;
-    };
+    AnimationInstance animation;
 }Special;
 
 typedef struct SpecialPoolObject {
