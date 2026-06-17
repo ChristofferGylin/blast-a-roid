@@ -4,9 +4,11 @@
 
 #include "gameContext.h"
 #include "specials.h"
+#include "utils.h"
 
 void addSpecialToPool(GameContext* ctx, SpecialType type);
 void addSpecialToSpawnPool(SpecialsSpawnPool* pool, SpecialType type);
+void handleSpecialsMovement(SpecialsPool* pool);
 void spawnSpecials(GameContext* ctx);
 
 void addSpecialToPool(GameContext* ctx, SpecialType type) {
@@ -91,7 +93,15 @@ void addSpecialToSpawnPool(SpecialsSpawnPool* pool, SpecialType type) {
     if (!success) {
         printf("Error: Could not add new SpecialSpawn in addSpecialToSpawnPool");
     }
-} 
+}
+
+void handleSpecialsMovement(SpecialsPool* pool) {
+    for (int i = 0; i < pool->activeCount; i++) {
+        SpecialPoolObject* specialObj = &pool->specials[i];
+        if (!specialObj->active) continue;
+        updatePosition(&specialObj->special.position, specialObj->special.velocity);
+    }
+}
 
 void initSpecialsPool(SpecialsPool* pool) {
     for (int i = 0; i < NUMBER_OF_SPECIALS; i++) {
