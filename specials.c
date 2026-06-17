@@ -64,6 +64,8 @@ void addSpecialToPool(GameContext* ctx, SpecialType type) {
         pool->specials[i].active = true;
         pool->specials[i].special = newSpecial;
 
+        pool->activeCount++;
+
         success = true;
         break;
     }
@@ -89,6 +91,8 @@ void addSpecialToSpawnPool(SpecialsSpawnPool* pool, SpecialType type) {
 
         pool->specials[i].active = true;
         pool->specials[i].special = newSpecial;
+
+        pool->activeCount++;
 
         success = true;
         break;
