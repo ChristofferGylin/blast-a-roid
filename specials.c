@@ -56,23 +56,10 @@ void addSpecialToPool(GameContext* ctx, SpecialType type) {
             break;
     }
 
-    bool success = false;
+    pool->specials[pool->activeCount].active = true;
+    pool->specials[pool->activeCount].special = newSpecial;
 
-    for (int i = 0; i < NUMBER_OF_SPECIALS; i++) {
-        if (pool->specials[i].active) continue;
-
-        pool->specials[i].active = true;
-        pool->specials[i].special = newSpecial;
-
-        pool->activeCount++;
-
-        success = true;
-        break;
-    }
-
-    if (!success) {
-        printf("Error: Could not add new Special in addSpecialToPool");
-    }
+    pool->activeCount++;
 }
 
 void addSpecialToSpawnPool(SpecialsSpawnPool* pool, SpecialType type) {
@@ -84,23 +71,10 @@ void addSpecialToSpawnPool(SpecialsSpawnPool* pool, SpecialType type) {
     newSpecial.type = type;
     newSpecial.spawnTime = GetTime() + GetRandomValue(minSpawnDelay, maxSpawnDelay);
 
-    bool success = false;
+    pool->specials[pool->activeCount].active = true;
+    pool->specials[pool->activeCount].special = newSpecial;
 
-    for (int i = 0; i < NUMBER_OF_SPECIALS; i++) {
-        if (pool->specials[i].active) continue;
-
-        pool->specials[i].active = true;
-        pool->specials[i].special = newSpecial;
-
-        pool->activeCount++;
-
-        success = true;
-        break;
-    }
-
-    if (!success) {
-        printf("Error: Could not add new SpecialSpawn in addSpecialToSpawnPool");
-    }
+    pool->activeCount++;
 }
 
 void compactSpecialsSpawnPool(SpecialsSpawnPool* pool) {
