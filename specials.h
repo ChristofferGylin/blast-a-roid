@@ -55,19 +55,10 @@ typedef struct SpecialsSpawnPool {
 }SpecialsSpawnPool;
 
 typedef struct SpecialSpawnOption {
+    bool active;
     SpecialType type;
     int weight;
 }SpecialSpawnOption;
-
-typedef struct SpecialSpawnOptionPoolObject {
-    bool active;
-    SpecialSpawnOption option;
-}SpecialSpawnOptionPoolObject;
-
-typedef struct SpecialsSpawnOptionPool {
-    SpecialSpawnOptionPoolObject options[NUMBER_OF_SPECIALS];
-    int activeCount;
-}SpecialsSpawnOptionPool;
 
 void initSpecialsPool(SpecialsPool* pool);
 void initSpecialsSpawnPool(SpecialsSpawnPool* pool);

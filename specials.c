@@ -11,6 +11,7 @@ void addSpecialToPool(GameContext* ctx, SpecialType type);
 void addSpecialToSpawnPool(SpecialsSpawnPool* pool, SpecialType type);
 void handleSpecialsMovement(SpecialsPool* pool);
 void spawnSpecials(GameContext* ctx);
+void updateSpecialsAnimations(SpecialsPool* pool);
 
 void addSpecialToPool(GameContext* ctx, SpecialType type) {
     
@@ -122,29 +123,14 @@ void initSpecialsSpawnPool(SpecialsSpawnPool* pool) {
 
 void populateSpecialsSpawnPool(GameContext* ctx) {
     
-    SpecialsSpawnOptionPool optionPool;
+    SpecialSpawnOption optionPool[NUMBER_OF_SPECIALS] = {
+        (SpecialSpawnOption){true, MULTIPLIER, 100},
+        (SpecialSpawnOption){true, COMET, 100},
+        (SpecialSpawnOption){true, EXTRA_LIFE, 30},
+        (SpecialSpawnOption){true, BLACK_HOLE, 20},
+        (SpecialSpawnOption){true, SUPERNOVA, 10},
+    };
     SpecialsSpawnPool* spawnPool = &ctx->objectPools.specialsSpawn;
-
-    for (int i = 0; i < NUMBER_OF_SPECIALS; i++) {
-        optionPool.options[i].active = true;
-    }
-
-    optionPool.activeCount = NUMBER_OF_SPECIALS;
-
-    optionPool.options[0].option.type = MULTIPLIER;
-    optionPool.options[0].option.weight = 100;
-
-    optionPool.options[1].option.type = COMET;
-    optionPool.options[1].option.weight = 100;
-
-    optionPool.options[2].option.type = EXTRA_LIFE;
-    optionPool.options[2].option.weight = 30;
-    
-    optionPool.options[3].option.type = BLACK_HOLE;
-    optionPool.options[3].option.weight = 20;
-
-    optionPool.options[4].option.type = SUPERNOVA;
-    optionPool.options[4].option.weight = 10;
     
     int minNumberOfSpecials = 0;
     int maxNumberOfSpecials = ceil((ctx->player.level / 2));
@@ -159,25 +145,25 @@ void populateSpecialsSpawnPool(GameContext* ctx) {
 
         for (int j = 0; j < NUMBER_OF_SPECIALS; j++) {
         
-            if (!optionPool.options[j].active) continue;
-            sumOfWeight += optionPool.options[j].option.weight;
+            if (!optionPool[j].active) continue;
+            sumOfWeight += optionPool[j].weight;
         }
 
         int randomSelect = GetRandomValue(0, sumOfWeight - 1);
 
         for (int j = 0; j < NUMBER_OF_SPECIALS; j++) {
 
-            if (!optionPool.options[j].active) continue;
+            if (!optionPool[j].active) continue;
 
-            SpecialSpawnOptionPoolObject* optionObj = &optionPool.options[j];
+            SpecialSpawnOption* option = &optionPool[j];
 
-            if (randomSelect < optionObj->option.weight) {
-                addSpecialToSpawnPool(&ctx->objectPools.specialsSpawn, optionObj->option.type);
-                optionObj->active = false;
+            if (randomSelect < option->weight) {
+                addSpecialToSpawnPool(&ctx->objectPools.specialsSpawn, option->type);
+                option->active = false;
                 break;
             }
 
-            randomSelect -= optionObj->option.weight;
+            randomSelect -= option->weight;
         }
     }
 
@@ -198,6 +184,11 @@ void spawnSpecials(GameContext* ctx) {
 
 void updateSpecialsAnimations(SpecialsPool* pool) {
     for (int i = 0; i < pool->activeCount; i++) {
+        if (!pool->specials[i].active) continue;
 
+        Special* special = &pool->specials[i].special;
+
+        special->animation.position = special->position;
+        updateAnimation(&special->animation);
     } 
 }
