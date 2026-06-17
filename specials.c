@@ -2,6 +2,7 @@
 #include <stdbool.h>
 #include <stdio.h>
 
+#include "animation.h"
 #include "gameContext.h"
 #include "specials.h"
 #include "utils.h"
@@ -193,4 +194,10 @@ void spawnSpecials(GameContext* ctx) {
             spawnObj->active = false;
         }
     }
+}
+
+void updateSpecialsAnimations(SpecialsPool* pool) {
+    for (int i = 0; i < pool->activeCount; i++) {
+
+    } 
 }
