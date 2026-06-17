@@ -9,6 +9,7 @@
 
 void addSpecialToPool(GameContext* ctx, SpecialType type);
 void addSpecialToSpawnPool(SpecialsSpawnPool* pool, SpecialType type);
+void compactSpecialsSpawnPool(SpecialsSpawnPool* pool);
 void handleSpecialsMovement(SpecialsPool* pool);
 void spawnSpecials(GameContext* ctx);
 void updateSpecialsAnimations(SpecialsPool* pool);
@@ -95,6 +96,25 @@ void addSpecialToSpawnPool(SpecialsSpawnPool* pool, SpecialType type) {
     if (!success) {
         printf("Error: Could not add new SpecialSpawn in addSpecialToSpawnPool");
     }
+}
+
+void compactSpecialsSpawnPool(SpecialsSpawnPool* pool) {
+    int write = 0;
+    
+    for (int i = 0; i < pool->activeCount; i++) {
+        if (pool->specials[i].active) {
+            if (write != i) {
+                pool->specials[write] = pool->specials[i];
+            }
+            write++;
+        }
+    }
+
+    for (int i = write; i < pool->activeCount; i++) {
+        pool->specials[i].active = false;
+    }
+
+    pool->activeCount = write;
 }
 
 void handleSpecialsMovement(SpecialsPool* pool) {
