@@ -5,7 +5,63 @@
 #include "gameContext.h"
 #include "specials.h"
 
+void addSpecialToPool(GameContext* ctx, SpecialType type);
 void addSpecialToSpawnPool(SpecialsSpawnPool* pool, SpecialType type);
+void spawnSpecials(GameContext* ctx);
+
+void addSpecialToPool(GameContext* ctx, SpecialType type) {
+    
+    SpecialsPool* pool = &ctx->objectPools.specials;
+    
+    Special newSpecial;
+
+    newSpecial.position = (Vector2){0,0};
+    newSpecial.rotation = 0;
+    newSpecial.rotationSpeed = 0;
+    newSpecial.size = (Vector2){32, 32};
+    newSpecial.spawnTime = GetTime() - ctx->pausTimer;
+    newSpecial.type = type;
+    newSpecial.value = 0;
+    newSpecial.velocity = (Vector2){0,0};
+
+    switch (type) {
+
+        case MULTIPLIER:
+            // TODO: set attributes specific to type
+            break;
+    
+        case COMET:
+            // TODO: set attributes specific to type
+            break;
+    
+        case EXTRA_LIFE:
+            // TODO: set attributes specific to type
+            break;
+    
+        case SUPERNOVA:
+            // TODO: set attributes specific to type
+            break;
+    
+        default:
+            break;
+    }
+
+    bool success = false;
+
+    for (int i = 0; i < NUMBER_OF_SPECIALS; i++) {
+        if (pool->specials[i].active) continue;
+
+        pool->specials[i].active = true;
+        pool->specials[i].special = newSpecial;
+
+        success = true;
+        break;
+    }
+
+    if (!success) {
+        printf("Error: Could not add new Special in addSpecialToPool");
+    }
+}
 
 void addSpecialToSpawnPool(SpecialsSpawnPool* pool, SpecialType type) {
     SpecialSpawn newSpecial;
@@ -107,4 +163,17 @@ void populateSpecialsSpawnPool(GameContext* ctx) {
         }
     }
 
+}
+
+void spawnSpecials(GameContext* ctx) {
+    for (int i = 0; i < NUMBER_OF_SPECIALS; i++) {
+        SpecialSpawnPoolObject* spawnObj = &ctx->objectPools.specialsSpawn.specials[i];
+
+        if (!spawnObj->active) continue;
+
+        if (spawnObj->special.spawnTime + ctx->pausTimer <= GetTime()) {
+            addSpecialToPool(ctx, spawnObj->special.type);
+            spawnObj->active = false;
+        }
+    }
 }
