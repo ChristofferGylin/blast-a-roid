@@ -188,7 +188,7 @@ void populateSpecialsSpawnPool(GameContext* ctx) {
 }
 
 void spawnSpecials(GameContext* ctx) {
-    for (int i = 0; i < NUMBER_OF_SPECIALS; i++) {
+    for (int i = 0; i < ctx->objectPools.specialsSpawn.activeCount; i++) {
         SpecialSpawnPoolObject* spawnObj = &ctx->objectPools.specialsSpawn.specials[i];
 
         if (!spawnObj->active) continue;
