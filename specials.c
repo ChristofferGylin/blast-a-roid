@@ -42,6 +42,10 @@ void addSpecialToPool(GameContext* ctx, SpecialType type) {
             // TODO: set attributes specific to type
             break;
     
+        case BLACK_HOLE:
+            // TODO: set attributes specific to type
+            break;
+    
         default:
             break;
     }
@@ -124,9 +128,12 @@ void populateSpecialsSpawnPool(GameContext* ctx) {
 
     optionPool.options[2].option.type = EXTRA_LIFE;
     optionPool.options[2].option.weight = 30;
-
-    optionPool.options[3].option.type = SUPERNOVA;
+    
+    optionPool.options[3].option.type = BLACK_HOLE;
     optionPool.options[3].option.weight = 20;
+
+    optionPool.options[4].option.type = SUPERNOVA;
+    optionPool.options[4].option.weight = 10;
     
     int minNumberOfSpecials = 0;
     int maxNumberOfSpecials = ceil((ctx->player.level / 2));

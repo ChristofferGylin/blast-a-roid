@@ -7,12 +7,13 @@
 #include "raylib.h"
 #include "utils.h"
 
-static const int NUMBER_OF_SPECIALS = 4;
+static const int NUMBER_OF_SPECIALS = 5;
 
 typedef enum SpecialType {
     MULTIPLIER,
     COMET,
     EXTRA_LIFE,
+    BLACK_HOLE,
     SUPERNOVA
 }SpecialType;
 
