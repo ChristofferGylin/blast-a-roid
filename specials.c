@@ -168,7 +168,7 @@ void populateSpecialsSpawnPool(GameContext* ctx) {
 
             if (!optionPool.options[j].active) continue;
 
-            SpecialSpawnOptionPoolObject* optionObj = &optionPool.options[j].option;
+            SpecialSpawnOptionPoolObject* optionObj = &optionPool.options[j];
 
             if (randomSelect < optionObj->option.weight) {
                 addSpecialToSpawnPool(&ctx->objectPools.specialsSpawn, optionObj->option.type);
