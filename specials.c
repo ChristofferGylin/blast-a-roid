@@ -3,7 +3,12 @@
 #include <stdio.h>
 
 #include "animation.h"
+#include "asteroid.h"
+#include "constants.h"
+#include "explosion.h"
 #include "gameContext.h"
+#include "ship.h"
+#include "shooting.h"
 #include "specials.h"
 #include "utils.h"
 
@@ -113,6 +118,56 @@ void compactSpecialsPool(SpecialsPool* pool) {
     }
 
     pool->activeCount = write;
+}
+
+void handleSpecialsCollisions(GameContext* ctx) {
+    Ship* ship = &ctx->ship;
+    SpecialsPool* specialsPool = &ctx->objectPools.specials;
+    AsteroidPool* asteroidsPool = &ctx->objectPools.asteroids;
+    ShotObjectPool* shotsPool = &ctx->objectPools.asteroids;
+
+    bool specialsPoolHasChanged = false;
+
+    for (int i = 0; i < specialsPool->activeCount; i++) {
+        if (!specialsPool->specials[i].active) continue;
+
+        Special* special = &specialsPool->specials[i].special;
+
+        if (special->type != EXTRA_LIFE && special->type != BLACK_HOLE) continue;
+
+        if (special->type == EXTRA_LIFE) {
+            for (int j = 0; j < asteroidsPool->activeCount; j++) {
+                if (!asteroidsPool->asteroids[j].active) continue;
+
+                Asteroid* ast = &asteroidsPool->asteroids[j];
+
+                if (CheckCollisionCircles(ast->position, ast->size / 2, special->position, special->size.x / 2)) {
+                    // TODO: Extra life ship destroy animation
+                    // TODO: Play extra life ship destroy sample
+                    specialsPool->specials[i].active = false;
+                    newExplosion(ctx, ast->position);
+                    destroyAsteroid(&ctx->objectPools.destroyedAsteroids, &asteroidsPool->asteroids[j]);
+                    specialsPoolHasChanged = true;
+                    break;
+                }
+            }
+        }
+
+        if (CheckCollisionCircles(ship->position, SHIP_SIZE / 2, special->position, special->size.x / 2)) {
+            if (special->type == EXTRA_LIFE) {
+                ctx->player.lives++;
+                // TODO: Play extra life collect sample
+            } else {
+                newExplosion(ctx, ship->position);
+                if (!ship->destroyed) destroyShip(ctx);
+            }
+
+            specialsPool->specials[i].active = false;
+            specialsPoolHasChanged = true;
+            continue;
+        }
+
+    }
 }
 
 void handleSpecialsMovement(SpecialsPool* pool) {
