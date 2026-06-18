@@ -138,7 +138,7 @@ void handleSpecialsCollisions(GameContext* ctx) {
             for (int j = 0; j < asteroidsPool->activeCount; j++) {
                 if (!asteroidsPool->asteroids[j].active) continue;
 
-                Asteroid* ast = &asteroidsPool->asteroids[j];
+                Asteroid* ast = &asteroidsPool->asteroids[j].asteroid;
 
                 if (CheckCollisionCircles(ast->position, ast->size / 2, special->position, special->size.x / 2)) {
                     // TODO: Extra life ship destroy animation
