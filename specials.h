@@ -61,6 +61,7 @@ typedef struct SpecialSpawnOption {
 }SpecialSpawnOption;
 
 void handleSpecialsCollisions(GameContext* ctx);
+void handleSpecialsHitDetection(GameContext* ctx);
 void initSpecialsPool(SpecialsPool* pool);
 void initSpecialsSpawnPool(SpecialsSpawnPool* pool);
 void populateSpecialsSpawnPool(GameContext* ctx);
