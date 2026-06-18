@@ -173,6 +173,60 @@ void handleSpecialsCollisions(GameContext* ctx) {
     }
 }
 
+void handleSpecialsHitDetection(GameContext* ctx) {
+    SpecialsPool* specialsPool = &ctx->objectPools.specials;
+    ShotObjectPool* shotsPool = &ctx->objectPools.shots;
+
+    if (specialsPool->activeCount == 0 || shotsPool->activeCount == 0) return;
+
+    bool specialsPoolHasChanged = false;
+
+    for (int i = 0; i < specialsPool->activeCount; i++) {
+
+        SpecialPoolObject* specialObj = &specialsPool->specials[i];
+
+        if (!specialObj->active) continue;
+
+        for (int j = 0; j < shotsPool->activeCount; j++) {
+            ShotPoolObject* shotObj = &shotsPool->shots[j];
+
+            if (!shotObj->active) continue;
+
+            if (CheckCollisionCircles(specialObj->special.position, specialObj->special.size.x / 2.0f, shotObj->shot.position, shotObj->shot.size / 2.0f)) {
+                switch (specialObj->special.type) {
+                    case MULTIPLIER:
+                        // handle special hit
+                        break;
+                    
+                    case COMET:
+                        // handle special hit
+                        break;
+                    
+                    case EXTRA_LIFE:
+                        // handle special hit
+                        break;
+                    
+                    case BLACK_HOLE:
+                        // handle special hit
+                        break;
+                    
+                    case SUPERNOVA:
+                        // handle special hit
+                        break;
+                    default:
+                        printf("Error: Invalid SpecialType (%d) in handleEnemiesHitDetection\n", specialObj->special.type);
+                }
+
+                destroyShot(shotObj);
+            }
+        }
+    }
+
+    if (specialsPoolHasChanged) {
+        compactSpecialsPool(specialsPool);
+    }
+}
+
 void handleSpecialsMovement(SpecialsPool* pool) {
     for (int i = 0; i < pool->activeCount; i++) {
         SpecialPoolObject* specialObj = &pool->specials[i];
