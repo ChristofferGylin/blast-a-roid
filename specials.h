@@ -65,5 +65,6 @@ void handleSpecialsHitDetection(GameContext* ctx);
 void initSpecialsPool(SpecialsPool* pool);
 void initSpecialsSpawnPool(SpecialsSpawnPool* pool);
 void populateSpecialsSpawnPool(GameContext* ctx);
+void updateSpecials(SpecialsPool* pool);
 
 #endif

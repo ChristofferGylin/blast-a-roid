@@ -312,6 +312,53 @@ void spawnSpecials(GameContext* ctx) {
     }
 }
 
+void updateSpecials(SpecialsPool* pool) {
+
+    if (pool->activeCount == 0) return;
+
+    updateSpecialsAnimations(pool);
+
+    bool specialsPoolHasChanged = false;
+    
+    for (int i = 0; i < pool->activeCount; i++) {
+
+        SpecialPoolObject* specialObj = &pool->specials[i];
+
+        if (!specialObj->active) continue;
+
+        switch (specialObj->special.type) {
+
+            case MULTIPLIER:
+                // TODO: set attributes specific to type
+                break;
+    
+            case COMET:
+                // TODO: set attributes specific to type
+                break;
+    
+            case EXTRA_LIFE:
+                // TODO: set attributes specific to type
+                break;
+    
+            case SUPERNOVA:
+                // TODO: set attributes specific to type
+                break;
+    
+            case BLACK_HOLE:
+                // TODO: set attributes specific to type
+                break;
+    
+            default:
+                printf("Error: Invalid SpecialType (%d) in updateSpecials\n", specialObj->special.type);
+                break;
+        }
+    }
+
+    if (specialsPoolHasChanged) {
+        compactSpecialsPool(pool);
+    }
+}
+
 void updateSpecialsAnimations(SpecialsPool* pool) {
     for (int i = 0; i < pool->activeCount; i++) {
         if (!pool->specials[i].active) continue;
