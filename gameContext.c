@@ -5,6 +5,7 @@
 #include "player.h"
 #include "raylib.h"
 #include "shooting.h"
+#include "specials.h"
 #include "ship.h"
 
 void initSpawning(GameContext* ctx) {
@@ -30,6 +31,8 @@ void initObjectPools(GameContext* ctx) {
     initEnemyPool(&ctx->objectPools.enemies);
     initEnemySpawnPool(ctx);
     initShotObjectPool(&ctx->objectPools.shots);
+    initSpecialsPool(&ctx->objectPools.specials);
+    initSpecialsSpawnPool(&ctx->objectPools.specialsSpawn);
 }
 
 void loadAssets(GameContext* ctx) {
