@@ -124,7 +124,6 @@ void handleSpecialsCollisions(GameContext* ctx) {
     Ship* ship = &ctx->ship;
     SpecialsPool* specialsPool = &ctx->objectPools.specials;
     AsteroidPool* asteroidsPool = &ctx->objectPools.asteroids;
-    ShotObjectPool* shotsPool = &ctx->objectPools.asteroids;
 
     bool specialsPoolHasChanged = false;
 
@@ -144,9 +143,9 @@ void handleSpecialsCollisions(GameContext* ctx) {
                 if (CheckCollisionCircles(ast->position, ast->size / 2, special->position, special->size.x / 2)) {
                     // TODO: Extra life ship destroy animation
                     // TODO: Play extra life ship destroy sample
-                    specialsPool->specials[i].active = false;
                     newExplosion(ctx, ast->position);
                     destroyAsteroid(&ctx->objectPools.destroyedAsteroids, &asteroidsPool->asteroids[j]);
+                    specialsPool->specials[i].active = false;
                     specialsPoolHasChanged = true;
                     break;
                 }
@@ -167,6 +166,10 @@ void handleSpecialsCollisions(GameContext* ctx) {
             continue;
         }
 
+    }
+
+    if (specialsPoolHasChanged) {
+        compactSpecialsPool(specialsPool);
     }
 }
 
