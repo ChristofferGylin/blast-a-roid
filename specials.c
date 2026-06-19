@@ -297,6 +297,16 @@ void populateSpecialsSpawnPool(GameContext* ctx) {
 
 }
 
+void renderSpecials(SpecialsPool* pool) {
+    for (int i = 0; i < pool->activeCount; i++) {
+        if (!pool->specials[i].active) continue;
+
+        Special* special = &pool->specials[i].special;
+
+        renderAnimation(&special->animation);
+    }
+}
+
 void spawnSpecials(GameContext* ctx) {
     for (int i = 0; i < ctx->objectPools.specialsSpawn.activeCount; i++) {
         SpecialSpawnPoolObject* spawnObj = &ctx->objectPools.specialsSpawn.specials[i];

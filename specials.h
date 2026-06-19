@@ -66,6 +66,7 @@ void handleSpecialsMovement(SpecialsPool* pool);
 void initSpecialsPool(SpecialsPool* pool);
 void initSpecialsSpawnPool(SpecialsSpawnPool* pool);
 void populateSpecialsSpawnPool(GameContext* ctx);
+void renderSpecials(SpecialsPool* pool);
 void spawnSpecials(GameContext* ctx);
 void updateSpecials(SpecialsPool* pool);
 
