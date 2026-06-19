@@ -18,6 +18,7 @@
 #include "animation.h"
 #include "enemies.h"
 #include "gameContext.h"
+#include "specials.h"
 
 static Bonuses bonuses = {0};
 
@@ -87,6 +88,7 @@ GameResult gameLoop(GameContext* ctx) {
         } else if (isFadeInComplete) {
 
             spawnEnemy(ctx);
+            spawnSpecials(ctx);
             resetTimeBonusMultiplier(ctx);
             updateLevelBonus(&ctx->player);
             handleBonuses(ctx, &bonuses);
@@ -97,6 +99,10 @@ GameResult gameLoop(GameContext* ctx) {
             handleAsteroidsMovement(&ctx->objectPools.asteroids);
             handleEnemiesMovement(ctx);
             handleShotsMovement(&ctx->objectPools.shots);
+            handleSpecialsMovement(&ctx->objectPools.specials);
+            updateSpecials(&ctx->objectPools.specials);
+            handleSpecialsHitDetection(ctx);
+            handleSpecialsCollisions(ctx);
             handleEnemiesHitDetection(ctx);
             handleEnemiesCollisions(ctx);
             handleDestroyedPiecesMovement(&ctx->ship);
@@ -138,6 +144,7 @@ GameResult gameLoop(GameContext* ctx) {
             renderAsteroids(ctx);
             renderShots(ctx);
             renderBonuses(&bonuses, &ctx->objectPools.bonuses);
+            renderSpecials(&ctx->objectPools.specials);
             renderEnemies(&ctx->objectPools.enemies);
             renderAnimationPool(&ctx->objectPools.explosions);
             renderSidebars(ctx);
