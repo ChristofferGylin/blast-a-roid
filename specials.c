@@ -241,12 +241,17 @@ void initSpecialsPool(SpecialsPool* pool) {
     pool->activeCount = 0;
 }
 
-void initSpecialsSpawnPool(SpecialsSpawnPool* pool) {
+void initSpecialsSpawnPool(GameContext* ctx) {
+
+    SpecialsSpawnPool* pool = &ctx->objectPools.specialsSpawn;
+
     for (int i = 0; i < NUMBER_OF_SPECIALS; i++) {
         pool->specials[i].active = false;
     }
 
     pool->activeCount = 0;
+
+    populateSpecialsSpawnPool(ctx);
 }
 
 void populateSpecialsSpawnPool(GameContext* ctx) {

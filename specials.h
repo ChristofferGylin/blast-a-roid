@@ -64,7 +64,7 @@ void handleSpecialsCollisions(GameContext* ctx);
 void handleSpecialsHitDetection(GameContext* ctx);
 void handleSpecialsMovement(SpecialsPool* pool);
 void initSpecialsPool(SpecialsPool* pool);
-void initSpecialsSpawnPool(SpecialsSpawnPool* pool);
+void initSpecialsSpawnPool(GameContext* ctx);
 void populateSpecialsSpawnPool(GameContext* ctx);
 void renderSpecials(SpecialsPool* pool);
 void spawnSpecials(GameContext* ctx);
