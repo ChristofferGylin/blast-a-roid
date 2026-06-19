@@ -9,6 +9,7 @@
 #include "animation.h"
 #include "player.h"
 #include "ship.h"
+#include "specials.h"
 
 typedef struct Animations {
     Animation crate;
@@ -63,6 +64,8 @@ typedef struct ObjectPools {
     EnemySpawnPool spawnableEnemies;
     AnimationPool explosions;
     ShotObjectPool shots;
+    SpecialsPool specials;
+    SpecialsSpawnPool specialsSpawn;
 }ObjectPools;
 
 typedef struct SpawningEnemies {
