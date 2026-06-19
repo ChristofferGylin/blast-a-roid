@@ -16,8 +16,6 @@ void addSpecialToPool(GameContext* ctx, SpecialType type);
 void addSpecialToSpawnPool(SpecialsSpawnPool* pool, SpecialType type);
 void compactSpecialsPool(SpecialsPool* pool);
 void compactSpecialsSpawnPool(SpecialsSpawnPool* pool);
-void handleSpecialsMovement(SpecialsPool* pool);
-void spawnSpecials(GameContext* ctx);
 void updateSpecialsAnimations(SpecialsPool* pool);
 
 void addSpecialToPool(GameContext* ctx, SpecialType type) {
