@@ -24,10 +24,8 @@ void addSpecialToPool(GameContext* ctx, SpecialType type) {
     
     Special newSpecial;
 
-    newSpecial.position = (Vector2){0,0};
     newSpecial.rotation = 0;
     newSpecial.rotationSpeed = 0;
-    newSpecial.size = (Vector2){32, 32};
     newSpecial.spawnTime = GetTime() - ctx->pausTimer;
     newSpecial.type = type;
     newSpecial.value = 0;
@@ -36,7 +34,14 @@ void addSpecialToPool(GameContext* ctx, SpecialType type) {
     switch (type) {
 
         case MULTIPLIER:
-            // TODO: set attributes specific to type
+
+            newSpecial.position = getRandomPosition();
+
+            AnimationInstance aniInstance;
+            initAnimtionInstance(&aniInstance, &ctx->assets.animations.multiplier, newSpecial.position, 0, 2.0f, false);
+            newSpecial.animation = aniInstance;
+            newSpecial.size = (Vector2){MULTIPLIER_COLLISION_SIZE, MULTIPLIER_COLLISION_SIZE};
+            
             break;
     
         case COMET:
