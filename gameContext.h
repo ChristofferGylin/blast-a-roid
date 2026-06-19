@@ -15,6 +15,7 @@ typedef struct Animations {
     Animation crate;
     Animation explosion;
     Animation metalAsteroid;
+    Animation multiplier;
     Animation spikyAsteroid;
     Animation supernova;
     Animation ufo1;
