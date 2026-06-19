@@ -32,7 +32,7 @@ void initObjectPools(GameContext* ctx) {
     initEnemySpawnPool(ctx);
     initShotObjectPool(&ctx->objectPools.shots);
     initSpecialsPool(&ctx->objectPools.specials);
-    initSpecialsSpawnPool(&ctx->objectPools.specialsSpawn);
+    initSpecialsSpawnPool(ctx);
 }
 
 void loadAssets(GameContext* ctx) {
