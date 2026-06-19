@@ -1,0 +1,44 @@
+{"frames": [
+
+{
+	"filename": "frame0000.png",
+	"frame": {"x":2,"y":2,"w":24,"h":24},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":24,"h":24},
+	"sourceSize": {"w":24,"h":24}
+},
+{
+	"filename": "frame0001.png",
+	"frame": {"x":30,"y":2,"w":24,"h":24},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":24,"h":24},
+	"sourceSize": {"w":24,"h":24}
+},
+{
+	"filename": "frame0002.png",
+	"frame": {"x":58,"y":2,"w":24,"h":24},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":24,"h":24},
+	"sourceSize": {"w":24,"h":24}
+},
+{
+	"filename": "frame0003.png",
+	"frame": {"x":86,"y":2,"w":24,"h":24},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":24,"h":24},
+	"sourceSize": {"w":24,"h":24}
+}],
+"meta": {
+	"app": "https://www.codeandweb.com/texturepacker",
+	"version": "1.0",
+	"image": "multiplier.png",
+	"format": "RGBA8888",
+	"size": {"w":112,"h":28},
+	"scale": "1",
+	"smartupdate": "$TexturePacker:SmartUpdate:c91fd03800c8656a796c2d425c583365:923940c5d1e4bd56c819773d578bdd50:f32a93fe4c4ce617e067204a5c1e512d$"
+}
+}
