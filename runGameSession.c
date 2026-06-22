@@ -21,7 +21,7 @@ bool runGameSession(GameContext* ctx) {
         if (ctx->player.lives < 0) {
             gameOver(&ctx->player);
         } else {
-            scoreScreen(&ctx->player);
+            scoreScreen(ctx);
         }
     }
 

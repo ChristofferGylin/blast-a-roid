@@ -40,28 +40,6 @@ typedef struct Bonus {
     };
 }Bonus;
 
-
-typedef struct BonusBase {
-    bool isActive;
-    double spawnTime;
-    Vector2 position;
-}BonusBase;
-
-typedef struct BonusMultiplier {
-    BonusBase base;
-    float level;
-}BonusMultiplier;
-
-typedef struct BonusMultiplierIcon {
-    char text[3];
-    Color color;
-}BonusMultiplierIcon;
-
-typedef struct Bonuses {
-    double nextSpawnTime;
-    BonusMultiplier bonusMultiplier;
-}Bonuses;
-
 typedef struct BonusPoolObject {
     bool active;
     Bonus bonus;
@@ -87,16 +65,11 @@ typedef struct BonusSpawnPool {
     int activeCount;
 } BonusSpawnPool;
 
-void dropNewBonus(GameContext* ctx, Enemy* enemy);
-BonusMultiplierIcon getBonusMultiplierIcon(float level);
-double getNextSpawnTime();
-void handleBonuses(GameContext* ctx, Bonuses* bonuses);
-void handleBonusesCollisions(GameContext* ctx, Bonuses* bonuses);
-void initBonuses(Bonuses* bonuses);
+void dropNewBonus(GameContext* ctx, Enemy* enemy);;
+void handleBonusesCollisions(GameContext* ctx);
 void initBonusPool(BonusObjectPool* pool);
 void initBonusSpawnPool(GameContext* ctx);
-void renderBonuses(Bonuses* bonuses, BonusObjectPool* pool);
-void renderBonusMultiplier(int level, Vector2 position, bool monochrome);
+void renderBonuses(BonusObjectPool* pool);
 void resetPowerups(Player* player);
 void updateBonuses(GameContext* ctx);
 

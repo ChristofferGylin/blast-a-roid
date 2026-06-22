@@ -20,8 +20,6 @@
 #include "gameContext.h"
 #include "specials.h"
 
-static Bonuses bonuses = {0};
-
 GameResult gameLoop(GameContext* ctx) {
 
     GameResult result = GAME_CONTINUE;
@@ -42,7 +40,6 @@ GameResult gameLoop(GameContext* ctx) {
    
     initObjectPools(ctx);
     initAsteroids(ctx);
-    initBonuses(&bonuses);
     initSpawning(ctx);
     ctx->pausTimer = 0;
 
@@ -91,7 +88,6 @@ GameResult gameLoop(GameContext* ctx) {
             spawnSpecials(ctx);
             resetTimeBonusMultiplier(ctx);
             updateLevelBonus(&ctx->player);
-            handleBonuses(ctx, &bonuses);
             clearShots(ctx);
             handleShooting(ctx);
             handleShipControls(ctx);
@@ -100,7 +96,7 @@ GameResult gameLoop(GameContext* ctx) {
             handleEnemiesMovement(ctx);
             handleShotsMovement(&ctx->objectPools.shots);
             handleSpecialsMovement(&ctx->objectPools.specials);
-            updateSpecials(&ctx->objectPools.specials);
+            updateSpecials(ctx);
             handleSpecialsHitDetection(ctx);
             handleSpecialsCollisions(ctx);
             handleEnemiesHitDetection(ctx);
@@ -108,7 +104,7 @@ GameResult gameLoop(GameContext* ctx) {
             handleDestroyedPiecesMovement(&ctx->ship);
             handleAsteroidCollisions(ctx);
             handleDestroyedAsteroids(ctx);
-            handleBonusesCollisions(ctx, &bonuses);
+            handleBonusesCollisions(ctx);
             handleFinishedAnimations(&ctx->objectPools.explosions);
             updateAnimationPool(&ctx->objectPools.explosions);
             updateEnemies(ctx);
@@ -143,7 +139,7 @@ GameResult gameLoop(GameContext* ctx) {
             renderShip(ctx);
             renderAsteroids(ctx);
             renderShots(ctx);
-            renderBonuses(&bonuses, &ctx->objectPools.bonuses);
+            renderBonuses(&ctx->objectPools.bonuses);
             renderSpecials(&ctx->objectPools.specials);
             renderEnemies(&ctx->objectPools.enemies);
             renderAnimationPool(&ctx->objectPools.explosions);

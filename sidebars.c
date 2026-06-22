@@ -9,6 +9,7 @@
 #include <stdio.h>
 #include <stdbool.h>
 #include "gameContext.h"
+#include "specials.h"
 
 void renderSidebarLeft(GameContext* ctx);
 void renderSidebarRight(GameContext* ctx);
@@ -234,7 +235,7 @@ void renderSidebarLeft(GameContext* ctx) {
             scorePosition.endYPosition + padding + (BONUS_MULTIPLIER_RADIUS * 2)
         };
 
-        renderBonusMultiplier(ctx->player.powerups.levelBonusMultiplier, multiplierIconPosition, true);
+        renderMultiplierIcon(ctx, ctx->player.powerups.levelBonusMultiplier, multiplierIconPosition);
     }
 }
 
