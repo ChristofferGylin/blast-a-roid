@@ -314,6 +314,15 @@ void populateSpecialsSpawnPool(GameContext* ctx) {
 
 }
 
+void renderMultiplierIcon(GameContext* ctx, int level, Vector2 position) {
+
+    AnimationInstance aniInst;
+    initAnimtionInstance(&aniInst, &ctx->assets.animations.multiplier, (Vector2){0,0}, 0, 0, false);
+    aniInst.currentFrame = level - 2;
+    aniInst.position = position;
+    renderAnimation(&aniInst);
+}
+
 void renderSpecials(SpecialsPool* pool) {
     for (int i = 0; i < pool->activeCount; i++) {
         if (!pool->specials[i].active) continue;

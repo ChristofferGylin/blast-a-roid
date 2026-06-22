@@ -66,6 +66,7 @@ void handleSpecialsMovement(SpecialsPool* pool);
 void initSpecialsPool(SpecialsPool* pool);
 void initSpecialsSpawnPool(GameContext* ctx);
 void populateSpecialsSpawnPool(GameContext* ctx);
+void renderMultiplierIcon(GameContext* ctx, int level, Vector2 position);
 void renderSpecials(SpecialsPool* pool);
 void spawnSpecials(GameContext* ctx);
 void updateSpecials(GameContext* ctx);
