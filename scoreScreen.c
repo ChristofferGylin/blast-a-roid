@@ -99,8 +99,7 @@ int renderScoreLine(uint64_t value, char title[], int startY, bool hasUnderline,
             valuePosition.x + valueSize.x + 15,
             valuePosition.y + BONUS_MULTIPLIER_RADIUS
         };
-
-        renderBonusMultiplier(bonusMultiplierLevel, multiplierIconPosition, false);
+        // TODO: Render bonus multiplier
     }
 
     if (hasUnderline) {

@@ -42,7 +42,6 @@ GameResult gameLoop(GameContext* ctx) {
    
     initObjectPools(ctx);
     initAsteroids(ctx);
-    initBonuses(&bonuses);
     initSpawning(ctx);
     ctx->pausTimer = 0;
 
@@ -91,7 +90,6 @@ GameResult gameLoop(GameContext* ctx) {
             spawnSpecials(ctx);
             resetTimeBonusMultiplier(ctx);
             updateLevelBonus(&ctx->player);
-            handleBonuses(ctx, &bonuses);
             clearShots(ctx);
             handleShooting(ctx);
             handleShipControls(ctx);
