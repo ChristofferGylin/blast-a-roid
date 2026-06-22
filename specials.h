@@ -68,6 +68,6 @@ void initSpecialsSpawnPool(GameContext* ctx);
 void populateSpecialsSpawnPool(GameContext* ctx);
 void renderSpecials(SpecialsPool* pool);
 void spawnSpecials(GameContext* ctx);
-void updateSpecials(SpecialsPool* pool);
+void updateSpecials(GameContext* ctx);
 
 #endif

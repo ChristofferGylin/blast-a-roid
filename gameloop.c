@@ -100,7 +100,7 @@ GameResult gameLoop(GameContext* ctx) {
             handleEnemiesMovement(ctx);
             handleShotsMovement(&ctx->objectPools.shots);
             handleSpecialsMovement(&ctx->objectPools.specials);
-            updateSpecials(&ctx->objectPools.specials);
+            updateSpecials(ctx);
             handleSpecialsHitDetection(ctx);
             handleSpecialsCollisions(ctx);
             handleEnemiesHitDetection(ctx);

@@ -18,6 +18,8 @@ void compactSpecialsPool(SpecialsPool* pool);
 void compactSpecialsSpawnPool(SpecialsSpawnPool* pool);
 void updateSpecialsAnimations(SpecialsPool* pool);
 
+static const int SPECIALS_LIFETIME = 30;
+
 void addSpecialToPool(GameContext* ctx, SpecialType type) {
     
     SpecialsPool* pool = &ctx->objectPools.specials;
@@ -334,7 +336,9 @@ void spawnSpecials(GameContext* ctx) {
     }
 }
 
-void updateSpecials(SpecialsPool* pool) {
+void updateSpecials(GameContext* ctx) {
+
+    SpecialsPool* pool = &ctx->objectPools.specials;
 
     if (pool->activeCount == 0) return;
 
@@ -348,11 +352,15 @@ void updateSpecials(SpecialsPool* pool) {
 
         if (!specialObj->active) continue;
 
+        if ((specialObj->special.spawnTime + SPECIALS_LIFETIME) < (GetTime() - ctx->pausTimer)) {
+            specialObj->active = false;
+            specialsPoolHasChanged = true;
+            continue;
+        }
+ 
         switch (specialObj->special.type) {
 
-            case MULTIPLIER:
-                // TODO: set attributes specific to type
-                break;
+            case MULTIPLIER: break;
     
             case COMET:
                 // TODO: set attributes specific to type
