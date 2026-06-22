@@ -20,8 +20,6 @@
 #include "gameContext.h"
 #include "specials.h"
 
-static Bonuses bonuses = {0};
-
 GameResult gameLoop(GameContext* ctx) {
 
     GameResult result = GAME_CONTINUE;
@@ -106,7 +104,7 @@ GameResult gameLoop(GameContext* ctx) {
             handleDestroyedPiecesMovement(&ctx->ship);
             handleAsteroidCollisions(ctx);
             handleDestroyedAsteroids(ctx);
-            handleBonusesCollisions(ctx, &bonuses);
+            handleBonusesCollisions(ctx);
             handleFinishedAnimations(&ctx->objectPools.explosions);
             updateAnimationPool(&ctx->objectPools.explosions);
             updateEnemies(ctx);
@@ -141,7 +139,7 @@ GameResult gameLoop(GameContext* ctx) {
             renderShip(ctx);
             renderAsteroids(ctx);
             renderShots(ctx);
-            renderBonuses(&bonuses, &ctx->objectPools.bonuses);
+            renderBonuses(&ctx->objectPools.bonuses);
             renderSpecials(&ctx->objectPools.specials);
             renderEnemies(&ctx->objectPools.enemies);
             renderAnimationPool(&ctx->objectPools.explosions);

@@ -162,7 +162,7 @@ double getNextSpawnTime() {
     return GetTime() + GetRandomValue(MIN_BONUS_SPAWN_TIME, MAX_BONUS_SPAWN_TIME);
 }
 
-void handleBonusesCollisions(GameContext* ctx, Bonuses* bonuses) {
+void handleBonusesCollisions(GameContext* ctx) {
     
     bool objectPoolHasChanged = false;
     BonusSpawnPool* spawnPool = &ctx->objectPools.spawnableBonuses;
@@ -325,7 +325,7 @@ void initBonusSpawnPool(GameContext* ctx) {
     }
 }
 
-void renderBonuses(Bonuses* bonuses, BonusObjectPool* pool) {
+void renderBonuses(BonusObjectPool* pool) {
     for (int i = 0; i < pool->activeCount; i++) {
 
         if (!pool->bonuses[i].active) continue;
