@@ -158,10 +158,6 @@ void dropNewBonus(GameContext* ctx, Enemy* enemy) {
     }
 }
 
-double getNextSpawnTime() {
-    return GetTime() + GetRandomValue(MIN_BONUS_SPAWN_TIME, MAX_BONUS_SPAWN_TIME);
-}
-
 void handleBonusesCollisions(GameContext* ctx) {
     
     bool objectPoolHasChanged = false;

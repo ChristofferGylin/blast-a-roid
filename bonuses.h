@@ -66,7 +66,6 @@ typedef struct BonusSpawnPool {
 } BonusSpawnPool;
 
 void dropNewBonus(GameContext* ctx, Enemy* enemy);;
-double getNextSpawnTime();
 void handleBonusesCollisions(GameContext* ctx);
 void initBonusPool(BonusObjectPool* pool);
 void initBonusSpawnPool(GameContext* ctx);
