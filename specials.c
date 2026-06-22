@@ -198,7 +198,11 @@ void handleSpecialsHitDetection(GameContext* ctx) {
             if (CheckCollisionCircles(specialObj->special.position, specialObj->special.size.x / 2.0f, shotObj->shot.position, shotObj->shot.size / 2.0f)) {
                 switch (specialObj->special.type) {
                     case MULTIPLIER:
-                        // handle special hit
+                        ctx->player.powerups.levelBonusMultiplier = specialObj->special.animation.currentFrame + 2;
+                        playSoundPositioned(ctx->assets.samples.multiplier_collect, specialObj->special.position.x);
+                        destroyShot(shotObj);
+                        specialObj->active = false;
+                        specialsPoolHasChanged = true;
                         break;
                     
                     case COMET:
@@ -220,7 +224,7 @@ void handleSpecialsHitDetection(GameContext* ctx) {
                         printf("Error: Invalid SpecialType (%d) in handleEnemiesHitDetection\n", specialObj->special.type);
                 }
 
-                destroyShot(shotObj);
+                
             }
         }
     }
