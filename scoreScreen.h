@@ -4,6 +4,8 @@
 #include <inttypes.h>
 #include <stdbool.h>
 
+#include "gameContext.h"
+
 typedef struct Player Player;
 
 typedef struct BonusCountUpState {
@@ -14,7 +16,7 @@ typedef struct BonusCountUpState {
 
 void bonusCountDown(uint64_t* src, uint64_t* target);
 void bonusCountUp(uint64_t* src, uint64_t* target, BonusCountUpState* state);
-int renderScoreLine(uint64_t value, char title[], int startY, bool hasUnderline, int bonusMultiplierLevel, bool isZeroPadded);
-void scoreScreen(Player* player);
+int renderScoreLine(GameContext* ctx, uint64_t value, char title[], int startY, bool hasUnderline, int bonusMultiplierLevel, bool isZeroPadded);
+void scoreScreen(GameContext* ctx);
 
 #endif

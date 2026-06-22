@@ -10,6 +10,7 @@
 #include <stdio.h>
 #include <string.h>
 #include "scoreScreen.h"
+#include "specials.h"
 
 #define HEADING_FONT_SIZE 48
 #define FONT_SPACING 6
@@ -63,7 +64,7 @@ void bonusCountDown(uint64_t* src, uint64_t* target) {
     }
 }
 
-int renderScoreLine(uint64_t value, char title[], int startY, bool hasUnderline, int bonusMultiplierLevel, bool isZeroPadded) {
+int renderScoreLine(GameContext* ctx, uint64_t value, char title[], int startY, bool hasUnderline, int bonusMultiplierLevel, bool isZeroPadded) {
     
     int gap = 200;
     int underlineGap = 10;
@@ -99,7 +100,7 @@ int renderScoreLine(uint64_t value, char title[], int startY, bool hasUnderline,
             valuePosition.x + valueSize.x + 15,
             valuePosition.y + BONUS_MULTIPLIER_RADIUS
         };
-        // TODO: Render bonus multiplier
+        renderMultiplierIcon(ctx, bonusMultiplierLevel, multiplierIconPosition);
     }
 
     if (hasUnderline) {
@@ -114,7 +115,9 @@ int renderScoreLine(uint64_t value, char title[], int startY, bool hasUnderline,
     return valuePosition.y + valueSize.y;
 }
 
-void scoreScreen(Player* player) {
+void scoreScreen(GameContext* ctx) {
+
+    Player* player = &ctx->player;
     
     float fadeInValue = 1.0f;
     float fadeOutValue = 0.0f;
@@ -212,9 +215,9 @@ void scoreScreen(Player* player) {
         BeginDrawing();
             ClearBackground(BLACK);
             DrawTextPro(GetFontDefault(), headingText, headingPosition, headingOrigin, 0, HEADING_FONT_SIZE, FONT_SPACING, primaryColor);
-            yOffset = renderScoreLine(displayBonus, "BONUS:", yOffset, true, currentMultiplier, bonusCountUpState.isZeroPadded);
+            yOffset = renderScoreLine(ctx, displayBonus, "BONUS:", yOffset, true, currentMultiplier, bonusCountUpState.isZeroPadded);
             yOffset = yOffset + GAP;
-            yOffset = renderScoreLine(displayScore, "SCORE:", yOffset, false, 0, false);
+            yOffset = renderScoreLine(ctx, displayScore, "SCORE:", yOffset, false, 0, false);
 
             if (!isFadeInComplete) {
                 isFadeInComplete = fadeIn(&fadeInValue);
