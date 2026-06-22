@@ -43,6 +43,7 @@ void addSpecialToPool(GameContext* ctx, SpecialType type) {
             initAnimtionInstance(&aniInstance, &ctx->assets.animations.multiplier, newSpecial.position, 0, 2.0f, false);
             newSpecial.animation = aniInstance;
             newSpecial.size = (Vector2){MULTIPLIER_COLLISION_SIZE, MULTIPLIER_COLLISION_SIZE};
+            playSoundPositioned(ctx->assets.samples.multiplier_spawn, newSpecial.position.x);
             
             break;
     
