@@ -404,7 +404,6 @@ void updateSpecials(GameContext* ctx) {
 
             case MULTIPLIER:
             case COMET:
-                // TODO: set attributes specific to type
                 break;
     
             case EXTRA_LIFE:
