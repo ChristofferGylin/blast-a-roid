@@ -402,8 +402,7 @@ void updateSpecials(GameContext* ctx) {
  
         switch (specialObj->special.type) {
 
-            case MULTIPLIER: break;
-    
+            case MULTIPLIER:
             case COMET:
                 // TODO: set attributes specific to type
                 break;
