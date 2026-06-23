@@ -7,6 +7,7 @@
 #include "constants.h"
 #include "explosion.h"
 #include "gameContext.h"
+#include "outOfBoundsCheck.h"
 #include "ship.h"
 #include "shooting.h"
 #include "specials.h"
@@ -255,6 +256,7 @@ void handleSpecialsMovement(SpecialsPool* pool) {
         SpecialPoolObject* specialObj = &pool->specials[i];
         if (!specialObj->active) continue;
         updatePosition(&specialObj->special.position, specialObj->special.velocity);
+        outOfBoundsCheck(&specialObj->special.position, specialObj->special.size.y);
     }
 }
 
