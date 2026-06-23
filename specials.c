@@ -7,6 +7,7 @@
 #include "constants.h"
 #include "explosion.h"
 #include "gameContext.h"
+#include "outOfBoundsCheck.h"
 #include "ship.h"
 #include "shooting.h"
 #include "specials.h"
@@ -19,12 +20,14 @@ void compactSpecialsSpawnPool(SpecialsSpawnPool* pool);
 void updateSpecialsAnimations(SpecialsPool* pool);
 
 static const int SPECIALS_LIFETIME = 30;
+static const int COMET_VELOCITY = 200;
 
 void addSpecialToPool(GameContext* ctx, SpecialType type) {
     
     SpecialsPool* pool = &ctx->objectPools.specials;
     
     Special newSpecial;
+    AnimationInstance aniInstance;
 
     newSpecial.rotation = 0;
     newSpecial.rotationSpeed = 0;
@@ -38,17 +41,26 @@ void addSpecialToPool(GameContext* ctx, SpecialType type) {
         case MULTIPLIER:
 
             newSpecial.position = getRandomPosition();
-
-            AnimationInstance aniInstance;
+            
             initAnimtionInstance(&aniInstance, &ctx->assets.animations.multiplier, newSpecial.position, 0, 2.0f, false);
-            newSpecial.animation = aniInstance;
             newSpecial.size = (Vector2){MULTIPLIER_COLLISION_SIZE, MULTIPLIER_COLLISION_SIZE};
             playSoundPositioned(ctx->assets.samples.multiplier_spawn, newSpecial.position.x);
             
             break;
     
         case COMET:
-            // TODO: set attributes specific to type
+            newSpecial.position = getRandomPositionOffScreen(COMET_RENDER_SIZE_Y);
+            newSpecial.rotation = GetRandomValue(0,359);
+            newSpecial.size = (Vector2){COMET_RENDER_SIZE_X, COMET_RENDER_SIZE_Y};
+
+            float radians = (newSpecial.rotation - 90.0f) * (PI / 180.0f);
+
+            newSpecial.velocity = (Vector2){cosf(radians) * COMET_VELOCITY, sinf(radians) * COMET_VELOCITY};
+
+            initAnimtionInstance(&aniInstance, &ctx->assets.animations.comet, newSpecial.position, newSpecial.rotation, ctx->assets.animations.comet.fps, false);
+            playSoundPositioned(ctx->assets.samples.multiplier_spawn, newSpecial.position.x);
+            // TODO: Play unique sound
+            
             break;
     
         case EXTRA_LIFE:
@@ -66,6 +78,8 @@ void addSpecialToPool(GameContext* ctx, SpecialType type) {
         default:
             break;
     }
+
+    newSpecial.animation = aniInstance;
 
     pool->specials[pool->activeCount].active = true;
     pool->specials[pool->activeCount].special = newSpecial;
@@ -182,6 +196,7 @@ void handleSpecialsCollisions(GameContext* ctx) {
 void handleSpecialsHitDetection(GameContext* ctx) {
     SpecialsPool* specialsPool = &ctx->objectPools.specials;
     ShotObjectPool* shotsPool = &ctx->objectPools.shots;
+    Player* player = &ctx->player;
 
     if (specialsPool->activeCount == 0 || shotsPool->activeCount == 0) return;
 
@@ -198,18 +213,32 @@ void handleSpecialsHitDetection(GameContext* ctx) {
 
             if (!shotObj->active) continue;
 
-            if (CheckCollisionCircles(specialObj->special.position, specialObj->special.size.x / 2.0f, shotObj->shot.position, shotObj->shot.size / 2.0f)) {
+            Vector2 specialPos = specialObj->special.position;
+            float specialRadius = specialObj->special.size.x / 2.0f;
+
+            if (specialObj->special.type == COMET) {
+                
+                float radians = (specialObj->special.rotation - 90.0f) * (PI / 180.0f);
+
+                specialPos.x = specialPos.x + (cosf(radians) * 25);
+                specialPos.y = specialPos.y + (sinf(radians) * 25);
+
+                specialRadius = COMET_COLLISION_SIZE / 2.0f;
+            }
+
+            if (CheckCollisionCircles(specialPos, specialRadius, shotObj->shot.position, shotObj->shot.size / 2.0f)) {
                 switch (specialObj->special.type) {
                     case MULTIPLIER:
-                        ctx->player.powerups.levelBonusMultiplier = specialObj->special.animation.currentFrame + 2;
+                        player->powerups.levelBonusMultiplier = specialObj->special.animation.currentFrame + 2;
                         playSoundPositioned(ctx->assets.samples.multiplier_collect, specialObj->special.position.x);
-                        destroyShot(shotObj);
-                        specialObj->active = false;
-                        specialsPoolHasChanged = true;
                         break;
                     
                     case COMET:
-                        // handle special hit
+                        int bonus = GetRandomValue(1,5) * 1000;
+                        player->levelBonus += bonus;
+                        playSoundPositioned(ctx->assets.samples.multiplier_collect, specialObj->special.position.x);
+                        // TODO: Play unique sound
+                        // TODO: Flash score on screen at hit pos
                         break;
                     
                     case EXTRA_LIFE:
@@ -227,7 +256,9 @@ void handleSpecialsHitDetection(GameContext* ctx) {
                         printf("Error: Invalid SpecialType (%d) in handleEnemiesHitDetection\n", specialObj->special.type);
                 }
 
-                
+                destroyShot(shotObj);
+                specialObj->active = false;
+                specialsPoolHasChanged = true;
             }
         }
     }
@@ -242,6 +273,7 @@ void handleSpecialsMovement(SpecialsPool* pool) {
         SpecialPoolObject* specialObj = &pool->specials[i];
         if (!specialObj->active) continue;
         updatePosition(&specialObj->special.position, specialObj->special.velocity);
+        outOfBoundsCheck(&specialObj->special.position, specialObj->special.size.y);
     }
 }
 
@@ -370,10 +402,8 @@ void updateSpecials(GameContext* ctx) {
  
         switch (specialObj->special.type) {
 
-            case MULTIPLIER: break;
-    
+            case MULTIPLIER:
             case COMET:
-                // TODO: set attributes specific to type
                 break;
     
             case EXTRA_LIFE:
