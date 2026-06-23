@@ -19,12 +19,14 @@ void compactSpecialsSpawnPool(SpecialsSpawnPool* pool);
 void updateSpecialsAnimations(SpecialsPool* pool);
 
 static const int SPECIALS_LIFETIME = 30;
+static const int COMET_VELOCITY = 200;
 
 void addSpecialToPool(GameContext* ctx, SpecialType type) {
     
     SpecialsPool* pool = &ctx->objectPools.specials;
     
     Special newSpecial;
+    AnimationInstance aniInstance;
 
     newSpecial.rotation = 0;
     newSpecial.rotationSpeed = 0;
@@ -38,17 +40,26 @@ void addSpecialToPool(GameContext* ctx, SpecialType type) {
         case MULTIPLIER:
 
             newSpecial.position = getRandomPosition();
-
-            AnimationInstance aniInstance;
+            
             initAnimtionInstance(&aniInstance, &ctx->assets.animations.multiplier, newSpecial.position, 0, 2.0f, false);
-            newSpecial.animation = aniInstance;
             newSpecial.size = (Vector2){MULTIPLIER_COLLISION_SIZE, MULTIPLIER_COLLISION_SIZE};
             playSoundPositioned(ctx->assets.samples.multiplier_spawn, newSpecial.position.x);
             
             break;
     
         case COMET:
-            // TODO: set attributes specific to type
+            newSpecial.position = getRandomPositionOffScreen(COMET_RENDER_SIZE_Y);
+            newSpecial.rotation = GetRandomValue(0,359);
+            newSpecial.size = (Vector2){COMET_RENDER_SIZE_X, COMET_RENDER_SIZE_Y};
+
+            float radians = (newSpecial.rotation - 90.0f) * (PI / 180.0f);
+
+            newSpecial.velocity = (Vector2){cosf(radians) * COMET_VELOCITY, sinf(radians) * COMET_VELOCITY};
+
+            initAnimtionInstance(&aniInstance, &ctx->assets.animations.comet, newSpecial.position, newSpecial.rotation, ctx->assets.animations.comet.fps, false);
+            playSoundPositioned(ctx->assets.samples.multiplier_spawn, newSpecial.position.x);
+            // TODO: Play unique sound
+            
             break;
     
         case EXTRA_LIFE:
@@ -66,6 +77,8 @@ void addSpecialToPool(GameContext* ctx, SpecialType type) {
         default:
             break;
     }
+
+    newSpecial.animation = aniInstance;
 
     pool->specials[pool->activeCount].active = true;
     pool->specials[pool->activeCount].special = newSpecial;
@@ -271,9 +284,9 @@ void populateSpecialsSpawnPool(GameContext* ctx) {
     SpecialSpawnOption optionPool[NUMBER_OF_SPECIALS] = {
         (SpecialSpawnOption){true, MULTIPLIER, 100},
         (SpecialSpawnOption){true, COMET, 100},
-        (SpecialSpawnOption){true, EXTRA_LIFE, 30},
-        (SpecialSpawnOption){true, BLACK_HOLE, 20},
-        (SpecialSpawnOption){true, SUPERNOVA, 10},
+        // (SpecialSpawnOption){true, EXTRA_LIFE, 30},
+        // (SpecialSpawnOption){true, BLACK_HOLE, 20},
+        // (SpecialSpawnOption){true, SUPERNOVA, 10},
     };
     SpecialsSpawnPool* spawnPool = &ctx->objectPools.specialsSpawn;
     
@@ -282,7 +295,7 @@ void populateSpecialsSpawnPool(GameContext* ctx) {
 
     if (maxNumberOfSpecials > NUMBER_OF_SPECIALS) maxNumberOfSpecials = NUMBER_OF_SPECIALS;
 
-    int numberToPopulate = GetRandomValue(minNumberOfSpecials, maxNumberOfSpecials);
+    int numberToPopulate = 2; // GetRandomValue(minNumberOfSpecials, maxNumberOfSpecials);
 
     for (int i = 0; i < numberToPopulate; i++) {
         
