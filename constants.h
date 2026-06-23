@@ -2,6 +2,8 @@
 #define CONSTANTS_H
 
 static const int CRATE_RENDER_SIZE = 32;
+static const int COMET_RENDER_SIZE_X = 32;
+static const int COMET_RENDER_SIZE_Y = 64;
 static const int CRATE_COLLISION_SIZE = 24;
 static const int GEM_RENDER_SIZE = 32;
 static const int GEM_COLLISION_SIZE = 24;

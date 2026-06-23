@@ -36,6 +36,7 @@ void initObjectPools(GameContext* ctx) {
 }
 
 void loadAssets(GameContext* ctx) {
+    initAnimation(&ctx->assets.animations.comet, "./assets/animations/comet.png", "./assets/animations/comet.json", 12.0f, (Vector2){COMET_RENDER_SIZE_X, COMET_RENDER_SIZE_Y}, true);
     initAnimation(&ctx->assets.animations.crate, "./assets/animations/crate.png", "./assets/animations/crate.json", 24.0f, (Vector2){CRATE_RENDER_SIZE, CRATE_RENDER_SIZE}, true);
     initAnimation(&ctx->assets.animations.explosion, "./assets/animations/explosion.png", "./assets/animations/explosion.json", 24.0f, (Vector2){EXPLOSION_SIZE, EXPLOSION_SIZE}, false);
     initAnimation(&ctx->assets.animations.metalAsteroid, "./assets/animations/metal_asteroid.png", "./assets/animations/metal_asteroid.json", 24.0f, (Vector2){METAL_ASTEROID_SIZE, METAL_ASTEROID_SIZE}, true);
@@ -71,6 +72,7 @@ void loadAssets(GameContext* ctx) {
 }
 
 void unloadAssets(GameContext* ctx) {
+    unloadAnimation(&ctx->assets.animations.comet);
     unloadAnimation(&ctx->assets.animations.crate);
     unloadAnimation(&ctx->assets.animations.explosion);
     unloadAnimation(&ctx->assets.animations.metalAsteroid);
