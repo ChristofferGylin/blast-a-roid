@@ -22,7 +22,7 @@ void updateSpecialsAnimations(SpecialsPool* pool);
 static const int SPECIALS_LIFETIME = 30;
 static const int COMET_VELOCITY = 200;
 static const int EXTRA_LIFE_VELOCITY = 140;
-static const int EXTRA_LIFE_ROTATION_SPEED = 400;
+static const int EXTRA_LIFE_ROTATION_SPEED = 500;
 
 void addSpecialToPool(GameContext* ctx, SpecialType type) {
     
