@@ -192,8 +192,6 @@ void handleSpecialsCollisions(GameContext* ctx) {
                     // TODO: Play extra life ship destroy sample
                     destroyShip(ctx, &special->ship);
                     destroyAsteroid(&ctx->objectPools.destroyedAsteroids, &asteroidsPool->asteroids[j]);
-                    specialsPool->specials[i].active = false;
-                    specialsPoolHasChanged = true;
                     break;
                 }
             }
