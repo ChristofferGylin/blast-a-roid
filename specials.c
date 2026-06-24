@@ -475,7 +475,7 @@ void updateSpecials(GameContext* ctx) {
 
 void updateSpecialsAnimations(SpecialsPool* pool) {
     for (int i = 0; i < pool->activeCount; i++) {
-        if (!pool->specials[i].active) continue;
+        if (!pool->specials[i].active || pool->specials[i].special.type == EXTRA_LIFE) continue;
 
         Special* special = &pool->specials[i].special;
 
