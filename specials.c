@@ -438,7 +438,8 @@ void updateSpecials(GameContext* ctx) {
 
         if (!specialObj->active) continue;
 
-        if ((specialObj->special.spawnTime + SPECIALS_LIFETIME) < (GetTime() - ctx->pausTimer)) {
+        if (((specialObj->special.spawnTime + SPECIALS_LIFETIME) < (GetTime() - ctx->pausTimer)) ||
+              (specialObj->special.type == EXTRA_LIFE && specialObj->special.ship.destroyed)) {
 
             if (specialObj->special.type == EXTRA_LIFE) {
                 
