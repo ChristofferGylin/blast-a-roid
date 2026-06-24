@@ -313,7 +313,7 @@ void handleSpecialsMovement(SpecialsPool* pool) {
         } 
 
         updatePosition(&specialObj->special.position, specialObj->special.velocity);
-        outOfBoundsCheck(&specialObj->special.position, specialObj->special.size.y);
+        handleOutOfBounds(&specialObj->special.position, specialObj->special.size.y);
     }
 }
 

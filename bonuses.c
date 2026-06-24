@@ -389,7 +389,7 @@ void updateBonuses(GameContext* ctx) {
             updateRotation(&bonus->rotation, bonus->rotationSpeed);
             updatePosition(&bonus->position, bonus->velocity);
 
-            outOfBoundsCheck(&bonus->position, bonus->size.x);
+            handleOutOfBounds(&bonus->position, bonus->size.x);
 
             if (bonus->visualType == VISUAL_ANIMATION) {
                 bonus->animation.position = bonus->position;

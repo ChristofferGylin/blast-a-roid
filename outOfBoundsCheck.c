@@ -1,7 +1,7 @@
 #include "raylib.h"
 #include "constants.h"
 
-void outOfBoundsCheck(Vector2* position, int size) {
+void handleOutOfBounds(Vector2* position, int size) {
     if (position->x < SIDEBAR_WIDTH - size / 2)
     {
         position->x = SCREEN_WIDTH - SIDEBAR_WIDTH + size / 2;

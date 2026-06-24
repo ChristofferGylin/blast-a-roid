@@ -238,7 +238,7 @@ void handleEnemiesMovement(GameContext* ctx) {
                 break;
         }
 
-        outOfBoundsCheck(&enemy->position, enemy->size);
+        handleOutOfBounds(&enemy->position, enemy->size);
     }
 }
 

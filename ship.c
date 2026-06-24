@@ -37,7 +37,7 @@ void handleDestroyedPiecesMovement(Ship* ship) {
             spriteSize = piece->sprite->height;
         }
 
-        outOfBoundsCheck(&piece->position, spriteSize);
+        handleOutOfBounds(&piece->position, spriteSize);
     }
 }
 

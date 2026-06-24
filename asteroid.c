@@ -177,7 +177,7 @@ void handleAsteroidsMovement(AsteroidPool* pool) {
 
         int asteroidSize = getAsteroidSize(ast->type);
 
-        outOfBoundsCheck(&ast->position, asteroidSize);
+        handleOutOfBounds(&ast->position, asteroidSize);
     }
 }
 
