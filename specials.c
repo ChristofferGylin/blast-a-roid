@@ -439,19 +439,33 @@ void updateSpecials(GameContext* ctx) {
         if (!specialObj->active) continue;
 
         if ((specialObj->special.spawnTime + SPECIALS_LIFETIME) < (GetTime() - ctx->pausTimer)) {
-            specialObj->active = false;
-            specialsPoolHasChanged = true;
-            continue;
+
+            if (specialObj->special.type == EXTRA_LIFE) {
+                
+                if (!specialObj->special.ship.destroyed) {
+                    destroyShip(ctx, &specialObj->special.ship);
+                } 
+
+                bool outOfBounds = handleDestroyedPiecesMovement(&specialObj->special.ship);
+
+                if (outOfBounds) {
+                    specialObj->active = false;
+                    specialsPoolHasChanged = true;
+                    continue;
+                }
+
+            } else {
+                specialObj->active = false;
+                specialsPoolHasChanged = true;
+                continue;
+            }
         }
  
         switch (specialObj->special.type) {
 
             case MULTIPLIER:
             case COMET:
-                break;
-    
             case EXTRA_LIFE:
-                // TODO: set attributes specific to type
                 break;
     
             case SUPERNOVA:

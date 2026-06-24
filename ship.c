@@ -15,7 +15,10 @@ void destroyShip(GameContext* ctx, Ship* ship) {
     resetDestroyedPieces(ship);
 }
 
-void handleDestroyedPiecesMovement(Ship* ship) {
+bool handleDestroyedPiecesMovement(Ship* ship) {
+    
+    bool allPiecesOutOfBounds = true;
+    
     for (int i = 0; i < 3; i++) {
         DestroyedShipPiece* piece = &ship->destroyedPieces[i];
 
@@ -37,8 +40,12 @@ void handleDestroyedPiecesMovement(Ship* ship) {
             spriteSize = piece->sprite->height;
         }
 
-        handleOutOfBounds(&piece->position, spriteSize);
+        bool isOutOfBounds = checkOutOfBounds(piece->position, spriteSize);
+
+        if (!isOutOfBounds) allPiecesOutOfBounds = false;
     }
+
+    return allPiecesOutOfBounds;
 }
 
 void initShip(GameContext* ctx, Ship* ship) {

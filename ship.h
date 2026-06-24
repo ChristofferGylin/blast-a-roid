@@ -30,7 +30,7 @@ typedef struct {
 
 void brakeShip(Vector2* velocity, float brakeFactor);
 void destroyShip(GameContext* ctx, Ship* ship);
-void handleDestroyedPiecesMovement(Ship* ship);
+bool handleDestroyedPiecesMovement(Ship* ship);
 void handleShipControls(GameContext* ctx);
 void initShip(GameContext* ctx, Ship* ship);
 void renderDestroyedShip(Ship* ship);
