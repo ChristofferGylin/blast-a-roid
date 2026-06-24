@@ -77,7 +77,12 @@ void addSpecialToPool(GameContext* ctx, SpecialType type) {
 
             newSpecial.velocity = (Vector2){cosf(radians) * EXTRA_LIFE_VELOCITY, sinf(radians) * EXTRA_LIFE_VELOCITY};
 
-            Ship shipInDistress;
+            Ship ship;
+            initShip(ctx, &ship);
+            ship.position = newSpecial.position;
+            ship.rotation = newSpecial.rotation;
+
+            newSpecial.ship = ship;
 
             playSoundPositioned(ctx->assets.samples.multiplier_spawn, newSpecial.position.x);
             // TODO: Play unique sound
@@ -95,7 +100,9 @@ void addSpecialToPool(GameContext* ctx, SpecialType type) {
             break;
     }
 
-    newSpecial.animation = aniInstance;
+    if (type == EXTRA_LIFE) {
+        newSpecial.animation = aniInstance;
+    }
 
     pool->specials[pool->activeCount].active = true;
     pool->specials[pool->activeCount].special = newSpecial;
