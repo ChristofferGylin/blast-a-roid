@@ -3,6 +3,7 @@
 
 #include "raylib.h"
 
+bool checkOutOfBounds(Vector2 position, int size);
 void handleOutOfBounds(Vector2* position, int size);
 
 #endif
