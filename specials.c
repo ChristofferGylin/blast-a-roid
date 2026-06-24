@@ -100,7 +100,7 @@ void addSpecialToPool(GameContext* ctx, SpecialType type) {
             break;
     }
 
-    if (type == EXTRA_LIFE) {
+    if (type != EXTRA_LIFE) {
         newSpecial.animation = aniInstance;
     }
 
@@ -178,15 +178,17 @@ void handleSpecialsCollisions(GameContext* ctx) {
         if (special->type != EXTRA_LIFE && special->type != BLACK_HOLE) continue;
 
         if (special->type == EXTRA_LIFE) {
+
+            if (special->ship.destroyed) continue;
+
             for (int j = 0; j < asteroidsPool->activeCount; j++) {
                 if (!asteroidsPool->asteroids[j].active) continue;
 
                 Asteroid* ast = &asteroidsPool->asteroids[j].asteroid;
 
                 if (CheckCollisionCircles(ast->position, ast->size / 2, special->position, special->size.x / 2)) {
-                    // TODO: Extra life ship destroy animation
                     // TODO: Play extra life ship destroy sample
-                    newExplosion(ctx, ast->position);
+                    destroyShip(ctx, &special->ship);
                     destroyAsteroid(&ctx->objectPools.destroyedAsteroids, &asteroidsPool->asteroids[j]);
                     specialsPool->specials[i].active = false;
                     specialsPoolHasChanged = true;
@@ -197,8 +199,10 @@ void handleSpecialsCollisions(GameContext* ctx) {
 
         if (CheckCollisionCircles(ship->position, SHIP_SIZE / 2, special->position, special->size.x / 2)) {
             if (special->type == EXTRA_LIFE) {
+                if (special->ship.destroyed) continue;
                 ctx->player.lives++;
-                // TODO: Play extra life collect sample
+                playSoundPositioned(ctx->assets.samples.multiplier_collect, special->position.x);
+                // TODO: Play unique extra life collect sample
             } else {
                 newExplosion(ctx, ship->position);
                 if (!ship->destroyed) destroyShip(ctx, &ctx->ship);

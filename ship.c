@@ -12,7 +12,7 @@ void destroyShip(GameContext* ctx, Ship* ship) {
     ship->destroyed = true;
     ship->timeDestroyed = GetTime();
     newExplosion(ctx, ship->position);
-    resetDestroyedPieces(&ctx->ship);
+    resetDestroyedPieces(ship);
 }
 
 void handleDestroyedPiecesMovement(Ship* ship) {
