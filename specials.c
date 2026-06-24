@@ -401,7 +401,11 @@ void renderSpecials(SpecialsPool* pool) {
 
         Special* special = &pool->specials[i].special;
 
-        renderAnimation(&special->animation);
+        if (special->type == EXTRA_LIFE) {
+            renderShip(&special->ship);
+        } else {
+            renderAnimation(&special->animation);
+        }
     }
 }
 
