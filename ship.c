@@ -90,19 +90,21 @@ void renderDestroyedShip(Ship* ship) {
     }
 }
 
-void renderShip(GameContext* ctx) {
-    if (ctx->ship.destroyed) {
-        renderDestroyedShip(&ctx->ship);
+void renderShip(Ship* ship) {
+    if (ship->destroyed) {
+        renderDestroyedShip(ship);
     } else {
+
+        Texture2D sprite = *ship->sprite;
         DrawTexturePro(
-            ctx->assets.sprites.ship,
-            (Rectangle){0, 0, ctx->assets.sprites.ship.width, ctx->assets.sprites.ship.height},
-            (Rectangle){ctx->ship.position.x, ctx->ship.position.y, SHIP_SIZE, SHIP_SIZE},
+            sprite,
+            (Rectangle){0, 0, sprite.width, sprite.height},
+            (Rectangle){ship->position.x, ship->position.y, SHIP_SIZE, SHIP_SIZE},
             (Vector2){ SHIP_SIZE / 2.0f, SHIP_SIZE / 2.0f},
-            ctx->ship.rotation,
+            ship->rotation,
             WHITE
         );
-        renderShield(&ctx->ship);
+        renderShield(ship);
     }
 }
 

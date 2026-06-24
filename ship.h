@@ -34,7 +34,7 @@ void handleDestroyedPiecesMovement(Ship* ship);
 void handleShipControls(GameContext* ctx);
 void initShip(GameContext* ctx, Ship* ship);
 void renderDestroyedShip(Ship* ship);
-void renderShip(GameContext* ctx);
+void renderShip(Ship* ship);
 void resetDestroyedPieces(Ship* ship);
 void resetShip(Ship* ship);
 

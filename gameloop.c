@@ -136,7 +136,7 @@ GameResult gameLoop(GameContext* ctx) {
         
         BeginDrawing();
             ClearBackground(BLACK);
-            renderShip(ctx);
+            renderShip(&ctx->ship);
             renderAsteroids(ctx);
             renderShots(ctx);
             renderBonuses(&ctx->objectPools.bonuses);
