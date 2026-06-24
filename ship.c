@@ -8,10 +8,10 @@
 #include "outOfBoundsCheck.h"
 #include "explosion.h"
 
-void destroyShip(GameContext* ctx) {
-    ctx->ship.destroyed = true;
-    ctx->ship.timeDestroyed = GetTime();
-    newExplosion(ctx, ctx->ship.position);
+void destroyShip(GameContext* ctx, Ship* ship) {
+    ship->destroyed = true;
+    ship->timeDestroyed = GetTime();
+    newExplosion(ctx, ship->position);
     resetDestroyedPieces(&ctx->ship);
 }
 

@@ -192,7 +192,7 @@ void handleSpecialsCollisions(GameContext* ctx) {
                 // TODO: Play extra life collect sample
             } else {
                 newExplosion(ctx, ship->position);
-                if (!ship->destroyed) destroyShip(ctx);
+                if (!ship->destroyed) destroyShip(ctx, &ctx->ship);
             }
 
             specialsPool->specials[i].active = false;

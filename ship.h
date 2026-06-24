@@ -28,7 +28,7 @@ typedef struct {
 }Ship;
 
 void brakeShip(Vector2* velocity, float brakeFactor);
-void destroyShip(GameContext* ctx);
+void destroyShip(GameContext* ctx, Ship* ship);
 void handleDestroyedPiecesMovement(Ship* ship);
 void handleShipControls(GameContext* ctx);
 void initShip(GameContext* ctx, Ship* ship);
