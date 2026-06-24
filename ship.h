@@ -24,16 +24,17 @@ typedef struct {
     double timeDestroyed;
     double timeRotateActivated;
     double timeSpawned;
+    Texture2D* sprite;
     DestroyedShipPiece destroyedPieces[3]; 
 }Ship;
 
 void brakeShip(Vector2* velocity, float brakeFactor);
-void destroyShip(GameContext* ctx);
-void handleDestroyedPiecesMovement(Ship* ship);
+void destroyShip(GameContext* ctx, Ship* ship);
+bool handleDestroyedPiecesMovement(Ship* ship);
 void handleShipControls(GameContext* ctx);
-void initShip(GameContext* ctx);
+void initShip(GameContext* ctx, Ship* ship);
 void renderDestroyedShip(Ship* ship);
-void renderShip(GameContext* ctx);
+void renderShip(Ship* ship);
 void resetDestroyedPieces(Ship* ship);
 void resetShip(Ship* ship);
 

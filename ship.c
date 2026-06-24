@@ -8,14 +8,17 @@
 #include "outOfBoundsCheck.h"
 #include "explosion.h"
 
-void destroyShip(GameContext* ctx) {
-    ctx->ship.destroyed = true;
-    ctx->ship.timeDestroyed = GetTime();
-    newExplosion(ctx, ctx->ship.position);
-    resetDestroyedPieces(&ctx->ship);
+void destroyShip(GameContext* ctx, Ship* ship) {
+    ship->destroyed = true;
+    ship->timeDestroyed = GetTime();
+    newExplosion(ctx, ship->position);
+    resetDestroyedPieces(ship);
 }
 
-void handleDestroyedPiecesMovement(Ship* ship) {
+bool handleDestroyedPiecesMovement(Ship* ship) {
+    
+    bool allPiecesOutOfBounds = true;
+    
     for (int i = 0; i < 3; i++) {
         DestroyedShipPiece* piece = &ship->destroyedPieces[i];
 
@@ -37,17 +40,21 @@ void handleDestroyedPiecesMovement(Ship* ship) {
             spriteSize = piece->sprite->height;
         }
 
-        outOfBoundsCheck(&piece->position, spriteSize);
+        bool isOutOfBounds = checkOutOfBounds(piece->position, spriteSize);
+
+        if (!isOutOfBounds) allPiecesOutOfBounds = false;
     }
+
+    return allPiecesOutOfBounds;
 }
 
-void initShip(GameContext* ctx) {
-    Ship* ship = &ctx->ship;
-
+void initShip(GameContext* ctx, Ship* ship) {
+    
     ship->isAutoShieldActive = true;
     ship->isShieldActive = false;
     ship->isRotateActive = false;
     ship->destroyed = false;
+    ship->sprite = &ctx->assets.sprites.ship;
     ship->timeDestroyed = 0.0f;
     ship->timeSpawned = GetTime();
     ship->timeRotateActivated = 0.0f;
@@ -90,19 +97,21 @@ void renderDestroyedShip(Ship* ship) {
     }
 }
 
-void renderShip(GameContext* ctx) {
-    if (ctx->ship.destroyed) {
-        renderDestroyedShip(&ctx->ship);
+void renderShip(Ship* ship) {
+    if (ship->destroyed) {
+        renderDestroyedShip(ship);
     } else {
+
+        Texture2D sprite = *ship->sprite;
         DrawTexturePro(
-            ctx->assets.sprites.ship,
-            (Rectangle){0, 0, ctx->assets.sprites.ship.width, ctx->assets.sprites.ship.height},
-            (Rectangle){ctx->ship.position.x, ctx->ship.position.y, SHIP_SIZE, SHIP_SIZE},
+            sprite,
+            (Rectangle){0, 0, sprite.width, sprite.height},
+            (Rectangle){ship->position.x, ship->position.y, SHIP_SIZE, SHIP_SIZE},
             (Vector2){ SHIP_SIZE / 2.0f, SHIP_SIZE / 2.0f},
-            ctx->ship.rotation,
+            ship->rotation,
             WHITE
         );
-        renderShield(&ctx->ship);
+        renderShield(ship);
     }
 }
 

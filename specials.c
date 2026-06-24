@@ -21,6 +21,8 @@ void updateSpecialsAnimations(SpecialsPool* pool);
 
 static const int SPECIALS_LIFETIME = 30;
 static const int COMET_VELOCITY = 200;
+static const int EXTRA_LIFE_VELOCITY = 140;
+static const int EXTRA_LIFE_ROTATION_SPEED = 500;
 
 void addSpecialToPool(GameContext* ctx, SpecialType type) {
     
@@ -35,6 +37,8 @@ void addSpecialToPool(GameContext* ctx, SpecialType type) {
     newSpecial.type = type;
     newSpecial.value = 0;
     newSpecial.velocity = (Vector2){0,0};
+
+    float radians = 0;
 
     switch (type) {
 
@@ -53,7 +57,7 @@ void addSpecialToPool(GameContext* ctx, SpecialType type) {
             newSpecial.rotation = GetRandomValue(0,359);
             newSpecial.size = (Vector2){COMET_RENDER_SIZE_X, COMET_RENDER_SIZE_Y};
 
-            float radians = (newSpecial.rotation - 90.0f) * (PI / 180.0f);
+            radians = (newSpecial.rotation - 90.0f) * (PI / 180.0f);
 
             newSpecial.velocity = (Vector2){cosf(radians) * COMET_VELOCITY, sinf(radians) * COMET_VELOCITY};
 
@@ -64,7 +68,26 @@ void addSpecialToPool(GameContext* ctx, SpecialType type) {
             break;
     
         case EXTRA_LIFE:
-            // TODO: set attributes specific to type
+            newSpecial.position = getRandomPositionOffScreen(SHIP_SIZE);
+            newSpecial.rotation = GetRandomValue(0,359);
+            newSpecial.rotationSpeed = GetRandomValue(0,1) == 1 ? EXTRA_LIFE_ROTATION_SPEED : -EXTRA_LIFE_ROTATION_SPEED;
+            newSpecial.size = (Vector2){SHIP_SIZE, SHIP_SIZE};
+
+            radians = (newSpecial.rotation - 90.0f) * (PI / 180.0f);
+
+            newSpecial.velocity = (Vector2){cosf(radians) * EXTRA_LIFE_VELOCITY, sinf(radians) * EXTRA_LIFE_VELOCITY};
+
+            Ship ship;
+            initShip(ctx, &ship);
+            ship.position = newSpecial.position;
+            ship.rotation = newSpecial.rotation;
+            ship.velocity = newSpecial.velocity;
+            ship.isAutoShieldActive = false;
+
+            newSpecial.ship = ship;
+
+            playSoundPositioned(ctx->assets.samples.multiplier_spawn, newSpecial.position.x);
+            // TODO: Play unique sound
             break;
     
         case SUPERNOVA:
@@ -79,7 +102,9 @@ void addSpecialToPool(GameContext* ctx, SpecialType type) {
             break;
     }
 
-    newSpecial.animation = aniInstance;
+    if (type != EXTRA_LIFE) {
+        newSpecial.animation = aniInstance;
+    }
 
     pool->specials[pool->activeCount].active = true;
     pool->specials[pool->activeCount].special = newSpecial;
@@ -155,18 +180,18 @@ void handleSpecialsCollisions(GameContext* ctx) {
         if (special->type != EXTRA_LIFE && special->type != BLACK_HOLE) continue;
 
         if (special->type == EXTRA_LIFE) {
+
+            if (special->ship.destroyed) continue;
+
             for (int j = 0; j < asteroidsPool->activeCount; j++) {
                 if (!asteroidsPool->asteroids[j].active) continue;
 
                 Asteroid* ast = &asteroidsPool->asteroids[j].asteroid;
 
                 if (CheckCollisionCircles(ast->position, ast->size / 2, special->position, special->size.x / 2)) {
-                    // TODO: Extra life ship destroy animation
                     // TODO: Play extra life ship destroy sample
-                    newExplosion(ctx, ast->position);
+                    destroyShip(ctx, &special->ship);
                     destroyAsteroid(&ctx->objectPools.destroyedAsteroids, &asteroidsPool->asteroids[j]);
-                    specialsPool->specials[i].active = false;
-                    specialsPoolHasChanged = true;
                     break;
                 }
             }
@@ -174,11 +199,13 @@ void handleSpecialsCollisions(GameContext* ctx) {
 
         if (CheckCollisionCircles(ship->position, SHIP_SIZE / 2, special->position, special->size.x / 2)) {
             if (special->type == EXTRA_LIFE) {
+                if (special->ship.destroyed) continue;
                 ctx->player.lives++;
-                // TODO: Play extra life collect sample
+                playSoundPositioned(ctx->assets.samples.multiplier_collect, special->position.x);
+                // TODO: Play unique extra life collect sample
             } else {
                 newExplosion(ctx, ship->position);
-                if (!ship->destroyed) destroyShip(ctx);
+                if (!ship->destroyed) destroyShip(ctx, &ctx->ship);
             }
 
             specialsPool->specials[i].active = false;
@@ -242,7 +269,10 @@ void handleSpecialsHitDetection(GameContext* ctx) {
                         break;
                     
                     case EXTRA_LIFE:
-                        // handle special hit
+                        if (!specialObj->special.ship.destroyed) {
+                            destroyShip(ctx, &specialObj->special.ship);
+                            // TODO: Play extra ship destroy sound
+                        }
                         break;
                     
                     case BLACK_HOLE:
@@ -256,9 +286,11 @@ void handleSpecialsHitDetection(GameContext* ctx) {
                         printf("Error: Invalid SpecialType (%d) in handleEnemiesHitDetection\n", specialObj->special.type);
                 }
 
-                destroyShot(shotObj);
-                specialObj->active = false;
-                specialsPoolHasChanged = true;
+                if (specialObj->special.type != EXTRA_LIFE || specialObj->special.type == EXTRA_LIFE && !specialObj->special.ship.destroyed) {
+                    destroyShot(shotObj);
+                    specialObj->active = false;
+                    specialsPoolHasChanged = true;
+                }      
             }
         }
     }
@@ -272,8 +304,21 @@ void handleSpecialsMovement(SpecialsPool* pool) {
     for (int i = 0; i < pool->activeCount; i++) {
         SpecialPoolObject* specialObj = &pool->specials[i];
         if (!specialObj->active) continue;
-        updatePosition(&specialObj->special.position, specialObj->special.velocity);
-        outOfBoundsCheck(&specialObj->special.position, specialObj->special.size.y);
+
+        if (specialObj->special.type == EXTRA_LIFE) {
+            if (specialObj->special.ship.destroyed) continue;
+
+            updateRotation(&specialObj->special.rotation, specialObj->special.rotationSpeed);
+            updatePosition(&specialObj->special.position, specialObj->special.velocity);
+            handleOutOfBounds(&specialObj->special.position, specialObj->special.size.y);
+
+            specialObj->special.ship.rotation = specialObj->special.rotation;
+            specialObj->special.ship.position = specialObj->special.position;
+
+        } else {
+            updatePosition(&specialObj->special.position, specialObj->special.velocity);
+            handleOutOfBounds(&specialObj->special.position, specialObj->special.size.y);
+        }
     }
 }
 
@@ -361,7 +406,11 @@ void renderSpecials(SpecialsPool* pool) {
 
         Special* special = &pool->specials[i].special;
 
-        renderAnimation(&special->animation);
+        if (special->type == EXTRA_LIFE) {
+            renderShip(&special->ship);
+        } else {
+            renderAnimation(&special->animation);
+        }
     }
 }
 
@@ -394,20 +443,35 @@ void updateSpecials(GameContext* ctx) {
 
         if (!specialObj->active) continue;
 
-        if ((specialObj->special.spawnTime + SPECIALS_LIFETIME) < (GetTime() - ctx->pausTimer)) {
-            specialObj->active = false;
-            specialsPoolHasChanged = true;
-            continue;
+        if (((specialObj->special.spawnTime + SPECIALS_LIFETIME) < (GetTime() - ctx->pausTimer)) ||
+              (specialObj->special.type == EXTRA_LIFE && specialObj->special.ship.destroyed)) {
+
+            if (specialObj->special.type == EXTRA_LIFE) {
+                
+                if (!specialObj->special.ship.destroyed) {
+                    destroyShip(ctx, &specialObj->special.ship);
+                } 
+
+                bool outOfBounds = handleDestroyedPiecesMovement(&specialObj->special.ship);
+
+                if (outOfBounds) {
+                    specialObj->active = false;
+                    specialsPoolHasChanged = true;
+                    continue;
+                }
+
+            } else {
+                specialObj->active = false;
+                specialsPoolHasChanged = true;
+                continue;
+            }
         }
  
         switch (specialObj->special.type) {
 
             case MULTIPLIER:
             case COMET:
-                break;
-    
             case EXTRA_LIFE:
-                // TODO: set attributes specific to type
                 break;
     
             case SUPERNOVA:
@@ -431,7 +495,7 @@ void updateSpecials(GameContext* ctx) {
 
 void updateSpecialsAnimations(SpecialsPool* pool) {
     for (int i = 0; i < pool->activeCount; i++) {
-        if (!pool->specials[i].active) continue;
+        if (!pool->specials[i].active || pool->specials[i].special.type == EXTRA_LIFE) continue;
 
         Special* special = &pool->specials[i].special;
 

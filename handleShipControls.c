@@ -113,5 +113,5 @@ void handleShipControls(GameContext* ctx)
     ship->position.x += GetFrameTime() * ship->velocity.x;
     ship->position.y += GetFrameTime() * ship->velocity.y;
 
-    outOfBoundsCheck(&ship->position, SHIP_SIZE);
+    handleOutOfBounds(&ship->position, SHIP_SIZE);
 }

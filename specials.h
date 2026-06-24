@@ -26,7 +26,10 @@ typedef struct Special {
     float rotation;
     float rotationSpeed;
     float value;
-    AnimationInstance animation;
+    union {
+        AnimationInstance animation;
+        Ship ship;
+    };
 }Special;
 
 typedef struct SpecialPoolObject {

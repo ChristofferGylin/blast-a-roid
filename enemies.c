@@ -134,7 +134,7 @@ void handleEnemiesCollisions(GameContext* ctx) {
             newExplosion(ctx, ship->position);
             newExplosion(ctx, enemy->position);
 
-            if (!ship->destroyed) destroyShip(ctx);
+            if (!ship->destroyed) destroyShip(ctx, &ctx->ship);
             
             enemyObject->active = false;
             enemyPoolHasChanges = true;
@@ -161,7 +161,7 @@ void handleEnemiesHitDetection(GameContext* ctx) {
                 continue;
 
             } else if (CheckCollisionCircles(shotObj->shot.position, shotObj->shot.size / 2.0f, ctx->ship.position, SHIP_SIZE / 2.0f)) {
-                destroyShip(ctx);
+                destroyShip(ctx, &ctx->ship);
 
                 if (shotObj->shot.level <= 1) {
                     destroyShot(shotObj);
@@ -238,7 +238,7 @@ void handleEnemiesMovement(GameContext* ctx) {
                 break;
         }
 
-        outOfBoundsCheck(&enemy->position, enemy->size);
+        handleOutOfBounds(&enemy->position, enemy->size);
     }
 }
 
