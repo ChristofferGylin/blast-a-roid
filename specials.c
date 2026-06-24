@@ -304,6 +304,14 @@ void handleSpecialsMovement(SpecialsPool* pool) {
     for (int i = 0; i < pool->activeCount; i++) {
         SpecialPoolObject* specialObj = &pool->specials[i];
         if (!specialObj->active) continue;
+
+        if (specialObj->special.type == EXTRA_LIFE) {
+            if (specialObj->special.ship.destroyed) continue;
+
+            updateRotation(&specialObj->special.ship.rotation, specialObj->special.rotationSpeed);
+            updatePosition(&specialObj->special.ship.position, specialObj->special.velocity);
+        } 
+
         updatePosition(&specialObj->special.position, specialObj->special.velocity);
         outOfBoundsCheck(&specialObj->special.position, specialObj->special.size.y);
     }
