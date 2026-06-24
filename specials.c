@@ -21,7 +21,7 @@ void updateSpecialsAnimations(SpecialsPool* pool);
 
 static const int SPECIALS_LIFETIME = 30;
 static const int COMET_VELOCITY = 200;
-static const int EXTRA_LIFE_VELOCITY = 270;
+static const int EXTRA_LIFE_VELOCITY = 170;
 static const int EXTRA_LIFE_ROTATION_SPEED = 400;
 
 void addSpecialToPool(GameContext* ctx, SpecialType type) {
@@ -308,12 +308,17 @@ void handleSpecialsMovement(SpecialsPool* pool) {
         if (specialObj->special.type == EXTRA_LIFE) {
             if (specialObj->special.ship.destroyed) continue;
 
-            updateRotation(&specialObj->special.ship.rotation, specialObj->special.rotationSpeed);
-            updatePosition(&specialObj->special.ship.position, specialObj->special.velocity);
-        } 
+            updateRotation(&specialObj->special.rotation, specialObj->special.rotationSpeed);
+            updatePosition(&specialObj->special.position, specialObj->special.velocity);
+            handleOutOfBounds(&specialObj->special.position, specialObj->special.size.y);
 
-        updatePosition(&specialObj->special.position, specialObj->special.velocity);
-        handleOutOfBounds(&specialObj->special.position, specialObj->special.size.y);
+            specialObj->special.ship.rotation = specialObj->special.rotation;
+            specialObj->special.ship.position = specialObj->special.position;
+
+        } else {
+            updatePosition(&specialObj->special.position, specialObj->special.velocity);
+            handleOutOfBounds(&specialObj->special.position, specialObj->special.size.y);
+        }
     }
 }
 
@@ -344,8 +349,8 @@ void populateSpecialsSpawnPool(GameContext* ctx) {
         (SpecialSpawnOption){true, MULTIPLIER, 100},
         (SpecialSpawnOption){true, COMET, 100},
         (SpecialSpawnOption){true, EXTRA_LIFE, 30},
-        (SpecialSpawnOption){true, BLACK_HOLE, 20},
-        (SpecialSpawnOption){true, SUPERNOVA, 10},
+        // (SpecialSpawnOption){true, BLACK_HOLE, 20},
+        // (SpecialSpawnOption){true, SUPERNOVA, 10},
     };
     SpecialsSpawnPool* spawnPool = &ctx->objectPools.specialsSpawn;
     
@@ -354,7 +359,7 @@ void populateSpecialsSpawnPool(GameContext* ctx) {
 
     if (maxNumberOfSpecials > NUMBER_OF_SPECIALS) maxNumberOfSpecials = NUMBER_OF_SPECIALS;
 
-    int numberToPopulate = GetRandomValue(minNumberOfSpecials, maxNumberOfSpecials);
+    int numberToPopulate = 3; // GetRandomValue(minNumberOfSpecials, maxNumberOfSpecials);
 
     for (int i = 0; i < numberToPopulate; i++) {
         
