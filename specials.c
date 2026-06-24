@@ -75,6 +75,8 @@ void addSpecialToPool(GameContext* ctx, SpecialType type) {
 
             newSpecial.velocity = (Vector2){cosf(radians) * EXTRA_LIFE_VELOCITY, sinf(radians) * EXTRA_LIFE_VELOCITY};
 
+            Ship shipInDistress;
+
             playSoundPositioned(ctx->assets.samples.multiplier_spawn, newSpecial.position.x);
             // TODO: Play unique sound
             break;

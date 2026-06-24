@@ -17,7 +17,7 @@ void initGameContext(GameContext* ctx) {
     initPlayer(&ctx->player);
     initObjectPools(ctx);
     loadAssets(ctx);
-    initShip(ctx);
+    initShip(ctx, &ctx->ship);
     initSpawning(ctx);
     ctx->pausTimer = 0;
 }

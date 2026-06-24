@@ -41,9 +41,8 @@ void handleDestroyedPiecesMovement(Ship* ship) {
     }
 }
 
-void initShip(GameContext* ctx) {
-    Ship* ship = &ctx->ship;
-
+void initShip(GameContext* ctx, Ship* ship) {
+    
     ship->isAutoShieldActive = true;
     ship->isShieldActive = false;
     ship->isRotateActive = false;
