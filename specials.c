@@ -81,6 +81,7 @@ void addSpecialToPool(GameContext* ctx, SpecialType type) {
             initShip(ctx, &ship);
             ship.position = newSpecial.position;
             ship.rotation = newSpecial.rotation;
+            ship.isAutoShieldActive = false;
 
             newSpecial.ship = ship;
 
