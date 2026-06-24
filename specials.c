@@ -349,8 +349,8 @@ void populateSpecialsSpawnPool(GameContext* ctx) {
         (SpecialSpawnOption){true, MULTIPLIER, 100},
         (SpecialSpawnOption){true, COMET, 100},
         (SpecialSpawnOption){true, EXTRA_LIFE, 30},
-        // (SpecialSpawnOption){true, BLACK_HOLE, 20},
-        // (SpecialSpawnOption){true, SUPERNOVA, 10},
+        (SpecialSpawnOption){true, BLACK_HOLE, 20},
+        (SpecialSpawnOption){true, SUPERNOVA, 10},
     };
     SpecialsSpawnPool* spawnPool = &ctx->objectPools.specialsSpawn;
     
@@ -359,7 +359,7 @@ void populateSpecialsSpawnPool(GameContext* ctx) {
 
     if (maxNumberOfSpecials > NUMBER_OF_SPECIALS) maxNumberOfSpecials = NUMBER_OF_SPECIALS;
 
-    int numberToPopulate = 3; // GetRandomValue(minNumberOfSpecials, maxNumberOfSpecials);
+    int numberToPopulate = GetRandomValue(minNumberOfSpecials, maxNumberOfSpecials);
 
     for (int i = 0; i < numberToPopulate; i++) {
         
