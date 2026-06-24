@@ -269,7 +269,10 @@ void handleSpecialsHitDetection(GameContext* ctx) {
                         break;
                     
                     case EXTRA_LIFE:
-                        // handle special hit
+                        if (!specialObj->special.ship.destroyed) {
+                            destroyShip(ctx, &specialObj->special.ship);
+                            // TODO: Play extra ship destroy sound
+                        }
                         break;
                     
                     case BLACK_HOLE:
@@ -283,9 +286,11 @@ void handleSpecialsHitDetection(GameContext* ctx) {
                         printf("Error: Invalid SpecialType (%d) in handleEnemiesHitDetection\n", specialObj->special.type);
                 }
 
-                destroyShot(shotObj);
-                specialObj->active = false;
-                specialsPoolHasChanged = true;
+                if (specialObj->special.type != EXTRA_LIFE || specialObj->special.type == EXTRA_LIFE && !specialObj->special.ship.destroyed) {
+                    destroyShot(shotObj);
+                    specialObj->active = false;
+                    specialsPoolHasChanged = true;
+                }      
             }
         }
     }
