@@ -21,6 +21,8 @@ void updateSpecialsAnimations(SpecialsPool* pool);
 
 static const int SPECIALS_LIFETIME = 30;
 static const int COMET_VELOCITY = 200;
+static const int EXTRA_LIFE_VELOCITY = 270;
+static const int EXTRA_LIFE_ROTATION_SPEED = 400;
 
 void addSpecialToPool(GameContext* ctx, SpecialType type) {
     
@@ -64,7 +66,17 @@ void addSpecialToPool(GameContext* ctx, SpecialType type) {
             break;
     
         case EXTRA_LIFE:
-            // TODO: set attributes specific to type
+            newSpecial.position = getRandomPositionOffScreen(SHIP_SIZE);
+            newSpecial.rotation = GetRandomValue(0,359);
+            newSpecial.rotationSpeed = GetRandomValue(0,1) == 1 ? EXTRA_LIFE_ROTATION_SPEED : -EXTRA_LIFE_ROTATION_SPEED;
+            newSpecial.size = (Vector2){SHIP_SIZE, SHIP_SIZE};
+
+            float radians = (newSpecial.rotation - 90.0f) * (PI / 180.0f);
+
+            newSpecial.velocity = (Vector2){cosf(radians) * EXTRA_LIFE_VELOCITY, sinf(radians) * EXTRA_LIFE_VELOCITY};
+
+            playSoundPositioned(ctx->assets.samples.multiplier_spawn, newSpecial.position.x);
+            // TODO: Play unique sound
             break;
     
         case SUPERNOVA:
