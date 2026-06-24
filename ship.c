@@ -47,6 +47,7 @@ void initShip(GameContext* ctx, Ship* ship) {
     ship->isShieldActive = false;
     ship->isRotateActive = false;
     ship->destroyed = false;
+    ship->sprite = &ctx->assets.sprites.ship;
     ship->timeDestroyed = 0.0f;
     ship->timeSpawned = GetTime();
     ship->timeRotateActivated = 0.0f;

@@ -24,6 +24,7 @@ typedef struct {
     double timeDestroyed;
     double timeRotateActivated;
     double timeSpawned;
+    Texture2D* sprite;
     DestroyedShipPiece destroyedPieces[3]; 
 }Ship;
 
