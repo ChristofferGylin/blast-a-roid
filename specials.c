@@ -38,6 +38,8 @@ void addSpecialToPool(GameContext* ctx, SpecialType type) {
     newSpecial.value = 0;
     newSpecial.velocity = (Vector2){0,0};
 
+    float radians = 0;
+
     switch (type) {
 
         case MULTIPLIER:
@@ -55,7 +57,7 @@ void addSpecialToPool(GameContext* ctx, SpecialType type) {
             newSpecial.rotation = GetRandomValue(0,359);
             newSpecial.size = (Vector2){COMET_RENDER_SIZE_X, COMET_RENDER_SIZE_Y};
 
-            float radians = (newSpecial.rotation - 90.0f) * (PI / 180.0f);
+            radians = (newSpecial.rotation - 90.0f) * (PI / 180.0f);
 
             newSpecial.velocity = (Vector2){cosf(radians) * COMET_VELOCITY, sinf(radians) * COMET_VELOCITY};
 
@@ -71,7 +73,7 @@ void addSpecialToPool(GameContext* ctx, SpecialType type) {
             newSpecial.rotationSpeed = GetRandomValue(0,1) == 1 ? EXTRA_LIFE_ROTATION_SPEED : -EXTRA_LIFE_ROTATION_SPEED;
             newSpecial.size = (Vector2){SHIP_SIZE, SHIP_SIZE};
 
-            float radians = (newSpecial.rotation - 90.0f) * (PI / 180.0f);
+            radians = (newSpecial.rotation - 90.0f) * (PI / 180.0f);
 
             newSpecial.velocity = (Vector2){cosf(radians) * EXTRA_LIFE_VELOCITY, sinf(radians) * EXTRA_LIFE_VELOCITY};
 
