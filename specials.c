@@ -21,7 +21,7 @@ void updateSpecialsAnimations(SpecialsPool* pool);
 
 static const int SPECIALS_LIFETIME = 30;
 static const int COMET_VELOCITY = 200;
-static const int EXTRA_LIFE_VELOCITY = 170;
+static const int EXTRA_LIFE_VELOCITY = 140;
 static const int EXTRA_LIFE_ROTATION_SPEED = 400;
 
 void addSpecialToPool(GameContext* ctx, SpecialType type) {
@@ -81,6 +81,7 @@ void addSpecialToPool(GameContext* ctx, SpecialType type) {
             initShip(ctx, &ship);
             ship.position = newSpecial.position;
             ship.rotation = newSpecial.rotation;
+            ship.velocity = newSpecial.velocity;
             ship.isAutoShieldActive = false;
 
             newSpecial.ship = ship;
