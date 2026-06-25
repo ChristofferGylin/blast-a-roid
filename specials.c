@@ -95,7 +95,10 @@ void addSpecialToPool(GameContext* ctx, SpecialType type) {
             break;
     
         case BLACK_HOLE:
-            // TODO: set attributes specific to type
+            newSpecial.position = getRandomPosition();
+            newSpecial.size = (Vector2){BLACK_HOLE_SIZE, BLACK_HOLE_SIZE};
+            
+            initAnimtionInstance(&aniInstance, &ctx->assets.animations.blackHole, newSpecial.position, newSpecial.rotation, ctx->assets.animations.blackHole.fps, false);
             break;
     
         default:
