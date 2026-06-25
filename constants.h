@@ -1,6 +1,7 @@
 #ifndef CONSTANTS_H
 #define CONSTANTS_H
 
+static const int BLACK_HOLE_SIZE = 32;
 static const int CRATE_RENDER_SIZE = 32;
 static const int COMET_RENDER_SIZE_X = 32;
 static const int COMET_RENDER_SIZE_Y = 64;
