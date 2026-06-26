@@ -1,6 +1,7 @@
 #ifndef CONSTANTS_H
 #define CONSTANTS_H
 
+static const int BLACK_HOLE_SIZE = 32;
 static const int CRATE_RENDER_SIZE = 32;
 static const int COMET_RENDER_SIZE_X = 32;
 static const int COMET_RENDER_SIZE_Y = 64;
@@ -29,5 +30,6 @@ static const int BONUS_MULTIPLIER_RADIUS = 9;
 static const int UFO_1_SIZE = 32;
 static const int UFO_3_RENDER_SIZE = 28;
 static const int UFO_3_COLLISION_SIZE = 24;
+static const float MAX_DISTANCE_SQR = (SCREEN_WIDTH - (SIDEBAR_WIDTH * 2)) * (SCREEN_WIDTH - (SIDEBAR_WIDTH * 2)) + (SCREEN_HEIGHT * SCREEN_HEIGHT);
 
 #endif

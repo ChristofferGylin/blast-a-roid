@@ -295,20 +295,7 @@ void handleUfoMovement(GameContext* ctx, Enemy* enemy) {
     if (enemy->isAttacking && CheckCollisionCircles(enemy->position, (float)enemy->attackRange, ctx->ship.position, SHIP_SIZE / 2)) {
         brakeShip(&enemy->velocity, enemy->brakeFactor);
     } else {
-
-        Vector2 toDestination = Vector2Subtract(enemy->destination, enemy->position);
-        Vector2 desiredVelocity = Vector2Scale(Vector2Normalize(toDestination), enemy->maxVelocity);
-        Vector2 steering = Vector2Subtract(desiredVelocity, enemy->velocity);
-
-        float steerLength = Vector2Length(steering);
-
-        if (steerLength > enemy->acceleration) {
-            steering = Vector2Scale(Vector2Normalize(steering), enemy->acceleration);
-        }
-
-        enemy->velocity.x += steering.x * GetFrameTime();
-        enemy->velocity.y += steering.y * GetFrameTime();
-
+        goToDestination(enemy->position, enemy->destination, &enemy->velocity, enemy->maxVelocity, enemy->acceleration);
     }
     
     enemy->position.x += GetFrameTime() * enemy->velocity.x;

@@ -5,6 +5,13 @@
 #include "constants.h"
 #include "stdio.h"
 
+void applyGForce(Vector2 position, Vector2  destination, Vector2* velocity, float maxVelocity, float minAcceleration, float maxAcceleration, float maxDistance) {
+    float distanceToDestination = Vector2DistanceSqr(position, destination);
+    float acceleration = scaleFloat(maxDistance, 0, minAcceleration, maxAcceleration,distanceToDestination);
+    goToDestination(position, destination, velocity, maxVelocity, acceleration);
+}
+
+
 float scaleFloat(float oldMin, float oldMax, float newMin, float newMax, float value) {
     return (value - oldMin) / (oldMax - oldMin) * (newMax - newMin) + newMin;
 }
@@ -71,6 +78,21 @@ Vector2 getRandomVelocity(FloatRange range) {
 float getRoundness(Rectangle rect, float radiusPx) {
     float minDim = rect.width < rect.height ? rect.width : rect.height;
     return (radiusPx * 2.0f) / minDim;
+}
+
+void goToDestination(Vector2 position, Vector2  destination, Vector2* velocity, float maxVelocity, float acceleration) {
+    Vector2 toDestination = Vector2Subtract(destination, position);
+    Vector2 desiredVelocity = Vector2Scale(Vector2Normalize(toDestination), maxVelocity);
+    Vector2 steering = Vector2Subtract(desiredVelocity, *velocity);
+
+    float steerLength = Vector2Length(steering);
+
+    if (steerLength > acceleration) {
+        steering = Vector2Scale(Vector2Normalize(steering), acceleration);
+    }
+
+    velocity->x += steering.x * GetFrameTime();
+    velocity->y += steering.y * GetFrameTime();
 }
 
 void knockback(Vector2 targetPosition, Vector2* targetVelocity, Vector2 forcePosition, int force) {

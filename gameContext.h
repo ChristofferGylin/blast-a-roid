@@ -12,6 +12,7 @@
 #include "specials.h"
 
 typedef struct Animations {
+    Animation blackHole;
     Animation comet;
     Animation crate;
     Animation explosion;

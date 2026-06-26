@@ -38,14 +38,12 @@ void addSpecialToPool(GameContext* ctx, SpecialType type) {
     newSpecial.value = 0;
     newSpecial.velocity = (Vector2){0,0};
 
+    float minDistanceToShip = SHIP_SIZE * 4;
     float radians = 0;
 
     switch (type) {
 
-        case MULTIPLIER:
-
-            newSpecial.position = getRandomPosition();
-            
+        case MULTIPLIER:            
             initAnimtionInstance(&aniInstance, &ctx->assets.animations.multiplier, newSpecial.position, 0, 2.0f, false);
             newSpecial.size = (Vector2){MULTIPLIER_COLLISION_SIZE, MULTIPLIER_COLLISION_SIZE};
             playSoundPositioned(ctx->assets.samples.multiplier_spawn, newSpecial.position.x);
@@ -95,11 +93,26 @@ void addSpecialToPool(GameContext* ctx, SpecialType type) {
             break;
     
         case BLACK_HOLE:
-            // TODO: set attributes specific to type
+            newSpecial.size = (Vector2){BLACK_HOLE_SIZE, BLACK_HOLE_SIZE};
+            
+            initAnimtionInstance(&aniInstance, &ctx->assets.animations.blackHole, newSpecial.position, newSpecial.rotation, ctx->assets.animations.blackHole.fps, false);
+            PlaySound(ctx->assets.samples.alarm);
             break;
     
         default:
             break;
+    }
+
+    if (type == BLACK_HOLE || type == MULTIPLIER || type == SUPERNOVA) {
+        newSpecial.position = (Vector2){0,0};
+
+        while (newSpecial.position.x == 0) {
+            Vector2 newPosition = getRandomPosition();
+
+            if (!CheckCollisionCircles(newPosition, minDistanceToShip, ctx->ship.position, SHIP_SIZE / 2.0f)) {
+                newSpecial.position = newPosition;
+            }
+        }
     }
 
     if (type != EXTRA_LIFE) {
@@ -202,17 +215,20 @@ void handleSpecialsCollisions(GameContext* ctx) {
                 if (special->ship.destroyed) continue;
                 ctx->player.lives++;
                 playSoundPositioned(ctx->assets.samples.multiplier_collect, special->position.x);
+                specialsPool->specials[i].active = false;
+                specialsPoolHasChanged = true;
                 // TODO: Play unique extra life collect sample
             } else {
-                newExplosion(ctx, ship->position);
-                if (!ship->destroyed) destroyShip(ctx, &ctx->ship);
+
+                if (ship->isShieldActive || ship->isAutoShieldActive) {
+                    specialsPool->specials[i].active = false;
+                    specialsPoolHasChanged = true;
+                    newExplosion(ctx, ship->position);
+                } else {
+                    if (!ship->destroyed) destroyShip(ctx, &ctx->ship);
+                }
             }
-
-            specialsPool->specials[i].active = false;
-            specialsPoolHasChanged = true;
-            continue;
         }
-
     }
 
     if (specialsPoolHasChanged) {
@@ -254,6 +270,9 @@ void handleSpecialsHitDetection(GameContext* ctx) {
             }
 
             if (CheckCollisionCircles(specialPos, specialRadius, shotObj->shot.position, shotObj->shot.size / 2.0f)) {
+                
+                if (shotObj->shot.owner == ENEMY_SHOT && specialObj->special.type != EXTRA_LIFE) continue;
+                
                 switch (specialObj->special.type) {
                     case MULTIPLIER:
                         player->powerups.levelBonusMultiplier = specialObj->special.animation.currentFrame + 2;
@@ -276,7 +295,8 @@ void handleSpecialsHitDetection(GameContext* ctx) {
                         break;
                     
                     case BLACK_HOLE:
-                        // handle special hit
+                        newExplosion(ctx, specialObj->special.position);
+                        player->levelBonus += 5000;
                         break;
                     
                     case SUPERNOVA:
@@ -359,7 +379,7 @@ void populateSpecialsSpawnPool(GameContext* ctx) {
 
     if (maxNumberOfSpecials > NUMBER_OF_SPECIALS) maxNumberOfSpecials = NUMBER_OF_SPECIALS;
 
-    int numberToPopulate = GetRandomValue(minNumberOfSpecials, maxNumberOfSpecials);
+    int numberToPopulate = 1; //GetRandomValue(minNumberOfSpecials, maxNumberOfSpecials);
 
     for (int i = 0; i < numberToPopulate; i++) {
         
@@ -479,7 +499,10 @@ void updateSpecials(GameContext* ctx) {
                 break;
     
             case BLACK_HOLE:
-                // TODO: set attributes specific to type
+                const float MAX_PULL_VELOCITY = 500.0f;
+                const float MIN_ACCELERATION = 120.0f;
+                const float MAX_ACCELERATION = 320.0f;
+                applyGForce(ctx->ship.position, specialObj->special.position, &ctx->ship.velocity, MAX_PULL_VELOCITY, MIN_ACCELERATION, MAX_ACCELERATION, MAX_DISTANCE_SQR);
                 break;
     
             default:

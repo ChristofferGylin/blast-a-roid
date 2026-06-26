@@ -22,12 +22,14 @@ typedef enum VisualType {
     VISUAL_ANIMATION
 }VisualType;
 
+void applyGForce(Vector2 position, Vector2  destination, Vector2* velocity, float maxVelocity, float minAcceleration, float maxAcceleration, float maxDistance);
 float scaleFloat(float oldMin, float oldMax, float newMin, float newMax, float value);
 int getNumberOfAsteroids(int gameLevel);
 Vector2 getRandomPosition();
 Vector2 getRandomPositionOffScreen(int size);
 Vector2 getRandomVelocity(FloatRange range);
 float getRoundness(Rectangle rect, float radiusPx);
+void goToDestination(Vector2 position, Vector2  destination, Vector2* velocity, float maxVelocity, float acceleration);
 void knockback(Vector2 targetPosition, Vector2* targetVelocity, Vector2 forcePosition, int force);
 void knockbackByImpact(Vector2 targetPosition, Vector2* targetVelocity, Vector2 forcePosition, Vector2 forceVelocity);
 void playSoundPositioned(Sound sound, float positionX);
