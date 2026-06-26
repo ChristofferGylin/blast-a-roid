@@ -497,8 +497,8 @@ void updateSpecials(GameContext* ctx) {
     
             case BLACK_HOLE:
                 const float MAX_PULL_VELOCITY = 500.0f;
-                const float MIN_ACCELERATION = 150.0f;
-                const float MAX_ACCELERATION = 350.0f;
+                const float MIN_ACCELERATION = 120.0f;
+                const float MAX_ACCELERATION = 320.0f;
                 applyGForce(ctx->ship.position, specialObj->special.position, &ctx->ship.velocity, MAX_PULL_VELOCITY, MIN_ACCELERATION, MAX_ACCELERATION, MAX_DISTANCE_SQR);
                 break;
     
