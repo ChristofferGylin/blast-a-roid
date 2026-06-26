@@ -283,7 +283,8 @@ void handleSpecialsHitDetection(GameContext* ctx) {
                         break;
                     
                     case BLACK_HOLE:
-                        // handle special hit
+                        newExplosion(ctx, specialObj->special.position);
+                        player->levelBonus += 5000;
                         break;
                     
                     case SUPERNOVA:
@@ -486,7 +487,9 @@ void updateSpecials(GameContext* ctx) {
                 break;
     
             case BLACK_HOLE:
-                // TODO: set attributes specific to type
+                const float MAX_PULL_VELOCITY = 600.0f;
+                const float ACCELERATION = 5.0f;
+                goToDestination(ctx->ship.position, specialObj->special.position, &ctx->ship.velocity, MAX_PULL_VELOCITY, ACCELERATION);
                 break;
     
             default:
