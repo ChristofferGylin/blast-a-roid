@@ -498,6 +498,7 @@ void updateSpecials(GameContext* ctx) {
                 break;
     
             case SUPERNOVA:
+                ctx->supernova.shakeTimer += GetFrameTime();
                 const int DETONATION_DURATION = 4;
 
                 int sizes[] = {

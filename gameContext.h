@@ -79,6 +79,7 @@ typedef struct SpawningEnemies {
 typedef struct Supernova {
     bool detonated;
     double detonationTime;
+    double shakeTimer;
 }Supernova;
 
 typedef struct GameContext {
