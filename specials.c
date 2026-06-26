@@ -99,6 +99,7 @@ void addSpecialToPool(GameContext* ctx, SpecialType type) {
             newSpecial.size = (Vector2){BLACK_HOLE_SIZE, BLACK_HOLE_SIZE};
             
             initAnimtionInstance(&aniInstance, &ctx->assets.animations.blackHole, newSpecial.position, newSpecial.rotation, ctx->assets.animations.blackHole.fps, false);
+            PlaySound(ctx->assets.samples.alarm);
             break;
     
         default:
