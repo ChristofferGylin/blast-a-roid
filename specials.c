@@ -38,14 +38,12 @@ void addSpecialToPool(GameContext* ctx, SpecialType type) {
     newSpecial.value = 0;
     newSpecial.velocity = (Vector2){0,0};
 
+    float minDistanceToShip = SHIP_SIZE * 4;
     float radians = 0;
 
     switch (type) {
 
-        case MULTIPLIER:
-
-            newSpecial.position = getRandomPosition();
-            
+        case MULTIPLIER:            
             initAnimtionInstance(&aniInstance, &ctx->assets.animations.multiplier, newSpecial.position, 0, 2.0f, false);
             newSpecial.size = (Vector2){MULTIPLIER_COLLISION_SIZE, MULTIPLIER_COLLISION_SIZE};
             playSoundPositioned(ctx->assets.samples.multiplier_spawn, newSpecial.position.x);
@@ -95,7 +93,6 @@ void addSpecialToPool(GameContext* ctx, SpecialType type) {
             break;
     
         case BLACK_HOLE:
-            newSpecial.position = getRandomPosition();
             newSpecial.size = (Vector2){BLACK_HOLE_SIZE, BLACK_HOLE_SIZE};
             
             initAnimtionInstance(&aniInstance, &ctx->assets.animations.blackHole, newSpecial.position, newSpecial.rotation, ctx->assets.animations.blackHole.fps, false);
@@ -104,6 +101,18 @@ void addSpecialToPool(GameContext* ctx, SpecialType type) {
     
         default:
             break;
+    }
+
+    if (type == BLACK_HOLE || type == MULTIPLIER || type == SUPERNOVA) {
+        newSpecial.position = (Vector2){0,0};
+
+        while (newSpecial.position.x == 0) {
+            Vector2 newPosition = getRandomPosition();
+
+            if (!CheckCollisionCircles(newPosition, minDistanceToShip, ctx->ship.position, SHIP_SIZE / 2.0f)) {
+                newSpecial.position = newPosition;
+            }
+        }
     }
 
     if (type != EXTRA_LIFE) {
