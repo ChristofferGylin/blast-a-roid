@@ -142,6 +142,25 @@ void playSoundPositioned(Sound sound, float positionX) {
     PlaySound(sound);
 }
 
+void shake(Vector2* position) {
+    int minShake = 3;
+    int maxShake = 10;
+
+    int shakeX = GetRandomValue(minShake, maxShake);
+    int shakeY = GetRandomValue(minShake, maxShake);
+
+    if (GetRandomValue(0,1)) {
+        shakeX = -shakeX;
+    }
+
+    if (GetRandomValue(0,1)) {
+        shakeY = -shakeY;
+    }
+
+    position->x += shakeX; 
+    position->y += shakeY; 
+}
+
 void updatePosition(Vector2* position, Vector2 velocity) {
     position->x += GetFrameTime() * velocity.x;
     position->y += GetFrameTime() * velocity.y;
