@@ -20,6 +20,7 @@ void initGameContext(GameContext* ctx) {
     initShip(ctx, &ctx->ship);
     initSpawning(ctx);
     ctx->pausTimer = 0;
+    ctx->supernova = (Supernova){false, 0.0f};
 }
 
 void initObjectPools(GameContext* ctx) {

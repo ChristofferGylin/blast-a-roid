@@ -498,6 +498,8 @@ void updateSpecials(GameContext* ctx) {
                 break;
     
             case SUPERNOVA:
+                const int DETONATION_DURATION = 4;
+
                 int sizes[] = {
                     2, 4, 6, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 12, 14, 16, 18, 22, 26, 30, 34, 40, 46, 48, 48, 48, 48, 48, 48, 48,48, 48, 48, 48, 48, 48,
                     48, 48, 48, 48, 48, 48, 48, 48, 48, 48, 48, 48, 48, 48, 48, 48, 48, 48, 48, 48, 48, 47, 47, 42, 40, 38, 34,30, 16, 12, 6, 5, 4, 0, 0, 0, 0, 0, 0
@@ -513,6 +515,16 @@ void updateSpecials(GameContext* ctx) {
                     specialObj->special.size.x = sizes[frame];
                     specialObj->special.size.y = sizes[frame];
                 }
+
+                if (frame >= 70 && !ctx->supernova.detonated) {
+                    ctx->supernova.detonated = true;
+                    ctx->supernova.detonationTime = GetTime() - ctx->pausTimer;
+                }
+
+                if (ctx->supernova.detonated && ((ctx->supernova.detonationTime + DETONATION_DURATION) < (GetTime() - ctx->pausTimer))) {
+                    ctx->supernova.detonated = false;
+                }
+
                 break;
     
             case BLACK_HOLE:

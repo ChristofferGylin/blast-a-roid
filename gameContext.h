@@ -76,6 +76,11 @@ typedef struct SpawningEnemies {
     FloatRange spawnDelay;
 }SpawningEnemies;
 
+typedef struct Supernova {
+    bool detonated;
+    double detonationTime;
+}Supernova;
+
 typedef struct GameContext {
     Assets assets;
     ObjectPools objectPools;
@@ -83,6 +88,7 @@ typedef struct GameContext {
     Ship ship;
     SpawningEnemies spawning;
     double pausTimer;
+    Supernova supernova;
 }GameContext;
 
 void initGameContext(GameContext* ctx);
