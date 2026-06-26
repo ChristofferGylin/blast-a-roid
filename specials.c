@@ -258,6 +258,9 @@ void handleSpecialsHitDetection(GameContext* ctx) {
             }
 
             if (CheckCollisionCircles(specialPos, specialRadius, shotObj->shot.position, shotObj->shot.size / 2.0f)) {
+                
+                if (shotObj->shot.owner == ENEMY_SHOT && specialObj->special.type != EXTRA_LIFE) continue;
+                
                 switch (specialObj->special.type) {
                     case MULTIPLIER:
                         player->powerups.levelBonusMultiplier = specialObj->special.animation.currentFrame + 2;
