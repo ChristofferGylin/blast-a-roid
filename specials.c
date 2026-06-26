@@ -302,7 +302,8 @@ void handleSpecialsHitDetection(GameContext* ctx) {
                         break;
                     
                     case SUPERNOVA:
-                        // handle special hit
+                        newExplosion(ctx, specialObj->special.position);
+                        player->levelBonus += 5000;
                         break;
                     default:
                         printf("Error: Invalid SpecialType (%d) in handleEnemiesHitDetection\n", specialObj->special.type);
