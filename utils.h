@@ -17,6 +17,11 @@ typedef enum PositionChoice {
     RIGHT_POS
 }PositionChoice;
 
+typedef struct PositionVelocity {
+    Vector2 position;
+    Vector2 velocity;
+}PositionVelocity;
+
 typedef enum VisualType {
     VISUAL_SPRITE,
     VISUAL_ANIMATION
