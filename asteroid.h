@@ -56,7 +56,7 @@ int countAsteroids(AsteroidPool* pool);
 void destroyAsteroid(DestroyedAsteroidPool* pool, AsteroidPoolObject* ast);
 int getAsteroidSize(AsteroidType type);
 void handleAsteroidCollisions(GameContext* ctx);
-void handleAsteroidsMovement(AsteroidPool* pool);
+void handleAsteroidsMovement(GameContext* ctx);
 void handleDestroyedAsteroids(GameContext* ctx);
 void initAsteroidPool(AsteroidPool* pool);
 void initDestroyedAsteroidPool(DestroyedAsteroidPool* pool);

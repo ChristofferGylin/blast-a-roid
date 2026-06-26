@@ -92,7 +92,7 @@ GameResult gameLoop(GameContext* ctx) {
             handleShooting(ctx);
             handleShipControls(ctx);
             handleShield(ctx);
-            handleAsteroidsMovement(&ctx->objectPools.asteroids);
+            handleAsteroidsMovement(ctx);
             handleEnemiesMovement(ctx);
             handleShotsMovement(&ctx->objectPools.shots);
             handleSpecialsMovement(&ctx->objectPools.specials);
