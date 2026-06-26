@@ -215,17 +215,20 @@ void handleSpecialsCollisions(GameContext* ctx) {
                 if (special->ship.destroyed) continue;
                 ctx->player.lives++;
                 playSoundPositioned(ctx->assets.samples.multiplier_collect, special->position.x);
+                specialsPool->specials[i].active = false;
+                specialsPoolHasChanged = true;
                 // TODO: Play unique extra life collect sample
             } else {
-                newExplosion(ctx, ship->position);
-                if (!ship->destroyed) destroyShip(ctx, &ctx->ship);
+
+                if (ship->isShieldActive || ship->isAutoShieldActive) {
+                    specialsPool->specials[i].active = false;
+                    specialsPoolHasChanged = true;
+                    newExplosion(ctx, ship->position);
+                } else {
+                    if (!ship->destroyed) destroyShip(ctx, &ctx->ship);
+                }
             }
-
-            specialsPool->specials[i].active = false;
-            specialsPoolHasChanged = true;
-            continue;
         }
-
     }
 
     if (specialsPoolHasChanged) {
