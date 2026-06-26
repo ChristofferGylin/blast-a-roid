@@ -73,6 +73,21 @@ float getRoundness(Rectangle rect, float radiusPx) {
     return (radiusPx * 2.0f) / minDim;
 }
 
+void goToDestination(Vector2 position, Vector2  destination, Vector2* velocity, float maxVelocity, float acceleration) {
+    Vector2 toDestination = Vector2Subtract(destination, position);
+    Vector2 desiredVelocity = Vector2Scale(Vector2Normalize(toDestination), maxVelocity);
+    Vector2 steering = Vector2Subtract(desiredVelocity, *velocity);
+
+    float steerLength = Vector2Length(steering);
+
+    if (steerLength > acceleration) {
+        steering = Vector2Scale(Vector2Normalize(steering), acceleration);
+    }
+
+    velocity->x += steering.x * GetFrameTime();
+    velocity->y += steering.y * GetFrameTime();
+}
+
 void knockback(Vector2 targetPosition, Vector2* targetVelocity, Vector2 forcePosition, int force) {
     Vector2 hitDirection = Vector2Subtract(targetPosition, forcePosition);
     hitDirection = Vector2Normalize(hitDirection);
