@@ -498,7 +498,21 @@ void updateSpecials(GameContext* ctx) {
                 break;
     
             case SUPERNOVA:
-                // TODO: set attributes specific to type
+                int sizes[] = {
+                    2, 4, 6, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 12, 14, 16, 18, 22, 26, 30, 34, 40, 46, 48, 48, 48, 48, 48, 48, 48,48, 48, 48, 48, 48, 48,
+                    48, 48, 48, 48, 48, 48, 48, 48, 48, 48, 48, 48, 48, 48, 48, 48, 48, 48, 48, 48, 48, 47, 47, 42, 40, 38, 34,30, 16, 12, 6, 5, 4, 0, 0, 0, 0, 0, 0
+                };
+
+                int arrSize = sizeof(sizes) * sizeof(sizes[0]);
+                int frame = specialObj->special.animation.currentFrame;
+
+                if (frame >= arrSize) {
+                    specialObj->special.size.x = 0;
+                    specialObj->special.size.y = 0;
+                } else {
+                    specialObj->special.size.x = sizes[frame];
+                    specialObj->special.size.y = sizes[frame];
+                }
                 break;
     
             case BLACK_HOLE:
