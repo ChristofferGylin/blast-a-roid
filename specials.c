@@ -41,11 +41,23 @@ void addSpecialToPool(GameContext* ctx, SpecialType type) {
     float minDistanceToShip = SHIP_SIZE * 4;
     float radians = 0;
 
+    if (type == BLACK_HOLE || type == MULTIPLIER || type == SUPERNOVA) {
+        newSpecial.position = (Vector2){0,0};
+
+        while (newSpecial.position.x == 0) {
+            Vector2 newPosition = getRandomPosition();
+
+            if (!CheckCollisionCircles(newPosition, minDistanceToShip, ctx->ship.position, SHIP_SIZE / 2.0f)) {
+                newSpecial.position = newPosition;
+            }
+        }
+    }
+
     switch (type) {
 
-        case MULTIPLIER:            
-            initAnimtionInstance(&aniInstance, &ctx->assets.animations.multiplier, newSpecial.position, 0, 2.0f, false);
+        case MULTIPLIER:
             newSpecial.size = (Vector2){MULTIPLIER_COLLISION_SIZE, MULTIPLIER_COLLISION_SIZE};
+            initAnimtionInstance(&aniInstance, &ctx->assets.animations.multiplier, newSpecial.position, 0, 2.0f, false);
             playSoundPositioned(ctx->assets.samples.multiplier_spawn, newSpecial.position.x);
             
             break;
@@ -89,7 +101,9 @@ void addSpecialToPool(GameContext* ctx, SpecialType type) {
             break;
     
         case SUPERNOVA:
-            // TODO: set attributes specific to type
+            newSpecial.size = (Vector2){2,2};
+            initAnimtionInstance(&aniInstance, &ctx->assets.animations.supernova, newSpecial.position, newSpecial.rotation, ctx->assets.animations.supernova.fps, false);
+            // TODO: Play unique sound
             break;
     
         case BLACK_HOLE:
@@ -101,18 +115,6 @@ void addSpecialToPool(GameContext* ctx, SpecialType type) {
     
         default:
             break;
-    }
-
-    if (type == BLACK_HOLE || type == MULTIPLIER || type == SUPERNOVA) {
-        newSpecial.position = (Vector2){0,0};
-
-        while (newSpecial.position.x == 0) {
-            Vector2 newPosition = getRandomPosition();
-
-            if (!CheckCollisionCircles(newPosition, minDistanceToShip, ctx->ship.position, SHIP_SIZE / 2.0f)) {
-                newSpecial.position = newPosition;
-            }
-        }
     }
 
     if (type != EXTRA_LIFE) {
