@@ -5,6 +5,13 @@
 #include "constants.h"
 #include "stdio.h"
 
+void applyGForce(Vector2 position, Vector2  destination, Vector2* velocity, float maxVelocity, float minAcceleration, float maxAcceleration, float maxDistance) {
+    float distanceToDestination = Vector2DistanceSqr(position, destination);
+    float acceleration = scaleFloat(maxDistance, 0, minAcceleration, maxAcceleration,distanceToDestination);
+    goToDestination(position, destination, velocity, maxVelocity, acceleration);
+}
+
+
 float scaleFloat(float oldMin, float oldMax, float newMin, float newMax, float value) {
     return (value - oldMin) / (oldMax - oldMin) * (newMax - newMin) + newMin;
 }

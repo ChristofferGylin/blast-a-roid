@@ -22,6 +22,7 @@ typedef enum VisualType {
     VISUAL_ANIMATION
 }VisualType;
 
+void applyGForce(Vector2 position, Vector2  destination, Vector2* velocity, float maxVelocity, float minAcceleration, float maxAcceleration, float maxDistance);
 float scaleFloat(float oldMin, float oldMax, float newMin, float newMax, float value);
 int getNumberOfAsteroids(int gameLevel);
 Vector2 getRandomPosition();

@@ -354,11 +354,11 @@ void initSpecialsSpawnPool(GameContext* ctx) {
 void populateSpecialsSpawnPool(GameContext* ctx) {
     
     SpecialSpawnOption optionPool[NUMBER_OF_SPECIALS] = {
-        (SpecialSpawnOption){true, MULTIPLIER, 100},
-        (SpecialSpawnOption){true, COMET, 100},
-        (SpecialSpawnOption){true, EXTRA_LIFE, 30},
+        // (SpecialSpawnOption){true, MULTIPLIER, 100},
+        // (SpecialSpawnOption){true, COMET, 100},
+        // (SpecialSpawnOption){true, EXTRA_LIFE, 30},
         (SpecialSpawnOption){true, BLACK_HOLE, 20},
-        (SpecialSpawnOption){true, SUPERNOVA, 10},
+        // (SpecialSpawnOption){true, SUPERNOVA, 10},
     };
     SpecialsSpawnPool* spawnPool = &ctx->objectPools.specialsSpawn;
     
@@ -367,7 +367,7 @@ void populateSpecialsSpawnPool(GameContext* ctx) {
 
     if (maxNumberOfSpecials > NUMBER_OF_SPECIALS) maxNumberOfSpecials = NUMBER_OF_SPECIALS;
 
-    int numberToPopulate = GetRandomValue(minNumberOfSpecials, maxNumberOfSpecials);
+    int numberToPopulate = 1; //GetRandomValue(minNumberOfSpecials, maxNumberOfSpecials);
 
     for (int i = 0; i < numberToPopulate; i++) {
         
@@ -487,9 +487,10 @@ void updateSpecials(GameContext* ctx) {
                 break;
     
             case BLACK_HOLE:
-                const float MAX_PULL_VELOCITY = 600.0f;
-                const float ACCELERATION = 5.0f;
-                goToDestination(ctx->ship.position, specialObj->special.position, &ctx->ship.velocity, MAX_PULL_VELOCITY, ACCELERATION);
+                const float MAX_PULL_VELOCITY = 500.0f;
+                const float MIN_ACCELERATION = 150.0f;
+                const float MAX_ACCELERATION = 350.0f;
+                applyGForce(ctx->ship.position, specialObj->special.position, &ctx->ship.velocity, MAX_PULL_VELOCITY, MIN_ACCELERATION, MAX_ACCELERATION, MAX_DISTANCE_SQR);
                 break;
     
             default:
