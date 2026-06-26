@@ -63,7 +63,7 @@ typedef struct SpecialSpawnOption {
     int weight;
 }SpecialSpawnOption;
 
-PositionVelocity applySupernovaEffects(GameContext* ctx, Vector2 position, Vector2 velocity);
+Vector2 applySupernovaEffects(GameContext* ctx, Vector2* position, Vector2 velocity);
 void handleSpecialsCollisions(GameContext* ctx);
 void handleSpecialsHitDetection(GameContext* ctx);
 void handleSpecialsMovement(SpecialsPool* pool);

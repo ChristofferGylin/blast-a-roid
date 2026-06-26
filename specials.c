@@ -142,26 +142,23 @@ void addSpecialToSpawnPool(SpecialsSpawnPool* pool, SpecialType type) {
     pool->activeCount++;
 }
 
-PositionVelocity applySupernovaEffects(GameContext* ctx, Vector2 position, Vector2 velocity) {
+Vector2 applySupernovaEffects(GameContext* ctx, Vector2* position, Vector2 velocity) {
     
     const float shakeDelay = 0.2f;
     const int velocityDivider = 4;
-
-    PositionVelocity newPosVel;
-
-    newPosVel.position = position;
+    Vector2 newVelocity = velocity;
     
     if (ctx->supernova.detonated) {
-        newPosVel.velocity.x = velocity.x / velocityDivider;
-        newPosVel.velocity.y = velocity.y / velocityDivider;
+        newVelocity.x = newVelocity.x / velocityDivider;
+        newVelocity.y = newVelocity.y / velocityDivider;
 
         if (ctx->supernova.shakeTimer >= shakeDelay) {
-            shake(&newPosVel.position);
+            shake(position);
             ctx->supernova.shakeTimer = 0.0f;
         }
     }
 
-    return newPosVel;
+    return newVelocity;
 }
 
 void compactSpecialsSpawnPool(SpecialsSpawnPool* pool) {
