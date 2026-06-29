@@ -142,20 +142,14 @@ void addSpecialToSpawnPool(SpecialsSpawnPool* pool, SpecialType type) {
     pool->activeCount++;
 }
 
-Vector2 applySupernovaEffects(GameContext* ctx, Vector2* position, Vector2 velocity) {
+Vector2 applySupernovaEffects(GameContext* ctx, Vector2 velocity) {
     
-    const float shakeDelay = 0.2f;
     const int velocityDivider = 4;
     Vector2 newVelocity = velocity;
     
     if (ctx->supernova.detonated) {
         newVelocity.x = newVelocity.x / velocityDivider;
         newVelocity.y = newVelocity.y / velocityDivider;
-
-        if (ctx->supernova.shakeTimer >= shakeDelay) {
-            shake(position);
-            ctx->supernova.shakeTimer = 0.0f;
-        }
     }
 
     return newVelocity;
@@ -388,10 +382,10 @@ void initSpecialsSpawnPool(GameContext* ctx) {
 void populateSpecialsSpawnPool(GameContext* ctx) {
     
     SpecialSpawnOption optionPool[NUMBER_OF_SPECIALS] = {
-        (SpecialSpawnOption){true, MULTIPLIER, 100},
-        (SpecialSpawnOption){true, COMET, 100},
-        (SpecialSpawnOption){true, EXTRA_LIFE, 30},
-        (SpecialSpawnOption){true, BLACK_HOLE, 20},
+        // (SpecialSpawnOption){true, MULTIPLIER, 100},
+        // (SpecialSpawnOption){true, COMET, 100},
+        // (SpecialSpawnOption){true, EXTRA_LIFE, 30},
+        // (SpecialSpawnOption){true, BLACK_HOLE, 20},
         (SpecialSpawnOption){true, SUPERNOVA, 10},
     };
     SpecialsSpawnPool* spawnPool = &ctx->objectPools.specialsSpawn;
@@ -471,17 +465,17 @@ void spawnSpecials(GameContext* ctx) {
 
 void updateSpecials(GameContext* ctx) {
 
-    SpecialsPool* pool = &ctx->objectPools.specials;
+    SpecialsPool* specialsPool = &ctx->objectPools.specials;
 
-    if (pool->activeCount == 0) return;
+    if (specialsPool->activeCount == 0) return;
 
-    updateSpecialsAnimations(pool);
+    updateSpecialsAnimations(specialsPool);
 
     bool specialsPoolHasChanged = false;
     
-    for (int i = 0; i < pool->activeCount; i++) {
+    for (int i = 0; i < specialsPool->activeCount; i++) {
 
-        SpecialPoolObject* specialObj = &pool->specials[i];
+        SpecialPoolObject* specialObj = &specialsPool->specials[i];
 
         if (!specialObj->active) continue;
 
@@ -517,7 +511,10 @@ void updateSpecials(GameContext* ctx) {
                 break;
     
             case SUPERNOVA:
-                ctx->supernova.shakeTimer += GetFrameTime();
+                Supernova* supernova = &ctx->supernova;
+                const float shakeDelay = 0.05f;
+
+                supernova->shakeTimer += GetFrameTime();
                 const int DETONATION_DURATION = 4;
 
                 int sizes[] = {
@@ -525,7 +522,7 @@ void updateSpecials(GameContext* ctx) {
                     48, 48, 48, 48, 48, 48, 48, 48, 48, 48, 48, 48, 48, 48, 48, 48, 48, 48, 48, 48, 48, 47, 47, 42, 40, 38, 34,30, 16, 12, 6, 5, 4, 0, 0, 0, 0, 0, 0
                 };
 
-                int arrSize = sizeof(sizes) * sizeof(sizes[0]);
+                int arrSize = sizeof(sizes) / sizeof(sizes[0]);
                 int frame = specialObj->special.animation.currentFrame;
 
                 if (frame >= arrSize) {
@@ -536,13 +533,34 @@ void updateSpecials(GameContext* ctx) {
                     specialObj->special.size.y = sizes[frame];
                 }
 
-                if (frame >= 70 && !ctx->supernova.detonated) {
-                    ctx->supernova.detonated = true;
-                    ctx->supernova.detonationTime = GetTime() - ctx->pausTimer;
+                if (frame == 70 && !supernova->detonated) {
+                    supernova->detonated = true;
+                    supernova->detonationTime = GetTime() - ctx->pausTimer;
                 }
 
-                if (ctx->supernova.detonated && ((ctx->supernova.detonationTime + DETONATION_DURATION) < (GetTime() - ctx->pausTimer))) {
-                    ctx->supernova.detonated = false;
+                if (supernova->detonated && ((supernova->detonationTime + DETONATION_DURATION) < (GetTime() - ctx->pausTimer))) {
+                    supernova->detonated = false;
+                }
+
+                if (supernova->detonated && supernova->shakeTimer >= shakeDelay) {
+                    
+                    AsteroidPool* astPool = & ctx->objectPools.asteroids;
+                    
+                    for (int j = 0; j < astPool->activeCount; j++) {
+                        if (!astPool->asteroids[j].active) continue;
+                        
+                        shake(&astPool->asteroids[j].asteroid.position);
+                    }
+
+                    for (int j = 0; j < specialsPool->activeCount; j++) {
+                        if (!specialsPool->specials[j].active || specialsPool->specials[j].special.type == SUPERNOVA) continue;
+                        
+                        shake(&specialsPool->specials[j].special.position);
+                    }
+
+                    shake(&ctx->ship.position);
+
+                    supernova->shakeTimer = 0.0f;
                 }
 
                 break;
@@ -561,7 +579,7 @@ void updateSpecials(GameContext* ctx) {
     }
 
     if (specialsPoolHasChanged) {
-        compactSpecialsPool(pool);
+        compactSpecialsPool(specialsPool);
     }
 }
 
