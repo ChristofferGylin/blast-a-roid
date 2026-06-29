@@ -103,7 +103,7 @@ void addSpecialToPool(GameContext* ctx, SpecialType type) {
         case SUPERNOVA:
             newSpecial.size = (Vector2){2,2};
             initAnimtionInstance(&aniInstance, &ctx->assets.animations.supernova, newSpecial.position, newSpecial.rotation, ctx->assets.animations.supernova.fps, false);
-            // TODO: Play unique sound
+            playSoundPositioned(ctx->assets.samples.supernova, newSpecial.position.x);
             break;
     
         case BLACK_HOLE:
