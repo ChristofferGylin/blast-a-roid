@@ -57,6 +57,7 @@ void loadAssets(GameContext* ctx) {
     ctx->assets.samples.multiplier_spawn = LoadSound("./assets/samples/multiplier_spawn.wav");
     ctx->assets.samples.shieldUp = LoadSound("./assets/samples/shield_up.wav");
     ctx->assets.samples.shot = LoadSound("./assets/samples/laser_pew1.wav");
+    ctx->assets.samples.supernova = LoadSound("./assets/samples/supernova.wav");
 
     ctx->assets.sprites.asteroid = LoadTexture("./assets/sprites/asteroid.png");
     ctx->assets.sprites.autoShotIcon = LoadTexture("./assets/sprites/auto_shot_icon.png");
@@ -94,6 +95,7 @@ void unloadAssets(GameContext* ctx) {
     UnloadSound(ctx->assets.samples.multiplier_spawn);
     UnloadSound(ctx->assets.samples.shieldUp);
     UnloadSound(ctx->assets.samples.shot);
+    UnloadSound(ctx->assets.samples.supernova);
 
     UnloadTexture(ctx->assets.sprites.asteroid);
     UnloadTexture(ctx->assets.sprites.autoShotIcon);
