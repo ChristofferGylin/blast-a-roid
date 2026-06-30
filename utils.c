@@ -146,8 +146,8 @@ void shake(Vector2* position , double startTime, float duration) {
 
     float timePassed = GetTime() - startTime;
 
-    float minShake = scaleFloat(0.0f, duration, 3.0f, 0.0f, timePassed);
-    float maxShake = scaleFloat(0.0f, duration, 10.0f, 0.0f, timePassed);
+    float minShake = scaleFloat(0.0f, duration, 4.0f, 1.0f, timePassed);
+    float maxShake = scaleFloat(0.0f, duration, 12.0f, 3.0f, timePassed);
 
     int shakeX = GetRandomValue(minShake, maxShake);
     int shakeY = GetRandomValue(minShake, maxShake);
