@@ -551,15 +551,16 @@ void updateSpecialsAnimations(SpecialsPool* pool) {
 
 void updateSupernova(GameContext* ctx ,Special* special) {
     Supernova* supernova = &ctx->supernova;
+    Ship* ship = &ctx->ship;
     AsteroidPool* astPool = & ctx->objectPools.asteroids;
     BonusObjectPool* bonusPool = &ctx->objectPools.bonuses;
     EnemyObjectPool* enemyPool = &ctx->objectPools.enemies;
     SpecialsPool* specialsPool = &ctx->objectPools.specials;
 
-    const float shakeDelay = 0.05f;
+    const float SHAKE_DELAY = 0.05f;
+    const int DETONATION_DURATION = 4;
 
     supernova->shakeTimer += GetFrameTime();
-    const int DETONATION_DURATION = 4;
 
     int sizes[] = {
         2, 4, 6, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 12, 14, 16, 18, 22, 26, 30, 34, 40, 46, 48, 48, 48, 48, 48, 48, 48,48, 48, 48, 48, 48, 48,
@@ -584,10 +585,9 @@ void updateSupernova(GameContext* ctx ,Special* special) {
 
     if (supernova->detonated && ((supernova->detonationTime + DETONATION_DURATION) < (GetTime() - ctx->pausTimer))) {
         supernova->detonated = false;
-
     }
 
-    if (supernova->detonated && supernova->shakeTimer >= shakeDelay) {
+    if (supernova->detonated && supernova->shakeTimer >= SHAKE_DELAY) {
                                         
         for (int j = 0; j < astPool->activeCount; j++) {
             if (!astPool->asteroids[j].active) continue;
@@ -609,11 +609,28 @@ void updateSupernova(GameContext* ctx ,Special* special) {
                     
         for (int j = 0; j < specialsPool->activeCount; j++) {
             if (!specialsPool->specials[j].active || specialsPool->specials[j].special.type == SUPERNOVA) continue;
-                        
-            shake(&specialsPool->specials[j].special.position, supernova->detonationTime, DETONATION_DURATION);
+            
+            Special* special = &specialsPool->specials[j].special;
+            shake(&special->position, supernova->detonationTime, DETONATION_DURATION);
+
+            if (special->type == EXTRA_LIFE) {
+                if (special->ship.destroyed) {
+                    for (int k = 0; k < 3; k++) {
+                        shake(&special->ship.destroyedPieces[k].position, supernova->detonationTime, DETONATION_DURATION);
+                    }
+                } else {
+                    special->ship.position = special->position;
+                } 
+            }
         }
 
-        shake(&ctx->ship.position, supernova->detonationTime, DETONATION_DURATION);
+        if (ship->destroyed) {
+            for (int j = 0; j < 3; j++) {
+                shake(&ship->destroyedPieces[j].position, supernova->detonationTime, DETONATION_DURATION);
+            }
+        } else {
+            shake(&ship->position, supernova->detonationTime, DETONATION_DURATION);
+        }
 
         supernova->shakeTimer = 0.0f;
     }
