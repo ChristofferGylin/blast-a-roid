@@ -585,6 +585,47 @@ void updateSupernova(GameContext* ctx ,Special* special) {
 
     if (supernova->detonated && ((supernova->detonationTime + DETONATION_DURATION) < (GetTime() - ctx->pausTimer))) {
         supernova->detonated = false;
+
+        FloatRange velocityRange = {ASTEROID_MIN_VELOCITY * 2, ASTEROID_MAX_VELOCITY * 2};
+
+        for (int j = 0; j < astPool->activeCount; j++) {
+            if (!astPool->asteroids[j].active) continue;
+            astPool->asteroids[j].asteroid.velocity = getRandomVelocity(velocityRange);
+        }
+
+        for (int j = 0; j < bonusPool->activeCount; j++) {
+            if (!bonusPool->bonuses[j].active) continue;
+            bonusPool->bonuses[j].bonus.velocity = getRandomVelocity(velocityRange);
+        }
+
+        for (int j = 0; j < enemyPool->activeCount; j++) {
+            if (!enemyPool->enemies[j].active) continue;
+            enemyPool->enemies[j].enemy.velocity = getRandomVelocity(velocityRange);
+        }
+                    
+        for (int j = 0; j < specialsPool->activeCount; j++) {
+            if (!specialsPool->specials[j].active || specialsPool->specials[j].special.type == SUPERNOVA) continue;
+            
+            Special* special = &specialsPool->specials[j].special;
+            special->velocity = getRandomVelocity(velocityRange);
+
+            if (special->type == EXTRA_LIFE) {
+                if (special->ship.destroyed) {
+                    for (int k = 0; k < 3; k++) {
+                        special->ship.destroyedPieces[k].velocity = getRandomVelocity(velocityRange);
+                    }
+                }
+            }
+        }
+
+        if (ship->destroyed) {
+            for (int j = 0; j < 3; j++) {
+                ship->destroyedPieces[j].velocity = getRandomVelocity(velocityRange);
+            }
+        } else {
+            ship->velocity = getRandomVelocity(velocityRange);
+        }
+        
     }
 
     if (supernova->detonated && supernova->shakeTimer >= SHAKE_DELAY) {
