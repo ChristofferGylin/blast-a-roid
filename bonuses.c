@@ -387,7 +387,10 @@ void updateBonuses(GameContext* ctx) {
             poolHasChanged = true;
         } else {
             updateRotation(&bonus->rotation, bonus->rotationSpeed);
-            updatePosition(&bonus->position, bonus->velocity);
+
+            Vector2 velocity = applySupernovaEffects(ctx, bonus->velocity);
+
+            updatePosition(&bonus->position, velocity);
 
             handleOutOfBounds(&bonus->position, bonus->size.x);
 
