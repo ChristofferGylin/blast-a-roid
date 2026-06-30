@@ -558,7 +558,8 @@ void updateSupernova(GameContext* ctx ,Special* special) {
     SpecialsPool* specialsPool = &ctx->objectPools.specials;
 
     const float SHAKE_DELAY = 0.05f;
-    const int DETONATION_DURATION = 4;
+    const float DETONATION_DURATION = 3.0f;
+    const FloatRange ASTEROID_DESTRUCTION_SPAN = {0.1f, DETONATION_DURATION};
 
     supernova->shakeTimer += GetFrameTime();
 
@@ -581,6 +582,12 @@ void updateSupernova(GameContext* ctx ,Special* special) {
     if (frame == 70 && !supernova->detonated) {
         supernova->detonated = true;
         supernova->detonationTime = GetTime() - ctx->pausTimer;
+
+        for (int j = 0; j < astPool->activeCount; j++) {
+            if (!astPool->asteroids[j].active || astPool->asteroids[j].asteroid.destroyed) continue;
+
+            astPool->asteroids[j].asteroid.destroyTime = getRandomFloat(ASTEROID_DESTRUCTION_SPAN.min, ASTEROID_DESTRUCTION_SPAN.max);
+        }
     }
 
     if (supernova->detonated && ((supernova->detonationTime + DETONATION_DURATION) < (GetTime() - ctx->pausTimer))) {
@@ -674,5 +681,22 @@ void updateSupernova(GameContext* ctx ,Special* special) {
         }
 
         supernova->shakeTimer = 0.0f;
+    }
+
+    if (supernova->detonated) {
+
+        double now = GetTime();
+
+        for (int j = 0; j < astPool->activeCount; j++) {
+
+            AsteroidPoolObject* astObj = &astPool->asteroids[j];
+
+            if (!astObj->active || astObj->asteroid.destroyed || astObj->asteroid.destroyTime == 0.0f) continue;
+
+            if ((supernova->detonationTime + astObj->asteroid.destroyTime) < now) {
+                destroyAsteroid(&ctx->objectPools.destroyedAsteroids, astObj);
+                newExplosion(ctx, astObj->asteroid.position);
+            }
+        }
     }
 }
