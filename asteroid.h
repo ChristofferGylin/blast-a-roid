@@ -29,6 +29,7 @@ typedef struct Asteroid {
     Vector2 velocity;
     Vector2 position;
     bool destroyed;
+    float destroyTime;
     VisualType visualType;
     union {
         Texture2D* sprite;

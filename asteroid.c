@@ -274,6 +274,7 @@ void initAsteroid(GameContext* ctx, Asteroid* ast, AsteroidType type) {
     
     ast->type = type;
     ast->destroyed = false;
+    ast->destroyTime = 0.0f;
     ast->size = getAsteroidSize(type);
     resetAsteroid(ast);
 
