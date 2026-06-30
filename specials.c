@@ -336,23 +336,28 @@ void handleSpecialsHitDetection(GameContext* ctx) {
     }
 }
 
-void handleSpecialsMovement(SpecialsPool* pool) {
+void handleSpecialsMovement(GameContext* ctx) {
+
+    SpecialsPool* pool = &ctx->objectPools.specials;
+
     for (int i = 0; i < pool->activeCount; i++) {
         SpecialPoolObject* specialObj = &pool->specials[i];
         if (!specialObj->active) continue;
+
+        Vector2 velocity = applySupernovaEffects(ctx, specialObj->special.velocity);
 
         if (specialObj->special.type == EXTRA_LIFE) {
             if (specialObj->special.ship.destroyed) continue;
 
             updateRotation(&specialObj->special.rotation, specialObj->special.rotationSpeed);
-            updatePosition(&specialObj->special.position, specialObj->special.velocity);
+            updatePosition(&specialObj->special.position, velocity);
             handleOutOfBounds(&specialObj->special.position, specialObj->special.size.y);
 
             specialObj->special.ship.rotation = specialObj->special.rotation;
             specialObj->special.ship.position = specialObj->special.position;
 
         } else {
-            updatePosition(&specialObj->special.position, specialObj->special.velocity);
+            updatePosition(&specialObj->special.position, velocity);
             handleOutOfBounds(&specialObj->special.position, specialObj->special.size.y);
         }
     }
