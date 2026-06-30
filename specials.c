@@ -551,72 +551,70 @@ void updateSpecialsAnimations(SpecialsPool* pool) {
 
 void updateSupernova(GameContext* ctx ,Special* special) {
     Supernova* supernova = &ctx->supernova;
-                const float shakeDelay = 0.05f;
+    AsteroidPool* astPool = & ctx->objectPools.asteroids;
+    BonusObjectPool* bonusPool = &ctx->objectPools.bonuses;
+    EnemyObjectPool* enemyPool = &ctx->objectPools.enemies;
+    SpecialsPool* specialsPool = &ctx->objectPools.specials;
 
-                supernova->shakeTimer += GetFrameTime();
-                const int DETONATION_DURATION = 4;
+    const float shakeDelay = 0.05f;
 
-                int sizes[] = {
-                    2, 4, 6, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 12, 14, 16, 18, 22, 26, 30, 34, 40, 46, 48, 48, 48, 48, 48, 48, 48,48, 48, 48, 48, 48, 48,
-                    48, 48, 48, 48, 48, 48, 48, 48, 48, 48, 48, 48, 48, 48, 48, 48, 48, 48, 48, 48, 48, 47, 47, 42, 40, 38, 34,30, 16, 12, 6, 5, 4, 0, 0, 0, 0, 0, 0
-                };
+    supernova->shakeTimer += GetFrameTime();
+    const int DETONATION_DURATION = 4;
 
-                int arrSize = sizeof(sizes) / sizeof(sizes[0]);
-                int frame = special->animation.currentFrame;
+    int sizes[] = {
+        2, 4, 6, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 12, 14, 16, 18, 22, 26, 30, 34, 40, 46, 48, 48, 48, 48, 48, 48, 48,48, 48, 48, 48, 48, 48,
+        48, 48, 48, 48, 48, 48, 48, 48, 48, 48, 48, 48, 48, 48, 48, 48, 48, 48, 48, 48, 48, 47, 47, 42, 40, 38, 34,30, 16, 12, 6, 5, 4, 0, 0, 0, 0, 0, 0
+    };
 
-                if (frame >= arrSize) {
-                    special->size.x = 0;
-                    special->size.y = 0;
-                } else {
-                    special->size.x = sizes[frame];
-                    special->size.y = sizes[frame];
-                }
+    int arrSize = sizeof(sizes) / sizeof(sizes[0]);
+    int frame = special->animation.currentFrame;
 
-                if (frame == 70 && !supernova->detonated) {
-                    supernova->detonated = true;
-                    supernova->detonationTime = GetTime() - ctx->pausTimer;
-                }
+    if (frame >= arrSize) {
+        special->size.x = 0;
+        special->size.y = 0;
+    } else {
+        special->size.x = sizes[frame];
+        special->size.y = sizes[frame];
+    }
 
-                if (supernova->detonated && ((supernova->detonationTime + DETONATION_DURATION) < (GetTime() - ctx->pausTimer))) {
-                    supernova->detonated = false;
-                }
+    if (frame == 70 && !supernova->detonated) {
+        supernova->detonated = true;
+        supernova->detonationTime = GetTime() - ctx->pausTimer;
+    }
 
-                if (supernova->detonated && supernova->shakeTimer >= shakeDelay) {
-                    
-                    AsteroidPool* astPool = & ctx->objectPools.asteroids;
-                    
-                    for (int j = 0; j < astPool->activeCount; j++) {
-                        if (!astPool->asteroids[j].active) continue;
+    if (supernova->detonated && ((supernova->detonationTime + DETONATION_DURATION) < (GetTime() - ctx->pausTimer))) {
+        supernova->detonated = false;
+
+    }
+
+    if (supernova->detonated && supernova->shakeTimer >= shakeDelay) {
+                                        
+        for (int j = 0; j < astPool->activeCount; j++) {
+            if (!astPool->asteroids[j].active) continue;
                         
-                        shake(&astPool->asteroids[j].asteroid.position, supernova->detonationTime, DETONATION_DURATION);
-                    }
+            shake(&astPool->asteroids[j].asteroid.position, supernova->detonationTime, DETONATION_DURATION);
+        }
 
-                    BonusObjectPool* bonusPool = &ctx->objectPools.bonuses;
+        for (int j = 0; j < bonusPool->activeCount; j++) {
+            if (!bonusPool->bonuses[j].active) continue;
 
-                    for (int j = 0; j < bonusPool->activeCount; j++) {
-                        if (!bonusPool->bonuses[j].active) continue;
+            shake(&bonusPool->bonuses[j].bonus.position, supernova->detonationTime, DETONATION_DURATION);
+        }
 
-                        shake(&bonusPool->bonuses[j].bonus.position, supernova->detonationTime, DETONATION_DURATION);
-                    }
+        for (int j = 0; j < enemyPool->activeCount; j++) {
+            if (!enemyPool->enemies[j].active) continue;
 
-                    EnemyObjectPool* enemyPool = &ctx->objectPools.enemies;
-
-                    for (int j = 0; j < enemyPool->activeCount; j++) {
-                        if (!enemyPool->enemies[j].active) continue;
-
-                        shake(&enemyPool->enemies[j].enemy.position, supernova->detonationTime, DETONATION_DURATION);
-                    }
-
-                    SpecialsPool* specialsPool = &ctx->objectPools.specials;
-
-                    for (int j = 0; j < specialsPool->activeCount; j++) {
-                        if (!specialsPool->specials[j].active || specialsPool->specials[j].special.type == SUPERNOVA) continue;
+            shake(&enemyPool->enemies[j].enemy.position, supernova->detonationTime, DETONATION_DURATION);
+        }
+                    
+        for (int j = 0; j < specialsPool->activeCount; j++) {
+            if (!specialsPool->specials[j].active || specialsPool->specials[j].special.type == SUPERNOVA) continue;
                         
-                        shake(&specialsPool->specials[j].special.position, supernova->detonationTime, DETONATION_DURATION);
-                    }
+            shake(&specialsPool->specials[j].special.position, supernova->detonationTime, DETONATION_DURATION);
+        }
 
-                    shake(&ctx->ship.position, supernova->detonationTime, DETONATION_DURATION);
+        shake(&ctx->ship.position, supernova->detonationTime, DETONATION_DURATION);
 
-                    supernova->shakeTimer = 0.0f;
-                }
+        supernova->shakeTimer = 0.0f;
+    }
 }
