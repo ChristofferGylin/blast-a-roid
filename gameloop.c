@@ -95,7 +95,7 @@ GameResult gameLoop(GameContext* ctx) {
             handleAsteroidsMovement(ctx);
             handleEnemiesMovement(ctx);
             handleShotsMovement(&ctx->objectPools.shots);
-            handleSpecialsMovement(&ctx->objectPools.specials);
+            handleSpecialsMovement(ctx);
             updateSpecials(ctx);
             handleSpecialsHitDetection(ctx);
             handleSpecialsCollisions(ctx);
