@@ -552,6 +552,22 @@ void updateSpecials(GameContext* ctx) {
                         shake(&astPool->asteroids[j].asteroid.position);
                     }
 
+                    BonusObjectPool* bonusPool = &ctx->objectPools.bonuses;
+
+                    for (int j = 0; j < bonusPool->activeCount; j++) {
+                        if (!bonusPool->bonuses[j].active) continue;
+
+                        shake(&bonusPool->bonuses[j].bonus.position);
+                    }
+
+                    EnemyObjectPool* enemyPool = &ctx->objectPools.enemies;
+
+                    for (int j = 0; j < enemyPool->activeCount; j++) {
+                        if (!enemyPool->enemies[j].active) continue;
+
+                        shake(&enemyPool->enemies[j].enemy.position);
+                    }
+
                     for (int j = 0; j < specialsPool->activeCount; j++) {
                         if (!specialsPool->specials[j].active || specialsPool->specials[j].special.type == SUPERNOVA) continue;
                         
