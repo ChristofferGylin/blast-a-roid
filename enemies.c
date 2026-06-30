@@ -297,9 +297,11 @@ void handleUfoMovement(GameContext* ctx, Enemy* enemy) {
     } else {
         goToDestination(enemy->position, enemy->destination, &enemy->velocity, enemy->maxVelocity, enemy->acceleration);
     }
+
+    Vector2 velocity = applySupernovaEffects(ctx, enemy->velocity);
     
-    enemy->position.x += GetFrameTime() * enemy->velocity.x;
-    enemy->position.y += GetFrameTime() * enemy->velocity.y;
+    enemy->position.x += GetFrameTime() * velocity.x;
+    enemy->position.y += GetFrameTime() * velocity.y;
 }
 
 void initEnemy(GameContext* ctx, Enemy* enemy, EnemyType type) {
