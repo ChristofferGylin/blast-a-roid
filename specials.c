@@ -554,7 +554,7 @@ void updateSpecials(GameContext* ctx) {
                     for (int j = 0; j < astPool->activeCount; j++) {
                         if (!astPool->asteroids[j].active) continue;
                         
-                        shake(&astPool->asteroids[j].asteroid.position);
+                        shake(&astPool->asteroids[j].asteroid.position, supernova->detonationTime, DETONATION_DURATION);
                     }
 
                     BonusObjectPool* bonusPool = &ctx->objectPools.bonuses;
@@ -562,7 +562,7 @@ void updateSpecials(GameContext* ctx) {
                     for (int j = 0; j < bonusPool->activeCount; j++) {
                         if (!bonusPool->bonuses[j].active) continue;
 
-                        shake(&bonusPool->bonuses[j].bonus.position);
+                        shake(&bonusPool->bonuses[j].bonus.position, supernova->detonationTime, DETONATION_DURATION);
                     }
 
                     EnemyObjectPool* enemyPool = &ctx->objectPools.enemies;
@@ -570,16 +570,16 @@ void updateSpecials(GameContext* ctx) {
                     for (int j = 0; j < enemyPool->activeCount; j++) {
                         if (!enemyPool->enemies[j].active) continue;
 
-                        shake(&enemyPool->enemies[j].enemy.position);
+                        shake(&enemyPool->enemies[j].enemy.position, supernova->detonationTime, DETONATION_DURATION);
                     }
 
                     for (int j = 0; j < specialsPool->activeCount; j++) {
                         if (!specialsPool->specials[j].active || specialsPool->specials[j].special.type == SUPERNOVA) continue;
                         
-                        shake(&specialsPool->specials[j].special.position);
+                        shake(&specialsPool->specials[j].special.position, supernova->detonationTime, DETONATION_DURATION);
                     }
 
-                    shake(&ctx->ship.position);
+                    shake(&ctx->ship.position, supernova->detonationTime, DETONATION_DURATION);
 
                     supernova->shakeTimer = 0.0f;
                 }
