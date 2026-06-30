@@ -18,6 +18,7 @@ void addSpecialToSpawnPool(SpecialsSpawnPool* pool, SpecialType type);
 void compactSpecialsPool(SpecialsPool* pool);
 void compactSpecialsSpawnPool(SpecialsSpawnPool* pool);
 void updateSpecialsAnimations(SpecialsPool* pool);
+void updateSupernova(GameContext* ctx ,Special* special);
 
 static const int SPECIALS_LIFETIME = 30;
 static const int COMET_VELOCITY = 200;
@@ -516,7 +517,40 @@ void updateSpecials(GameContext* ctx) {
                 break;
     
             case SUPERNOVA:
-                Supernova* supernova = &ctx->supernova;
+                updateSupernova(ctx, &specialObj->special);
+                break;
+    
+            case BLACK_HOLE:
+                const float MAX_PULL_VELOCITY = 500.0f;
+                const float MIN_ACCELERATION = 120.0f;
+                const float MAX_ACCELERATION = 320.0f;
+                applyGForce(ctx->ship.position, specialObj->special.position, &ctx->ship.velocity, MAX_PULL_VELOCITY, MIN_ACCELERATION, MAX_ACCELERATION, MAX_DISTANCE_SQR);
+                break;
+    
+            default:
+                printf("Error: Invalid SpecialType (%d) in updateSpecials\n", specialObj->special.type);
+                break;
+        }
+    }
+
+    if (specialsPoolHasChanged) {
+        compactSpecialsPool(specialsPool);
+    }
+}
+
+void updateSpecialsAnimations(SpecialsPool* pool) {
+    for (int i = 0; i < pool->activeCount; i++) {
+        if (!pool->specials[i].active || pool->specials[i].special.type == EXTRA_LIFE) continue;
+
+        Special* special = &pool->specials[i].special;
+
+        special->animation.position = special->position;
+        updateAnimation(&special->animation);
+    } 
+}
+
+void updateSupernova(GameContext* ctx ,Special* special) {
+    Supernova* supernova = &ctx->supernova;
                 const float shakeDelay = 0.05f;
 
                 supernova->shakeTimer += GetFrameTime();
@@ -528,14 +562,14 @@ void updateSpecials(GameContext* ctx) {
                 };
 
                 int arrSize = sizeof(sizes) / sizeof(sizes[0]);
-                int frame = specialObj->special.animation.currentFrame;
+                int frame = special->animation.currentFrame;
 
                 if (frame >= arrSize) {
-                    specialObj->special.size.x = 0;
-                    specialObj->special.size.y = 0;
+                    special->size.x = 0;
+                    special->size.y = 0;
                 } else {
-                    specialObj->special.size.x = sizes[frame];
-                    specialObj->special.size.y = sizes[frame];
+                    special->size.x = sizes[frame];
+                    special->size.y = sizes[frame];
                 }
 
                 if (frame == 70 && !supernova->detonated) {
@@ -573,6 +607,8 @@ void updateSpecials(GameContext* ctx) {
                         shake(&enemyPool->enemies[j].enemy.position, supernova->detonationTime, DETONATION_DURATION);
                     }
 
+                    SpecialsPool* specialsPool = &ctx->objectPools.specials;
+
                     for (int j = 0; j < specialsPool->activeCount; j++) {
                         if (!specialsPool->specials[j].active || specialsPool->specials[j].special.type == SUPERNOVA) continue;
                         
@@ -583,34 +619,4 @@ void updateSpecials(GameContext* ctx) {
 
                     supernova->shakeTimer = 0.0f;
                 }
-
-                break;
-    
-            case BLACK_HOLE:
-                const float MAX_PULL_VELOCITY = 500.0f;
-                const float MIN_ACCELERATION = 120.0f;
-                const float MAX_ACCELERATION = 320.0f;
-                applyGForce(ctx->ship.position, specialObj->special.position, &ctx->ship.velocity, MAX_PULL_VELOCITY, MIN_ACCELERATION, MAX_ACCELERATION, MAX_DISTANCE_SQR);
-                break;
-    
-            default:
-                printf("Error: Invalid SpecialType (%d) in updateSpecials\n", specialObj->special.type);
-                break;
-        }
-    }
-
-    if (specialsPoolHasChanged) {
-        compactSpecialsPool(specialsPool);
-    }
-}
-
-void updateSpecialsAnimations(SpecialsPool* pool) {
-    for (int i = 0; i < pool->activeCount; i++) {
-        if (!pool->specials[i].active || pool->specials[i].special.type == EXTRA_LIFE) continue;
-
-        Special* special = &pool->specials[i].special;
-
-        special->animation.position = special->position;
-        updateAnimation(&special->animation);
-    } 
 }
