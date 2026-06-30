@@ -4,6 +4,7 @@
 #include "math.h"
 #include "constants.h"
 #include "stdio.h"
+#include <stdlib.h>
 
 void applyGForce(Vector2 position, Vector2  destination, Vector2* velocity, float maxVelocity, float minAcceleration, float maxAcceleration, float maxDistance) {
     float distanceToDestination = Vector2DistanceSqr(position, destination);
@@ -18,6 +19,11 @@ float scaleFloat(float oldMin, float oldMax, float newMin, float newMax, float v
 
 int getNumberOfAsteroids(int gameLevel) {
     return gameLevel + 2;
+}
+
+float getRandomFloat(float min, float max) {
+    float randomFloat = (float)rand()/(float)(RAND_MAX);
+    return scaleFloat(0.0f, 1.0f, min, max, randomFloat);
 }
 
 Vector2 getRandomPosition() {
