@@ -23,15 +23,15 @@ int roundnessRadius = 12.0f;
 int logoFontSize = 42;
 int logoFontSpacing = 8;
 
-void drawHighscores(Highscore highscores[NUMBER_OF_HIGHSCORES], Vector2 startPosition, Vector2 containerDimensions);
+void drawHighscores(Highscore highscores[NUMBER_OF_HIGHSCORES], Rectangle container);
 
-void drawHighscores(Highscore highscores[NUMBER_OF_HIGHSCORES], Vector2 startPosition, Vector2 containerDimensions) {
+void drawHighscores(Highscore highscores[NUMBER_OF_HIGHSCORES], Rectangle container) {
     int highscoreFontSize = 22;
     int highscoreFontSpacing = 6;
     int highscoreMargin = 10;
 
-    int interval = (containerDimensions.y - (highscoreMargin * 2)) / NUMBER_OF_HIGHSCORES;
-    int yPosition = startPosition.y + highscoreMargin;
+    int interval = (container.height - (highscoreMargin * 2)) / NUMBER_OF_HIGHSCORES;
+    int yPosition = container.y + highscoreMargin;
 
     char number[4] = "99.";
     char name[33] = "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA";
@@ -56,9 +56,9 @@ void drawHighscores(Highscore highscores[NUMBER_OF_HIGHSCORES], Vector2 startPos
             strcpy(score, "");
         }
 
-        int numberXPos = startPosition.x + highscoreMargin;
+        int numberXPos = container.x + highscoreMargin;
         int nameXPos = numberXPos + numberSize.x + highscoreMargin;
-        int scoreXPos = startPosition.x + containerDimensions.x - highscoreMargin;
+        int scoreXPos = container.x + container.width - highscoreMargin;
         int levelXPos = nameXPos + ((scoreXPos - nameXPos) / 2);
         
         DrawTextPro(
@@ -110,7 +110,7 @@ void drawHighscores(Highscore highscores[NUMBER_OF_HIGHSCORES], Vector2 startPos
     }
 }
 
-void drawLayoutContainers() {
+Rectangle drawLayoutContainers() {
 
     Rectangle background = {
         0,
@@ -193,6 +193,8 @@ void drawLayoutContainers() {
     DrawRectangleRoundedLinesEx(highScoreContainer, getRoundness(highScoreContainer, roundnessRadius), 10, 3, primaryColor);
     DrawRectangleRoundedLinesEx(logoContainer, getRoundness(logoContainer, roundnessRadius), 10, 3, primaryColor);
     DrawRectangleRoundedLinesEx(menuContainer, getRoundness(menuContainer, roundnessRadius), 10, 3, primaryColor);
+
+    return highScoreContainer;
 }
 
 void drawMenu(Menu* menu) {
@@ -300,7 +302,8 @@ void mainMenu(GameContext* ctx) {
 
         BeginDrawing();
             ClearBackground(BLACK);
-            drawLayoutContainers();
+            Rectangle highscoreContainer = drawLayoutContainers();
+            drawHighscores(ctx->highscores, highscoreContainer);
             drawMenu(&menu);
             
             if (!isFadeInComplete) {
