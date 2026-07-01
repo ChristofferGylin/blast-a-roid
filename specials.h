@@ -7,7 +7,7 @@
 #include "raylib.h"
 #include "utils.h"
 
-#define NUMBER_OF_SPECIALS 1
+#define NUMBER_OF_SPECIALS 5
 
 typedef enum SpecialType {
     MULTIPLIER,
