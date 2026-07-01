@@ -4,12 +4,15 @@
 #include <inttypes.h>
 #include <stdio.h>
 #include "gameContext.h"
+#include "secrets.h"
 #include <string.h>
 
 static const int ASTEROID_POINTS_1 = 50;
 static const int ASTEROID_POINTS_2 = 100;
 static const int ASTEROID_POINTS_3 = 300;
 static const int METAL_ASTEROID_POINTS = 1000;
+
+void saveHighscores(Highscore highscores[NUMBER_OF_HIGHSCORES]);
 
 void addScore(Player* player, Asteroid* ast) {
     int score = 0;
@@ -62,6 +65,16 @@ void resetTimeBonusMultiplier(GameContext* ctx) {
         player->timeBonusMultiplier = 1;
         player->timeBonusTimer = 0;
     }
+}
+
+void saveHighscores(Highscore highscores[NUMBER_OF_HIGHSCORES]) {
+    HighscoreSaveData saveFile;
+
+    memcpy(saveFile.scores, highscores, NUMBER_OF_HIGHSCORES * sizeof(Highscore));
+    saveFile.checksum = ComputeCRC32((unsigned char *)saveFile.scores, sizeof(saveFile.scores));
+    saveFile.checksum ^= SECRET_NUMBER;
+
+    SaveFileData("./data.dat", &saveFile, sizeof(saveFile));
 }
 
 void updateLevelBonus(Player* player) {
