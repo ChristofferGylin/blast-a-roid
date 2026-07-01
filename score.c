@@ -12,6 +12,7 @@ static const int ASTEROID_POINTS_2 = 100;
 static const int ASTEROID_POINTS_3 = 300;
 static const int METAL_ASTEROID_POINTS = 1000;
 
+void loadHighscores(Highscore* highscores[NUMBER_OF_HIGHSCORES]);
 void saveHighscores(Highscore highscores[NUMBER_OF_HIGHSCORES]);
 
 void addScore(Player* player, Asteroid* ast) {
@@ -52,6 +53,18 @@ void initHighScores(Highscore* highscores[NUMBER_OF_HIGHSCORES]) {
         entry->score = 0;
         strcpy("", entry->name);
         
+    }
+}
+
+void loadHighscores(Highscore* highscores[NUMBER_OF_HIGHSCORES]) {
+    int size;
+    Highscore *scoresFromFile = (Highscore *)LoadFileData("./data.dat", &size);
+
+    if (scoresFromFile) {
+        memcpy(highscores, scoresFromFile, size);
+        UnloadFileData((unsigned char *)scoresFromFile);
+    } else {
+        printf("Error: Could not read highscores from file in loadHighscores");
     }
 }
 
