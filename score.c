@@ -12,7 +12,7 @@ static const int ASTEROID_POINTS_2 = 100;
 static const int ASTEROID_POINTS_3 = 300;
 static const int METAL_ASTEROID_POINTS = 1000;
 
-void loadHighscores(Highscore* highscores[NUMBER_OF_HIGHSCORES]);
+void loadHighscores(Highscore highscores[NUMBER_OF_HIGHSCORES]);
 void saveHighscores(Highscore highscores[NUMBER_OF_HIGHSCORES]);
 
 void addScore(Player* player, Asteroid* ast) {
@@ -46,25 +46,43 @@ void addScore(Player* player, Asteroid* ast) {
 }
 
 void initHighScores(Highscore highscores[NUMBER_OF_HIGHSCORES]) {
-    for (int i = 0; i < NUMBER_OF_HIGHSCORES; i++) {
-        Highscore* entry = &highscores[i];
+    
+    if (FileExists("./data.dat")) {
+        loadHighscores(highscores);
+    } else {
+        for (int i = 0; i < NUMBER_OF_HIGHSCORES; i++) {
+            Highscore* entry = &highscores[i];
 
-        entry->level = 0;
-        entry->score = 0;
-        strcpy(entry->name, "");
+            entry->level = 0;
+            entry->score = 0;
+            entry->name[0] = '\0';
+        }
+
+        saveHighscores(highscores);
     }
 }
 
-void loadHighscores(Highscore* highscores[NUMBER_OF_HIGHSCORES]) {
+void loadHighscores(Highscore highscores[NUMBER_OF_HIGHSCORES]) {
     int size;
-    Highscore *scoresFromFile = (Highscore *)LoadFileData("./data.dat", &size);
+    HighscoreSaveData *scoresFromFile = (HighscoreSaveData *)LoadFileData("./data.dat", &size);
 
-    if (scoresFromFile) {
-        memcpy(highscores, scoresFromFile, size);
-        UnloadFileData((unsigned char *)scoresFromFile);
+    if (scoresFromFile && size == sizeof(HighscoreSaveData)) {
+
+        uint32_t hash = ComputeCRC32((unsigned char *)scoresFromFile->scores, sizeof(scoresFromFile->scores));
+        hash ^= SECRET_NUMBER;
+
+        if (hash == scoresFromFile->checksum) {
+            memcpy(highscores, scoresFromFile->scores, sizeof(scoresFromFile->scores));
+        } else {
+            printf("Error: The data file have been modified or corrupted, could not load highscores in loadHighscores");
+        }
+
+        
     } else {
         printf("Error: Could not read highscores from file in loadHighscores");
     }
+
+    UnloadFileData((unsigned char *)scoresFromFile);
 }
 
 void resetTimeBonusMultiplier(GameContext* ctx) {
@@ -86,7 +104,11 @@ void saveHighscores(Highscore highscores[NUMBER_OF_HIGHSCORES]) {
     saveFile.checksum = ComputeCRC32((unsigned char *)saveFile.scores, sizeof(saveFile.scores));
     saveFile.checksum ^= SECRET_NUMBER;
 
-    SaveFileData("./data.dat", &saveFile, sizeof(saveFile));
+    bool success = SaveFileData("./data.dat", &saveFile, sizeof(saveFile));
+
+    if (!success) {
+        printf("Error: Could not save highscores to file in saveHighscores");
+    }
 }
 
 void updateLevelBonus(Player* player) {
