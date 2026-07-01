@@ -125,7 +125,7 @@ void renderAnimation(AnimationInstance* aniInst) {
         (Rectangle){round(aniInst->position.x),  round(aniInst->position.y), round(aniInst->animation->size.x), round(aniInst->animation->size.y)},
         (Vector2){aniInst->animation->size.x / 2, aniInst->animation->size.y / 2},
         aniInst->rotation,
-        RAYWHITE
+        WHITE
     );
 }
 
