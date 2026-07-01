@@ -23,6 +23,93 @@ int roundnessRadius = 12.0f;
 int logoFontSize = 42;
 int logoFontSpacing = 8;
 
+void drawHighscores(Highscore highscores[NUMBER_OF_HIGHSCORES], Vector2 startPosition, Vector2 containerDimensions);
+
+void drawHighscores(Highscore highscores[NUMBER_OF_HIGHSCORES], Vector2 startPosition, Vector2 containerDimensions) {
+    int highscoreFontSize = 22;
+    int highscoreFontSpacing = 6;
+    int highscoreMargin = 10;
+
+    int interval = (containerDimensions.y - (highscoreMargin * 2)) / NUMBER_OF_HIGHSCORES;
+    int yPosition = startPosition.y + highscoreMargin;
+
+    char number[4] = "99.";
+    char name[33] = "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA";
+    char level[4] = "999";
+    char score[21] = "99999999999999999999";
+
+    Vector2 numberSize = MeasureTextEx(GetFontDefault(), number, highscoreFontSize, highscoreFontSpacing);
+    Vector2 nameSize = MeasureTextEx(GetFontDefault(), name, highscoreFontSize, highscoreFontSpacing);
+    Vector2 levelSize = MeasureTextEx(GetFontDefault(), level, highscoreFontSize, highscoreFontSpacing);
+    Vector2 scoreSize = MeasureTextEx(GetFontDefault(), score, highscoreFontSize, highscoreFontSpacing);
+
+    for (int i = 0; i < NUMBER_OF_HIGHSCORES; i++) {
+        snprintf(number, sizeof(number), "%d.", i + 1);
+
+        if (highscores[i].score > 0) {
+            snprintf(name, sizeof(name), "%s", highscores[i].name);
+            snprintf(level, sizeof(level), "%d", highscores[i].level);
+            snprintf(score, sizeof(score), "%" PRIu64, highscores[i].score);
+        } else {
+            strcpy(name, "");
+            strcpy(level, "");
+            strcpy(score, "");
+        }
+
+        int numberXPos = startPosition.x + highscoreMargin;
+        int nameXPos = numberXPos + numberSize.x + highscoreMargin;
+        int scoreXPos = startPosition.x + containerDimensions.x - highscoreMargin;
+        int levelXPos = nameXPos + ((scoreXPos - nameXPos) / 2);
+        
+        DrawTextPro(
+            GetFontDefault(),
+            number,
+            (Vector2){numberXPos, yPosition},
+            (Vector2){0,0},
+            0,
+            highscoreFontSize,
+            highscoreFontSpacing,
+            primaryColor
+        );
+
+        DrawTextPro(
+            GetFontDefault(),
+            name,
+            (Vector2){nameXPos, yPosition},
+            (Vector2){0,0},
+            0,
+            highscoreFontSize,
+            highscoreFontSpacing,
+            primaryColor
+        );
+
+        DrawTextPro(
+            GetFontDefault(),
+            level,
+            (Vector2){levelXPos, yPosition},
+            (Vector2){0,0},
+            0,
+            highscoreFontSize,
+            highscoreFontSpacing,
+            primaryColor
+        );
+        
+        DrawTextPro(
+            GetFontDefault(),
+            score,
+            (Vector2){scoreXPos, yPosition},
+            (Vector2){0,0},
+            0,
+            highscoreFontSize,
+            highscoreFontSpacing,
+            primaryColor
+        );
+
+        yPosition += interval;
+
+    }
+}
+
 void drawLayoutContainers() {
 
     Rectangle background = {
