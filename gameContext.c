@@ -4,6 +4,7 @@
 #include "gameContext.h"
 #include "player.h"
 #include "raylib.h"
+#include "score.h"
 #include "shooting.h"
 #include "specials.h"
 #include "ship.h"
@@ -19,6 +20,7 @@ void initGameContext(GameContext* ctx) {
     loadAssets(ctx);
     initShip(ctx, &ctx->ship);
     initSpawning(ctx);
+    initHighScores(&ctx->highscores);
     ctx->pausTimer = 0;
     ctx->supernova = (Supernova){false, 0.0f, 0.0f};
 }
