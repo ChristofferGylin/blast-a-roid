@@ -10,6 +10,7 @@
 #include "player.h"
 #include "ship.h"
 #include "specials.h"
+#include "score.h"
 
 typedef struct Animations {
     Animation blackHole;
@@ -91,6 +92,7 @@ typedef struct GameContext {
     SpawningEnemies spawning;
     double pausTimer;
     Supernova supernova;
+    Highscore highscores[NUMBER_OF_HIGHSCORES];
 }GameContext;
 
 void initGameContext(GameContext* ctx);

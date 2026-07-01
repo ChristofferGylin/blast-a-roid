@@ -6,6 +6,8 @@
 #include "asteroid.h"
 #include "player.h"
 
+#define NUMBER_OF_HIGHSCORES 20
+
 typedef struct Highscore {
     uint64_t score;
     char name[32];
