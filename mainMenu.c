@@ -28,12 +28,13 @@ void drawHighscores(Highscore highscores[NUMBER_OF_HIGHSCORES], Rectangle contai
 void drawHighscores(Highscore highscores[NUMBER_OF_HIGHSCORES], Rectangle container) {
     int highscoreFontSize = 22;
     int highscoreFontSpacing = 6;
-    int highscoreMargin = 10;
+    int highscoreMarginY = 20;
+    int highscoreMarginX = 10;
+    int lineWidth = 3;
 
-    int interval = (container.height - (highscoreMargin * 2)) / NUMBER_OF_HIGHSCORES;
-    int yPosition = container.y + highscoreMargin;
+    int yPosition = container.y + highscoreMarginY;
 
-    char number[4] = "99.";
+    char number[3] = "99";
     char name[33] = "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA";
     char level[4] = "999";
     char score[21] = "99999999999999999999";
@@ -43,8 +44,12 @@ void drawHighscores(Highscore highscores[NUMBER_OF_HIGHSCORES], Rectangle contai
     Vector2 levelSize = MeasureTextEx(GetFontDefault(), level, highscoreFontSize, highscoreFontSpacing);
     Vector2 scoreSize = MeasureTextEx(GetFontDefault(), score, highscoreFontSize, highscoreFontSpacing);
 
+    int availibleHeight = (container.height - numberSize.y - (highscoreMarginY * 2));
+    int gapX = 20;
+    int gapY = availibleHeight / (NUMBER_OF_HIGHSCORES -1);
+
     for (int i = 0; i < NUMBER_OF_HIGHSCORES; i++) {
-        snprintf(number, sizeof(number), "%d.", i + 1);
+        snprintf(number, sizeof(number), "%d", i + 1);
 
         if (highscores[i].score > 0) {
             snprintf(name, sizeof(name), "%s", highscores[i].name);
@@ -56,16 +61,18 @@ void drawHighscores(Highscore highscores[NUMBER_OF_HIGHSCORES], Rectangle contai
             strcpy(score, "");
         }
 
-        int numberXPos = container.x + highscoreMargin;
-        int nameXPos = numberXPos + numberSize.x + highscoreMargin;
-        int scoreXPos = container.x + container.width - highscoreMargin;
+        int numberXPos = container.x +  highscoreMarginX + lineWidth;
+        int nameXPos = numberXPos + numberSize.x + gapX;
+        int scoreXPos = container.x + container.width - highscoreMarginY;
         int levelXPos = nameXPos + ((scoreXPos - nameXPos) / 2);
+
+        Vector2 origin = {0,0};
         
         DrawTextPro(
             GetFontDefault(),
             number,
             (Vector2){numberXPos, yPosition},
-            (Vector2){0,0},
+            origin,
             0,
             highscoreFontSize,
             highscoreFontSpacing,
@@ -76,7 +83,7 @@ void drawHighscores(Highscore highscores[NUMBER_OF_HIGHSCORES], Rectangle contai
             GetFontDefault(),
             name,
             (Vector2){nameXPos, yPosition},
-            (Vector2){0,0},
+            origin,
             0,
             highscoreFontSize,
             highscoreFontSpacing,
@@ -87,7 +94,7 @@ void drawHighscores(Highscore highscores[NUMBER_OF_HIGHSCORES], Rectangle contai
             GetFontDefault(),
             level,
             (Vector2){levelXPos, yPosition},
-            (Vector2){0,0},
+            origin,
             0,
             highscoreFontSize,
             highscoreFontSpacing,
@@ -98,14 +105,14 @@ void drawHighscores(Highscore highscores[NUMBER_OF_HIGHSCORES], Rectangle contai
             GetFontDefault(),
             score,
             (Vector2){scoreXPos, yPosition},
-            (Vector2){0,0},
+            origin,
             0,
             highscoreFontSize,
             highscoreFontSpacing,
             primaryColor
         );
 
-        yPosition += interval;
+        yPosition += gapY;
 
     }
 }
@@ -194,7 +201,13 @@ Rectangle drawLayoutContainers() {
     DrawRectangleRoundedLinesEx(logoContainer, getRoundness(logoContainer, roundnessRadius), 10, 3, primaryColor);
     DrawRectangleRoundedLinesEx(menuContainer, getRoundness(menuContainer, roundnessRadius), 10, 3, primaryColor);
 
-    return highScoreContainer;
+    Rectangle highscoreTextContainer;
+    highscoreTextContainer.x = highScoreContainer.x;
+    highscoreTextContainer.y = highscoresLinePos.y + highscoresLineSize.y;
+    highscoreTextContainer.width = highScoreContainer.width;
+    highscoreTextContainer.height = highScoreContainer.height - (highscoreTextContainer.y - (highScoreContainer.y + highscoresLineSize.y));
+
+    return highscoreTextContainer;
 }
 
 void drawMenu(Menu* menu) {
