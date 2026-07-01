@@ -1,6 +1,8 @@
 #ifndef CONSTANTS_H
 #define CONSTANTS_H
 
+static const int ASTEROID_MIN_VELOCITY = 30;
+static const int ASTEROID_MAX_VELOCITY = 100;
 static const int BLACK_HOLE_SIZE = 32;
 static const int CRATE_RENDER_SIZE = 32;
 static const int COMET_RENDER_SIZE_X = 32;

@@ -1,5 +1,6 @@
-#include "raylib.h"
+#include <stdlib.h>
 #include <time.h>
+#include "raylib.h"
 #include "constants.h"
 #include "mainMenu.h"
 #include "gameContext.h"
@@ -12,6 +13,7 @@ int main(){
     InitAudioDevice();
     SetTargetFPS(144);
     SetRandomSeed(time(NULL));
+    srand((unsigned)time(NULL));
     SetExitKey(KEY_NULL);
     initGameContext(&ctx);
     

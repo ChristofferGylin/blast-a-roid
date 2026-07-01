@@ -29,6 +29,7 @@ typedef struct Asteroid {
     Vector2 velocity;
     Vector2 position;
     bool destroyed;
+    float destroyTime;
     VisualType visualType;
     union {
         Texture2D* sprite;
@@ -56,7 +57,7 @@ int countAsteroids(AsteroidPool* pool);
 void destroyAsteroid(DestroyedAsteroidPool* pool, AsteroidPoolObject* ast);
 int getAsteroidSize(AsteroidType type);
 void handleAsteroidCollisions(GameContext* ctx);
-void handleAsteroidsMovement(AsteroidPool* pool);
+void handleAsteroidsMovement(GameContext* ctx);
 void handleDestroyedAsteroids(GameContext* ctx);
 void initAsteroidPool(AsteroidPool* pool);
 void initDestroyedAsteroidPool(DestroyedAsteroidPool* pool);

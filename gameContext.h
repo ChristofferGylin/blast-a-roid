@@ -33,6 +33,7 @@ typedef struct Samples {
     Sound multiplier_spawn;
     Sound shieldUp;
     Sound shot;
+    Sound supernova;
     Sound enemyShot1;
 }Samples;
 
@@ -76,6 +77,12 @@ typedef struct SpawningEnemies {
     FloatRange spawnDelay;
 }SpawningEnemies;
 
+typedef struct Supernova {
+    bool detonated;
+    double detonationTime;
+    double shakeTimer;
+}Supernova;
+
 typedef struct GameContext {
     Assets assets;
     ObjectPools objectPools;
@@ -83,6 +90,7 @@ typedef struct GameContext {
     Ship ship;
     SpawningEnemies spawning;
     double pausTimer;
+    Supernova supernova;
 }GameContext;
 
 void initGameContext(GameContext* ctx);

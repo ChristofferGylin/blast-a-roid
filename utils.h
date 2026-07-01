@@ -17,6 +17,11 @@ typedef enum PositionChoice {
     RIGHT_POS
 }PositionChoice;
 
+typedef struct PositionVelocity {
+    Vector2 position;
+    Vector2 velocity;
+}PositionVelocity;
+
 typedef enum VisualType {
     VISUAL_SPRITE,
     VISUAL_ANIMATION
@@ -25,6 +30,7 @@ typedef enum VisualType {
 void applyGForce(Vector2 position, Vector2  destination, Vector2* velocity, float maxVelocity, float minAcceleration, float maxAcceleration, float maxDistance);
 float scaleFloat(float oldMin, float oldMax, float newMin, float newMax, float value);
 int getNumberOfAsteroids(int gameLevel);
+float getRandomFloat(float min, float max);
 Vector2 getRandomPosition();
 Vector2 getRandomPositionOffScreen(int size);
 Vector2 getRandomVelocity(FloatRange range);
@@ -33,6 +39,7 @@ void goToDestination(Vector2 position, Vector2  destination, Vector2* velocity, 
 void knockback(Vector2 targetPosition, Vector2* targetVelocity, Vector2 forcePosition, int force);
 void knockbackByImpact(Vector2 targetPosition, Vector2* targetVelocity, Vector2 forcePosition, Vector2 forceVelocity);
 void playSoundPositioned(Sound sound, float positionX);
+void shake(Vector2* position , double startTime, float duration);
 void updatePosition(Vector2* position, Vector2 velocity);
 void updateRotation(float* rotation, float rotationSpeed);
 

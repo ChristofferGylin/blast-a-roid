@@ -144,6 +144,8 @@ void unloadAnimation(Animation* animation) {
 
 void updateAnimation(AnimationInstance* aniInst) {
 
+    if (aniInst->isFinished) return;
+
     aniInst->frameTimer += GetFrameTime();
 
     if (aniInst->frameTimer >= (1.0f / aniInst->fps)) {

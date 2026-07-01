@@ -18,6 +18,7 @@ void addSpecialToSpawnPool(SpecialsSpawnPool* pool, SpecialType type);
 void compactSpecialsPool(SpecialsPool* pool);
 void compactSpecialsSpawnPool(SpecialsSpawnPool* pool);
 void updateSpecialsAnimations(SpecialsPool* pool);
+void updateSupernova(GameContext* ctx ,Special* special);
 
 static const int SPECIALS_LIFETIME = 30;
 static const int COMET_VELOCITY = 200;
@@ -41,11 +42,23 @@ void addSpecialToPool(GameContext* ctx, SpecialType type) {
     float minDistanceToShip = SHIP_SIZE * 4;
     float radians = 0;
 
+    if (type == BLACK_HOLE || type == MULTIPLIER || type == SUPERNOVA) {
+        newSpecial.position = (Vector2){0,0};
+
+        while (newSpecial.position.x == 0) {
+            Vector2 newPosition = getRandomPosition();
+
+            if (!CheckCollisionCircles(newPosition, minDistanceToShip, ctx->ship.position, SHIP_SIZE / 2.0f)) {
+                newSpecial.position = newPosition;
+            }
+        }
+    }
+
     switch (type) {
 
-        case MULTIPLIER:            
-            initAnimtionInstance(&aniInstance, &ctx->assets.animations.multiplier, newSpecial.position, 0, 2.0f, false);
+        case MULTIPLIER:
             newSpecial.size = (Vector2){MULTIPLIER_COLLISION_SIZE, MULTIPLIER_COLLISION_SIZE};
+            initAnimtionInstance(&aniInstance, &ctx->assets.animations.multiplier, newSpecial.position, 0, 2.0f, false);
             playSoundPositioned(ctx->assets.samples.multiplier_spawn, newSpecial.position.x);
             
             break;
@@ -89,7 +102,9 @@ void addSpecialToPool(GameContext* ctx, SpecialType type) {
             break;
     
         case SUPERNOVA:
-            // TODO: set attributes specific to type
+            newSpecial.size = (Vector2){2,2};
+            initAnimtionInstance(&aniInstance, &ctx->assets.animations.supernova, newSpecial.position, newSpecial.rotation, ctx->assets.animations.supernova.fps, false);
+            playSoundPositioned(ctx->assets.samples.supernova, newSpecial.position.x);
             break;
     
         case BLACK_HOLE:
@@ -101,18 +116,6 @@ void addSpecialToPool(GameContext* ctx, SpecialType type) {
     
         default:
             break;
-    }
-
-    if (type == BLACK_HOLE || type == MULTIPLIER || type == SUPERNOVA) {
-        newSpecial.position = (Vector2){0,0};
-
-        while (newSpecial.position.x == 0) {
-            Vector2 newPosition = getRandomPosition();
-
-            if (!CheckCollisionCircles(newPosition, minDistanceToShip, ctx->ship.position, SHIP_SIZE / 2.0f)) {
-                newSpecial.position = newPosition;
-            }
-        }
     }
 
     if (type != EXTRA_LIFE) {
@@ -138,6 +141,19 @@ void addSpecialToSpawnPool(SpecialsSpawnPool* pool, SpecialType type) {
     pool->specials[pool->activeCount].special = newSpecial;
 
     pool->activeCount++;
+}
+
+Vector2 applySupernovaEffects(GameContext* ctx, Vector2 velocity) {
+    
+    const int velocityDivider = 4;
+    Vector2 newVelocity = velocity;
+    
+    if (ctx->supernova.detonated) {
+        newVelocity.x = newVelocity.x / velocityDivider;
+        newVelocity.y = newVelocity.y / velocityDivider;
+    }
+
+    return newVelocity;
 }
 
 void compactSpecialsSpawnPool(SpecialsSpawnPool* pool) {
@@ -300,7 +316,8 @@ void handleSpecialsHitDetection(GameContext* ctx) {
                         break;
                     
                     case SUPERNOVA:
-                        // handle special hit
+                        newExplosion(ctx, specialObj->special.position);
+                        player->levelBonus += 5000;
                         break;
                     default:
                         printf("Error: Invalid SpecialType (%d) in handleEnemiesHitDetection\n", specialObj->special.type);
@@ -320,23 +337,28 @@ void handleSpecialsHitDetection(GameContext* ctx) {
     }
 }
 
-void handleSpecialsMovement(SpecialsPool* pool) {
+void handleSpecialsMovement(GameContext* ctx) {
+
+    SpecialsPool* pool = &ctx->objectPools.specials;
+
     for (int i = 0; i < pool->activeCount; i++) {
         SpecialPoolObject* specialObj = &pool->specials[i];
         if (!specialObj->active) continue;
+
+        Vector2 velocity = applySupernovaEffects(ctx, specialObj->special.velocity);
 
         if (specialObj->special.type == EXTRA_LIFE) {
             if (specialObj->special.ship.destroyed) continue;
 
             updateRotation(&specialObj->special.rotation, specialObj->special.rotationSpeed);
-            updatePosition(&specialObj->special.position, specialObj->special.velocity);
+            updatePosition(&specialObj->special.position, velocity);
             handleOutOfBounds(&specialObj->special.position, specialObj->special.size.y);
 
             specialObj->special.ship.rotation = specialObj->special.rotation;
             specialObj->special.ship.position = specialObj->special.position;
 
         } else {
-            updatePosition(&specialObj->special.position, specialObj->special.velocity);
+            updatePosition(&specialObj->special.position, velocity);
             handleOutOfBounds(&specialObj->special.position, specialObj->special.size.y);
         }
     }
@@ -368,9 +390,9 @@ void populateSpecialsSpawnPool(GameContext* ctx) {
     SpecialSpawnOption optionPool[NUMBER_OF_SPECIALS] = {
         (SpecialSpawnOption){true, MULTIPLIER, 100},
         (SpecialSpawnOption){true, COMET, 100},
-        (SpecialSpawnOption){true, EXTRA_LIFE, 30},
-        (SpecialSpawnOption){true, BLACK_HOLE, 20},
-        (SpecialSpawnOption){true, SUPERNOVA, 10},
+        (SpecialSpawnOption){true, BLACK_HOLE, 30},
+        (SpecialSpawnOption){true, SUPERNOVA, 20},
+        (SpecialSpawnOption){true, EXTRA_LIFE, 20},
     };
     SpecialsSpawnPool* spawnPool = &ctx->objectPools.specialsSpawn;
     
@@ -379,7 +401,7 @@ void populateSpecialsSpawnPool(GameContext* ctx) {
 
     if (maxNumberOfSpecials > NUMBER_OF_SPECIALS) maxNumberOfSpecials = NUMBER_OF_SPECIALS;
 
-    int numberToPopulate = 1; //GetRandomValue(minNumberOfSpecials, maxNumberOfSpecials);
+    int numberToPopulate = GetRandomValue(minNumberOfSpecials, maxNumberOfSpecials);
 
     for (int i = 0; i < numberToPopulate; i++) {
         
@@ -449,17 +471,17 @@ void spawnSpecials(GameContext* ctx) {
 
 void updateSpecials(GameContext* ctx) {
 
-    SpecialsPool* pool = &ctx->objectPools.specials;
+    SpecialsPool* specialsPool = &ctx->objectPools.specials;
 
-    if (pool->activeCount == 0) return;
+    if (specialsPool->activeCount == 0) return;
 
-    updateSpecialsAnimations(pool);
+    updateSpecialsAnimations(specialsPool);
 
     bool specialsPoolHasChanged = false;
     
-    for (int i = 0; i < pool->activeCount; i++) {
+    for (int i = 0; i < specialsPool->activeCount; i++) {
 
-        SpecialPoolObject* specialObj = &pool->specials[i];
+        SpecialPoolObject* specialObj = &specialsPool->specials[i];
 
         if (!specialObj->active) continue;
 
@@ -495,7 +517,7 @@ void updateSpecials(GameContext* ctx) {
                 break;
     
             case SUPERNOVA:
-                // TODO: set attributes specific to type
+                updateSupernova(ctx, &specialObj->special);
                 break;
     
             case BLACK_HOLE:
@@ -512,7 +534,7 @@ void updateSpecials(GameContext* ctx) {
     }
 
     if (specialsPoolHasChanged) {
-        compactSpecialsPool(pool);
+        compactSpecialsPool(specialsPool);
     }
 }
 
@@ -525,4 +547,156 @@ void updateSpecialsAnimations(SpecialsPool* pool) {
         special->animation.position = special->position;
         updateAnimation(&special->animation);
     } 
+}
+
+void updateSupernova(GameContext* ctx ,Special* special) {
+    Supernova* supernova = &ctx->supernova;
+    Ship* ship = &ctx->ship;
+    AsteroidPool* astPool = & ctx->objectPools.asteroids;
+    BonusObjectPool* bonusPool = &ctx->objectPools.bonuses;
+    EnemyObjectPool* enemyPool = &ctx->objectPools.enemies;
+    SpecialsPool* specialsPool = &ctx->objectPools.specials;
+
+    const float SHAKE_DELAY = 0.05f;
+    const float DETONATION_DURATION = 3.0f;
+    const FloatRange ASTEROID_DESTRUCTION_SPAN = {0.1f, DETONATION_DURATION};
+
+    supernova->shakeTimer += GetFrameTime();
+
+    int sizes[] = {
+        2, 4, 6, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 12, 14, 16, 18, 22, 26, 30, 34, 40, 46, 48, 48, 48, 48, 48, 48, 48,48, 48, 48, 48, 48, 48,
+        48, 48, 48, 48, 48, 48, 48, 48, 48, 48, 48, 48, 48, 48, 48, 48, 48, 48, 48, 48, 48, 47, 47, 42, 40, 38, 34,30, 16, 12, 6, 5, 4, 0, 0, 0, 0, 0, 0
+    };
+
+    int arrSize = sizeof(sizes) / sizeof(sizes[0]);
+    int frame = special->animation.currentFrame;
+
+    if (frame >= arrSize) {
+        special->size.x = 0;
+        special->size.y = 0;
+    } else {
+        special->size.x = sizes[frame];
+        special->size.y = sizes[frame];
+    }
+
+    if (frame == 70 && !supernova->detonated) {
+        supernova->detonated = true;
+        supernova->detonationTime = GetTime() - ctx->pausTimer;
+
+        for (int j = 0; j < astPool->activeCount; j++) {
+            if (!astPool->asteroids[j].active || astPool->asteroids[j].asteroid.destroyed) continue;
+
+            astPool->asteroids[j].asteroid.destroyTime = getRandomFloat(ASTEROID_DESTRUCTION_SPAN.min, ASTEROID_DESTRUCTION_SPAN.max);
+        }
+    }
+
+    if (supernova->detonated && ((supernova->detonationTime + DETONATION_DURATION) < (GetTime() - ctx->pausTimer))) {
+        supernova->detonated = false;
+
+        FloatRange velocityRange = {ASTEROID_MIN_VELOCITY * 2, ASTEROID_MAX_VELOCITY * 2};
+
+        for (int j = 0; j < astPool->activeCount; j++) {
+            if (!astPool->asteroids[j].active) continue;
+            astPool->asteroids[j].asteroid.velocity = getRandomVelocity(velocityRange);
+        }
+
+        for (int j = 0; j < bonusPool->activeCount; j++) {
+            if (!bonusPool->bonuses[j].active) continue;
+            bonusPool->bonuses[j].bonus.velocity = getRandomVelocity(velocityRange);
+        }
+
+        for (int j = 0; j < enemyPool->activeCount; j++) {
+            if (!enemyPool->enemies[j].active) continue;
+            enemyPool->enemies[j].enemy.velocity = getRandomVelocity(velocityRange);
+        }
+                    
+        for (int j = 0; j < specialsPool->activeCount; j++) {
+            if (!specialsPool->specials[j].active || specialsPool->specials[j].special.type == SUPERNOVA) continue;
+            
+            Special* special = &specialsPool->specials[j].special;
+            special->velocity = getRandomVelocity(velocityRange);
+
+            if (special->type == EXTRA_LIFE) {
+                if (special->ship.destroyed) {
+                    for (int k = 0; k < 3; k++) {
+                        special->ship.destroyedPieces[k].velocity = getRandomVelocity(velocityRange);
+                    }
+                }
+            }
+        }
+
+        if (ship->destroyed) {
+            for (int j = 0; j < 3; j++) {
+                ship->destroyedPieces[j].velocity = getRandomVelocity(velocityRange);
+            }
+        } else {
+            ship->velocity = getRandomVelocity(velocityRange);
+        }
+        
+    }
+
+    if (supernova->detonated && supernova->shakeTimer >= SHAKE_DELAY) {
+                                        
+        for (int j = 0; j < astPool->activeCount; j++) {
+            if (!astPool->asteroids[j].active) continue;
+                        
+            shake(&astPool->asteroids[j].asteroid.position, supernova->detonationTime, DETONATION_DURATION);
+        }
+
+        for (int j = 0; j < bonusPool->activeCount; j++) {
+            if (!bonusPool->bonuses[j].active) continue;
+
+            shake(&bonusPool->bonuses[j].bonus.position, supernova->detonationTime, DETONATION_DURATION);
+        }
+
+        for (int j = 0; j < enemyPool->activeCount; j++) {
+            if (!enemyPool->enemies[j].active) continue;
+
+            shake(&enemyPool->enemies[j].enemy.position, supernova->detonationTime, DETONATION_DURATION);
+        }
+                    
+        for (int j = 0; j < specialsPool->activeCount; j++) {
+            if (!specialsPool->specials[j].active || specialsPool->specials[j].special.type == SUPERNOVA) continue;
+            
+            Special* special = &specialsPool->specials[j].special;
+            shake(&special->position, supernova->detonationTime, DETONATION_DURATION);
+
+            if (special->type == EXTRA_LIFE) {
+                if (special->ship.destroyed) {
+                    for (int k = 0; k < 3; k++) {
+                        shake(&special->ship.destroyedPieces[k].position, supernova->detonationTime, DETONATION_DURATION);
+                    }
+                } else {
+                    special->ship.position = special->position;
+                } 
+            }
+        }
+
+        if (ship->destroyed) {
+            for (int j = 0; j < 3; j++) {
+                shake(&ship->destroyedPieces[j].position, supernova->detonationTime, DETONATION_DURATION);
+            }
+        } else {
+            shake(&ship->position, supernova->detonationTime, DETONATION_DURATION);
+        }
+
+        supernova->shakeTimer = 0.0f;
+    }
+
+    if (supernova->detonated) {
+
+        double now = GetTime();
+
+        for (int j = 0; j < astPool->activeCount; j++) {
+
+            AsteroidPoolObject* astObj = &astPool->asteroids[j];
+
+            if (!astObj->active || astObj->asteroid.destroyed || astObj->asteroid.destroyTime == 0.0f) continue;
+
+            if ((supernova->detonationTime + astObj->asteroid.destroyTime) < now) {
+                destroyAsteroid(&ctx->objectPools.destroyedAsteroids, astObj);
+                newExplosion(ctx, astObj->asteroid.position);
+            }
+        }
+    }
 }

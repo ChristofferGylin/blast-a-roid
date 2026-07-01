@@ -162,8 +162,8 @@ void handleAsteroidCollisions(GameContext* ctx) {
     }
 }
 
-void handleAsteroidsMovement(AsteroidPool* pool) {
-    int spriteWidth = 32;
+void handleAsteroidsMovement(GameContext* ctx) {
+    AsteroidPool* pool = &ctx->objectPools.asteroids;
 
     for (int i = 0; i < pool->activeCount; i++) {
         if (!pool->asteroids[i].active) continue;
@@ -172,8 +172,10 @@ void handleAsteroidsMovement(AsteroidPool* pool) {
 
         if (ast->destroyed) continue;
 
+        Vector2 velocity = applySupernovaEffects(ctx,ast->velocity);
+
         updateRotation(&ast->rotation, ast->rotationSpeed);
-        updatePosition(&ast->position, ast->velocity);
+        updatePosition(&ast->position, velocity);
 
         int asteroidSize = getAsteroidSize(ast->type);
 
@@ -272,6 +274,7 @@ void initAsteroid(GameContext* ctx, Asteroid* ast, AsteroidType type) {
     
     ast->type = type;
     ast->destroyed = false;
+    ast->destroyTime = 0.0f;
     ast->size = getAsteroidSize(type);
     resetAsteroid(ast);
 

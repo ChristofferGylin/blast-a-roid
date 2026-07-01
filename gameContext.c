@@ -20,6 +20,7 @@ void initGameContext(GameContext* ctx) {
     initShip(ctx, &ctx->ship);
     initSpawning(ctx);
     ctx->pausTimer = 0;
+    ctx->supernova = (Supernova){false, 0.0f, 0.0f};
 }
 
 void initObjectPools(GameContext* ctx) {
@@ -43,7 +44,7 @@ void loadAssets(GameContext* ctx) {
     initAnimation(&ctx->assets.animations.metalAsteroid, "./assets/animations/metal_asteroid.png", "./assets/animations/metal_asteroid.json", 24.0f, (Vector2){METAL_ASTEROID_SIZE, METAL_ASTEROID_SIZE}, true);
     initAnimation(&ctx->assets.animations.multiplier, "./assets/animations/multiplier.png", "./assets/animations/multiplier.json", 24.0f, (Vector2){MULTIPLIER_RENDER_SIZE, MULTIPLIER_RENDER_SIZE}, true);
     initAnimation(&ctx->assets.animations.spikyAsteroid, "./assets/animations/spiky_asteroid.png", "./assets/animations/spiky_asteroid.json", 30.0f, (Vector2){SPIKY_ASTEROID_SIZE, SPIKY_ASTEROID_SIZE}, true);
-    initAnimation(&ctx->assets.animations.supernova, "./assets/animations/supernova.png", "./assets/animations/supernova.json", 2.0f, (Vector2){SUPERNOVA_RENDER_SIZE, SUPERNOVA_RENDER_SIZE}, false);
+    initAnimation(&ctx->assets.animations.supernova, "./assets/animations/supernova.png", "./assets/animations/supernova.json", 30.0f, (Vector2){SUPERNOVA_RENDER_SIZE, SUPERNOVA_RENDER_SIZE}, false);
     initAnimation(&ctx->assets.animations.ufo1, "./assets/animations/ufo1.png", "./assets/animations/ufo1.json", 24.0f, (Vector2){UFO_1_SIZE, UFO_1_SIZE}, true);
     initAnimation(&ctx->assets.animations.ufo2, "./assets/animations/ufo2.png", "./assets/animations/ufo2.json", 24.0f, (Vector2){UFO_1_SIZE, UFO_1_SIZE}, true);
     initAnimation(&ctx->assets.animations.ufo3, "./assets/animations/ufo3.png", "./assets/animations/ufo3.json", 24.0f, (Vector2){UFO_3_RENDER_SIZE, UFO_3_RENDER_SIZE}, true);
@@ -56,6 +57,7 @@ void loadAssets(GameContext* ctx) {
     ctx->assets.samples.multiplier_spawn = LoadSound("./assets/samples/multiplier_spawn.wav");
     ctx->assets.samples.shieldUp = LoadSound("./assets/samples/shield_up.wav");
     ctx->assets.samples.shot = LoadSound("./assets/samples/laser_pew1.wav");
+    ctx->assets.samples.supernova = LoadSound("./assets/samples/supernova.wav");
 
     ctx->assets.sprites.asteroid = LoadTexture("./assets/sprites/asteroid.png");
     ctx->assets.sprites.autoShotIcon = LoadTexture("./assets/sprites/auto_shot_icon.png");
@@ -93,6 +95,7 @@ void unloadAssets(GameContext* ctx) {
     UnloadSound(ctx->assets.samples.multiplier_spawn);
     UnloadSound(ctx->assets.samples.shieldUp);
     UnloadSound(ctx->assets.samples.shot);
+    UnloadSound(ctx->assets.samples.supernova);
 
     UnloadTexture(ctx->assets.sprites.asteroid);
     UnloadTexture(ctx->assets.sprites.autoShotIcon);
