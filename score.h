@@ -14,6 +14,11 @@ typedef struct Highscore {
     int level;
 }Highscore;
 
+typedef struct HighscoreSaveData {
+    Highscore scores[NUMBER_OF_HIGHSCORES];
+    uint32_t checksum;
+}HighscoreSaveData;
+
 
 void addScore(Player* player, Asteroid* ast);
 void initHighScores(Highscore* highscores[NUMBER_OF_HIGHSCORES]);
