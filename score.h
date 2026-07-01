@@ -16,7 +16,7 @@ typedef struct Highscore {
 
 
 void addScore(Player* player, Asteroid* ast);
-
+void initHighScores(Highscore* highscores[NUMBER_OF_HIGHSCORES]);
 void resetTimeBonusMultiplier(GameContext* ctx);
 void updateLevelBonus(Player* player);
 void updateTimeBonusMultiplier(Player* player);

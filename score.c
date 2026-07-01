@@ -4,6 +4,7 @@
 #include <inttypes.h>
 #include <stdio.h>
 #include "gameContext.h"
+#include <string.h>
 
 static const int ASTEROID_POINTS_1 = 50;
 static const int ASTEROID_POINTS_2 = 100;
@@ -38,6 +39,17 @@ void addScore(Player* player, Asteroid* ast) {
     player->levelBonus += score * player->timeBonusMultiplier;
 
     updateTimeBonusMultiplier(player);
+}
+
+void initHighScores(Highscore* highscores[NUMBER_OF_HIGHSCORES]) {
+    for (int i = 0; i < NUMBER_OF_HIGHSCORES; i++) {
+        Highscore* entry = &highscores[i];
+
+        entry->level = 0;
+        entry->score = 0;
+        strcpy("", entry->name);
+        
+    }
 }
 
 void resetTimeBonusMultiplier(GameContext* ctx) {
