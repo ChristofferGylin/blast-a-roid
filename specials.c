@@ -401,7 +401,7 @@ void populateSpecialsSpawnPool(GameContext* ctx) {
 
     if (maxNumberOfSpecials > NUMBER_OF_SPECIALS) maxNumberOfSpecials = NUMBER_OF_SPECIALS;
 
-    int numberToPopulate = 1; //GetRandomValue(minNumberOfSpecials, maxNumberOfSpecials);
+    int numberToPopulate = GetRandomValue(minNumberOfSpecials, maxNumberOfSpecials);
 
     for (int i = 0; i < numberToPopulate; i++) {
         
