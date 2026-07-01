@@ -45,14 +45,13 @@ void addScore(Player* player, Asteroid* ast) {
     updateTimeBonusMultiplier(player);
 }
 
-void initHighScores(Highscore* highscores[NUMBER_OF_HIGHSCORES]) {
+void initHighScores(Highscore highscores[NUMBER_OF_HIGHSCORES]) {
     for (int i = 0; i < NUMBER_OF_HIGHSCORES; i++) {
         Highscore* entry = &highscores[i];
 
         entry->level = 0;
         entry->score = 0;
-        strcpy("", entry->name);
-        
+        strcpy(entry->name, "");
     }
 }
 
