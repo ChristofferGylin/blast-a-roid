@@ -3,6 +3,6 @@
 
 #include "gameContext.h"
 
-void highscoreScreen(GameContext* ctx);
+GameResult highscoreScreen(GameContext* ctx);
 
 #endif

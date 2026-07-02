@@ -9,25 +9,31 @@
 bool runGameSession(GameContext* ctx) {
     initPlayer(&ctx->player);
     
-    highscoreScreen(ctx);
-    
-    // GameResult gameLoopResult = GAME_CONTINUE;
+    GameResult result = GAME_CONTINUE;
 
-    // while (ctx->player.lives >= 0) {            
-    //     gameLoopResult = gameLoop(ctx);
+    while (ctx->player.lives >= 0) {            
+        result = gameLoop(ctx);
 
-    //     if (gameLoopResult == EXIT_TO_DESKTOP) {
-    //         return false;
-    //     } else if (gameLoopResult == EXIT_TO_MENU) {
-    //         return true;
-    //     }
+        if (result == EXIT_TO_DESKTOP) {
+            return false;
+        } else if (result == EXIT_TO_MENU) {
+            return true;
+        }
 
-    //     if (ctx->player.lives < 0) {
-    //         gameOver(&ctx->player);
-    //     } else {
-    //         scoreScreen(ctx);
-    //     }
-    // }
+        if (ctx->player.lives < 0) {
+            gameOver(&ctx->player);
+            result = highscoreScreen(ctx);
+
+            if (result == EXIT_TO_DESKTOP) {
+                return false;
+            } else if (result == EXIT_TO_MENU) {
+                return true;
+            }
+
+        } else {
+            scoreScreen(ctx);
+        }
+    }
 
     return true;
 }

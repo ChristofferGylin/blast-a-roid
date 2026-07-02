@@ -9,10 +9,13 @@
 #include "score.h"
 #include <string.h>
 #include "gameContext.h"
+#include "gameloop.h"
 
-void highscoreScreen(GameContext* ctx) {
+GameResult highscoreScreen(GameContext* ctx) {
 
-    // if (!checkHighscore(ctx)) return;
+    GameResult result = EXIT_TO_MENU;
+
+    if (!checkHighscore(ctx)) return result;
 
     float fadeInValue = 1.0f;
     float fadeOutValue = 0.0f;
@@ -143,4 +146,8 @@ void highscoreScreen(GameContext* ctx) {
 
         if (exit && isFadeOutComplete) break;
     }
+
+    if (WindowShouldClose()) result = EXIT_TO_DESKTOP;
+
+    return result;
 }
