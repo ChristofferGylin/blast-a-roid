@@ -15,6 +15,20 @@ static const int METAL_ASTEROID_POINTS = 1000;
 void loadHighscores(Highscore highscores[NUMBER_OF_HIGHSCORES]);
 void saveHighscores(Highscore highscores[NUMBER_OF_HIGHSCORES]);
 
+void addHighscore(Highscore highscores[NUMBER_OF_HIGHSCORES], Highscore newHighscore) {
+    for (int i = 0; i < NUMBER_OF_HIGHSCORES; i++) {
+        if (newHighscore.score > highscores[i].score) {
+            for (int j = NUMBER_OF_HIGHSCORES - 1; j > i; j--) {
+                highscores[j] = highscores[j - 1];
+            }
+            highscores[i] = newHighscore;
+            break;
+        }
+    }
+
+    saveHighscores(highscores);
+}
+
 void addScore(Player* player, Asteroid* ast) {
     int score = 0;
     

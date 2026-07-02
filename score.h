@@ -19,7 +19,7 @@ typedef struct HighscoreSaveData {
     uint32_t checksum;
 }HighscoreSaveData;
 
-
+void addHighscore(Highscore highscores[NUMBER_OF_HIGHSCORES], Highscore newHighscore);
 void addScore(Player* player, Asteroid* ast);
 bool checkHighscore(GameContext* ctx);
 void initHighScores(Highscore highscores[NUMBER_OF_HIGHSCORES]);
