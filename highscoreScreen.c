@@ -34,12 +34,13 @@ void highscoreScreen(GameContext* ctx) {
     Vector2 titleSize = MeasureTextEx(GetFontDefault(), title, titleFontSize, titleFontSpacing);
     Vector2 text1Size = MeasureTextEx(GetFontDefault(), text1, textFontSize, textFontSpacing);
     Vector2 text2Size = MeasureTextEx(GetFontDefault(), text2, textFontSize, textFontSpacing);
-    Vector2 inputTextSize = MeasureTextEx(GetFontDefault(), "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA", inputFontSize, textFontSpacing);
+    Vector2 inputTextSize = MeasureTextEx(GetFontDefault(), inputText, inputFontSize, textFontSpacing);
+    Vector2 inputTextSizeMax = MeasureTextEx(GetFontDefault(), "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA", inputFontSize, textFontSpacing);
 
     Rectangle inputBox;
 
-    inputBox.width = inputTextSize.x + inputMargin.x;
-    inputBox.height = inputTextSize.y + inputMargin.y;
+    inputBox.width = inputTextSizeMax.x + inputMargin.x;
+    inputBox.height = inputTextSizeMax.y + inputMargin.y;
 
     int totalHeight = titleSize.y + text1Size.y + text2Size.y + inputBox.height + (gap * 5);   
 
@@ -60,8 +61,25 @@ void highscoreScreen(GameContext* ctx) {
     float inputBoxRoundness = getRoundness(inputBox, 8.0f);
     int inputBoxsegments = 10;
 
+    bool isCursorVisible = true;
+    float cursorBlinkTimer = 0.0f;
+    float cursorBlinkDelay = 0.5f;
+    int cursorLineThickness = 2;
+    int cursorGap = 3;
+
     while(!WindowShouldClose())
     {
+
+        cursorBlinkTimer += GetFrameTime();
+
+        if (cursorBlinkTimer >= cursorBlinkDelay) {
+            isCursorVisible = !isCursorVisible;
+            cursorBlinkTimer = 0.0f;
+        }
+
+        Vector2 cursorStartPos = {inputTextPosition.x + inputTextSize.x + textFontSpacing, inputTextPosition.y - (inputTextSizeMax.y / 2)};
+        Vector2 cursorEndPos = {cursorStartPos.x, inputTextPosition.y + (inputTextSizeMax.y / 2)};
+
         BeginDrawing();
             ClearBackground(BLACK);
             DrawTextPro(GetFontDefault(), title, titlePosition, titleOrigin, 0, titleFontSize, titleFontSpacing, primaryColor);
@@ -71,6 +89,10 @@ void highscoreScreen(GameContext* ctx) {
             DrawRectangleRounded(inputBox, inputBoxRoundness, inputBoxsegments, primaryColorDimmed);
             DrawRectangleRoundedLinesEx(inputBox, inputBoxRoundness, inputBoxsegments, 2, primaryColor);
             DrawTextPro(GetFontDefault(), inputText, inputTextPosition, inputTextOrigin, 0, inputFontSize, textFontSpacing, primaryColor);
+            
+            if (isCursorVisible) {
+                DrawLineEx(cursorStartPos, cursorEndPos, cursorLineThickness, primaryColor);
+            }
             
             if (!isFadeInComplete) {
                 isFadeInComplete = fadeIn(&fadeInValue);
