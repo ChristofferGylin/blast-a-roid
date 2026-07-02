@@ -41,7 +41,7 @@ void highscoreScreen(GameContext* ctx) {
 
     Rectangle inputBox;
 
-    inputBox.width = inputTextSizeMax.x + inputMargin.x;
+    inputBox.width = inputTextSizeMax.x + (inputMargin.x * 2);
     inputBox.height = inputTextSizeMax.y + inputMargin.y;
 
     int totalHeight = titleSize.y + text1Size.y + text2Size.y + inputBox.height + (gap * 5);   
