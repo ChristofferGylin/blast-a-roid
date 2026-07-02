@@ -45,6 +45,19 @@ void addScore(Player* player, Asteroid* ast) {
     updateTimeBonusMultiplier(player);
 }
 
+bool checkHighscore(GameContext* ctx) {
+    bool isHighscore = false;
+
+    for (int i = 0; i < NUMBER_OF_HIGHSCORES; i++) {
+        if (ctx->player.score > ctx->highscores[i].score) {
+            isHighscore = true;
+            break;
+        }
+    }
+
+    return isHighscore;
+}
+
 void initHighScores(Highscore highscores[NUMBER_OF_HIGHSCORES]) {
     
     if (FileExists("./data.dat")) {
