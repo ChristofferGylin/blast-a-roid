@@ -2,15 +2,19 @@
 #define SCORE_H
 
 #include <inttypes.h>
+#include <stdbool.h>
 
 #include "asteroid.h"
 #include "player.h"
 
+typedef struct GameContext GameContext;
+
 #define NUMBER_OF_HIGHSCORES 10
+#define MAX_NAME_LENGTH 32
 
 typedef struct Highscore {
     uint64_t score;
-    char name[32];
+    char name[MAX_NAME_LENGTH];
     int level;
 }Highscore;
 

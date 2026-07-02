@@ -1,7 +1,7 @@
 #ifndef HIGHSCORESCREEN_H
 #define HIGHSCORESCREEN_H
 
-typedef struct GameContext GameContext;
+#include "gameContext.h"
 
 void highscoreScreen(GameContext* ctx);
 

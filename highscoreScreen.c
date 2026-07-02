@@ -7,6 +7,8 @@
 #include "player.h"
 #include "constants.h"
 #include "score.h"
+#include <string.h>
+#include "gameContext.h"
 
 void highscoreScreen(GameContext* ctx) {
 
@@ -21,7 +23,8 @@ void highscoreScreen(GameContext* ctx) {
     char title[] = "CONGRATULATIONS!";
     char text1[] = "YOU MADE THE HIGHSCORE LIST";
     char text2[] = "ENTER YOUR NAME:";
-    char inputText[33] = "Players Name";
+    char inputText[MAX_NAME_LENGTH + 1] = "\0";
+    int letterCount = 0;
     int titleFontSize = 96;
     int textFontSize = 36;
     int inputFontSize = 24;
@@ -34,7 +37,6 @@ void highscoreScreen(GameContext* ctx) {
     Vector2 titleSize = MeasureTextEx(GetFontDefault(), title, titleFontSize, titleFontSpacing);
     Vector2 text1Size = MeasureTextEx(GetFontDefault(), text1, textFontSize, textFontSpacing);
     Vector2 text2Size = MeasureTextEx(GetFontDefault(), text2, textFontSize, textFontSpacing);
-    Vector2 inputTextSize = MeasureTextEx(GetFontDefault(), inputText, inputFontSize, textFontSpacing);
     Vector2 inputTextSizeMax = MeasureTextEx(GetFontDefault(), "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA", inputFontSize, textFontSpacing);
 
     Rectangle inputBox;
@@ -56,7 +58,7 @@ void highscoreScreen(GameContext* ctx) {
     Vector2 titleOrigin = {titleSize.x / 2, 0}; 
     Vector2 text1Origin = {text1Size.x / 2, 0};
     Vector2 text2Origin = {text2Size.x / 2, 0};
-    Vector2 inputTextOrigin = {0, inputTextSize.y / 2};
+    Vector2 inputTextOrigin = {0, inputTextSizeMax.y / 2};
 
     float inputBoxRoundness = getRoundness(inputBox, 8.0f);
     int inputBoxsegments = 10;
@@ -70,13 +72,50 @@ void highscoreScreen(GameContext* ctx) {
     while(!WindowShouldClose())
     {
 
-        cursorBlinkTimer += GetFrameTime();
+        if (!exit) {
 
-        if (cursorBlinkTimer >= cursorBlinkDelay) {
-            isCursorVisible = !isCursorVisible;
-            cursorBlinkTimer = 0.0f;
+            cursorBlinkTimer += GetFrameTime();
+
+            if (cursorBlinkTimer >= cursorBlinkDelay) {
+                isCursorVisible = !isCursorVisible;
+                cursorBlinkTimer = 0.0f;
+            }
+
+            int key = GetCharPressed();
+
+            while (key > 0) {
+                
+                if ((key >= 32) && (key <= 125) && (letterCount < MAX_NAME_LENGTH)) {
+                    inputText[letterCount] = (char)key;
+                    inputText[letterCount + 1] = '\0';
+                    letterCount++;
+                }
+
+                key = GetCharPressed();
+            }
+
+            if (IsKeyPressed(KEY_BACKSPACE)) {
+                letterCount--;
+                if (letterCount < 0) letterCount = 0;
+                inputText[letterCount] = '\0';
+            } else if (IsKeyPressed(KEY_ENTER) && !exit) {
+            
+                Highscore newHighscore;
+            
+                newHighscore.level = ctx->player.level;
+                newHighscore.score = ctx->player.score;
+
+                strcpy(newHighscore.name, inputText);
+
+                addHighscore(ctx->highscores, newHighscore);
+                
+                isCursorVisible = false;
+
+                exit = true;
+            }
         }
 
+        Vector2 inputTextSize = MeasureTextEx(GetFontDefault(), inputText, inputFontSize, textFontSpacing);
         Vector2 cursorStartPos = {inputTextPosition.x + inputTextSize.x + textFontSpacing, inputTextPosition.y - (inputTextSizeMax.y / 2)};
         Vector2 cursorEndPos = {cursorStartPos.x, inputTextPosition.y + (inputTextSizeMax.y / 2)};
 
