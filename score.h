@@ -14,7 +14,7 @@ typedef struct GameContext GameContext;
 
 typedef struct Highscore {
     uint64_t score;
-    char name[MAX_NAME_LENGTH];
+    char name[MAX_NAME_LENGTH + 1];
     int level;
 }Highscore;
 
