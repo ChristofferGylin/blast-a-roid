@@ -29,27 +29,30 @@ void drawHighscores(Highscore highscores[NUMBER_OF_HIGHSCORES], Rectangle contai
     int highscoreFontSize = 22;
     int highscoreFontSpacing = 6;
     int highscoreMarginY = 20;
-    int highscoreMarginX = 10;
+    int highscoreMarginX = 35;
     int lineWidth = 3;
 
     int yPosition = container.y + highscoreMarginY;
 
-    char number[3] = "99";
-    char name[33] = "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA";
+    char number[4] = "10.";
+    char name[MAX_NAME_LENGTH + 1] = "AAAAAAAAAAAAAAAA";
     char level[4] = "999";
     char score[21] = "99999999999999999999";
 
-    Vector2 numberSize = MeasureTextEx(GetFontDefault(), number, highscoreFontSize, highscoreFontSpacing);
-    Vector2 nameSize = MeasureTextEx(GetFontDefault(), name, highscoreFontSize, highscoreFontSpacing);
-    Vector2 levelSize = MeasureTextEx(GetFontDefault(), level, highscoreFontSize, highscoreFontSpacing);
-    Vector2 scoreSize = MeasureTextEx(GetFontDefault(), score, highscoreFontSize, highscoreFontSpacing);
+    Vector2 levelSizeMax = MeasureTextEx(GetFontDefault(), level, highscoreFontSize, highscoreFontSpacing);
+    Vector2 numberSizeMax = MeasureTextEx(GetFontDefault(), number, highscoreFontSize, highscoreFontSpacing);
 
-    int availibleHeight = (container.height - numberSize.y - (highscoreMarginY * 2));
+    int availibleHeight = (container.height - levelSizeMax.y - (highscoreMarginY * 2));
     int gapX = 20;
     int gapY = availibleHeight / (NUMBER_OF_HIGHSCORES -1);
 
+    int numberXPosBase = container.x +  highscoreMarginX + lineWidth;
+    int nameXPosBase = container.x +  highscoreMarginX + lineWidth + gapX;
+    int levelXPosBase = container.x + container.width - highscoreMarginX - lineWidth;
+    int scoreXPosBase = container.x + container.width - highscoreMarginX - lineWidth - levelSizeMax.x - gapX;
+
     for (int i = 0; i < NUMBER_OF_HIGHSCORES; i++) {
-        snprintf(number, sizeof(number), "%d", i + 1);
+        snprintf(number, sizeof(number), "%d.", i + 1);
 
         if (highscores[i].score > 0) {
             snprintf(name, sizeof(name), "%s", highscores[i].name);
@@ -61,10 +64,13 @@ void drawHighscores(Highscore highscores[NUMBER_OF_HIGHSCORES], Rectangle contai
             strcpy(score, "");
         }
 
-        int numberXPos = container.x +  highscoreMarginX + lineWidth;
-        int nameXPos = numberXPos + numberSize.x + gapX;
-        int scoreXPos = container.x + container.width - highscoreMarginY;
-        int levelXPos = nameXPos + ((scoreXPos - nameXPos) / 2);
+        Vector2 levelSize = MeasureTextEx(GetFontDefault(), level, highscoreFontSize, highscoreFontSpacing);
+        Vector2 scoreSize = MeasureTextEx(GetFontDefault(), score, highscoreFontSize, highscoreFontSpacing);
+        Vector2 numberSize = MeasureTextEx(GetFontDefault(), number, highscoreFontSize, highscoreFontSpacing);
+
+        int numberXPos = numberXPosBase - numberSize.x;
+        int levelXPos = levelXPosBase - levelSize.x;
+        int scoreXPos = scoreXPosBase - scoreSize.x;
 
         Vector2 origin = {0,0};
         
@@ -82,7 +88,7 @@ void drawHighscores(Highscore highscores[NUMBER_OF_HIGHSCORES], Rectangle contai
         DrawTextPro(
             GetFontDefault(),
             name,
-            (Vector2){nameXPos, yPosition},
+            (Vector2){nameXPosBase, yPosition},
             origin,
             0,
             highscoreFontSize,

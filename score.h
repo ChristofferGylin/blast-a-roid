@@ -10,7 +10,7 @@
 typedef struct GameContext GameContext;
 
 #define NUMBER_OF_HIGHSCORES 10
-#define MAX_NAME_LENGTH 32
+#define MAX_NAME_LENGTH 16
 
 typedef struct Highscore {
     uint64_t score;

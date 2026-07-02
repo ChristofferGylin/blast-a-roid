@@ -40,7 +40,7 @@ GameResult highscoreScreen(GameContext* ctx) {
     Vector2 titleSize = MeasureTextEx(GetFontDefault(), title, titleFontSize, titleFontSpacing);
     Vector2 text1Size = MeasureTextEx(GetFontDefault(), text1, textFontSize, textFontSpacing);
     Vector2 text2Size = MeasureTextEx(GetFontDefault(), text2, textFontSize, textFontSpacing);
-    Vector2 inputTextSizeMax = MeasureTextEx(GetFontDefault(), "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA", inputFontSize, textFontSpacing);
+    Vector2 inputTextSizeMax = MeasureTextEx(GetFontDefault(), "AAAAAAAAAAAAAAAA", inputFontSize, textFontSpacing);
 
     Rectangle inputBox;
 
