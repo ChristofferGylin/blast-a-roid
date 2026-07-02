@@ -4,26 +4,30 @@
 #include "gameOver.h"
 #include "gameloop.h"
 #include "scoreScreen.h"
+#include "highscoreScreen.h"
 
 bool runGameSession(GameContext* ctx) {
     initPlayer(&ctx->player);
-    GameResult gameLoopResult = GAME_CONTINUE;
+    
+    highscoreScreen(ctx);
+    
+    // GameResult gameLoopResult = GAME_CONTINUE;
 
-    while (ctx->player.lives >= 0) {            
-        gameLoopResult = gameLoop(ctx);
+    // while (ctx->player.lives >= 0) {            
+    //     gameLoopResult = gameLoop(ctx);
 
-        if (gameLoopResult == EXIT_TO_DESKTOP) {
-            return false;
-        } else if (gameLoopResult == EXIT_TO_MENU) {
-            return true;
-        }
+    //     if (gameLoopResult == EXIT_TO_DESKTOP) {
+    //         return false;
+    //     } else if (gameLoopResult == EXIT_TO_MENU) {
+    //         return true;
+    //     }
 
-        if (ctx->player.lives < 0) {
-            gameOver(&ctx->player);
-        } else {
-            scoreScreen(ctx);
-        }
-    }
+    //     if (ctx->player.lives < 0) {
+    //         gameOver(&ctx->player);
+    //     } else {
+    //         scoreScreen(ctx);
+    //     }
+    // }
 
     return true;
 }

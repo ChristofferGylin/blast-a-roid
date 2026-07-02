@@ -10,7 +10,7 @@
 
 void highscoreScreen(GameContext* ctx) {
 
-    if (!checkHighscore(ctx)) return;
+    // if (!checkHighscore(ctx)) return;
 
     float fadeInValue = 1.0f;
     float fadeOutValue = 0.0f;
@@ -19,8 +19,9 @@ void highscoreScreen(GameContext* ctx) {
     bool exit = false;
 
     char title[] = "CONGRATULATIONS!";
-    char text[] = "YOU MADE THE HIGHSCORE LIST\nENTER YOUR NAME:";
-    char inputText[33] = "\0";
+    char text1[] = "YOU MADE THE HIGHSCORE LIST";
+    char text2[] = "ENTER YOUR NAME:";
+    char inputText[33] = "Players Name";
     int titleFontSize = 96;
     int textFontSize = 36;
     int inputFontSize = 24;
@@ -28,34 +29,48 @@ void highscoreScreen(GameContext* ctx) {
     int textFontSpacing = 4;
     int gap = 30; 
 
-    Vector2 inputMargin = {8, 4};
+    Vector2 inputMargin = {12, 20};
 
     Vector2 titleSize = MeasureTextEx(GetFontDefault(), title, titleFontSize, titleFontSpacing);
-    Vector2 textSize = MeasureTextEx(GetFontDefault(), text, textFontSize, textFontSpacing);
+    Vector2 text1Size = MeasureTextEx(GetFontDefault(), text1, textFontSize, textFontSpacing);
+    Vector2 text2Size = MeasureTextEx(GetFontDefault(), text2, textFontSize, textFontSpacing);
     Vector2 inputTextSize = MeasureTextEx(GetFontDefault(), "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA", inputFontSize, textFontSpacing);
-
-    Vector2 titlePosition = {SCREEN_WIDTH / 2, (SCREEN_HEIGHT / 2) - (titleSize.y / 2)};
-    Vector2 textPosition = {SCREEN_WIDTH / 2, (SCREEN_HEIGHT / 2) + (titleSize.y / 2)};
-
-    Vector2 titleOrigin = {titleSize.x / 2, titleSize.y / 2}; 
-    Vector2 textOrigin = {textSize.x / 2, textSize.y / 2};
 
     Rectangle inputBox;
 
-    inputBox.width = inputTextSize.y + inputMargin.x;
+    inputBox.width = inputTextSize.x + inputMargin.x;
     inputBox.height = inputTextSize.y + inputMargin.y;
-    inputBox.x = SCREEN_WIDTH / 2;
-    inputBox.y = textPosition.y + (textSize.y / 2) + gap;
+
+    int totalHeight = titleSize.y + text1Size.y + text2Size.y + inputBox.height + (gap * 5);   
+
+    Vector2 titlePosition = {SCREEN_WIDTH / 2, (SCREEN_HEIGHT / 2) - (totalHeight / 2)};
+    Vector2 text1Position = {SCREEN_WIDTH / 2, titlePosition.y + titleSize.y + (gap * 2)};
+    Vector2 text2Position = {SCREEN_WIDTH / 2, text1Position.y + text1Size.y + gap};
+
+    inputBox.x = (SCREEN_WIDTH / 2 - (inputBox.width / 2));
+    inputBox.y = text2Position.y + (text2Size.y) + (gap * 2);
+
+    Vector2 inputTextPosition = {inputBox.x + inputMargin.x, inputBox.y + (inputBox.height / 2)};
+
+    Vector2 titleOrigin = {titleSize.x / 2, 0}; 
+    Vector2 text1Origin = {text1Size.x / 2, 0};
+    Vector2 text2Origin = {text2Size.x / 2, 0};
+    Vector2 inputTextOrigin = {0, inputTextSize.y / 2};
+
+    float inputBoxRoundness = getRoundness(inputBox, 8.0f);
+    int inputBoxsegments = 10;
 
     while(!WindowShouldClose())
     {
         BeginDrawing();
             ClearBackground(BLACK);
             DrawTextPro(GetFontDefault(), title, titlePosition, titleOrigin, 0, titleFontSize, titleFontSpacing, primaryColor);
-            DrawTextPro(GetFontDefault(), text, textPosition, textOrigin, 0, textFontSize, textFontSpacing, primaryColor);
+            DrawTextPro(GetFontDefault(), text1, text1Position, text1Origin, 0, textFontSize, textFontSpacing, primaryColor);
+            DrawTextPro(GetFontDefault(), text2, text2Position, text2Origin, 0, textFontSize, textFontSpacing, primaryColor);
 
-            DrawRectangleRounded(inputBox, 10, 10, primaryColorDimmed);
-            DrawRectangleRoundedLinesEx(inputBox, 10, 10, 2, primaryColor);
+            DrawRectangleRounded(inputBox, inputBoxRoundness, inputBoxsegments, primaryColorDimmed);
+            DrawRectangleRoundedLinesEx(inputBox, inputBoxRoundness, inputBoxsegments, 2, primaryColor);
+            DrawTextPro(GetFontDefault(), inputText, inputTextPosition, inputTextOrigin, 0, inputFontSize, textFontSpacing, primaryColor);
             
             if (!isFadeInComplete) {
                 isFadeInComplete = fadeIn(&fadeInValue);
