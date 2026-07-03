@@ -107,20 +107,6 @@ void loadHighscores(Highscore highscores[NUMBER_OF_HIGHSCORES]) {
         } else {
             printf("Error: The data file have been modified or corrupted, could not load highscores in loadHighscores");
         }
-
-        char name[MAX_NAME_LENGTH +1];
-        char level[4];
-        char score[21];
-
-
-        for (int i = 0; i < NUMBER_OF_HIGHSCORES; i++) {
-            snprintf(name, sizeof(name), "%s", highscores[i].name);
-            snprintf(level, sizeof(level), "%d", highscores[i].level);
-            snprintf(score, sizeof(score), "%" PRIu64, highscores[i].score);
-
-            printf("Name: %s   Score: %s   Level: %s\n", name, score, level);
-        }
-
         
     } else {
         printf("Error: Could not read highscores from file in loadHighscores");
