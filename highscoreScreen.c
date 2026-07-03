@@ -100,6 +100,7 @@ GameResult highscoreScreen(GameContext* ctx) {
             }
 
             int key = GetCharPressed();
+            bool submit = false;
 
             while (key > 0) {
                 
@@ -112,11 +113,15 @@ GameResult highscoreScreen(GameContext* ctx) {
                 key = GetCharPressed();
             }
 
+            if (CheckCollisionPointRec(GetMousePosition(), button) && IsMouseButtonPressed(0)) {
+                submit = true;
+            }
+
             if (IsKeyPressed(KEY_BACKSPACE)) {
                 letterCount--;
                 if (letterCount < 0) letterCount = 0;
                 inputText[letterCount] = '\0';
-            } else if (IsKeyPressed(KEY_ENTER) && !exit) {
+            } else if (IsKeyPressed(KEY_ENTER) || submit) {
             
                 Highscore newHighscore;
             
