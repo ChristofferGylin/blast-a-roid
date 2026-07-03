@@ -268,13 +268,13 @@ Rectangle drawLayoutContainers() {
     );
 
     Vector2 highscoresLinePos = {
-        highScoreContainer.x + margin,
+        highScoreContainer.x,
         highScoreHeadingPos.y + highScoreHeadingSize.y + 10
     };
 
     Vector2 highscoresLineSize = {
-        highScoreContainer.width - (margin * 2),
-        3
+        highScoreContainer.width,
+        1
     };
 
     DrawRectangle(highscoresLinePos.x, highscoresLinePos.y, highscoresLineSize.x, highscoresLineSize.y, primaryColor);
