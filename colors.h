@@ -8,5 +8,6 @@ static const Color bottomColor = {0, 13, 36, 255};
 static const Color lineColor = {156, 192, 255, 128};
 static const Color primaryColor = {0, 218, 255, 255};
 static const Color primaryColorDimmed = {0, 218, 255, 78};
+static const Color primaryColorLessDimmed = {0, 218, 255, 140};
 
 #endif
