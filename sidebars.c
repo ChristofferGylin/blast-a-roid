@@ -54,7 +54,7 @@ void renderLives(GameContext* ctx, Vector2 position, Vector2 size) {
 void renderPowerupIcon(Texture2D* iconSprite, Vector2 position, Vector2 size, bool active) {
     
     Texture2D sprite = *iconSprite;
-    Color color = active ? primaryColor : primaryColorDimmed;
+    Color color = active ? primaryColor : primaryColorDimmed30;
     
     DrawTexturePro(
             sprite,
@@ -133,7 +133,7 @@ void renderShieldPower(float shieldPower, Vector2 position, Vector2 size) {
 
     float roundness = getRoundness(rect, roundnessRadius);
 
-    DrawRectangleRounded(rect, roundness, segments, primaryColorDimmed);
+    DrawRectangleRounded(rect, roundness, segments, primaryColorDimmed30);
     BeginScissorMode(rect.x, rect.y, barLevelWidth, rect.height);
         DrawRectangleRounded(rect, roundness, segments, primaryColor);
     EndScissorMode();

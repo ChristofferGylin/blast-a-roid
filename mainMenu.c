@@ -23,7 +23,183 @@ int roundnessRadius = 12.0f;
 int logoFontSize = 42;
 int logoFontSpacing = 8;
 
-void drawLayoutContainers() {
+void drawHighscores(Highscore highscores[NUMBER_OF_HIGHSCORES], Rectangle container);
+
+void drawHighscores(Highscore highscores[NUMBER_OF_HIGHSCORES], Rectangle container) {
+    int highscoreFontSize = 22;
+    int highscoreFontSpacing = 6;
+    int highscoreMarginY = 20;
+    int highscoreMarginX = 35;
+    int lineWidth = 3;
+
+    char number[4] = "10.";
+    char name[MAX_NAME_LENGTH + 1] = "AAAAAAAAAAAAAAAA";
+    char level[4] = "999";
+    char score[21] = "99999999999999999999";
+
+    char numberTitle[] = "#";
+    char nameTitle[] = "NAME";
+    char levelTitle[] = "LVL";
+    char scoreTitle[] = "SCORE";
+
+    Vector2 numberSizeMax = MeasureTextEx(GetFontDefault(), number, highscoreFontSize, highscoreFontSpacing);
+    Vector2 nameSizeMax = MeasureTextEx(GetFontDefault(), name, highscoreFontSize, highscoreFontSpacing);
+    Vector2 scoreSizeMax = MeasureTextEx(GetFontDefault(), score, highscoreFontSize, highscoreFontSpacing);
+    Vector2 levelSizeMax = MeasureTextEx(GetFontDefault(), level, highscoreFontSize, highscoreFontSpacing);
+
+    Vector2 numberTitleSize = MeasureTextEx(GetFontDefault(), numberTitle, highscoreFontSize, highscoreFontSpacing);
+    Vector2 nameTitleSize = MeasureTextEx(GetFontDefault(), nameTitle, highscoreFontSize, highscoreFontSpacing);
+    Vector2 scoreTitleSize = MeasureTextEx(GetFontDefault(), scoreTitle, highscoreFontSize, highscoreFontSpacing);
+    Vector2 levelTitleSize = MeasureTextEx(GetFontDefault(), levelTitle, highscoreFontSize, highscoreFontSpacing);
+
+    int availibleHeight = (container.height - (levelSizeMax.y * 2) - (highscoreMarginY * 3));
+    int gapX = 20;
+    int gapY = availibleHeight / (NUMBER_OF_HIGHSCORES -1);
+
+    int numberXPosBase = container.x +  highscoreMarginX + lineWidth;
+    int nameXPosBase = container.x +  highscoreMarginX + lineWidth + gapX;
+    int levelXPosBase = container.x + container.width - highscoreMarginX - lineWidth;
+    int scoreXPosBase = container.x + container.width - highscoreMarginX - lineWidth - levelSizeMax.x - gapX;
+
+    int numberTitleXPos = numberXPosBase - (numberSizeMax.x / 2.0f); 
+    int nameTitleXPos = nameXPosBase;
+    int levelTitleXPos = levelXPosBase - (levelTitleSize.x / 2.0f);
+    int scoreTitleXPos = scoreXPosBase - scoreTitleSize.x;
+
+    int yPosition = container.y;
+
+    Vector2 origin = {0,0};
+
+    Rectangle titlesBackground = {container.x, yPosition, container.width, nameTitleSize.y + highscoreMarginY};
+
+    DrawRectanglePro(titlesBackground, origin, 0, primaryColorDimmed30);
+
+    yPosition += + (highscoreMarginY / 2);
+
+    DrawTextPro(
+            GetFontDefault(),
+            numberTitle,
+            (Vector2){numberTitleXPos, yPosition},
+            origin,
+            0,
+            highscoreFontSize,
+            highscoreFontSpacing,
+            primaryColor
+    );
+
+    DrawTextPro(
+            GetFontDefault(),
+            nameTitle,
+            (Vector2){nameTitleXPos, yPosition},
+            origin,
+            0,
+            highscoreFontSize,
+            highscoreFontSpacing,
+            primaryColor
+    );
+
+    DrawTextPro(
+            GetFontDefault(),
+            scoreTitle,
+            (Vector2){scoreTitleXPos, yPosition},
+            origin,
+            0,
+            highscoreFontSize,
+            highscoreFontSpacing,
+            primaryColor
+    );
+
+    DrawTextPro(
+            GetFontDefault(),
+            levelTitle,
+            (Vector2){levelTitleXPos, yPosition},
+            origin,
+            0,
+            highscoreFontSize,
+            highscoreFontSpacing,
+            primaryColor
+    );
+
+    yPosition += nameTitleSize.y + (highscoreMarginY / 2) ;
+
+    Vector2 dividerLineStart = {container.x, yPosition};
+    Vector2 dividerLineEnd = {container.x + container.width, yPosition};
+
+    DrawLineEx(dividerLineStart, dividerLineEnd, 1, primaryColor);
+
+    yPosition += highscoreMarginY;
+
+    for (int i = 0; i < NUMBER_OF_HIGHSCORES; i++) {
+        snprintf(number, sizeof(number), "%d.", i + 1);
+
+        if (highscores[i].score > 0) {
+            snprintf(name, sizeof(name), "%s", highscores[i].name);
+            snprintf(level, sizeof(level), "%d", highscores[i].level);
+            snprintf(score, sizeof(score), "%" PRIu64, highscores[i].score);
+        } else {
+            strcpy(name, "");
+            strcpy(level, "");
+            strcpy(score, "");
+        }
+
+        Vector2 levelSize = MeasureTextEx(GetFontDefault(), level, highscoreFontSize, highscoreFontSpacing);
+        Vector2 scoreSize = MeasureTextEx(GetFontDefault(), score, highscoreFontSize, highscoreFontSpacing);
+        Vector2 numberSize = MeasureTextEx(GetFontDefault(), number, highscoreFontSize, highscoreFontSpacing);
+
+        int numberXPos = numberXPosBase - numberSize.x;
+        int levelXPos = levelXPosBase - levelSize.x;
+        int scoreXPos = scoreXPosBase - scoreSize.x;
+        
+        DrawTextPro(
+            GetFontDefault(),
+            number,
+            (Vector2){numberXPos, yPosition},
+            origin,
+            0,
+            highscoreFontSize,
+            highscoreFontSpacing,
+            primaryColor
+        );
+
+        DrawTextPro(
+            GetFontDefault(),
+            name,
+            (Vector2){nameXPosBase, yPosition},
+            origin,
+            0,
+            highscoreFontSize,
+            highscoreFontSpacing,
+            primaryColor
+        );
+
+        DrawTextPro(
+            GetFontDefault(),
+            level,
+            (Vector2){levelXPos, yPosition},
+            origin,
+            0,
+            highscoreFontSize,
+            highscoreFontSpacing,
+            primaryColor
+        );
+        
+        DrawTextPro(
+            GetFontDefault(),
+            score,
+            (Vector2){scoreXPos, yPosition},
+            origin,
+            0,
+            highscoreFontSize,
+            highscoreFontSpacing,
+            primaryColor
+        );
+
+        yPosition += gapY;
+
+    }
+}
+
+Rectangle drawLayoutContainers() {
 
     Rectangle background = {
         0,
@@ -92,13 +268,13 @@ void drawLayoutContainers() {
     );
 
     Vector2 highscoresLinePos = {
-        highScoreContainer.x + margin,
+        highScoreContainer.x,
         highScoreHeadingPos.y + highScoreHeadingSize.y + 10
     };
 
     Vector2 highscoresLineSize = {
-        highScoreContainer.width - (margin * 2),
-        3
+        highScoreContainer.width,
+        1
     };
 
     DrawRectangle(highscoresLinePos.x, highscoresLinePos.y, highscoresLineSize.x, highscoresLineSize.y, primaryColor);
@@ -106,6 +282,14 @@ void drawLayoutContainers() {
     DrawRectangleRoundedLinesEx(highScoreContainer, getRoundness(highScoreContainer, roundnessRadius), 10, 3, primaryColor);
     DrawRectangleRoundedLinesEx(logoContainer, getRoundness(logoContainer, roundnessRadius), 10, 3, primaryColor);
     DrawRectangleRoundedLinesEx(menuContainer, getRoundness(menuContainer, roundnessRadius), 10, 3, primaryColor);
+
+    Rectangle highscoreTextContainer;
+    highscoreTextContainer.x = highScoreContainer.x;
+    highscoreTextContainer.y = highscoresLinePos.y + highscoresLineSize.y;
+    highscoreTextContainer.width = highScoreContainer.width;
+    highscoreTextContainer.height = highScoreContainer.height - (highscoreTextContainer.y - (highScoreContainer.y + highscoresLineSize.y));
+
+    return highscoreTextContainer;
 }
 
 void drawMenu(Menu* menu) {
@@ -213,7 +397,8 @@ void mainMenu(GameContext* ctx) {
 
         BeginDrawing();
             ClearBackground(BLACK);
-            drawLayoutContainers();
+            Rectangle highscoreContainer = drawLayoutContainers();
+            drawHighscores(ctx->highscores, highscoreContainer);
             drawMenu(&menu);
             
             if (!isFadeInComplete) {
