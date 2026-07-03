@@ -87,6 +87,8 @@ GameResult highscoreScreen(GameContext* ctx) {
     int cursorLineThickness = 2;
     int cursorGap = 3;
 
+    bool isButtonHovered = false;
+
     while(!WindowShouldClose())
     {
 
@@ -113,15 +115,23 @@ GameResult highscoreScreen(GameContext* ctx) {
                 key = GetCharPressed();
             }
 
-            if (CheckCollisionPointRec(GetMousePosition(), button) && IsMouseButtonPressed(0)) {
-                submit = true;
+            if (CheckCollisionPointRec(GetMousePosition(), button) && letterCount > 0) {
+                isButtonHovered = true;
+                SetMouseCursor(MOUSE_CURSOR_POINTING_HAND);
+                if (IsMouseButtonPressed(0)) {
+                    submit = true;
+                }
+                
+            } else {
+                isButtonHovered = false;
+                SetMouseCursor(MOUSE_CURSOR_DEFAULT);
             }
 
             if (IsKeyPressed(KEY_BACKSPACE)) {
                 letterCount--;
                 if (letterCount < 0) letterCount = 0;
                 inputText[letterCount] = '\0';
-            } else if (IsKeyPressed(KEY_ENTER) || submit) {
+            } else if ((IsKeyPressed(KEY_ENTER) && letterCount > 0) || submit) {
             
                 Highscore newHighscore;
             
@@ -134,6 +144,8 @@ GameResult highscoreScreen(GameContext* ctx) {
                 
                 isCursorVisible = false;
 
+                SetMouseCursor(MOUSE_CURSOR_DEFAULT);
+
                 exit = true;
             }
         }
@@ -142,18 +154,22 @@ GameResult highscoreScreen(GameContext* ctx) {
         Vector2 cursorStartPos = {inputTextPosition.x + inputTextSize.x + textFontSpacing, inputTextPosition.y - (inputTextSizeMax.y / 2)};
         Vector2 cursorEndPos = {cursorStartPos.x, inputTextPosition.y + (inputTextSizeMax.y / 2)};
 
+        Color buttonColor = isButtonHovered ? primaryColorDimmed60 : primaryColorDimmed50;
+        Color buttonBorderColor = primaryColor;
+        Color buttonTextColor = primaryColor;
+
         BeginDrawing();
             ClearBackground(BLACK);
             DrawTextPro(GetFontDefault(), title, titlePosition, titleOrigin, 0, titleFontSize, titleFontSpacing, primaryColor);
             DrawTextPro(GetFontDefault(), text1, text1Position, text1Origin, 0, textFontSize, textFontSpacing, primaryColor);
             DrawTextPro(GetFontDefault(), text2, text2Position, text2Origin, 0, textFontSize, textFontSpacing, primaryColor);
 
-            DrawRectangleRounded(button, buttonRoundness, inputBoxsegments, primaryColorLessDimmed);
-            DrawRectangleRoundedLinesEx(button, buttonRoundness, inputBoxsegments, 2, primaryColor);
+            DrawRectangleRounded(button, buttonRoundness, inputBoxsegments, buttonColor);
+            DrawRectangleRoundedLinesEx(button, buttonRoundness, inputBoxsegments, 2, buttonBorderColor);
 
-            DrawTextPro(GetFontDefault(), buttonText, buttonTextPosition, origin, 0, buttonFontSize, textFontSpacing, primaryColor);
+            DrawTextPro(GetFontDefault(), buttonText, buttonTextPosition, origin, 0, buttonFontSize, textFontSpacing, buttonTextColor);
 
-            DrawRectangleRounded(inputBox, inputBoxRoundness, inputBoxsegments, primaryColorDimmed);
+            DrawRectangleRounded(inputBox, inputBoxRoundness, inputBoxsegments, primaryColorDimmed30);
             DrawRectangleRoundedLinesEx(inputBox, inputBoxRoundness, inputBoxsegments, 2, primaryColor);
             DrawTextPro(GetFontDefault(), inputText, inputTextPosition, inputTextOrigin, 0, inputFontSize, textFontSpacing, primaryColor);
             

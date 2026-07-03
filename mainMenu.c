@@ -72,7 +72,7 @@ void drawHighscores(Highscore highscores[NUMBER_OF_HIGHSCORES], Rectangle contai
 
     Rectangle titlesBackground = {container.x, yPosition, container.width, nameTitleSize.y + highscoreMarginY};
 
-    DrawRectanglePro(titlesBackground, origin, 0, primaryColorDimmed);
+    DrawRectanglePro(titlesBackground, origin, 0, primaryColorDimmed30);
 
     yPosition += + (highscoreMarginY / 2);
 
