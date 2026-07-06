@@ -721,7 +721,14 @@ bool ufoGoOffScreen(GameContext* ctx, Enemy* enemy) {
 }
 
 void updateSpikyAsteroid(GameContext* ctx, Enemy* enemy) {
-    enemy->destination = predictiveAim(ctx->ship.position, ctx->ship.velocity, enemy->position, 0.5f);
+
+    Ship* ship = &ctx->ship;
+
+    if (CheckCollisionCircles(enemy->position, enemy->size / 2.0f, ship->position, SHIP_SIZE)) {
+        enemy->destination = ship->position;
+    } else {
+        enemy->destination = predictiveAim(ship->position, ship->velocity, enemy->position, 0.5f);
+    }
 }
 
 bool updateUfo1(GameContext* ctx, Enemy* enemy) {
