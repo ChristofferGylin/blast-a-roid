@@ -375,7 +375,7 @@ void resetAsteroid(Asteroid* ast) {
     if (ast->type == METAL_ASTEROID) {
         ast->rotationSpeed = 0;
     } else {
-        ast->rotationSpeed = GetRandomValue(-100, 100);
+        ast->rotationSpeed = GetRandomValue(-ASTEROID_MAX_ROTATION_SPEED, ASTEROID_MAX_ROTATION_SPEED);
     }
 }
 

@@ -3,6 +3,10 @@
 
 static const int ASTEROID_MIN_VELOCITY = 30;
 static const int ASTEROID_MAX_VELOCITY = 100;
+static const int ASTEROID_MAX_ROTATION_SPEED = 100;
+static const int ASTEROID_SIZE_1 = 32;
+static const int ASTEROID_SIZE_2 = 24;
+static const int ASTEROID_SIZE_3 = 12;
 static const int BLACK_HOLE_SIZE = 32;
 static const int CRATE_RENDER_SIZE = 32;
 static const int COMET_RENDER_SIZE_X = 32;
@@ -14,9 +18,6 @@ static const int GEM_COLLISION_SIZE = 24;
 static const int EXPLOSION_SIZE = 32;
 static const int SHIP_SIZE = 32;
 static const int SHIELD_SIZE = 48;
-static const int ASTEROID_SIZE_1 = 32;
-static const int ASTEROID_SIZE_2 = 24;
-static const int ASTEROID_SIZE_3 = 12;
 static const int METAL_ASTEROID_SIZE = 32;
 static const int MULTIPLIER_COLLISION_SIZE = 18;
 static const int MULTIPLIER_RENDER_SIZE = 24;
