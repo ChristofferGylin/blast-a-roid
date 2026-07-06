@@ -368,31 +368,15 @@ void resetAllAsteroids(AsteroidPool* pool) {
 }
 
 void resetAsteroid(Asteroid* ast) {
-    bool directionX = GetRandomValue(0,1);
-    bool directionY = GetRandomValue(0,1);
-    int tempVelocityX = GetRandomValue(30, 100);
-    int tempVelocityY = GetRandomValue(30, 100);
-    Vector2 velocity = {directionX ? tempVelocityX : -tempVelocityX, directionY ? tempVelocityY : -tempVelocityY};
-    Vector2 position;
-        
-    if (GetRandomValue(0,1) == 1) {
-        position.x = -32.0f;
-        position.y = GetRandomValue(0, GetScreenHeight());
-    } else {
-        position.x = GetRandomValue(0, GetScreenWidth());
-        position.y = -32.0f;
-    }
-
-    ast->position = position;
+    ast->position = getRandomPositionOffScreen(getAsteroidSize(ast->type));
     ast->rotation = 0;
+    ast->velocity = getRandomVelocity((FloatRange){ASTEROID_MIN_VELOCITY, ASTEROID_MAX_VELOCITY});
 
     if (ast->type == METAL_ASTEROID) {
         ast->rotationSpeed = 0;
     } else {
-        ast->rotationSpeed = GetRandomValue(-100, 100);
+        ast->rotationSpeed = GetRandomValue(-ASTEROID_MAX_ROTATION_SPEED, ASTEROID_MAX_ROTATION_SPEED);
     }
-    
-    ast->velocity = velocity;
 }
 
 void updateAsteroidsAnimations(GameContext* ctx) {
