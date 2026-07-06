@@ -745,8 +745,16 @@ bool updateUfo2(GameContext* ctx, Enemy* enemy) {
     bool hasBeenRemoved = false;
 
     if (now <= enemy->spawnTime + attackDurationTime + ctx->pausTimer) {
+
+        Ship* ship = &ctx->ship;
         enemy->isAttacking = true;
-        enemy->destination = predictiveAim(ctx->ship.position, ctx->ship.velocity, enemy->position, 0.5f);
+        
+        if (CheckCollisionCircles(enemy->position, enemy->size / 2.0f, ship->position, SHIP_SIZE)) {
+            enemy->destination = ship->position;
+        } else {
+            enemy->destination = predictiveAim(ship->position, ship->velocity, enemy->position, 0.5f);
+        }
+
     } else {
         enemy->isAttacking = false;
        hasBeenRemoved = ufoGoOffScreen(ctx, enemy);
