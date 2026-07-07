@@ -18,13 +18,9 @@ float shieldLerpT = 0.0f;
 
 void handleShield(GameContext* ctx) {
 
-    if (GetTime() < (ctx->ship.timeSpawned + AUTO_SHIELD_DURATION)) {
-        ctx->ship.isAutoShieldActive = true;
-    } else {
-        ctx->ship.isAutoShieldActive = false;
-    }
-
-    if (IsKeyDown(KEY_SPACE) && !ctx->ship.isAutoShieldActive) {
+    if (GetTime() < (ctx->ship.timeSpawned + AUTO_SHIELD_DURATION)){
+        ctx->ship.isShieldActive = true;
+    }  else if (IsKeyDown(KEY_SPACE)) {
 
         ctx->player.shieldPower -= GetFrameTime() * SHIELD_DRAIN_RATE;
 
