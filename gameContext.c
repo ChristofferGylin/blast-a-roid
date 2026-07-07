@@ -20,7 +20,7 @@ void initGameContext(GameContext* ctx) {
     loadAssets(ctx);
     initShip(ctx, &ctx->ship);
     initSpawning(ctx);
-    initHighScores(ctx->highscores);
+    initHighScores(&ctx->highscores);
     ctx->pausTimer = 0;
     ctx->supernova = (Supernova){false, 0.0f, 0.0f};
     ctx->isBlackHoleActive = false;

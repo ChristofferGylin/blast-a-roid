@@ -23,9 +23,10 @@ int roundnessRadius = 12.0f;
 int logoFontSize = 42;
 int logoFontSpacing = 8;
 
-void drawHighscores(Highscore highscores[NUMBER_OF_HIGHSCORES], Rectangle container);
+void drawHighscores(Highscores* highscores, Rectangle container);
 
-void drawHighscores(Highscore highscores[NUMBER_OF_HIGHSCORES], Rectangle container) {
+void drawHighscores(Highscores* highscores, Rectangle container) {
+
     int highscoreFontSize = 22;
     int highscoreFontSpacing = 6;
     int highscoreMarginY = 20;
@@ -132,10 +133,10 @@ void drawHighscores(Highscore highscores[NUMBER_OF_HIGHSCORES], Rectangle contai
     for (int i = 0; i < NUMBER_OF_HIGHSCORES; i++) {
         snprintf(number, sizeof(number), "%d.", i + 1);
 
-        if (highscores[i].score > 0) {
-            snprintf(name, sizeof(name), "%s", highscores[i].name);
-            snprintf(level, sizeof(level), "%d", highscores[i].level);
-            snprintf(score, sizeof(score), "%" PRIu64, highscores[i].score);
+        if (highscores->scores[i].score > 0) {
+            snprintf(name, sizeof(name), "%s", highscores->scores[i].name);
+            snprintf(level, sizeof(level), "%d", highscores->scores[i].level);
+            snprintf(score, sizeof(score), "%" PRIu64, highscores->scores[i].score);
         } else {
             strcpy(name, "");
             strcpy(level, "");
@@ -149,6 +150,13 @@ void drawHighscores(Highscore highscores[NUMBER_OF_HIGHSCORES], Rectangle contai
         int numberXPos = numberXPosBase - numberSize.x;
         int levelXPos = levelXPosBase - levelSize.x;
         int scoreXPos = scoreXPosBase - scoreSize.x;
+
+        if (highscores->hasNewHighscore && highscores->latestScoreIndex == i) {
+
+            Rectangle highlight = {container.x, yPosition - (highscoreMarginY / 2.0f), container.width, levelSize.y + highscoreMarginY};
+
+            DrawRectanglePro(highlight, origin, 0, primaryColorDimmed30);   
+        }
         
         DrawTextPro(
             GetFontDefault(),
@@ -398,7 +406,7 @@ void mainMenu(GameContext* ctx) {
         BeginDrawing();
             ClearBackground(BLACK);
             Rectangle highscoreContainer = drawLayoutContainers();
-            drawHighscores(ctx->highscores, highscoreContainer);
+            drawHighscores(&ctx->highscores, highscoreContainer);
             drawMenu(&menu);
             
             if (!isFadeInComplete) {
