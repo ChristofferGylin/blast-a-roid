@@ -29,10 +29,15 @@ typedef struct HighscoreSaveData {
     uint32_t checksum;
 }HighscoreSaveData;
 
+typedef struct NewHighscore {
+    bool hasNewHighscore;
+    int scoreIndex;
+}NewHighscore;
+
 void addHighscore(Highscore highscores[NUMBER_OF_HIGHSCORES], Highscore newHighscore);
 void addScore(Player* player, Asteroid* ast);
-bool checkHighscore(GameContext* ctx);
-void initHighScores(Highscore highscores[NUMBER_OF_HIGHSCORES]);
+NewHighscore checkHighscore(GameContext* ctx);
+void initHighScores(Highscores highscores);
 void resetTimeBonusMultiplier(GameContext* ctx);
 void updateLevelBonus(Player* player);
 void updateTimeBonusMultiplier(Player* player);

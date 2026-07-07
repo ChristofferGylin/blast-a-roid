@@ -14,8 +14,8 @@
 GameResult highscoreScreen(GameContext* ctx) {
 
     GameResult result = EXIT_TO_MENU;
-
-    if (!checkHighscore(ctx)) return result;
+    NewHighscore newHighscoreResult = checkHighscore(ctx);
+    if (!newHighscoreResult.hasNewHighscore) return result;
 
     float fadeInValue = 1.0f;
     float fadeOutValue = 0.0f;
@@ -140,7 +140,7 @@ GameResult highscoreScreen(GameContext* ctx) {
 
                 strcpy(newHighscore.name, inputText);
 
-                addHighscore(ctx->highscores, newHighscore);
+                addHighscore(ctx->highscores.scores, newHighscore);
                 
                 isCursorVisible = false;
 

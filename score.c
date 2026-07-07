@@ -59,17 +59,19 @@ void addScore(Player* player, Asteroid* ast) {
     updateTimeBonusMultiplier(player);
 }
 
-bool checkHighscore(GameContext* ctx) {
-    bool isHighscore = false;
+NewHighscore checkHighscore(GameContext* ctx) {
+    
+    NewHighscore result = {0};
 
     for (int i = 0; i < NUMBER_OF_HIGHSCORES; i++) {
         if (ctx->player.score > ctx->highscores.scores[i].score) {
-            isHighscore = true;
+            result.hasNewHighscore = true;
+            result.scoreIndex = i;
             break;
         }
     }
 
-    return isHighscore;
+    return result;
 }
 
 void initHighScores(Highscores* highscores) {
