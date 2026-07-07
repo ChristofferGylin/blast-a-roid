@@ -72,24 +72,24 @@ bool checkHighscore(GameContext* ctx) {
     return isHighscore;
 }
 
-void initHighScores(Highscore highscores[NUMBER_OF_HIGHSCORES]) {
+void initHighScores(Highscores* highscores) {
     
     if (FileExists("./data.dat")) {
-        loadHighscores(highscores);
+        loadHighscores(highscores->scores);
         printf("Successfully loaded highscores from file\n");
     } else {
 
         printf("Error: Could not load highscores from file, recreating file...\n");
 
         for (int i = 0; i < NUMBER_OF_HIGHSCORES; i++) {
-            Highscore* entry = &highscores[i];
+            Highscore* entry = &highscores->scores[i];
 
             entry->level = 0;
             entry->score = 0;
             entry->name[0] = '\0';
         }
 
-        saveHighscores(highscores);
+        saveHighscores(highscores->scores);
     }
 }
 
