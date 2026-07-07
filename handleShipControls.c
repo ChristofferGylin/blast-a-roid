@@ -106,7 +106,7 @@ void handleShipControls(GameContext* ctx)
         {
             ship->velocity.y = MAX_VELOCITY;
         }
-    } else if (ctx->player.powerups.autoStop) {
+    } else if (ctx->player.powerups.autoStop && !ctx->isBlackHoleActive) {
         brakeShip(&ship->velocity, BRAKE_FACTOR);
     }
 
