@@ -313,6 +313,7 @@ void handleSpecialsHitDetection(GameContext* ctx) {
                     case BLACK_HOLE:
                         newExplosion(ctx, specialObj->special.position);
                         player->levelBonus += 5000;
+                        ctx->isBlackHoleActive = false;
                         break;
                     
                     case SUPERNOVA:
