@@ -93,7 +93,6 @@ void addSpecialToPool(GameContext* ctx, SpecialType type) {
             ship.position = newSpecial.position;
             ship.rotation = newSpecial.rotation;
             ship.velocity = newSpecial.velocity;
-            ship.isAutoShieldActive = false;
 
             newSpecial.ship = ship;
 
@@ -236,7 +235,7 @@ void handleSpecialsCollisions(GameContext* ctx) {
                 // TODO: Play unique extra life collect sample
             } else {
 
-                if (ship->isShieldActive || ship->isAutoShieldActive) {
+                if (ship->isShieldActive) {
                     ctx->isBlackHoleActive = false;
                     specialsPool->specials[i].active = false;
                     specialsPoolHasChanged = true;

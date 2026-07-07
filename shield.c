@@ -46,7 +46,7 @@ Color lerpColor(Color a, Color b, float t) {
 }
 
 void renderShield(Ship* ship) {
-    if (!ship->isShieldActive && !ship->isAutoShieldActive) return;
+    if (!ship->isShieldActive) return;
 
     Color inner = lerpColor(SHIELD_GRADIENT_COLOR_1, SHIELD_GRADIENT_COLOR_2, shieldLerpT);
     Color outer = lerpColor(SHIELD_GRADIENT_COLOR_2, SHIELD_GRADIENT_COLOR_1, shieldLerpT);

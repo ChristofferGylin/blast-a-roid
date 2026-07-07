@@ -19,7 +19,6 @@ typedef struct {
     float rotation;
     bool destroyed;
     bool isShieldActive;
-    bool isAutoShieldActive;
     bool isRotateActive;
     double timeDestroyed;
     double timeRotateActivated;
