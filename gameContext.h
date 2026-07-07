@@ -92,6 +92,7 @@ typedef struct GameContext {
     SpawningEnemies spawning;
     double pausTimer;
     Supernova supernova;
+    bool isBlackHoleActive;
     Highscore highscores[NUMBER_OF_HIGHSCORES];
 }GameContext;
 

@@ -109,7 +109,7 @@ void addSpecialToPool(GameContext* ctx, SpecialType type) {
     
         case BLACK_HOLE:
             newSpecial.size = (Vector2){BLACK_HOLE_SIZE, BLACK_HOLE_SIZE};
-            
+            ctx->isBlackHoleActive = true;
             initAnimtionInstance(&aniInstance, &ctx->assets.animations.blackHole, newSpecial.position, newSpecial.rotation, ctx->assets.animations.blackHole.fps, false);
             PlaySound(ctx->assets.samples.alarm);
             break;
@@ -237,6 +237,7 @@ void handleSpecialsCollisions(GameContext* ctx) {
             } else {
 
                 if (ship->isShieldActive || ship->isAutoShieldActive) {
+                    ctx->isBlackHoleActive = false;
                     specialsPool->specials[i].active = false;
                     specialsPoolHasChanged = true;
                     newExplosion(ctx, ship->position);
@@ -313,6 +314,7 @@ void handleSpecialsHitDetection(GameContext* ctx) {
                     case BLACK_HOLE:
                         newExplosion(ctx, specialObj->special.position);
                         player->levelBonus += 5000;
+                        ctx->isBlackHoleActive = false;
                         break;
                     
                     case SUPERNOVA:
@@ -505,6 +507,11 @@ void updateSpecials(GameContext* ctx) {
             } else {
                 specialObj->active = false;
                 specialsPoolHasChanged = true;
+
+                if (specialObj->special.type == BLACK_HOLE) {
+                    ctx->isBlackHoleActive = false;
+                }
+
                 continue;
             }
         }

@@ -23,6 +23,7 @@ void initGameContext(GameContext* ctx) {
     initHighScores(ctx->highscores);
     ctx->pausTimer = 0;
     ctx->supernova = (Supernova){false, 0.0f, 0.0f};
+    ctx->isBlackHoleActive = false;
 }
 
 void initObjectPools(GameContext* ctx) {
