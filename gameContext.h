@@ -93,7 +93,7 @@ typedef struct GameContext {
     double pausTimer;
     Supernova supernova;
     bool isBlackHoleActive;
-    Highscore highscores[NUMBER_OF_HIGHSCORES];
+    Highscores highscores;
 }GameContext;
 
 void initGameContext(GameContext* ctx);

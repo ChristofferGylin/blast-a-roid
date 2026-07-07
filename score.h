@@ -18,6 +18,12 @@ typedef struct Highscore {
     int level;
 }Highscore;
 
+typedef struct Highscores {
+    Highscore scores[NUMBER_OF_HIGHSCORES];
+    bool hasNewHighscore;
+    int latestScoreIndex;
+}Highscores;
+
 typedef struct HighscoreSaveData {
     Highscore scores[NUMBER_OF_HIGHSCORES];
     uint32_t checksum;
