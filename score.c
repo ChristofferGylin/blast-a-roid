@@ -73,6 +73,9 @@ bool checkHighscore(GameContext* ctx) {
 }
 
 void initHighScores(Highscores* highscores) {
+
+    highscores->hasNewHighscore = false;
+    highscores->latestScoreIndex = 0;
     
     if (FileExists("./data.dat")) {
         loadHighscores(highscores->scores);
