@@ -268,6 +268,11 @@ void handleEnemyShooting(GameContext* ctx, Enemy* enemy) {
         
         float angle = atan2(aimPos.y - enemy->position.y, aimPos.x - enemy->position.x);
 
+        Vector2 shotSpawnPosition = {
+                enemy->position.x + (cosf(angle) * (enemy->size / 2.0f)),
+                enemy->position.y + (sinf(angle) * (enemy->size / 2.0f))
+            };
+
         Shot newShot = {
             ENEMY_SHOT,
             shotProps->shot.level,
