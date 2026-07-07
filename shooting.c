@@ -103,7 +103,9 @@ void handleShooting(GameContext* ctx) {
 
     double nowMillis = GetTime() * 1000.0f;
 
-    if (ctx->ship.destroyed) return;
+    Ship* ship = &ctx->ship;
+
+    if (ship->destroyed) return;
     if (ctx->objectPools.shots.activeCount >= MAX_SHOTS) return;
     if (nowMillis <= lastShot + SHOT_COOLDOWN_TIME) return;
 
@@ -125,24 +127,32 @@ void handleShooting(GameContext* ctx) {
     if (shoot) {
 
         float radians[] = {
-            (ctx->ship.rotation - 90.0f) * (PI / 180.0f),
-            (ctx->ship.rotation - 80.0f) * (PI / 180.0f),
-            (ctx->ship.rotation - 100.0f) * (PI / 180.0f)
+            (ship->rotation - 90.0f) * (PI / 180.0f),
+            (ship->rotation - 80.0f) * (PI / 180.0f),
+            (ship->rotation - 100.0f) * (PI / 180.0f)
         };
 
         int lifetime = ctx->player.powerups.longShot ? nowMillis + (SHOT_LIFE_TIME * 2) : nowMillis + SHOT_LIFE_TIME;
         int numberOfShots = ctx->player.powerups.trippleShot ? 3 : 1;
 
+        
+
         for (int i = 0; i < numberOfShots; i++) {
+
+            Vector2 shotSpawnPosition = {
+                ship->position.x + (cosf(radians[i]) * (SHIP_SIZE / 2.0f)),
+                ship->position.y + (sinf(radians[i]) * (SHIP_SIZE / 2.0f))
+            };
+
             Shot newShot = {
                 PLAYER_SHOT,
                 1,
                 &ctx->assets.sprites.shot,
                 SHOT_SIZE,
-                ctx->ship.position,
+                shotSpawnPosition,
                 {
-                    ctx->ship.velocity.x + cosf(radians[i]) * SHOT_VELOCITY,
-                    ctx->ship.velocity.y + sinf(radians[i]) * SHOT_VELOCITY
+                    ship->velocity.x + cosf(radians[i]) * SHOT_VELOCITY,
+                    ship->velocity.y + sinf(radians[i]) * SHOT_VELOCITY
                 },
                 lifetime,
                 false
