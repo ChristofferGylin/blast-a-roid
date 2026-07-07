@@ -18,13 +18,9 @@ float shieldLerpT = 0.0f;
 
 void handleShield(GameContext* ctx) {
 
-    if (GetTime() < (ctx->ship.timeSpawned + AUTO_SHIELD_DURATION)) {
-        ctx->ship.isAutoShieldActive = true;
-    } else {
-        ctx->ship.isAutoShieldActive = false;
-    }
-
-    if (IsKeyDown(KEY_SPACE) && !ctx->ship.isAutoShieldActive) {
+    if (GetTime() < (ctx->ship.timeSpawned + AUTO_SHIELD_DURATION)){
+        ctx->ship.isShieldActive = true;
+    }  else if (IsKeyDown(KEY_SPACE)) {
 
         ctx->player.shieldPower -= GetFrameTime() * SHIELD_DRAIN_RATE;
 
@@ -50,7 +46,7 @@ Color lerpColor(Color a, Color b, float t) {
 }
 
 void renderShield(Ship* ship) {
-    if (!ship->isShieldActive && !ship->isAutoShieldActive) return;
+    if (!ship->isShieldActive) return;
 
     Color inner = lerpColor(SHIELD_GRADIENT_COLOR_1, SHIELD_GRADIENT_COLOR_2, shieldLerpT);
     Color outer = lerpColor(SHIELD_GRADIENT_COLOR_2, SHIELD_GRADIENT_COLOR_1, shieldLerpT);
