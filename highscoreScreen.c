@@ -141,6 +141,9 @@ GameResult highscoreScreen(GameContext* ctx) {
                 strcpy(newHighscore.name, inputText);
 
                 addHighscore(ctx->highscores.scores, newHighscore);
+
+                ctx->highscores.hasNewHighscore = true;
+                ctx->highscores.latestScoreIndex = newHighscoreResult.scoreIndex;
                 
                 isCursorVisible = false;
 
