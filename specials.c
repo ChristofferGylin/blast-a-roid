@@ -237,6 +237,7 @@ void handleSpecialsCollisions(GameContext* ctx) {
             } else {
 
                 if (ship->isShieldActive || ship->isAutoShieldActive) {
+                    ctx->isBlackHoleActive = false;
                     specialsPool->specials[i].active = false;
                     specialsPoolHasChanged = true;
                     newExplosion(ctx, ship->position);
