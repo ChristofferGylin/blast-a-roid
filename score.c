@@ -63,7 +63,7 @@ bool checkHighscore(GameContext* ctx) {
     bool isHighscore = false;
 
     for (int i = 0; i < NUMBER_OF_HIGHSCORES; i++) {
-        if (ctx->player.score > ctx->highscores[i].score) {
+        if (ctx->player.score > ctx->highscores.scores[i].score) {
             isHighscore = true;
             break;
         }
