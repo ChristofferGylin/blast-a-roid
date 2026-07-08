@@ -64,6 +64,7 @@ typedef struct SpecialSpawnOption {
 }SpecialSpawnOption;
 
 Vector2 applySupernovaEffects(GameContext* ctx, Vector2 velocity);
+int countSpecials(GameContext* ctx);
 void handleSpecialsCollisions(GameContext* ctx);
 void handleSpecialsHitDetection(GameContext* ctx);
 void handleSpecialsMovement(GameContext* ctx);

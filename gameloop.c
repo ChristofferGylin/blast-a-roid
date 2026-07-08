@@ -129,9 +129,9 @@ GameResult gameLoop(GameContext* ctx) {
             }
         } else if (
             countAsteroids(&ctx->objectPools.asteroids) == 0 &&
+            countSpecials(ctx) == 0 &&
             ctx->objectPools.bonuses.activeCount == 0 &&
             ctx->objectPools.enemies.activeCount == 0 &&
-            ctx->objectPools.specials.activeCount == 0 &&
             !waitForExit
         ) {
             waitForExit = true;
