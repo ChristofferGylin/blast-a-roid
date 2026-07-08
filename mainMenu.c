@@ -153,7 +153,7 @@ void drawHighscores(Highscores* highscores, Rectangle container, HighlightTimers
         int levelXPos = levelXPosBase - levelSize.x;
         int scoreXPos = scoreXPosBase - scoreSize.x;
 
-        if (highscores->hasNewHighscore && highscores->latestScoreIndex == i && highlightTimers->blinkVisible) {
+        if (highscores->hasNewHighscore && highscores->latestScoreIndex == i && highlightTimers->active && highlightTimers->blinkVisible) {
 
             Rectangle highlight = {container.x, yPosition - (highscoreMarginY / 2.0f), container.width, levelSize.y + highscoreMarginY};
 
@@ -337,7 +337,8 @@ void drawMenu(Menu* menu) {
 void initHighlightTimers(HighlightTimers* timers) {
     timers->activeTimer = 0.0f;
     timers->blinkTimer = 0.0f;
-    timers->blinkVisible = false;
+    timers->active = true;
+    timers->blinkVisible = true;
 }
 
 void initMenu(Menu* menu) {
@@ -435,13 +436,13 @@ void updateHighlightTimers(GameContext* ctx, HighlightTimers* timers) {
     const float HIGHLIGHT_BLINK_TIME = 0.5f;
     const float HIGHLIGHT_ACTIVE_TIME = 10.0f;
     
-    if (!ctx->highscores.hasNewHighscore) return;
+    if (!ctx->highscores.hasNewHighscore || !timers->active) return;
 
     timers->activeTimer += GetFrameTime();
     timers->blinkTimer += GetFrameTime();
 
     if (timers->activeTimer >= HIGHLIGHT_ACTIVE_TIME) {
-        ctx->highscores.hasNewHighscore = false;
+        timers->active = false;
         timers->activeTimer = 0.0f;
         return;
     }

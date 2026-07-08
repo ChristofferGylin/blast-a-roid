@@ -10,6 +10,7 @@ typedef struct HighlightTimers {
     float blinkTimer;
     float activeTimer;
     bool blinkVisible;
+    bool active;
 }HighlightTimers;
 
 typedef struct MenuItem {
