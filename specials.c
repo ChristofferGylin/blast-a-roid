@@ -648,17 +648,14 @@ void updateSupernova(GameContext* ctx ,Special* special) {
         }
                     
         for (int j = 0; j < specialsPool->activeCount; j++) {
-            if (!specialsPool->specials[j].active || specialsPool->specials[j].special.type == SUPERNOVA) continue;
-            
-            Special* special = &specialsPool->specials[j].special;
-            special->velocity = getRandomVelocity(velocityRange);
+            if (!specialsPool->specials[j].active || specialsPool->specials[j].special.type != EXTRA_LIFE) continue;
 
-            if (special->type == EXTRA_LIFE) {
-                if (special->ship.destroyed) {
-                    for (int k = 0; k < 3; k++) {
-                        special->ship.destroyedPieces[k].velocity = getRandomVelocity(velocityRange);
-                    }
+            if (special->ship.destroyed) {
+                for (int k = 0; k < 3; k++) {
+                    special->ship.destroyedPieces[k].velocity = getRandomVelocity(velocityRange);
                 }
+            } else {
+                special->velocity = getRandomVelocity(velocityRange);    
             }
         }
 
