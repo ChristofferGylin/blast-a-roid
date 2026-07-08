@@ -8,6 +8,7 @@
 #include "utils.h"
 
 #define NUMBER_OF_SPECIALS 5
+typedef struct Supernova Supernova;
 
 typedef enum SpecialType {
     MULTIPLIER,
