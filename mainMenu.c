@@ -23,11 +23,11 @@ int roundnessRadius = 12.0f;
 int logoFontSize = 42;
 int logoFontSpacing = 8;
 
-void drawHighscores(Highscores* highscores, Rectangle container, HighlightTimers highlightTimers);
+void drawHighscores(Highscores* highscores, Rectangle container, HighlightTimers* highlightTimers);
 void initHighlightTimers(HighlightTimers* timers);
 void updateHighlightTimers(GameContext* ctx, HighlightTimers* timers);
 
-void drawHighscores(Highscores* highscores, Rectangle container, HighlightTimers highlightTimers) {
+void drawHighscores(Highscores* highscores, Rectangle container, HighlightTimers* highlightTimers) {
 
     int highscoreFontSize = 22;
     int highscoreFontSpacing = 6;
@@ -153,7 +153,7 @@ void drawHighscores(Highscores* highscores, Rectangle container, HighlightTimers
         int levelXPos = levelXPosBase - levelSize.x;
         int scoreXPos = scoreXPosBase - scoreSize.x;
 
-        if (highscores->hasNewHighscore && highscores->latestScoreIndex == i) {
+        if (highscores->hasNewHighscore && highscores->latestScoreIndex == i && highlightTimers->blinkVisible) {
 
             Rectangle highlight = {container.x, yPosition - (highscoreMarginY / 2.0f), container.width, levelSize.y + highscoreMarginY};
 
@@ -388,7 +388,7 @@ void mainMenu(GameContext* ctx) {
     while (!WindowShouldClose() && isRunning) {
         updateMenu(&menu);
         updateHighlightTimers(ctx, &highlightTimers);
-        
+
         if (isFadeOutComplete) {
             switch (menu.selected) {
                 case -1: break;
@@ -418,7 +418,7 @@ void mainMenu(GameContext* ctx) {
         BeginDrawing();
             ClearBackground(BLACK);
             Rectangle highscoreContainer = drawLayoutContainers();
-            drawHighscores(&ctx->highscores, highscoreContainer, highlightTimers);
+            drawHighscores(&ctx->highscores, highscoreContainer, &highlightTimers);
             drawMenu(&menu);
             
             if (!isFadeInComplete) {
