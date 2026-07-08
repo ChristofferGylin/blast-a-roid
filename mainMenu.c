@@ -432,8 +432,8 @@ void mainMenu(GameContext* ctx) {
 
 void updateHighlightTimers(GameContext* ctx, HighlightTimers* timers) {
     
-    const float HIGHLIGHT_BLINK_TIME = 0.25f;
-    const float HIGHLIGHT_ACTIVE_TIME = 5.0f;
+    const float HIGHLIGHT_BLINK_TIME = 0.5f;
+    const float HIGHLIGHT_ACTIVE_TIME = 10.0f;
     
     if (!ctx->highscores.hasNewHighscore) return;
 
