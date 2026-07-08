@@ -287,7 +287,7 @@ void handleSpecialsHitDetection(GameContext* ctx) {
 
         SpecialPoolObject* specialObj = &specialsPool->specials[i];
 
-        if (!specialObj->active) continue;
+        if (!specialObj->active || (specialObj->special.type == SUPERNOVA && ctx->supernova.detonated)) continue;
 
         for (int j = 0; j < shotsPool->activeCount; j++) {
             ShotPoolObject* shotObj = &shotsPool->shots[j];
@@ -341,6 +341,7 @@ void handleSpecialsHitDetection(GameContext* ctx) {
                     case SUPERNOVA:
                         newExplosion(ctx, specialObj->special.position);
                         player->levelBonus += 5000;
+                        resetSupernova(&ctx->supernova);
                         break;
                     default:
                         printf("Error: Invalid SpecialType (%d) in handleEnemiesHitDetection\n", specialObj->special.type);
@@ -537,6 +538,8 @@ void updateSpecials(GameContext* ctx) {
 
                 if (specialObj->special.type == BLACK_HOLE) {
                     ctx->isBlackHoleActive = false;
+                } else if (specialObj->special.type == SUPERNOVA) {
+                    resetSupernova(&ctx->supernova);
                 }
 
                 continue;
