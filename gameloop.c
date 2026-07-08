@@ -84,8 +84,11 @@ GameResult gameLoop(GameContext* ctx) {
             }
         } else if (isFadeInComplete) {
 
-            spawnEnemy(ctx);
-            spawnSpecials(ctx);
+            if (!waitForExit) {
+                spawnEnemy(ctx);
+                spawnSpecials(ctx);
+            }
+
             resetTimeBonusMultiplier(ctx);
             updateLevelBonus(&ctx->player);
             clearShots(ctx);
