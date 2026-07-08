@@ -628,7 +628,7 @@ void updateSupernova(GameContext* ctx ,Special* special) {
     }
 
     if (supernova->detonated && ((supernova->detonationTime + DETONATION_DURATION) < (GetTime() - ctx->pausTimer))) {
-        supernova->detonated = false;
+        resetSupernova(supernova);
 
         FloatRange velocityRange = {ASTEROID_MIN_VELOCITY * 2, ASTEROID_MAX_VELOCITY * 2};
 
