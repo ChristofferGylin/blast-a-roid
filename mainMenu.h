@@ -6,6 +6,12 @@
 
 typedef struct GameContext GameContext;
 
+typedef struct HighlightTimers {
+    float blinkTimer;
+    float activeTimer;
+    bool blinkVisible;
+}HighlightTimers;
+
 typedef struct MenuItem {
     char text[32];
     Vector2 basePosition;

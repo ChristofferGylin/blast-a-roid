@@ -23,9 +23,11 @@ int roundnessRadius = 12.0f;
 int logoFontSize = 42;
 int logoFontSpacing = 8;
 
-void drawHighscores(Highscores* highscores, Rectangle container);
+void drawHighscores(Highscores* highscores, Rectangle container, HighlightTimers highlightTimers);
+void initHighlightTimers(HighlightTimers* timers);
+void updateHighlightTimers(GameContext* ctx, HighlightTimers* timers);
 
-void drawHighscores(Highscores* highscores, Rectangle container) {
+void drawHighscores(Highscores* highscores, Rectangle container, HighlightTimers highlightTimers) {
 
     int highscoreFontSize = 22;
     int highscoreFontSpacing = 6;
@@ -332,6 +334,12 @@ void drawMenu(Menu* menu) {
     }
 }
 
+void initHighlightTimers(HighlightTimers* timers) {
+    timers->activeTimer = 0.0f;
+    timers->blinkTimer = 0.0f;
+    timers->blinkVisible = false;
+}
+
 void initMenu(Menu* menu) {
     char titles[][32] = {
         "START GAME",
@@ -367,7 +375,10 @@ void initMenu(Menu* menu) {
 
 void mainMenu(GameContext* ctx) {
     Menu menu;
+    HighlightTimers highlightTimers;
     initMenu(&menu);
+    initHighlightTimers(&highlightTimers);
+
     float fadeInValue = 1.0f;
     float fadeOutValue = 0.0f;
     bool isFadeInComplete = false;
@@ -376,7 +387,8 @@ void mainMenu(GameContext* ctx) {
 
     while (!WindowShouldClose() && isRunning) {
         updateMenu(&menu);
-
+        updateHighlightTimers(ctx, &highlightTimers);
+        
         if (isFadeOutComplete) {
             switch (menu.selected) {
                 case -1: break;
@@ -406,7 +418,7 @@ void mainMenu(GameContext* ctx) {
         BeginDrawing();
             ClearBackground(BLACK);
             Rectangle highscoreContainer = drawLayoutContainers();
-            drawHighscores(&ctx->highscores, highscoreContainer);
+            drawHighscores(&ctx->highscores, highscoreContainer, highlightTimers);
             drawMenu(&menu);
             
             if (!isFadeInComplete) {
@@ -415,6 +427,28 @@ void mainMenu(GameContext* ctx) {
                 isFadeOutComplete = fadeOut(&fadeOutValue);
             }
         EndDrawing();
+    }
+}
+
+void updateHighlightTimers(GameContext* ctx, HighlightTimers* timers) {
+    
+    const float HIGHLIGHT_BLINK_TIME = 0.25f;
+    const float HIGHLIGHT_ACTIVE_TIME = 5.0f;
+    
+    if (!ctx->highscores.hasNewHighscore) return;
+
+    timers->activeTimer += GetFrameTime();
+    timers->blinkTimer += GetFrameTime();
+
+    if (timers->activeTimer >= HIGHLIGHT_ACTIVE_TIME) {
+        ctx->highscores.hasNewHighscore = false;
+        timers->activeTimer = 0.0f;
+        return;
+    }
+
+    if (timers->blinkTimer >= HIGHLIGHT_BLINK_TIME) {
+        timers->blinkVisible = !timers->blinkVisible;
+        timers->blinkTimer = 0.0f;
     }
 }
 
