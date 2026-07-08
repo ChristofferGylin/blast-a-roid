@@ -193,6 +193,28 @@ void compactSpecialsPool(SpecialsPool* pool) {
     pool->activeCount = write;
 }
 
+int countSpecials(GameContext* ctx) {
+
+    SpecialsPool* pool = &ctx->objectPools.specials;
+
+    int count = 0;
+
+    for (int i = 0; i < pool->activeCount; i++) {
+        
+        SpecialPoolObject* obj = & pool->specials[i];
+        
+        if (
+            !obj->active ||
+            (obj->special.type == EXTRA_LIFE && obj->special.ship.destroyed) ||
+            (obj->special.type == SUPERNOVA && ctx->supernova.detonated)
+        ) continue;
+
+        count++;
+    }
+
+    return count;
+}
+
 void handleSpecialsCollisions(GameContext* ctx) {
     Ship* ship = &ctx->ship;
     SpecialsPool* specialsPool = &ctx->objectPools.specials;
