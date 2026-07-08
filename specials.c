@@ -479,6 +479,12 @@ void renderSpecials(SpecialsPool* pool) {
     }
 }
 
+void resetSupernova(Supernova* supernova) {
+    supernova->detonated = false;
+    supernova->detonationTime = 0.0f;
+    supernova->shakeTimer = 0.0f;
+}
+
 void spawnSpecials(GameContext* ctx) {
     for (int i = 0; i < ctx->objectPools.specialsSpawn.activeCount; i++) {
         SpecialSpawnPoolObject* spawnObj = &ctx->objectPools.specialsSpawn.specials[i];

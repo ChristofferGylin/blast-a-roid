@@ -73,6 +73,7 @@ void initSpecialsSpawnPool(GameContext* ctx);
 void populateSpecialsSpawnPool(GameContext* ctx);
 void renderMultiplierIcon(GameContext* ctx, int level, Vector2 position);
 void renderSpecials(SpecialsPool* pool);
+void resetSupernova(Supernova* supernova);
 void spawnSpecials(GameContext* ctx);
 void updateSpecials(GameContext* ctx);
 
