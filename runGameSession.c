@@ -5,9 +5,11 @@
 #include "gameloop.h"
 #include "scoreScreen.h"
 #include "highscoreScreen.h"
+#include "score.h"
 
 bool runGameSession(GameContext* ctx) {
     initPlayer(&ctx->player);
+    resetLastHighscore(&ctx->highscores);
     
     GameResult result = GAME_CONTINUE;
 

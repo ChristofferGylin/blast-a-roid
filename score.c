@@ -76,8 +76,7 @@ NewHighscore checkHighscore(GameContext* ctx) {
 
 void initHighScores(Highscores* highscores) {
 
-    highscores->hasNewHighscore = false;
-    highscores->latestScoreIndex = 0;
+    resetLastHighscore(highscores);
     
     if (FileExists("./data.dat")) {
         loadHighscores(highscores->scores);
@@ -118,6 +117,11 @@ void loadHighscores(Highscore highscores[NUMBER_OF_HIGHSCORES]) {
     }
 
     UnloadFileData((unsigned char *)scoresFromFile);
+}
+
+void resetLastHighscore(Highscores* highscores) {
+    highscores->hasNewHighscore = false;
+    highscores->latestScoreIndex = 0;
 }
 
 void resetTimeBonusMultiplier(GameContext* ctx) {
