@@ -395,6 +395,7 @@ void mainMenu(GameContext* ctx) {
                 case -1: break;
                 case 0: 
                     menu.selected = -1;
+                    initHighlightTimers(&highlightTimers);
                     isRunning = runGameSession(ctx);
                 break;
 
