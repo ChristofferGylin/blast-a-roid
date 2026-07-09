@@ -600,20 +600,24 @@ void updateSupernova(GameContext* ctx ,Special* special) {
 
     supernova->shakeTimer += GetFrameTime();
 
+    // Sizes in array are based of 64x64 render size, but sprite is rendered at 75% scale so spriteScale multiplier is used
+
+    float spriteScale = 0.75f;
+
     int sizes[] = {
         2, 4, 6, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 12, 14, 16, 18, 22, 26, 30, 34, 40, 46, 48, 48, 48, 48, 48, 48, 48,48, 48, 48, 48, 48, 48,
         48, 48, 48, 48, 48, 48, 48, 48, 48, 48, 48, 48, 48, 48, 48, 48, 48, 48, 48, 48, 48, 47, 47, 42, 40, 38, 34,30, 16, 12, 6, 5, 4, 0, 0, 0, 0, 0, 0
     };
 
-    int arrSize = sizeof(sizes) / sizeof(sizes[0]);
+        int arrSize = sizeof(sizes) / sizeof(sizes[0]);
     int frame = special->animation.currentFrame;
 
     if (frame >= arrSize) {
         special->size.x = 0;
         special->size.y = 0;
     } else {
-        special->size.x = sizes[frame];
-        special->size.y = sizes[frame];
+        special->size.x = sizes[frame] * spriteScale;
+        special->size.y = sizes[frame] * spriteScale;
     }
 
     if (frame == 70 && !supernova->detonated) {
