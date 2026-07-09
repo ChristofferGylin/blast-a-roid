@@ -29,5 +29,6 @@ typedef struct Debug {
 }Debug;
 
 void initDebug(Debug* debug, bool active);
+void updateDebug(Debug* debug);
 
 #endif

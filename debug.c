@@ -3,8 +3,10 @@
 
 #include "debug.h"
 #include "gameContext.h"
+#include "raylib.h"
 
-void outputObjectCountToTerminal(char* name[], ObjectCount oc);
+void outputDebugToTerminal(Debug* debug);
+void outputObjectCountToTerminal(const char* name, ObjectCount oc);
 void resetObjectCount(ObjectCount* oc, int capacity);
 
 void initDebug(Debug* debug, bool active) {
@@ -24,7 +26,7 @@ void initDebug(Debug* debug, bool active) {
     
 }
 
-void outputObjectCountToTerminal(char* name[], ObjectCount oc) {
+void outputObjectCountToTerminal(const char* name, ObjectCount oc) {
     printf("%s:   Active count: %d / %d   Spike: %d\n", name, oc.activeCount, oc.capacity, oc.spike);
 }
 
@@ -45,4 +47,18 @@ void resetObjectCount(ObjectCount* oc, int capacity) {
     oc->activeCount = 0;
     oc->capacity = capacity;
     oc->spike = 0;
+}
+
+void updateDebug(Debug* debug) {
+    if (!debug->active) return;
+
+    const float updateFrequency = 1.0f;
+
+    debug->updateTimer += GetFrameTime();
+
+    if (debug->updateTimer >= updateFrequency) {
+        debug->updateTimer = 0.0f;
+
+        outputDebugToTerminal(debug);
+    }
 }

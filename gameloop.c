@@ -1,3 +1,4 @@
+#include "debug.h"
 #include "raylib.h"
 #include "gameContext.h"
 #include "gameloop.h"
@@ -143,6 +144,8 @@ GameResult gameLoop(GameContext* ctx) {
             isFadeOutComplete = false;
             exit = true;
         }
+
+        updateDebug(&ctx->debug);
         
         BeginDrawing();
             ClearBackground(BLACK);
