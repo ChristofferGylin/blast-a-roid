@@ -5,6 +5,18 @@
 #include "gameContext.h"
 #include "raylib.h"
 
+#define POOL_COUNTS(X)               \
+    X(asteroids)                     \
+    X(bonuses)                       \
+    X(destroyedAsteroids)            \
+    X(enemies)                       \
+    X(explosions)                    \
+    X(shots)                         \
+    X(spawnableBonuses)              \
+    X(spawnableEnemies)              \
+    X(specials)                      \
+    X(specialsSpawn)
+
 void outputDebugToTerminal(Debug* debug);
 void outputObjectCountToTerminal(const char* name, ObjectCount oc);
 void resetObjectCount(ObjectCount* oc, int capacity);
@@ -27,20 +39,17 @@ void initDebug(Debug* debug, bool active) {
 }
 
 void outputObjectCountToTerminal(const char* name, ObjectCount oc) {
-    printf("%s:   Active count: %d / %d   Spike: %d\n", name, oc.activeCount, oc.capacity, oc.spike);
+    printf("%-21s Active count: %4d / %4d   Spike: %4d\n", name, oc.activeCount, oc.capacity, oc.spike);
 }
 
 void outputDebugToTerminal(Debug* debug) {
-    outputObjectCountToTerminal("asteroids", debug->poolCount.asteroids);
-    outputObjectCountToTerminal("bonuses", debug->poolCount.bonuses);
-    outputObjectCountToTerminal("destroyedAsteroids", debug->poolCount.destroyedAsteroids);
-    outputObjectCountToTerminal("enemies", debug->poolCount.enemies);
-    outputObjectCountToTerminal("explosions", debug->poolCount.explosions);
-    outputObjectCountToTerminal("shots", debug->poolCount.shots);
-    outputObjectCountToTerminal("spawnableBonuses", debug->poolCount.spawnableBonuses);
-    outputObjectCountToTerminal("spawnableEnemies", debug->poolCount.spawnableEnemies);
-    outputObjectCountToTerminal("specials", debug->poolCount.specials);
-    outputObjectCountToTerminal("specialsSpawn", debug->poolCount.specialsSpawn);
+
+    #define OUTPUT(name) \
+        outputObjectCountToTerminal(#name, debug->poolCount.name);
+
+        POOL_COUNTS(OUTPUT)
+    #undef OUTPUT
+    printf("\n");
 }
 
 void resetObjectCount(ObjectCount* oc, int capacity) {
@@ -49,16 +58,31 @@ void resetObjectCount(ObjectCount* oc, int capacity) {
     oc->spike = 0;
 }
 
-void updateDebug(Debug* debug) {
+void updateDebug(GameContext* ctx) {
+
+    Debug* debug = &ctx->debug;
+
     if (!debug->active) return;
 
     const float updateFrequency = 1.0f;
 
     debug->updateTimer += GetFrameTime();
 
-    if (debug->updateTimer >= updateFrequency) {
-        debug->updateTimer = 0.0f;
+    if (debug->updateTimer < updateFrequency) return;
+    
+    debug->updateTimer = 0.0f;
 
-        outputDebugToTerminal(debug);
-    }
+    #define OUTPUT(name)                                                     \
+        do {                                                                 \
+            debug->poolCount.name.activeCount = ctx->objectPools.name.activeCount; \
+            if (debug->poolCount.name.activeCount > debug->poolCount.name.spike) { \
+                debug->poolCount.name.spike = debug->poolCount.name.activeCount;    \
+            }                                                                \
+        } while (0);
+
+    POOL_COUNTS(OUTPUT)
+
+    #undef OUTPUT
+
+    outputDebugToTerminal(debug);
 }

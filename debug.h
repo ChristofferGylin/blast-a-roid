@@ -3,6 +3,8 @@
 
 #include <stdbool.h>
 
+typedef struct GameContext GameContext;
+
 typedef struct ObjectCount {
     int activeCount;
     int capacity;
@@ -29,6 +31,6 @@ typedef struct Debug {
 }Debug;
 
 void initDebug(Debug* debug, bool active);
-void updateDebug(Debug* debug);
+void updateDebug(GameContext* ctx);
 
 #endif

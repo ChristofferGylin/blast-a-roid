@@ -145,7 +145,7 @@ GameResult gameLoop(GameContext* ctx) {
             exit = true;
         }
 
-        updateDebug(&ctx->debug);
+        updateDebug(ctx);
         
         BeginDrawing();
             ClearBackground(BLACK);
