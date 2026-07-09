@@ -3,8 +3,29 @@
 
 #include <stdbool.h>
 
+typedef struct ObjectCount {
+    int activeCount;
+    int capacity;
+    int spike;
+}ObjectCount;
+
+typedef struct ObjectPoolCount {
+    ObjectCount asteroids;
+    ObjectCount bonuses;
+    ObjectCount spawnableBonuses;
+    ObjectCount destroyedAsteroids;
+    ObjectCount enemies;
+    ObjectCount spawnableEnemies;
+    ObjectCount explosions;
+    ObjectCount shots;
+    ObjectCount specials;
+    ObjectCount specialsSpawn;
+}ObjectPoolCount;
+
 typedef struct Debug {
     bool active;
+    float updateTimer;
+    ObjectPoolCount poolCount;
 }Debug;
 
 void initDebug(Debug* debug, bool active);

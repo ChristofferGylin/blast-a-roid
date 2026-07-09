@@ -27,7 +27,7 @@ int main(int argc, char* argv[]){
     SetRandomSeed(time(NULL));
     srand((unsigned)time(NULL));
     SetExitKey(KEY_NULL);
-    initGameContext(&ctx);
+    initGameContext(&ctx, isDebugActive);
     
     mainMenu(&ctx);
     
