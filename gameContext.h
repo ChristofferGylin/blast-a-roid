@@ -2,6 +2,7 @@
 #define GAMECONTEXT_H
 
 #include "bonuses.h"
+#include "debug.h"
 #include "raylib.h"
 #include "asteroid.h"
 #include "enemies.h"
@@ -86,6 +87,7 @@ typedef struct Supernova {
 
 typedef struct GameContext {
     Assets assets;
+    Debug debug;
     ObjectPools objectPools;
     Player player;
     Ship ship;
@@ -96,7 +98,7 @@ typedef struct GameContext {
     Highscores highscores;
 }GameContext;
 
-void initGameContext(GameContext* ctx);
+void initGameContext(GameContext* ctx, bool debugActive);
 void initObjectPools(GameContext* ctx);
 void initSpawning(GameContext* ctx);
 void loadAssets(GameContext* ctx);
