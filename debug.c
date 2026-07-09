@@ -4,13 +4,8 @@
 #include "debug.h"
 #include "gameContext.h"
 
+void outputObjectCountToTerminal(char* name[], ObjectCount oc);
 void resetObjectCount(ObjectCount* oc, int capacity);
-
-void resetObjectCount(ObjectCount* oc, int capacity) {
-    oc->activeCount = 0;
-    oc->capacity = capacity;
-    oc->spike = 0;
-}
 
 void initDebug(Debug* debug, bool active) {
     debug->active = active;
@@ -27,4 +22,27 @@ void initDebug(Debug* debug, bool active) {
     resetObjectCount(&debug->poolCount.specials, NUMBER_OF_SPECIALS);
     resetObjectCount(&debug->poolCount.specialsSpawn, NUMBER_OF_SPECIALS);
     
+}
+
+void outputObjectCountToTerminal(char* name[], ObjectCount oc) {
+    printf("%s:   Active count: %d / %d   Spike: %d\n", name, oc.activeCount, oc.capacity, oc.spike);
+}
+
+void outputDebugToTerminal(Debug* debug) {
+    outputObjectCountToTerminal("asteroids", debug->poolCount.asteroids);
+    outputObjectCountToTerminal("bonuses", debug->poolCount.bonuses);
+    outputObjectCountToTerminal("destroyedAsteroids", debug->poolCount.destroyedAsteroids);
+    outputObjectCountToTerminal("enemies", debug->poolCount.enemies);
+    outputObjectCountToTerminal("explosions", debug->poolCount.explosions);
+    outputObjectCountToTerminal("shots", debug->poolCount.shots);
+    outputObjectCountToTerminal("spawnableBonuses", debug->poolCount.spawnableBonuses);
+    outputObjectCountToTerminal("spawnableEnemies", debug->poolCount.spawnableEnemies);
+    outputObjectCountToTerminal("specials", debug->poolCount.specials);
+    outputObjectCountToTerminal("specialsSpawn", debug->poolCount.specialsSpawn);
+}
+
+void resetObjectCount(ObjectCount* oc, int capacity) {
+    oc->activeCount = 0;
+    oc->capacity = capacity;
+    oc->spike = 0;
 }
