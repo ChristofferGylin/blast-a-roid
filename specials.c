@@ -287,7 +287,7 @@ void handleSpecialsHitDetection(GameContext* ctx) {
 
         SpecialPoolObject* specialObj = &specialsPool->specials[i];
 
-        if (!specialObj->active) continue;
+        if (!specialObj->active || (specialObj->special.type == SUPERNOVA && ctx->supernova.detonated)) continue;
 
         for (int j = 0; j < shotsPool->activeCount; j++) {
             ShotPoolObject* shotObj = &shotsPool->shots[j];
@@ -341,6 +341,7 @@ void handleSpecialsHitDetection(GameContext* ctx) {
                     case SUPERNOVA:
                         newExplosion(ctx, specialObj->special.position);
                         player->levelBonus += 5000;
+                        resetSupernova(&ctx->supernova);
                         break;
                     default:
                         printf("Error: Invalid SpecialType (%d) in handleEnemiesHitDetection\n", specialObj->special.type);
@@ -479,6 +480,12 @@ void renderSpecials(SpecialsPool* pool) {
     }
 }
 
+void resetSupernova(Supernova* supernova) {
+    supernova->detonated = false;
+    supernova->detonationTime = 0.0f;
+    supernova->shakeTimer = 0.0f;
+}
+
 void spawnSpecials(GameContext* ctx) {
     for (int i = 0; i < ctx->objectPools.specialsSpawn.activeCount; i++) {
         SpecialSpawnPoolObject* spawnObj = &ctx->objectPools.specialsSpawn.specials[i];
@@ -531,6 +538,8 @@ void updateSpecials(GameContext* ctx) {
 
                 if (specialObj->special.type == BLACK_HOLE) {
                     ctx->isBlackHoleActive = false;
+                } else if (specialObj->special.type == SUPERNOVA) {
+                    resetSupernova(&ctx->supernova);
                 }
 
                 continue;
@@ -591,20 +600,24 @@ void updateSupernova(GameContext* ctx ,Special* special) {
 
     supernova->shakeTimer += GetFrameTime();
 
+    // Sizes in array are based of 64x64 render size, but sprite is rendered at 75% scale so spriteScale multiplier is used
+
+    float spriteScale = 0.75f;
+
     int sizes[] = {
         2, 4, 6, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 12, 14, 16, 18, 22, 26, 30, 34, 40, 46, 48, 48, 48, 48, 48, 48, 48,48, 48, 48, 48, 48, 48,
         48, 48, 48, 48, 48, 48, 48, 48, 48, 48, 48, 48, 48, 48, 48, 48, 48, 48, 48, 48, 48, 47, 47, 42, 40, 38, 34,30, 16, 12, 6, 5, 4, 0, 0, 0, 0, 0, 0
     };
 
-    int arrSize = sizeof(sizes) / sizeof(sizes[0]);
+        int arrSize = sizeof(sizes) / sizeof(sizes[0]);
     int frame = special->animation.currentFrame;
 
     if (frame >= arrSize) {
         special->size.x = 0;
         special->size.y = 0;
     } else {
-        special->size.x = sizes[frame];
-        special->size.y = sizes[frame];
+        special->size.x = sizes[frame] * spriteScale;
+        special->size.y = sizes[frame] * spriteScale;
     }
 
     if (frame == 70 && !supernova->detonated) {
@@ -619,7 +632,7 @@ void updateSupernova(GameContext* ctx ,Special* special) {
     }
 
     if (supernova->detonated && ((supernova->detonationTime + DETONATION_DURATION) < (GetTime() - ctx->pausTimer))) {
-        supernova->detonated = false;
+        resetSupernova(supernova);
 
         FloatRange velocityRange = {ASTEROID_MIN_VELOCITY * 2, ASTEROID_MAX_VELOCITY * 2};
 
@@ -639,17 +652,14 @@ void updateSupernova(GameContext* ctx ,Special* special) {
         }
                     
         for (int j = 0; j < specialsPool->activeCount; j++) {
-            if (!specialsPool->specials[j].active || specialsPool->specials[j].special.type == SUPERNOVA) continue;
-            
-            Special* special = &specialsPool->specials[j].special;
-            special->velocity = getRandomVelocity(velocityRange);
+            if (!specialsPool->specials[j].active || specialsPool->specials[j].special.type != EXTRA_LIFE) continue;
 
-            if (special->type == EXTRA_LIFE) {
-                if (special->ship.destroyed) {
-                    for (int k = 0; k < 3; k++) {
-                        special->ship.destroyedPieces[k].velocity = getRandomVelocity(velocityRange);
-                    }
+            if (specialsPool->specials[j].special.ship.destroyed) {
+                for (int k = 0; k < 3; k++) {
+                    specialsPool->specials[j].special.ship.destroyedPieces[k].velocity = getRandomVelocity(velocityRange);
                 }
+            } else {
+                specialsPool->specials[j].special.velocity = getRandomVelocity(velocityRange);    
             }
         }
 

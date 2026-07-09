@@ -8,6 +8,7 @@
 #include "utils.h"
 
 #define NUMBER_OF_SPECIALS 5
+typedef struct Supernova Supernova;
 
 typedef enum SpecialType {
     MULTIPLIER,
@@ -73,6 +74,7 @@ void initSpecialsSpawnPool(GameContext* ctx);
 void populateSpecialsSpawnPool(GameContext* ctx);
 void renderMultiplierIcon(GameContext* ctx, int level, Vector2 position);
 void renderSpecials(SpecialsPool* pool);
+void resetSupernova(Supernova* supernova);
 void spawnSpecials(GameContext* ctx);
 void updateSpecials(GameContext* ctx);
 
