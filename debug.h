@@ -7,4 +7,6 @@ typedef struct Debug {
     bool active;
 }Debug;
 
+void initDebug(Debug* debug, bool active);
+
 #endif
