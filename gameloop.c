@@ -145,7 +145,9 @@ GameResult gameLoop(GameContext* ctx) {
             exit = true;
         }
 
-        updateDebug(ctx);
+        if (!isPaused) {
+            updateDebug(ctx);
+        }
         
         BeginDrawing();
             ClearBackground(BLACK);
