@@ -20,6 +20,7 @@ typedef struct Button {
 void drawButton(Button* button);
 void drawCheckbox(Vector2 position, bool state);
 void initButton(Button* button, Rectangle rect, int fontSize, char* text, ButtonCallback callback, void* userData);
+void updateButton(Button* button);
 bool updateCheckbox(Vector2 position, bool* state);
 
 #endif

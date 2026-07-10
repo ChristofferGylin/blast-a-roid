@@ -73,6 +73,19 @@ void initButton(Button* button, Rectangle rect, int fontSize, char* text, Button
     button->textPosition.y = button->rect.y + (button->rect.height / 2.0f) - (textSize.y / 2.0f);
 }
 
+void updateButton(Button* button) {
+    if (CheckCollisionPointRec(GetMousePosition(), button->rect)) {
+        button->isHovered = true;
+
+        if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
+            button->onClick(button->userData);
+        }
+
+    } else {
+        button->isHovered = false;
+    }
+}
+
 bool updateCheckbox(Vector2 position, bool* state) {
     bool isHovered = false;
 
