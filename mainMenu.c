@@ -433,7 +433,6 @@ void mainMenu(GameContext* ctx) {
             Rectangle highscoreContainer = drawLayoutContainers();
             drawHighscores(&ctx->highscores, highscoreContainer, &highlightTimers);
             drawMenu(&menu);
-            
             if (!isFadeInComplete) {
                 isFadeInComplete = fadeIn(&fadeInValue);
             } else if (menu.selected != -1 && !isFadeOutComplete) {
