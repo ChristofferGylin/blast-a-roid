@@ -1,6 +1,7 @@
 #ifndef UISIZES_H
 #define UISIZES_H
 
+static const float CHECKBOX_SIZE = 22.0f;
 static const int MENU_FONT_SIZE = 32;
 static const int MENU_FONT_SPACING = 6;
 static const int MENU_ITEM_GAP = 20;
