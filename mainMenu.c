@@ -25,6 +25,7 @@ int logoFontSpacing = 8;
 
 void drawHighscores(Highscores* highscores, Rectangle container, HighlightTimers* highlightTimers);
 void initHighlightTimers(HighlightTimers* timers);
+void initMenu(GameContext* ctx, Menu* menu);
 void updateHighlightTimers(GameContext* ctx, HighlightTimers* timers);
 
 void drawHighscores(Highscores* highscores, Rectangle container, HighlightTimers* highlightTimers) {
@@ -353,7 +354,7 @@ void initMenu(GameContext* ctx, Menu* menu) {
 
     int menuY = 0;
 
-    int numberOfItems = ctx->debug.active ? 5 : 4;
+    int numberOfItems = ctx->debug.active ? MAX_NUMBER_OF_MAIN_MENU_ITEMS : MAX_NUMBER_OF_MAIN_MENU_ITEMS - 1;
 
     for (int i = 0; i < numberOfItems; i++) {
         Vector2 size = MeasureTextEx(GetFontDefault(), titles[i], fontSize, fontSpacing);
@@ -414,7 +415,13 @@ void mainMenu(GameContext* ctx) {
                 case 3:
                     isRunning = false;
                 break;
-        
+
+                case 4:
+                    if (ctx->debug.active) {
+                        // Open debug menu
+                        menu.selected = -1;
+                        break;
+                    }
                 default: 
                     printf("Error: Invalid menu choice (%d) in main menu\n", menu.selected);
                 break;

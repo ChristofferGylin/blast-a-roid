@@ -4,6 +4,8 @@
 #include "raylib.h"
 #include <stdbool.h>
 
+#define MAX_NUMBER_OF_MAIN_MENU_ITEMS 5
+
 typedef struct GameContext GameContext;
 
 typedef struct HighlightTimers {
@@ -22,7 +24,7 @@ typedef struct MenuItem {
 }MenuItem;
 
 typedef struct Menu {
-    MenuItem items[4];
+    MenuItem items[MAX_NUMBER_OF_MAIN_MENU_ITEMS];
     int count;
     int selected;
     int menuOffset;
@@ -30,7 +32,6 @@ typedef struct Menu {
 
 Rectangle drawLayoutContainers();
 void drawMenu(Menu* menu);
-void initMenu(Menu* menu);
 void mainMenu(GameContext* ctx);
 void updateMenu(Menu* menu);
 
