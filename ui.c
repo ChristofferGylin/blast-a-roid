@@ -4,18 +4,18 @@
 #include "raylib.h"
 #include "ui.h"
 
-void renderCheckbox(Checkbox* checkbox) {
+void renderCheckbox(Vector2 position, bool state) {
     
     const float lineThickness = 3.0f;
     const float roundness = 0.5f;
     const int segments = 10;
 
-    Rectangle box = {checkbox->position.x, checkbox->position.y, CHECKBOX_SIZE, CHECKBOX_SIZE};
+    Rectangle box = {position.x, position.y, CHECKBOX_SIZE, CHECKBOX_SIZE};
     
     DrawRectangleRounded(box, roundness, segments, primaryColorDimmed30);
     DrawRectangleRoundedLinesEx(box, 0.5f, 10, lineThickness, primaryColor);
 
-    if (checkbox->isChecked) {
+    if (state) {
         float inset = 3.0f;
 
         Vector2 p1 = {
@@ -38,17 +38,16 @@ void renderCheckbox(Checkbox* checkbox) {
     }
 }
 
-bool updateCheckbox(Checkbox* checkbox, void (*callback)(bool)) {
+bool updateCheckbox(Vector2 position, bool* state) {
     bool isHovered = false;
 
-    Rectangle box = {checkbox->position.x, checkbox->position.y, CHECKBOX_SIZE, CHECKBOX_SIZE};
+    Rectangle box = {position.x, position.y, CHECKBOX_SIZE, CHECKBOX_SIZE};
 
     if (CheckCollisionPointRec(GetMousePosition(), box)) {
         isHovered = true;
 
-        if (IsMouseButtonPressed(0)) {
-            checkbox->isChecked = !checkbox->isChecked;
-            callback(checkbox->isChecked);
+        if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
+            *state = !*state;
         }
     }
 
