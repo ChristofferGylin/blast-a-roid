@@ -8,18 +8,6 @@
 #include "ui.h"
 #include "uiSizes.h"
 
-#define POOL_COUNTS(X)               \
-    X(asteroids)                     \
-    X(bonuses)                       \
-    X(destroyedAsteroids)            \
-    X(enemies)                       \
-    X(explosions)                    \
-    X(shots)                         \
-    X(spawnableBonuses)              \
-    X(spawnableEnemies)              \
-    X(specials)                      \
-    X(specialsSpawn)
-
 void outputDebugToTerminal(Debug* debug);
 void outputObjectCountToTerminal(const char* name, ObjectCount oc);
 void resetObjectCount(ObjectCount* oc, int capacity);

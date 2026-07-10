@@ -3,6 +3,19 @@
 
 #include <stdbool.h>
 
+#define POOL_COUNTS(X)               \
+    X(asteroids)                     \
+    X(bonuses)                       \
+    X(destroyedAsteroids)            \
+    X(enemies)                       \
+    X(explosions)                    \
+    X(shots)                         \
+    X(spawnableBonuses)              \
+    X(spawnableEnemies)              \
+    X(specials)                      \
+    X(specialsSpawn)
+
+
 typedef struct GameContext GameContext;
 
 typedef struct ObjectCount {
