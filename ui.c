@@ -6,12 +6,11 @@
 
 Rectangle renderCheckbox(Vector2 position, bool isChecked) {
     
-    const float rectangleSize = 22.0f;
     const float lineThickness = 3.0f;
     const float roundness = 0.5f;
     const int segments = 10;
 
-    Rectangle box = {position.x, position.y, rectangleSize, rectangleSize};
+    Rectangle box = {position.x, position.y, CHECKBOX_SIZE, CHECKBOX_SIZE};
     
     DrawRectangleRounded(box, roundness, segments, primaryColorDimmed30);
     DrawRectangleRoundedLinesEx(box, 0.5f, 10, lineThickness, primaryColor);
