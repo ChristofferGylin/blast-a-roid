@@ -43,9 +43,10 @@ void drawCheckbox(Vector2 position, bool state) {
 }
 
 void drawButton(Button* button) {
-    Color buttonColor = button->isHovered ? primaryColorDimmed60 : primaryColorDimmed50;
+    Color buttonColor = button->isHovered ? primaryColorDimmed50 : primaryColorDimmed30;
     float roundness = getRoundness(button->rect, BUTTON_ROUNDNESS_RADIUS);
 
+    DrawRectangleRounded(button->rect, roundness, MENU_ROUNDNESS_SEGMENTS, BLACK);
     DrawRectangleRounded(button->rect, roundness, MENU_ROUNDNESS_SEGMENTS, buttonColor);
     DrawRectangleRoundedLinesEx(button->rect, roundness, MENU_ROUNDNESS_SEGMENTS, 2, primaryColor);
 
