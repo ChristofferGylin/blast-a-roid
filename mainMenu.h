@@ -30,9 +30,6 @@ typedef struct Menu {
     int menuOffset;
 }Menu; 
 
-Rectangle drawLayoutContainers();
-void drawMenu(Menu* menu);
 void mainMenu(GameContext* ctx);
-void updateMenu(Menu* menu);
 
 #endif

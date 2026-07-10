@@ -24,9 +24,13 @@ int logoFontSize = 42;
 int logoFontSpacing = 8;
 
 void drawHighscores(Highscores* highscores, Rectangle container, HighlightTimers* highlightTimers);
+void drawMenu(Menu* menu);
+Rectangle drawLayoutContainers();
 void initHighlightTimers(HighlightTimers* timers);
 void initMenu(GameContext* ctx, Menu* menu);
 void updateHighlightTimers(GameContext* ctx, HighlightTimers* timers);
+void updateMenu(Menu* menu);
+
 
 void drawHighscores(Highscores* highscores, Rectangle container, HighlightTimers* highlightTimers) {
 
