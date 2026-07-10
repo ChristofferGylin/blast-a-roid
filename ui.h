@@ -13,5 +13,6 @@ typedef struct Checkbox {
 }Checkbox;
 
 void renderCheckbox(Checkbox* checkbox);
+bool updateCheckbox(Checkbox* checkbox);
 
 #endif

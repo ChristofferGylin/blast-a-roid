@@ -37,3 +37,19 @@ void renderCheckbox(Checkbox* checkbox) {
         DrawLineEx(p2, p3, lineThickness, primaryColor);
     }
 }
+
+bool updateCheckbox(Checkbox* checkbox) {
+    bool isHovered = false;
+
+    Rectangle box = {checkbox->position.x, checkbox->position.y, CHECKBOX_SIZE, CHECKBOX_SIZE};
+
+    if (CheckCollisionPointRec(GetMousePosition(), box)) {
+        isHovered = true;
+
+        if (IsMouseButtonPressed(0)) {
+            checkbox->isChecked = !checkbox->isChecked;
+        }
+    }
+
+    return isHovered;
+}
