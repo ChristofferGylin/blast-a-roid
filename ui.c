@@ -38,7 +38,7 @@ void renderCheckbox(Checkbox* checkbox) {
     }
 }
 
-bool updateCheckbox(Checkbox* checkbox) {
+bool updateCheckbox(Checkbox* checkbox, void (*callback)(bool)) {
     bool isHovered = false;
 
     Rectangle box = {checkbox->position.x, checkbox->position.y, CHECKBOX_SIZE, CHECKBOX_SIZE};
@@ -48,6 +48,7 @@ bool updateCheckbox(Checkbox* checkbox) {
 
         if (IsMouseButtonPressed(0)) {
             checkbox->isChecked = !checkbox->isChecked;
+            callback(checkbox->isChecked);
         }
     }
 
