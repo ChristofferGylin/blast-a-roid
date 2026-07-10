@@ -7,6 +7,11 @@
 
 static const float CHECKBOX_SIZE = 22.0f;
 
-Rectangle renderCheckbox(Vector2 position, bool isChecked);
+typedef struct Checkbox {
+    bool isChecked;
+    Vector2 position;
+}Checkbox;
+
+void renderCheckbox(Checkbox* checkbox);
 
 #endif
