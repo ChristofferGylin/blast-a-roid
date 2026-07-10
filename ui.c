@@ -50,7 +50,7 @@ void drawButton(Button* button) {
     DrawRectangleRounded(button->rect, roundness, MENU_ROUNDNESS_SEGMENTS, buttonColor);
     DrawRectangleRoundedLinesEx(button->rect, roundness, MENU_ROUNDNESS_SEGMENTS, 2, primaryColor);
 
-    DrawTextPro(GetFontDefault(), button->text, button->textPosition, (Vector2){0,0}, 0, BUTTON_FONT_SIZE, BUTTON_FONT_SPACING, primaryColor);
+    DrawTextPro(GetFontDefault(), button->text, button->textPosition, (Vector2){0,0}, 0, button->fontSize, BUTTON_FONT_SPACING, primaryColor);
 }
 
 void initButton(Button* button, Rectangle rect, int fontSize, char* text, ButtonCallback callback, void* userData) {
@@ -61,7 +61,7 @@ void initButton(Button* button, Rectangle rect, int fontSize, char* text, Button
     strncpy(button->text, text, sizeof(button->text) - 1);
     button->text[sizeof(button->text) - 1] = '\0';
 
-    Vector2 textSize = MeasureTextEx(GetFontDefault(), button->text, BUTTON_FONT_SIZE, BUTTON_FONT_SPACING);
+    Vector2 textSize = MeasureTextEx(GetFontDefault(), button->text, button->fontSize, BUTTON_FONT_SPACING);
 
     if (textSize.x + (BUTTON_PADDING * 2) > button->rect.width) {
         button->rect.width = textSize.x + (BUTTON_PADDING * 2);
