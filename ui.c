@@ -4,7 +4,7 @@
 #include "raylib.h"
 #include "ui.h"
 
-void renderCheckbox(Vector2 position, bool state) {
+void drawCheckbox(Vector2 position, bool state) {
     
     const float lineThickness = 3.0f;
     const float roundness = 0.5f;
