@@ -341,17 +341,21 @@ void initHighlightTimers(HighlightTimers* timers) {
     timers->blinkVisible = true;
 }
 
-void initMenu(Menu* menu) {
+void initMenu(GameContext* ctx, Menu* menu) {
+
     char titles[][32] = {
         "START GAME",
         "OPTIONS",
         "ABOUT",
-        "EXIT"
+        "EXIT",
+        "DEBUG"
     };
 
     int menuY = 0;
 
-    for (int i = 0; i < 4; i++) {
+    int numberOfItems = ctx->debug.active ? 5 : 4;
+
+    for (int i = 0; i < numberOfItems; i++) {
         Vector2 size = MeasureTextEx(GetFontDefault(), titles[i], fontSize, fontSpacing);
 
         menu->items[i].basePosition = (Vector2){
@@ -366,7 +370,7 @@ void initMenu(Menu* menu) {
         menuY += size.y + nextItemGap;
     }
 
-    menu->count = 4;
+    menu->count = numberOfItems;
 
     int menuHeight = menuY - nextItemGap;
     menu->menuOffset = ((SCREEN_HEIGHT / 8) * 5) - (menuHeight / 2);
@@ -377,7 +381,7 @@ void initMenu(Menu* menu) {
 void mainMenu(GameContext* ctx) {
     Menu menu;
     HighlightTimers highlightTimers;
-    initMenu(&menu);
+    initMenu(ctx, &menu);
     initHighlightTimers(&highlightTimers);
 
     float fadeInValue = 1.0f;
