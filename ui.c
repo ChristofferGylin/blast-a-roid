@@ -5,17 +5,7 @@
 #include "raylib.h"
 #include "utils.h"
 #include "ui.h"
-
-int fontSize = 32;
-int fontSpacing = 6;
-int nextItemGap = 20;
-int underLineHeight = 3;
-int underLineOffset = 3;
-int margin = 20;
-int roundnessRadius = 12.0f;
-int logoFontSize = 42;
-int logoFontSpacing = 8;
-int lineThickness = 3;
+#include "uiSizes.h"
 
 static Rectangle drawLayoutContainers();
 
@@ -29,19 +19,19 @@ Rectangle drawLayoutContainers() {
     };
 
     Rectangle mainContainer = {
-        margin,
-        margin,
-        SCREEN_WIDTH - (margin * 2),
-        SCREEN_HEIGHT - (margin * 2)
+        MENU_MARGIN,
+        MENU_MARGIN,
+        SCREEN_WIDTH - (MENU_MARGIN * 2),
+        SCREEN_HEIGHT - (MENU_MARGIN * 2)
     };
 
     char headingText[] = "DEBUG OPTIONS";
 
-    Vector2 headingSize = MeasureTextEx(GetFontDefault(), headingText, logoFontSize, logoFontSpacing);
+    Vector2 headingSize = MeasureTextEx(GetFontDefault(), headingText, MENU_HEADING_FONT_SIZE, MENU_HEADING_FONT_SPACING);
 
     Vector2 headingPos = {
         (SCREEN_WIDTH / 2) - (headingSize.x / 2),
-        mainContainer.y + margin
+        mainContainer.y + MENU_MARGIN
     };
 
     DrawRectangleGradientV(background.x, background.y, background.width, background.height, topColor, bottomColor);
@@ -52,8 +42,8 @@ Rectangle drawLayoutContainers() {
         headingPos,
         (Vector2){0, 0},
         0,
-        logoFontSize,
-        logoFontSpacing,
+        MENU_HEADING_FONT_SIZE,
+        MENU_HEADING_FONT_SPACING,
         primaryColor
     );
 
@@ -64,12 +54,12 @@ Rectangle drawLayoutContainers() {
 
     Vector2 lineSize = {
         mainContainer.width,
-        lineThickness,
+        MENU_LINE_THICKNESS,
     };
 
     DrawRectangle(linePos.x, linePos.y, lineSize.x, lineSize.y, primaryColor);
 
-    DrawRectangleRoundedLinesEx(mainContainer, getRoundness(mainContainer, roundnessRadius), 10, lineThickness, primaryColor);
+    DrawRectangleRoundedLinesEx(mainContainer, getRoundness(mainContainer, MENU_ROUNDNESS_RADIUS), MENU_ROUNDNESS_SEGMENTS, MENU_LINE_THICKNESS, primaryColor);
 
     Rectangle contentContainer;
     contentContainer.x = mainContainer.x;
