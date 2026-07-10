@@ -4,6 +4,7 @@
 static const int BUTTON_FONT_SIZE = 20;
 static const int BUTTON_FONT_SPACING = 4;
 static const int BUTTON_PADDING = 10;
+static const float BUTTON_ROUNDNESS_RADIUS = 8.0f;
 static const float CHECKBOX_SIZE = 22.0f;
 static const int MENU_FONT_SIZE = 32;
 static const int MENU_FONT_SPACING = 6;

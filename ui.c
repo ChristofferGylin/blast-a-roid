@@ -42,6 +42,16 @@ void drawCheckbox(Vector2 position, bool state) {
     }
 }
 
+void drawButton(Button* button) {
+    Color buttonColor = button->isHovered ? primaryColorDimmed60 : primaryColorDimmed50;
+    float roundness = getRoundness(button->rect, BUTTON_ROUNDNESS_RADIUS);
+
+    DrawRectangleRounded(button->rect, roundness, MENU_ROUNDNESS_SEGMENTS, buttonColor);
+    DrawRectangleRoundedLinesEx(button->rect, roundness, MENU_ROUNDNESS_SEGMENTS, 2, primaryColor);
+
+    DrawTextPro(GetFontDefault(), button->text, button->textPosition, (Vector2){0,0}, 0, BUTTON_FONT_SIZE, BUTTON_FONT_SPACING, primaryColor);
+}
+
 void initButton(Button* button, Rectangle rect, int fontSize, char* text, ButtonCallback callback, void* userData) {
     button->fontSize = fontSize;
     button->onClick = callback;
@@ -57,7 +67,10 @@ void initButton(Button* button, Rectangle rect, int fontSize, char* text, Button
 
     if (textSize.y + (BUTTON_PADDING * 2) > button->rect.height) {
         button->rect.height = textSize.y + (BUTTON_PADDING * 2);
-    } 
+    }
+
+    button->textPosition.x = button->rect.x + (button->rect.width / 2.0f) - (textSize.x / 2.0f);
+    button->textPosition.y = button->rect.y + (button->rect.height / 2.0f) - (textSize.y / 2.0f);
 }
 
 bool updateCheckbox(Vector2 position, bool* state) {
