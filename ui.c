@@ -58,7 +58,8 @@ void initButton(Button* button, Rectangle rect, int fontSize, char* text, Button
     button->onClick = callback;
     button->rect = rect;
     button->userData = userData;
-    strcpy(button->text, text);
+    strncpy(button->text, text, sizeof(button->text) - 1);
+    button->text[sizeof(button->text) - 1] = '\0';
 
     Vector2 textSize = MeasureTextEx(GetFontDefault(), button->text, BUTTON_FONT_SIZE, BUTTON_FONT_SPACING);
 

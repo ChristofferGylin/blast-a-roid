@@ -14,7 +14,7 @@ typedef struct Button {
     bool isHovered;
     ButtonCallback onClick;
     void* userData;
-    char text[];
+    char text[32];
 }Button;
 
 void drawButton(Button* button);
