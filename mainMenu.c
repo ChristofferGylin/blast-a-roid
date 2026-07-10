@@ -25,7 +25,7 @@ int logoFontSpacing = 8;
 
 void drawHighscores(Highscores* highscores, Rectangle container, HighlightTimers* highlightTimers);
 void drawMenu(Menu* menu);
-Rectangle drawLayoutContainers();
+static Rectangle drawLayoutContainers();
 void initHighlightTimers(HighlightTimers* timers);
 void initMenu(GameContext* ctx, Menu* menu);
 void updateHighlightTimers(GameContext* ctx, HighlightTimers* timers);
