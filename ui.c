@@ -8,24 +8,6 @@
 #include "ui.h"
 #include "uiSizes.h"
 
-void initButton(Button* button, Rectangle rect, int fontSize, char* text[], ButtonCallback callback, void* userData) {
-    button->fontSize = fontSize;
-    button->onClick = callback;
-    button->rect = rect;
-    button->userData = userData;
-    strcpy(button->text, text);
-
-    Vector2 textSize = MeasureTextEx(GetFontDefault(), button->text, BUTTON_FONT_SIZE, BUTTON_FONT_SPACING);
-
-    if (textSize.x + (BUTTON_PADDING * 2) > button->rect.width) {
-        button->rect.width = textSize.x + (BUTTON_PADDING * 2);
-    } 
-
-    if (textSize.y + (BUTTON_PADDING * 2) > button->rect.height) {
-        button->rect.height = textSize.y + (BUTTON_PADDING * 2);
-    } 
-}
-
 void drawCheckbox(Vector2 position, bool state) {
     
     const float lineThickness = 3.0f;
@@ -58,6 +40,24 @@ void drawCheckbox(Vector2 position, bool state) {
         DrawLineEx(p1, p2, lineThickness, primaryColor);
         DrawLineEx(p2, p3, lineThickness, primaryColor);
     }
+}
+
+void initButton(Button* button, Rectangle rect, int fontSize, char* text, ButtonCallback callback, void* userData) {
+    button->fontSize = fontSize;
+    button->onClick = callback;
+    button->rect = rect;
+    button->userData = userData;
+    strcpy(button->text, text);
+
+    Vector2 textSize = MeasureTextEx(GetFontDefault(), button->text, BUTTON_FONT_SIZE, BUTTON_FONT_SPACING);
+
+    if (textSize.x + (BUTTON_PADDING * 2) > button->rect.width) {
+        button->rect.width = textSize.x + (BUTTON_PADDING * 2);
+    } 
+
+    if (textSize.y + (BUTTON_PADDING * 2) > button->rect.height) {
+        button->rect.height = textSize.y + (BUTTON_PADDING * 2);
+    } 
 }
 
 bool updateCheckbox(Vector2 position, bool* state) {
