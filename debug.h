@@ -43,6 +43,7 @@ typedef struct Debug {
     ObjectPoolCount poolCount;
 }Debug;
 
+bool debugMenu(GameContext* ctx);
 void initDebug(Debug* debug, bool active);
 void updateDebug(GameContext* ctx);
 

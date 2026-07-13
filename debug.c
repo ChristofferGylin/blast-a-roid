@@ -8,11 +8,48 @@
 #include "ui.h"
 #include "uiSizes.h"
 
+ButtonCallback backButtonOnClick(void* userData);
 void outputDebugToTerminal(Debug* debug);
 void outputObjectCountToTerminal(const char* name, ObjectCount oc);
 void resetObjectCount(ObjectCount* oc, int capacity);
 
 static Rectangle drawLayoutContainers();
+
+ButtonCallback backButtonOnClick(void* userData) {
+    bool* exit = userData;
+
+    exit = true;
+}
+
+bool debugMenu(GameContext* ctx) {
+
+    bool exit = false;
+    bool closeApplication = false;
+
+    Button backButton;
+    initButton(
+        &backButton,
+        (Rectangle){100, MENU_MARGIN * 2, 0, 0},
+        BUTTON_FONT_SIZE, "BACK",
+        backButtonOnClick,
+        &exit
+    );
+
+    while (!WindowShouldClose()) {
+        updateButton(&backButton);
+
+        BeginDrawing();
+            drawLayoutContainers();
+            drawButton(&backButton);
+        EndDrawing();
+
+        if (exit) break;
+    }
+
+    if (WindowShouldClose()) closeApplication = true;
+
+    return closeApplication;
+}
 
 Rectangle drawLayoutContainers() {
 
