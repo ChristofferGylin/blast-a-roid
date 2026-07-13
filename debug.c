@@ -8,17 +8,17 @@
 #include "ui.h"
 #include "uiSizes.h"
 
-ButtonCallback backButtonOnClick(void* userData);
+void backButtonOnClick(void* userData);
 void outputDebugToTerminal(Debug* debug);
 void outputObjectCountToTerminal(const char* name, ObjectCount oc);
 void resetObjectCount(ObjectCount* oc, int capacity);
 
 static Rectangle drawLayoutContainers();
 
-ButtonCallback backButtonOnClick(void* userData) {
+void backButtonOnClick(void* userData) {
     bool* exit = userData;
 
-    exit = true;
+    *exit = true;
 }
 
 bool debugMenu(GameContext* ctx) {
