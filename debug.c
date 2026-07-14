@@ -32,7 +32,6 @@ bool debugMenu(GameContext* ctx) {
 
     initDebugMenu(ctx, &menu);
 
-    bool exit = false;
     bool applicationIsRunning = true;
 
 
@@ -44,7 +43,7 @@ bool debugMenu(GameContext* ctx) {
             drawButton(&menu.backButton);
         EndDrawing();
 
-        if (exit) break;
+        if (menu.exit) break;
     }
 
     if (WindowShouldClose()) applicationIsRunning = false;
@@ -86,6 +85,7 @@ void initDebug(Debug* debug, bool active) {
 
 void initDebugMenu(GameContext* ctx, DebugMenu* menu) {
     
+    menu->exit = false;
     initBasicLayoutContainer(&menu->layout, (Rectangle){0, 0, SCREEN_WIDTH, SCREEN_HEIGHT}, "DEBUG MENU");
     initButton(
         &menu->backButton,
