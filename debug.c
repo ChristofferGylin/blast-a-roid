@@ -24,7 +24,7 @@ void backButtonOnClick(void* userData) {
 bool debugMenu(GameContext* ctx) {
 
     bool exit = false;
-    bool closeApplication = false;
+    bool applicationIsRunning = true;
 
     Button backButton;
     initButton(
@@ -46,9 +46,9 @@ bool debugMenu(GameContext* ctx) {
         if (exit) break;
     }
 
-    if (WindowShouldClose()) closeApplication = true;
+    if (WindowShouldClose()) applicationIsRunning = false;
 
-    return closeApplication;
+    return applicationIsRunning;
 }
 
 Rectangle drawLayoutContainers() {

@@ -414,7 +414,7 @@ void mainMenu(GameContext* ctx) {
                 case 4:
                     if (ctx->debug.active) {
                         menu.selected = -1;
-                        debugMenu(ctx);
+                        isRunning = debugMenu(ctx);
                         break;
                     }
                 default: 
