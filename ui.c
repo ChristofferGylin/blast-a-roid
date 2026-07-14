@@ -53,6 +53,31 @@ void drawButton(Button* button) {
     DrawTextPro(GetFontDefault(), button->text, button->textPosition, (Vector2){0,0}, 0, button->fontSize, BUTTON_FONT_SPACING, primaryColor);
 }
 
+void initBasicLayoutContainer(BasicLayoutContainer* layout, Rectangle area, char* heading) {
+    layout->background = area;
+    strcpy(layout->heading, heading);
+
+    layout->container.x = area.x + MENU_MARGIN;
+    layout->container.y = area.y + MENU_MARGIN;
+    layout->container.width = area.width - (MENU_MARGIN * 2);
+    layout->container.height = area.height - (MENU_MARGIN * 2);
+
+    Vector2 headingSize = MeasureTextEx(GetFontDefault(), layout->heading, MENU_HEADING_FONT_SIZE, MENU_HEADING_FONT_SPACING);
+
+    layout->headingPosition.x = area.x + (area.width / 2.0f) - (headingSize.x / 2.0f);
+    layout->headingPosition.y = layout->container.y + MENU_MARGIN + MENU_LINE_THICKNESS;
+
+    layout->divider.x = layout->container.x;
+    layout->divider.y = layout->headingPosition.y + headingSize.y + MENU_MARGIN;
+    layout->divider.width = layout->container.width;
+    layout->divider.height = MENU_LINE_THICKNESS;
+
+    layout->contentArea.x = layout->container.x;
+    layout->contentArea.y = layout->divider.y + layout->divider.height;
+    layout->contentArea.width = layout->container.width;
+    layout->contentArea.height = layout->container.height - (layout->contentArea.y - (layout->container.y + layout->divider.height));
+}
+
 void initCheckbox(Checkbox* checkbox, bool* state, Vector2 position) {
     checkbox->position = position;
     checkbox->state = state;

@@ -2,6 +2,7 @@
 #define DEBUG_H
 
 #include <stdbool.h>
+#define NUMBER_OF_POOL_COUNTS 10
 
 #define POOL_COUNTS(X)               \
     X(asteroids)                     \
@@ -49,6 +50,10 @@ typedef struct Debug {
     float updateTimer;
     ObjectPoolCount poolCount;
 }Debug;
+
+typedef struct DebugMenu {
+    
+}
 
 bool debugMenu(GameContext* ctx);
 void initDebug(Debug* debug, bool active);

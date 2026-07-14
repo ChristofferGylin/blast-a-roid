@@ -28,8 +28,23 @@ void backButtonOnClick(void* userData) {
 
 bool debugMenu(GameContext* ctx) {
 
+    Debug* debug = &ctx->debug;
+
     bool exit = false;
     bool applicationIsRunning = true;
+
+    ObjectCountOption countOptions[NUMBER_OF_POOL_COUNTS];
+
+    int index = 0;
+
+    #define OUTPUT(name)
+        do {                                        \
+            initObjectCountOption(&countOptions[index], )
+        } while (0);
+    
+    POOL_COUNTS(OUTPUT)
+
+    #undef OUTPUT
 
     Button backButton;
     initButton(

@@ -8,6 +8,16 @@
 
 typedef void (*ButtonCallback)(void* userData);
 
+typedef struct BasicLayoutContainer {
+    Rectangle background;
+    Rectangle container;
+    Rectangle divider;
+    Rectangle contentArea;
+    Vector2 headingPosition;
+    char heading[TITLE_MAX_LENGTH];
+}BasicLayoutContainer;
+
+
 typedef struct Button {
     Rectangle rect;
     Vector2 textPosition;
