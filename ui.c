@@ -53,6 +53,11 @@ void drawButton(Button* button) {
     DrawTextPro(GetFontDefault(), button->text, button->textPosition, (Vector2){0,0}, 0, button->fontSize, BUTTON_FONT_SPACING, primaryColor);
 }
 
+void initCheckbox(Checkbox* checkbox, bool* state, Vector2 position) {
+    checkbox->position = position;
+    checkbox->state = state;
+}
+
 void initButton(Button* button, Rectangle rect, int fontSize, char* text, ButtonCallback callback, void* userData) {
     button->fontSize = fontSize;
     button->onClick = callback;
