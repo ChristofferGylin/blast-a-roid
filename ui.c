@@ -8,18 +8,18 @@
 #include "ui.h"
 #include "uiSizes.h"
 
-void drawCheckbox(Vector2 position, bool state) {
+void drawCheckbox(Checkbox* checkbox) {
     
     const float lineThickness = 3.0f;
     const float roundness = 0.5f;
     const int segments = 10;
 
-    Rectangle box = {position.x, position.y, CHECKBOX_SIZE, CHECKBOX_SIZE};
+    Rectangle box = {checkbox->position.x, checkbox->position.y, CHECKBOX_SIZE, CHECKBOX_SIZE};
     
     DrawRectangleRounded(box, roundness, segments, primaryColorDimmed30);
     DrawRectangleRoundedLinesEx(box, 0.5f, 10, lineThickness, primaryColor);
 
-    if (state) {
+    if (checkbox->state) {
         float inset = 3.0f;
 
         Vector2 p1 = {
@@ -88,16 +88,17 @@ void updateButton(Button* button) {
     }
 }
 
-bool updateCheckbox(Vector2 position, bool* state) {
+bool updateCheckbox(Checkbox* checkbox) {
+
     bool isHovered = false;
 
-    Rectangle box = {position.x, position.y, CHECKBOX_SIZE, CHECKBOX_SIZE};
+    Rectangle box = {checkbox->position.x, checkbox->position.y, CHECKBOX_SIZE, CHECKBOX_SIZE};
 
     if (CheckCollisionPointRec(GetMousePosition(), box)) {
         isHovered = true;
 
         if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
-            *state = !*state;
+            checkbox->state = !checkbox->state;
         }
     }
 

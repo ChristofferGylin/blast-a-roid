@@ -4,6 +4,7 @@
 #include <stdbool.h>
 
 #include "raylib.h"
+#define TITLE_MAX_LENGTH 32
 
 typedef void (*ButtonCallback)(void* userData);
 
@@ -14,11 +15,16 @@ typedef struct Button {
     bool isHovered;
     ButtonCallback onClick;
     void* userData;
-    char text[32];
+    char text[TITLE_MAX_LENGTH];
 }Button;
 
+typedef struct Checkbox {
+    Vector2 position;
+    bool* state;
+}Checkbox;
+
 void drawButton(Button* button);
-void drawCheckbox(Vector2 position, bool state);
+void drawCheckbox(Checkbox* checkbox);
 void initButton(Button* button, Rectangle rect, int fontSize, char* text, ButtonCallback callback, void* userData);
 void updateButton(Button* button);
 bool updateCheckbox(Vector2 position, bool* state);

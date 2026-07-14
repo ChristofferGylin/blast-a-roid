@@ -25,6 +25,12 @@ typedef struct ObjectCount {
     bool showInDebug;
 }ObjectCount;
 
+typedef struct ObjectCountOption {
+    Vector2 position;
+    Checkbox checkbox;
+    char title[32];
+}ObjectCountOption;
+
 typedef struct ObjectPoolCount {
     ObjectCount asteroids;
     ObjectCount bonuses;
