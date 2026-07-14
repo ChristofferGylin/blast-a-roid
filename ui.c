@@ -42,6 +42,24 @@ void drawCheckbox(Checkbox* checkbox) {
     }
 }
 
+void drawBasicLayoutContainer(BasicLayoutContainer* layout) {
+    DrawRectangleGradientV(layout->background.x, layout->background.y, layout->background.width, layout->background.height, topColor, bottomColor);
+
+    DrawTextPro(
+        GetFontDefault(),
+        layout->heading,
+        layout->headingPosition,
+        (Vector2){0, 0},
+        0,
+        MENU_HEADING_FONT_SIZE,
+        MENU_HEADING_FONT_SPACING,
+        primaryColor
+    );
+
+    DrawRectanglePro(layout->divider, (Vector2){0,0}, 0, primaryColor);
+    DrawRectangleRoundedLinesEx(layout->container, getRoundness(layout->container, MENU_ROUNDNESS_RADIUS), MENU_ROUNDNESS_SEGMENTS, MENU_LINE_THICKNESS, primaryColor);
+}
+
 void drawButton(Button* button) {
     Color buttonColor = button->isHovered ? primaryColorDimmed50 : primaryColorDimmed30;
     float roundness = getRoundness(button->rect, BUTTON_ROUNDNESS_RADIUS);

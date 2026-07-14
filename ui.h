@@ -33,6 +33,7 @@ typedef struct Checkbox {
     bool* state;
 }Checkbox;
 
+void drawBasicLayoutContainer(BasicLayoutContainer* layout);
 void drawButton(Button* button);
 void drawCheckbox(Checkbox* checkbox);
 void initBasicLayoutContainer(BasicLayoutContainer* layout, Rectangle area, char* heading);
