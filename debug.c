@@ -163,12 +163,12 @@ void updateDebug(GameContext* ctx) {
     
     debug->updateTimer = 0.0f;
 
-    #define OUTPUT(name)                                                     \
-        do {                                                                 \
-            debug->poolCount.name.activeCount = ctx->objectPools.name.activeCount; \
-            if (debug->poolCount.name.activeCount > debug->poolCount.name.spike) { \
+    #define OUTPUT(name)                                                            \
+        do {                                                                        \
+            debug->poolCount.name.activeCount = ctx->objectPools.name.activeCount;  \
+            if (debug->poolCount.name.activeCount > debug->poolCount.name.spike) {  \
                 debug->poolCount.name.spike = debug->poolCount.name.activeCount;    \
-            }                                                                \
+            }                                                                       \
         } while (0);
 
     POOL_COUNTS(OUTPUT)
