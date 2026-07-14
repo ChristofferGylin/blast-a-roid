@@ -29,7 +29,7 @@ bool debugMenu(GameContext* ctx) {
     Button backButton;
     initButton(
         &backButton,
-        (Rectangle){100, MENU_MARGIN * 2, 0, 0},
+        (Rectangle){MENU_MARGIN * 2.0f, (MENU_MARGIN * 2.0f) + MENU_LINE_THICKNESS, 0, 0},
         BUTTON_FONT_SIZE, "BACK",
         backButtonOnClick,
         &exit
@@ -73,7 +73,7 @@ Rectangle drawLayoutContainers() {
 
     Vector2 headingPos = {
         (SCREEN_WIDTH / 2) - (headingSize.x / 2),
-        mainContainer.y + MENU_MARGIN
+        mainContainer.y + MENU_MARGIN + MENU_LINE_THICKNESS
     };
 
     DrawRectangleGradientV(background.x, background.y, background.width, background.height, topColor, bottomColor);
@@ -91,7 +91,7 @@ Rectangle drawLayoutContainers() {
 
     Vector2 linePos = {
         mainContainer.x,
-        headingPos.y + headingSize.y + 10
+        headingPos.y + headingSize.y + MENU_MARGIN
     };
 
     Vector2 lineSize = {
