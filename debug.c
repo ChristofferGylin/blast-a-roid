@@ -56,19 +56,9 @@ bool debugMenu(GameContext* ctx) {
     return applicationIsRunning;
 }
 
-void drawObjectCountOption(ObjectCountOption* option) {
-    
-    int yCenter = option->position.y + MENU_MARGIN + CHECKBOX_SIZE;
-    const int COUNT_OPTION_FONT_SIZE = 18;
-    Vector2 titleSize = MeasureTextEx(GetFontDefault(), option->title, COUNT_OPTION_FONT_SIZE, MENU_FONT_SPACING);
-    
-    // Vector2 checkBoxPosition = {option->position.x + MENU_MARGIN, yCenter - CHECKBOX_SIZE / 2.0f};
-    Vector2 textPosition = {
-        option->checkbox.position.x + CHECKBOX_SIZE + (MENU_MARGIN / 2.0f),
-        yCenter - (titleSize.y / 2.0f)
-    };
-    
+void drawObjectCountOption(ObjectCountOption* option) {    
     drawCheckbox(&option->checkbox);
+    DrawTextPro(GetFontDefault(), option->title, option->titlePosition, (Vector2){0,0}, 0, COUNT_OPTION_FONT_SIZE, MENU_FONT_SPACING, primaryColor);
 }
 
 Rectangle drawLayoutContainers() {
