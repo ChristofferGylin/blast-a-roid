@@ -40,6 +40,6 @@ void initBasicLayoutContainer(BasicLayoutContainer* layout, Rectangle area, char
 void initButton(Button* button, Rectangle rect, int fontSize, char* text, ButtonCallback callback, void* userData);
 void initCheckbox(Checkbox* checkbox, bool* state, Vector2 position);
 void updateButton(Button* button);
-bool updateCheckbox(Vector2 position, bool* state);
+bool updateCheckbox(Checkbox* checkbox);
 
 #endif

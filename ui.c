@@ -146,7 +146,7 @@ bool updateCheckbox(Checkbox* checkbox) {
         isHovered = true;
 
         if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
-            checkbox->state = !checkbox->state;
+            *checkbox->state = !*checkbox->state;
         }
     }
 

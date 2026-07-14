@@ -2,6 +2,8 @@
 #define DEBUG_H
 
 #include <stdbool.h>
+
+#include "ui.h"
 #define NUMBER_OF_POOL_COUNTS 10
 
 #define POOL_COUNTS(X)               \
