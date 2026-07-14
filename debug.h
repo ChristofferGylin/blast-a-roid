@@ -26,8 +26,8 @@ typedef struct ObjectCount {
 }ObjectCount;
 
 typedef struct ObjectCountOption {
-    Vector2 position;
     Checkbox checkbox;
+    Vector2 titlePosition;
     char title[32];
 }ObjectCountOption;
 

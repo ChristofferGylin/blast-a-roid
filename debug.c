@@ -1,5 +1,6 @@
 #include <stdbool.h>
 #include <stdio.h>
+#include <string.h>
 
 #include "colors.h"
 #include "debug.h"
@@ -8,8 +9,11 @@
 #include "ui.h"
 #include "uiSizes.h"
 
+static const int COUNT_OPTION_FONT_SIZE = 18;
+
 void backButtonOnClick(void* userData);
 void drawPoolCountOption(ObjectCount* option, char* title, Vector2 position);
+void initObjectCountOption(ObjectCountOption* option, Vector2 position, char* title, bool* state);
 void outputDebugToTerminal(Debug* debug);
 void outputObjectCountToTerminal(const char* name, ObjectCount oc);
 void resetObjectCount(ObjectCount* oc, int capacity);
@@ -153,6 +157,23 @@ void initDebug(Debug* debug, bool active) {
     debug->poolCount.spawnableEnemies.showInDebug = true;
     debug->poolCount.specials.showInDebug = true;
     debug->poolCount.specialsSpawn.showInDebug = true;
+}
+
+void initObjectCountOption(ObjectCountOption* option, Vector2 position, char* title, bool* state) {
+    
+    int yCenter = position.y + ((MENU_MARGIN + CHECKBOX_SIZE) / 2.0f);
+    
+    Vector2 titleSize = MeasureTextEx(GetFontDefault(), title, COUNT_OPTION_FONT_SIZE, MENU_FONT_SPACING);
+    
+    Vector2 checkBoxPosition = {position.x + MENU_MARGIN, yCenter - CHECKBOX_SIZE / 2.0f};
+    Vector2 titlePosition = {
+        checkBoxPosition.x + CHECKBOX_SIZE + (MENU_MARGIN / 2.0f),
+        yCenter - (titleSize.y / 2.0f)
+    };
+    
+    initCheckbox(&option->checkbox, state, checkBoxPosition);
+    strcpy(option->title, title);
+    option->titlePosition;
 }
 
 void outputObjectCountToTerminal(const char* name, ObjectCount oc) {
