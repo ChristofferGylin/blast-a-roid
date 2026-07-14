@@ -19,8 +19,6 @@ void outputDebugToTerminal(Debug* debug);
 void outputObjectCountToTerminal(const char* name, ObjectCount oc);
 void resetObjectCount(ObjectCount* oc, int capacity);
 
-static Rectangle drawLayoutContainers();
-
 void backButtonOnClick(void* userData) {
     bool* exit = userData;
 
@@ -42,7 +40,7 @@ bool debugMenu(GameContext* ctx) {
         updateButton(&menu.backButton);
 
         BeginDrawing();
-            drawLayoutContainers();
+            drawBasicLayoutContainer(&menu.layout);
             drawButton(&menu.backButton);
         EndDrawing();
 
