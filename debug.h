@@ -22,6 +22,7 @@ typedef struct ObjectCount {
     int activeCount;
     int capacity;
     int spike;
+    bool showInDebug;
 }ObjectCount;
 
 typedef struct ObjectPoolCount {

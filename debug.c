@@ -9,6 +9,7 @@
 #include "uiSizes.h"
 
 void backButtonOnClick(void* userData);
+void drawPoolCountOption(ObjectCount* option, char* title, Vector2 position);
 void outputDebugToTerminal(Debug* debug);
 void outputObjectCountToTerminal(const char* name, ObjectCount oc);
 void resetObjectCount(ObjectCount* oc, int capacity);
@@ -49,6 +50,21 @@ bool debugMenu(GameContext* ctx) {
     if (WindowShouldClose()) applicationIsRunning = false;
 
     return applicationIsRunning;
+}
+
+void drawPoolCountOption(ObjectCount* option, char* title, Vector2 position) {
+    
+    int yCenter = position.y + MENU_MARGIN + CHECKBOX_SIZE;
+    const int COUNT_OPTION_FONT_SIZE = 18;
+    Vector2 titleSize = MeasureTextEx(GetFontDefault(), title, COUNT_OPTION_FONT_SIZE, MENU_FONT_SPACING);
+    
+    Vector2 checkBoxPosition = {position.x + MENU_MARGIN, yCenter - CHECKBOX_SIZE / 2.0f};
+    Vector2 textPosition = {
+        checkBoxPosition.x + CHECKBOX_SIZE + (MENU_MARGIN / 2.0f),
+        yCenter - (titleSize.y / 2.0f)
+    };
+    
+    drawCheckbox(position, option->showInDebug);
 }
 
 Rectangle drawLayoutContainers() {
@@ -126,7 +142,17 @@ void initDebug(Debug* debug, bool active) {
     resetObjectCount(&debug->poolCount.spawnableEnemies, NUMBER_OF_ENEMY_TYPES);
     resetObjectCount(&debug->poolCount.specials, NUMBER_OF_SPECIALS);
     resetObjectCount(&debug->poolCount.specialsSpawn, NUMBER_OF_SPECIALS);
-    
+
+    debug->poolCount.asteroids.showInDebug = true;
+    debug->poolCount.bonuses.showInDebug = true;
+    debug->poolCount.destroyedAsteroids.showInDebug = true;
+    debug->poolCount.enemies.showInDebug = true;
+    debug->poolCount.explosions.showInDebug = true;
+    debug->poolCount.shots.showInDebug = true;
+    debug->poolCount.spawnableBonuses.showInDebug = true;
+    debug->poolCount.spawnableEnemies.showInDebug = true;
+    debug->poolCount.specials.showInDebug = true;
+    debug->poolCount.specialsSpawn.showInDebug = true;
 }
 
 void outputObjectCountToTerminal(const char* name, ObjectCount oc) {
