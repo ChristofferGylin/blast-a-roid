@@ -52,8 +52,11 @@ typedef struct Debug {
 }Debug;
 
 typedef struct DebugMenu {
-    
-}
+    BasicLayoutContainer layout;
+    Button backButton;
+    ObjectCountOption countOptions[NUMBER_OF_POOL_COUNTS];
+    bool exit;
+}DebugMenu;
 
 bool debugMenu(GameContext* ctx);
 void initDebug(Debug* debug, bool active);

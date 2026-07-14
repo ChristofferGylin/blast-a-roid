@@ -29,22 +29,14 @@ void backButtonOnClick(void* userData) {
 bool debugMenu(GameContext* ctx) {
 
     Debug* debug = &ctx->debug;
+    DebugMenu menu;
+
+    initDebugMenu(ctx, &menu);
 
     bool exit = false;
     bool applicationIsRunning = true;
 
     ObjectCountOption countOptions[NUMBER_OF_POOL_COUNTS];
-
-    int index = 0;
-
-    #define OUTPUT(name)
-        do {                                        \
-            initObjectCountOption(&countOptions[index], )
-        } while (0);
-    
-    POOL_COUNTS(OUTPUT)
-
-    #undef OUTPUT
 
     Button backButton;
     initButton(
@@ -76,67 +68,6 @@ void drawObjectCountOption(ObjectCountOption* option) {
     DrawTextPro(GetFontDefault(), option->title, option->titlePosition, (Vector2){0,0}, 0, COUNT_OPTION_FONT_SIZE, MENU_FONT_SPACING, primaryColor);
 }
 
-Rectangle drawLayoutContainers() {
-
-    Rectangle background = {
-        0,
-        0,
-        SCREEN_WIDTH,
-        SCREEN_HEIGHT
-    };
-
-    Rectangle mainContainer = {
-        MENU_MARGIN,
-        MENU_MARGIN,
-        SCREEN_WIDTH - (MENU_MARGIN * 2),
-        SCREEN_HEIGHT - (MENU_MARGIN * 2)
-    };
-
-    char headingText[] = "DEBUG OPTIONS";
-
-    Vector2 headingSize = MeasureTextEx(GetFontDefault(), headingText, MENU_HEADING_FONT_SIZE, MENU_HEADING_FONT_SPACING);
-
-    Vector2 headingPos = {
-        (SCREEN_WIDTH / 2) - (headingSize.x / 2),
-        mainContainer.y + MENU_MARGIN + MENU_LINE_THICKNESS
-    };
-
-    DrawRectangleGradientV(background.x, background.y, background.width, background.height, topColor, bottomColor);
-
-    DrawTextPro(
-        GetFontDefault(),
-        headingText,
-        headingPos,
-        (Vector2){0, 0},
-        0,
-        MENU_HEADING_FONT_SIZE,
-        MENU_HEADING_FONT_SPACING,
-        primaryColor
-    );
-
-    Vector2 linePos = {
-        mainContainer.x,
-        headingPos.y + headingSize.y + MENU_MARGIN
-    };
-
-    Vector2 lineSize = {
-        mainContainer.width,
-        MENU_LINE_THICKNESS,
-    };
-
-    DrawRectangle(linePos.x, linePos.y, lineSize.x, lineSize.y, primaryColor);
-
-    DrawRectangleRoundedLinesEx(mainContainer, getRoundness(mainContainer, MENU_ROUNDNESS_RADIUS), MENU_ROUNDNESS_SEGMENTS, MENU_LINE_THICKNESS, primaryColor);
-
-    Rectangle contentContainer;
-    contentContainer.x = mainContainer.x;
-    contentContainer.y = linePos.y + lineSize.y;
-    contentContainer.width = mainContainer.width;
-    contentContainer.height = mainContainer.height - (contentContainer.y - (mainContainer.y + lineSize.y));
-
-    return contentContainer;
-}
-
 void initDebug(Debug* debug, bool active) {
     debug->active = active;
     debug->updateTimer = 0.0f;
@@ -162,6 +93,34 @@ void initDebug(Debug* debug, bool active) {
     debug->poolCount.spawnableEnemies.showInDebug = true;
     debug->poolCount.specials.showInDebug = true;
     debug->poolCount.specialsSpawn.showInDebug = true;
+}
+
+void initDebugMenu(GameContext* ctx, DebugMenu* menu) {
+    
+    initBasicLayoutContainer(&menu->layout, (Rectangle){0, 0, SCREEN_WIDTH, SCREEN_HEIGHT}, "DEBUG MENU");
+    initButton(
+        &menu->backButton,
+        (Rectangle){MENU_MARGIN * 2.0f, (MENU_MARGIN * 2.0f) + MENU_LINE_THICKNESS, 0, 0},
+        BUTTON_FONT_SIZE, "BACK",
+        backButtonOnClick,
+        &menu->exit
+    );
+
+    int index = 0;
+
+    int yPosition = menu->layout.contentArea.y + MENU_MARGIN;
+
+    #define OUTPUT(name)                                                                                                        \
+        do {                                                                                                                    \
+            Vector2 optionPosition = {menu->layout.container.x, yPosition};                                                              \
+            initObjectCountOption(&menu->countOptions[index], optionPosition, #name, &ctx->debug.poolCount.name.showInDebug);   \
+            yPosition += MENU_MARGIN + CHECKBOX_SIZE;                                                                           \
+            index++;                                                                                                            \
+        } while (0);                                                                                                
+    
+    POOL_COUNTS(OUTPUT)
+
+    #undef OUTPUT
 }
 
 void initObjectCountOption(ObjectCountOption* option, Vector2 position, char* title, bool* state) {
