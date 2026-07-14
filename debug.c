@@ -13,6 +13,7 @@ static const int COUNT_OPTION_FONT_SIZE = 18;
 
 void backButtonOnClick(void* userData);
 void drawPoolCountOption(ObjectCount* option, char* title, Vector2 position);
+void initDebugMenu(GameContext* ctx, DebugMenu* menu);
 void initObjectCountOption(ObjectCountOption* option, Vector2 position, char* title, bool* state);
 void outputDebugToTerminal(Debug* debug);
 void outputObjectCountToTerminal(const char* name, ObjectCount oc);
@@ -36,23 +37,13 @@ bool debugMenu(GameContext* ctx) {
     bool exit = false;
     bool applicationIsRunning = true;
 
-    ObjectCountOption countOptions[NUMBER_OF_POOL_COUNTS];
-
-    Button backButton;
-    initButton(
-        &backButton,
-        (Rectangle){MENU_MARGIN * 2.0f, (MENU_MARGIN * 2.0f) + MENU_LINE_THICKNESS, 0, 0},
-        BUTTON_FONT_SIZE, "BACK",
-        backButtonOnClick,
-        &exit
-    );
 
     while (!WindowShouldClose()) {
-        updateButton(&backButton);
+        updateButton(&menu.backButton);
 
         BeginDrawing();
             drawLayoutContainers();
-            drawButton(&backButton);
+            drawButton(&menu.backButton);
         EndDrawing();
 
         if (exit) break;
