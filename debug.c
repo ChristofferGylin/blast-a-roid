@@ -196,9 +196,37 @@ void initObjectCountSection(GameContext* ctx, ObjectCountSection* section, Recta
 
 void initOutputOptions(GameContext* ctx, DebugOutputOptions* options, Vector2 position) {
     
-    options->position = position;
     options->onlyOutputOnChange = &ctx->debug.onlyOutputOnChange;
     options->outputFrequency = &ctx->debug.outputFrequency;
+
+    float size = 16.0f;
+    float gap = 4.0f;
+
+    Rectangle decreaseButtonRect;
+    Rectangle increaseButtonRect;
+    Rectangle valueRect;
+
+    decreaseButtonRect.width = size;
+    decreaseButtonRect.height = size;
+
+    increaseButtonRect.width = size;
+    increaseButtonRect.height = size;
+
+    valueRect.width = size * 2.0f;
+    valueRect.height = size;
+
+    decreaseButtonRect.x = position.x;
+    decreaseButtonRect.y = position.y;
+
+    valueRect.x = decreaseButtonRect.x + decreaseButtonRect.width + gap;
+    valueRect.y = position.y;
+
+    increaseButtonRect.x = valueRect.x + valueRect.width + gap;
+    increaseButtonRect.y = position.y;
+
+    initButton(&options->decreaseButton, decreaseButtonRect, BUTTON_FONT_SIZE, "-", onClickDecrease, options->outputFrequency);
+    initButton(&options->increaseButton, increaseButtonRect, BUTTON_FONT_SIZE, "-", onClickIncrease, options->outputFrequency);
+    options->valueDisplay = valueRect;
 
 }
 

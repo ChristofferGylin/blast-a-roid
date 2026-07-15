@@ -22,11 +22,11 @@
 typedef struct GameContext GameContext;
 
 typedef struct DebugOutputOptions {
-    Vector2 position;
     bool* onlyOutputOnChange;
     float* outputFrequency;
     Button increaseButton;
     Button decreaseButton;
+    Rectangle valueDisplay;
 }DebugOutputOptions;
 
 typedef struct ObjectCount {
