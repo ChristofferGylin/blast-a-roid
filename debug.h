@@ -37,6 +37,8 @@ typedef struct ObjectCountOption {
 typedef struct ObjectCountSection {
     LayoutSection section;
     ObjectCountOption options[NUMBER_OF_POOL_COUNTS];
+    bool* onlyOutputOnChange;
+    float* outputFrequency;
 }ObjectCountSection;
 
 typedef struct ObjectPoolCount {
@@ -55,6 +57,8 @@ typedef struct ObjectPoolCount {
 typedef struct Debug {
     bool active;
     float updateTimer;
+    bool onlyOutputOnChange;
+    float outputFrequency;
     ObjectPoolCount poolCount;
 }Debug;
 

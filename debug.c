@@ -88,6 +88,8 @@ void drawObjectCountSectionContent(void* userData) {
 void initDebug(Debug* debug, bool active) {
     debug->active = active;
     debug->updateTimer = 0.0f;
+    debug->onlyOutputOnChange = true;
+    debug->outputFrequency = 1.0f;
 
     resetObjectCount(&debug->poolCount.asteroids, MAX_ASTEROIDS);
     resetObjectCount(&debug->poolCount.bonuses, MAX_BONUSES);
@@ -145,7 +147,6 @@ void initObjectCountOption(ObjectCountOption* option, Vector2 position, char* ti
 
 void initObjectCountSection(GameContext* ctx, ObjectCountSection* section, Rectangle* parent) {
     int index = 0;
-
     int yPosition = 0;
 
     #define OUTPUT(name)                                                                                                        \
@@ -175,6 +176,9 @@ void initObjectCountSection(GameContext* ctx, ObjectCountSection* section, Recta
         section->options[i].titlePosition.x += section->section.contentArea.x;
         section->options[i].titlePosition.y += section->section.contentArea.y;
     }
+
+    section->onlyOutputOnChange = &ctx->debug.onlyOutputOnChange;
+    section->outputFrequency = &ctx->debug.outputFrequency;
 }
 
 void outputObjectCountToTerminal(const char* name, ObjectCount oc) {
