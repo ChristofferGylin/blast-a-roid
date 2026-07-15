@@ -21,6 +21,7 @@ void drawObjectCountSectionContent(void* userData);
 void outputDebugToTerminal(Debug* debug);
 void outputObjectCountToTerminal(const char* name, ObjectCount oc);
 void resetObjectCount(ObjectCount* oc, int capacity);
+bool updateObjectCountSection(ObjectCountSection* section);
 
 void backButtonOnClick(void* userData) {
     bool* exit = userData;
@@ -40,6 +41,13 @@ bool debugMenu(GameContext* ctx) {
 
     while (!WindowShouldClose()) {
         updateButton(&menu.backButton);
+        bool isCheckboxHovered = updateObjectCountSection(&menu.objectCountSection);
+
+        if (isCheckboxHovered || menu.backButton.isHovered) {
+            SetMouseCursor(MOUSE_CURSOR_POINTING_HAND);
+        } else {
+            SetMouseCursor(MOUSE_CURSOR_DEFAULT);
+        }
 
         BeginDrawing();
             drawBasicLayoutContainer(&menu.layout);
@@ -177,6 +185,19 @@ void resetObjectCount(ObjectCount* oc, int capacity) {
     oc->activeCount = 0;
     oc->capacity = capacity;
     oc->spike = 0;
+}
+
+bool updateObjectCountSection(ObjectCountSection* section) {
+    
+    bool isHovered = false;
+
+    for (int i = 0; i < NUMBER_OF_POOL_COUNTS; i++) {
+        bool checkboxHovered = updateCheckbox(&section->options[i].checkbox);
+
+        if (checkboxHovered) isHovered = checkboxHovered;
+    }
+
+    return isHovered;
 }
 
 void updateDebug(GameContext* ctx) {
