@@ -85,6 +85,10 @@ void drawObjectCountSectionContent(void* userData) {
     }
 }
 
+void drawOutputOptions(ObjectCountSection* section) {
+
+}
+
 void initDebug(Debug* debug, bool active) {
     debug->active = active;
     debug->updateTimer = 0.0f;
@@ -167,7 +171,7 @@ void initObjectCountSection(GameContext* ctx, ObjectCountSection* section, Recta
     layoutContainer.width = parent->width / 2.0f;
     layoutContainer.height = parent->height / 2.0f;
 
-    initLayoutSection(&section->section, parent, layoutContainer, "OBJECT COUNT OUTPUT", drawObjectCountSectionContent, &section->options);
+    initLayoutSection(&section->section, parent, layoutContainer, "OBJECT COUNT OUTPUT", drawObjectCountSectionContent, &section->options); 
 
     for (int i = 0; i < NUMBER_OF_POOL_COUNTS; i++) {
         section->options[i].checkbox.position.x += section->section.contentArea.x;
@@ -176,6 +180,11 @@ void initObjectCountSection(GameContext* ctx, ObjectCountSection* section, Recta
         section->options[i].titlePosition.x += section->section.contentArea.x;
         section->options[i].titlePosition.y += section->section.contentArea.y;
     }
+
+    float endPositionY = section->options[NUMBER_OF_POOL_COUNTS - 1].titlePosition.y + CHECKBOX_SIZE + MENU_MARGIN;
+
+    section->outputOptionsPosition.y = endPositionY + MENU_MARGIN;
+    section->outputOptionsPosition.x = section->section.contentArea.x;
 
     section->onlyOutputOnChange = &ctx->debug.onlyOutputOnChange;
     section->outputFrequency = &ctx->debug.outputFrequency;

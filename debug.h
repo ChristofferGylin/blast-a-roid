@@ -37,6 +37,7 @@ typedef struct ObjectCountOption {
 typedef struct ObjectCountSection {
     LayoutSection section;
     ObjectCountOption options[NUMBER_OF_POOL_COUNTS];
+    Vector2 outputOptionsPosition;
     bool* onlyOutputOnChange;
     float* outputFrequency;
 }ObjectCountSection;
