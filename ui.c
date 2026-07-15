@@ -130,8 +130,8 @@ void initLayoutSection(LayoutSection* section, Rectangle* parent, Rectangle cont
     section->userData = userData;
 
     section->container = container;
-    section->container.x += parent->x;
-    section->container.y += parent->y;
+    section->container.x += parent->x + MENU_MARGIN;
+    section->container.y += parent->y + MENU_MARGIN;
 
     section->headingPosition.x = section->container.x;
     section->headingPosition.y = section->container.y;
@@ -140,7 +140,7 @@ void initLayoutSection(LayoutSection* section, Rectangle* parent, Rectangle cont
 
     section->divider.x = section->headingPosition.x;
     section->divider.y = section->headingPosition.y + headingSize.y + (MENU_MARGIN / 2.0f); 
-    section->divider.width = section->container.width;
+    section->divider.width = headingSize.x;
     section->divider.height = SECTION_DIVIDER_LINE_THICKNESS;
 
     section->contentArea.x = section->container.x;
