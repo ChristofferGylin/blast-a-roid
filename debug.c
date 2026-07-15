@@ -13,11 +13,11 @@ static const int COUNT_OPTION_FONT_SIZE = 18;
 
 void backButtonOnClick(void* userData);
 void drawPoolCountOption(ObjectCount* option, char* title, Vector2 position);
-void drawObjectCountSection(ObjectCountOption* option);
+void drawObjectCountSection(ObjectCountSection* section);
+void drawObjectCountSectionContent(void* userData);
 void initDebugMenu(GameContext* ctx, DebugMenu* menu);
 void initObjectCountOption(ObjectCountOption* option, Vector2 position, char* title, bool* state);
 void initObjectCountSection(GameContext* ctx, ObjectCountSection* section, Rectangle* parent);
-void drawObjectCountSectionContent(void* userData);
 void outputDebugToTerminal(Debug* debug);
 void outputObjectCountToTerminal(const char* name, ObjectCount oc);
 void resetObjectCount(ObjectCount* oc, int capacity);
@@ -38,7 +38,6 @@ bool debugMenu(GameContext* ctx) {
 
     bool applicationIsRunning = true;
 
-
     while (!WindowShouldClose()) {
         updateButton(&menu.backButton);
         bool isCheckboxHovered = updateObjectCountSection(&menu.objectCountSection);
@@ -52,6 +51,7 @@ bool debugMenu(GameContext* ctx) {
         BeginDrawing();
             drawBasicLayoutContainer(&menu.layout);
             drawButton(&menu.backButton);
+            drawObjectCountSection(&menu.objectCountSection);
         EndDrawing();
 
         if (menu.exit) break;
@@ -65,6 +65,16 @@ bool debugMenu(GameContext* ctx) {
 void drawObjectCountOption(ObjectCountOption* option) {    
     drawCheckbox(&option->checkbox);
     DrawTextPro(GetFontDefault(), option->title, option->titlePosition, (Vector2){0,0}, 0, COUNT_OPTION_FONT_SIZE, MENU_FONT_SPACING, primaryColor);
+}
+
+void drawObjectCountSection(ObjectCountSection* section) {
+    
+    Vector2 origin = {0,0};
+    
+    DrawTextPro(GetFontDefault(), section->section.heading, section->section.headingPosition, origin, 0, SECTION_HEADING_FONT_SIZE, MENU_FONT_SPACING, primaryColor);
+    DrawRectanglePro(section->section.divider, origin, 0, primaryColor);
+
+    section->section.drawContent(&section->options);
 }
 
 void drawObjectCountSectionContent(void* userData) {
@@ -130,7 +140,7 @@ void initObjectCountOption(ObjectCountOption* option, Vector2 position, char* ti
     
     initCheckbox(&option->checkbox, state, checkBoxPosition);
     strcpy(option->title, title);
-    option->titlePosition;
+    option->titlePosition = titlePosition;
 }
 
 void initObjectCountSection(GameContext* ctx, ObjectCountSection* section, Rectangle* parent) {

@@ -1,5 +1,6 @@
 #include <stdbool.h>
 #include <string.h>
+#include <stdio.h>
 
 #include "colors.h"
 #include "constants.h"
@@ -19,7 +20,7 @@ void drawCheckbox(Checkbox* checkbox) {
     DrawRectangleRounded(box, roundness, segments, primaryColorDimmed30);
     DrawRectangleRoundedLinesEx(box, 0.5f, 10, lineThickness, primaryColor);
 
-    if (checkbox->state) {
+    if (*checkbox->state) {
         float inset = 3.0f;
 
         Vector2 p1 = {
@@ -174,6 +175,8 @@ bool updateCheckbox(Checkbox* checkbox) {
 
         if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
             *checkbox->state = !*checkbox->state;
+            printf("Checkbox clicked\n");
+            printf("Checkbox state: %d\n", (int)*checkbox->state);
         }
     }
 
