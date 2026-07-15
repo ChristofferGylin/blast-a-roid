@@ -13,8 +13,11 @@ static const int COUNT_OPTION_FONT_SIZE = 18;
 
 void backButtonOnClick(void* userData);
 void drawPoolCountOption(ObjectCount* option, char* title, Vector2 position);
+void drawObjectCountSection(ObjectCountOption* option);
 void initDebugMenu(GameContext* ctx, DebugMenu* menu);
 void initObjectCountOption(ObjectCountOption* option, Vector2 position, char* title, bool* state);
+void initObjectCountSection(GameContext* ctx, ObjectCountSection* section, Rectangle* parent);
+void drawObjectCountSectionContent(void* userData);
 void outputDebugToTerminal(Debug* debug);
 void outputObjectCountToTerminal(const char* name, ObjectCount oc);
 void resetObjectCount(ObjectCount* oc, int capacity);
@@ -54,6 +57,14 @@ bool debugMenu(GameContext* ctx) {
 void drawObjectCountOption(ObjectCountOption* option) {    
     drawCheckbox(&option->checkbox);
     DrawTextPro(GetFontDefault(), option->title, option->titlePosition, (Vector2){0,0}, 0, COUNT_OPTION_FONT_SIZE, MENU_FONT_SPACING, primaryColor);
+}
+
+void drawObjectCountSectionContent(void* userData) {
+    ObjectCountOption* options = (ObjectCountOption*)userData;
+
+    for (int i = 0; i < NUMBER_OF_POOL_COUNTS; i++) {
+        drawObjectCountOption(&options[i]);
+    }
 }
 
 void initDebug(Debug* debug, bool active) {
@@ -127,6 +138,40 @@ void initObjectCountOption(ObjectCountOption* option, Vector2 position, char* ti
     initCheckbox(&option->checkbox, state, checkBoxPosition);
     strcpy(option->title, title);
     option->titlePosition;
+}
+
+void initObjectCountSection(GameContext* ctx, ObjectCountSection* section, Rectangle* parent) {
+    int index = 0;
+
+    int yPosition = 0;
+
+    #define OUTPUT(name)                                                                                                        \
+        do {                                                                                                                    \
+            Vector2 optionPosition = {0, yPosition};                                                                            \
+            initObjectCountOption(&section->options[index], optionPosition, #name, &ctx->debug.poolCount.name.showInDebug);     \
+            yPosition += MENU_MARGIN + CHECKBOX_SIZE;                                                                           \
+            index++;                                                                                                            \
+        } while (0);                                                                                                
+    
+    POOL_COUNTS(OUTPUT)
+
+    #undef OUTPUT
+
+    Rectangle layoutContainer;
+    layoutContainer.x = 0;
+    layoutContainer.y = 0;
+    layoutContainer.width = parent->width / 2.0f;
+    layoutContainer.height = parent->height / 2.0f;
+
+    initLayoutSection(&section->section, parent, layoutContainer, "OBJECT COUNT OUTPUT", drawObjectCountSectionContent, &section->options);
+
+    for (int i = 0; i < NUMBER_OF_POOL_COUNTS; i++) {
+        section->options[i].checkbox.position.x += section->section.contentArea.x;
+        section->options[i].checkbox.position.y += section->section.contentArea.y;
+
+        section->options[i].titlePosition.x += section->section.contentArea.x;
+        section->options[i].titlePosition.y += section->section.contentArea.y;
+    }
 }
 
 void outputObjectCountToTerminal(const char* name, ObjectCount oc) {

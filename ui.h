@@ -7,7 +7,7 @@
 #define TITLE_MAX_LENGTH 32
 
 typedef void (*ButtonCallback)(void* userData);
-typedef void (*DrawSectionContent)(Rectangle area, void* userData);
+typedef void (*DrawSectionContent)(void* userData);
 
 typedef struct BasicLayoutContainer {
     Rectangle background;

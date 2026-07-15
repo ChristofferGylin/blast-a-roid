@@ -34,6 +34,11 @@ typedef struct ObjectCountOption {
     char title[32];
 }ObjectCountOption;
 
+typedef struct ObjectCountSection {
+    LayoutSection section;
+    ObjectCountOption options[NUMBER_OF_POOL_COUNTS];
+}ObjectCountSection;
+
 typedef struct ObjectPoolCount {
     ObjectCount asteroids;
     ObjectCount bonuses;
