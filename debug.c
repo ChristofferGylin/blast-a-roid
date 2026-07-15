@@ -105,22 +105,7 @@ void initDebugMenu(GameContext* ctx, DebugMenu* menu) {
         backButtonOnClick,
         &menu->exit
     );
-
-    int index = 0;
-
-    int yPosition = menu->layout.contentArea.y + MENU_MARGIN;
-
-    #define OUTPUT(name)                                                                                                        \
-        do {                                                                                                                    \
-            Vector2 optionPosition = {menu->layout.container.x, yPosition};                                                              \
-            initObjectCountOption(&menu->countOptions[index], optionPosition, #name, &ctx->debug.poolCount.name.showInDebug);   \
-            yPosition += MENU_MARGIN + CHECKBOX_SIZE;                                                                           \
-            index++;                                                                                                            \
-        } while (0);                                                                                                
-    
-    POOL_COUNTS(OUTPUT)
-
-    #undef OUTPUT
+    initObjectCountSection(ctx, &menu->objectCountSection, &menu->layout.contentArea);
 }
 
 void initObjectCountOption(ObjectCountOption* option, Vector2 position, char* title, bool* state) {
