@@ -19,6 +19,8 @@ void initDebugMenu(GameContext* ctx, DebugMenu* menu);
 void initObjectCountOption(ObjectCountOption* option, Vector2 position, char* title, bool* state);
 void initObjectCountSection(GameContext* ctx, ObjectCountSection* section, Rectangle* parent);
 void initOutputOptions(GameContext* ctx, DebugOutputOptions* options, Vector2 position);
+void onClickDecrease(void* userData);
+void onClickIncrease(void* userData);
 void outputDebugToTerminal(Debug* debug);
 void outputObjectCountToTerminal(const char* name, ObjectCount oc);
 void resetObjectCount(ObjectCount* oc, int capacity);
@@ -212,6 +214,23 @@ void onClickDecrease(void* userData) {
         *value = 0.0f;
     } else {
         *value -= interval;
+    }
+}
+
+void onClickIncrease(void* userData) {
+
+    const float MAX_VALUE = 10.0f;
+
+    float* value = (float*)userData;
+
+    if (*value >= MAX_VALUE) return;
+    
+    float interval = *value <= 0.25f ? 0.1f : 0.25f;
+
+    if (*value + interval > MAX_VALUE) {
+        *value = MAX_VALUE;
+    } else {
+        *value += interval;
     }
 }
 
