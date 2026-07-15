@@ -15,6 +15,7 @@ void backButtonOnClick(void* userData);
 void drawPoolCountOption(ObjectCount* option, char* title, Vector2 position);
 void drawObjectCountSection(ObjectCountSection* section);
 void drawObjectCountSectionContent(void* userData);
+void drawOutputOptions(ObjectCountSection* section);
 void initDebugMenu(GameContext* ctx, DebugMenu* menu);
 void initObjectCountOption(ObjectCountOption* option, Vector2 position, char* title, bool* state);
 void initObjectCountSection(GameContext* ctx, ObjectCountSection* section, Rectangle* parent);
@@ -55,6 +56,7 @@ bool debugMenu(GameContext* ctx) {
             drawBasicLayoutContainer(&menu.layout);
             drawButton(&menu.backButton);
             drawObjectCountSection(&menu.objectCountSection);
+            drawOutputOptions(&menu.objectCountSection);
         EndDrawing();
 
         if (menu.exit) break;
@@ -89,7 +91,31 @@ void drawObjectCountSectionContent(void* userData) {
 }
 
 void drawOutputOptions(ObjectCountSection* section) {
+    drawButton(&section->outputOptions.decreaseButton);
+    drawButton(&section->outputOptions.increaseButton);
 
+    float valueDisplayRoundness = getRoundness(section->outputOptions.valueDisplay, 8.0f);
+    float valueDisplaySegments = 10;
+    int valueFontSize = 22;
+    int valueFontSpacing = 4;
+
+    Rectangle* valueRect = &section->outputOptions.valueDisplay;
+
+    char valueStr[32];
+
+    snprintf(valueStr, sizeof(valueStr), "%.2f", *section->outputOptions.outputFrequency);
+
+    Vector2 valueSize = MeasureTextEx(GetFontDefault(), valueStr, valueFontSize, valueFontSpacing);
+    Vector2 valuePosition;
+
+    valuePosition.x = valueRect->x + (valueRect->width / 2.0f) - (valueSize.x / 2.0f);
+    valuePosition.y = valueRect->y + (valueRect->height / 2.0f) - (valueSize.y / 2.0f);
+
+    Vector2 origin = {0,0};
+
+    DrawRectangleRounded(*valueRect, valueDisplayRoundness, valueDisplaySegments, primaryColorDimmed30);
+    DrawRectangleRoundedLinesEx(*valueRect, valueDisplayRoundness, valueDisplaySegments, 2, primaryColor);
+    DrawTextPro(GetFontDefault(), valueStr, valuePosition, origin, 0, valueFontSize, valueFontSpacing, primaryColor);
 }
 
 void initDebug(Debug* debug, bool active) {
@@ -199,8 +225,8 @@ void initOutputOptions(GameContext* ctx, DebugOutputOptions* options, Vector2 po
     options->onlyOutputOnChange = &ctx->debug.onlyOutputOnChange;
     options->outputFrequency = &ctx->debug.outputFrequency;
 
-    float size = 16.0f;
-    float gap = 4.0f;
+    float size = 42.0f;
+    float gap = 10.0f;
 
     Rectangle decreaseButtonRect;
     Rectangle increaseButtonRect;
