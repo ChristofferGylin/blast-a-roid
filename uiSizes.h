@@ -15,5 +15,7 @@ static const float MENU_ROUNDNESS_RADIUS = 12.0f;
 static const int MENU_ROUNDNESS_SEGMENTS = 10;
 static const int MENU_HEADING_FONT_SIZE = 42;
 static const int MENU_HEADING_FONT_SPACING = 8;
+static const int SECTION_HEADING_FONT_SIZE = 28;
+static const int SECTION_DIVIDER_LINE_THICKNESS = 2;
 
 #endif

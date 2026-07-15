@@ -123,6 +123,33 @@ void initButton(Button* button, Rectangle rect, int fontSize, char* text, Button
     button->textPosition.y = button->rect.y + (button->rect.height / 2.0f) - (textSize.y / 2.0f);
 }
 
+void initLayoutSection(LayoutSection* section, Rectangle* parent, Rectangle container, char* heading, DrawSectionContent drawContent, void* userData) {
+
+    section->drawContent = drawContent;
+    section->userData = userData;
+
+    section->container = container;
+    section->container.x += parent->x;
+    section->container.y += parent->y;
+
+    section->headingPosition.x = section->container.x;
+    section->headingPosition.y = section->container.y;
+
+    Vector2 headingSize = MeasureTextEx(GetFontDefault(), heading, SECTION_HEADING_FONT_SIZE, MENU_FONT_SPACING);
+
+    section->divider.x = section->headingPosition.x;
+    section->divider.y = section->headingPosition.y + headingSize.y + (MENU_MARGIN / 2.0f); 
+    section->divider.width = section->container.width;
+    section->divider.height = SECTION_DIVIDER_LINE_THICKNESS;
+
+    section->contentArea.x = section->container.x;
+    section->contentArea.y = section->divider.y + section->divider.height + MENU_MARGIN;
+    section->contentArea.width = section->container.width;
+    section->contentArea.height = section->container.y - section->contentArea.y;
+
+    strcpy(section->heading, heading);
+}
+
 void updateButton(Button* button) {
     if (CheckCollisionPointRec(GetMousePosition(), button->rect)) {
         button->isHovered = true;

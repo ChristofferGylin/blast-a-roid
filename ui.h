@@ -36,6 +36,7 @@ typedef struct Checkbox {
 typedef struct LayoutSection {
     Rectangle container;
     Rectangle contentArea;
+    Rectangle divider;
     Vector2 headingPosition;
     DrawSectionContent drawContent;
     void* userData;
@@ -48,6 +49,7 @@ void drawCheckbox(Checkbox* checkbox);
 void initBasicLayoutContainer(BasicLayoutContainer* layout, Rectangle area, char* heading);
 void initButton(Button* button, Rectangle rect, int fontSize, char* text, ButtonCallback callback, void* userData);
 void initCheckbox(Checkbox* checkbox, bool* state, Vector2 position);
+void initLayoutSection(LayoutSection* section, Rectangle* parent, Rectangle container, char* heading, DrawSectionContent drawContent, void* userData);
 void updateButton(Button* button);
 bool updateCheckbox(Checkbox* checkbox);
 
