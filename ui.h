@@ -7,6 +7,7 @@
 #define TITLE_MAX_LENGTH 32
 
 typedef void (*ButtonCallback)(void* userData);
+typedef void (*DrawSectionContent)(Rectangle area, void* userData);
 
 typedef struct BasicLayoutContainer {
     Rectangle background;
@@ -16,7 +17,6 @@ typedef struct BasicLayoutContainer {
     Vector2 headingPosition;
     char heading[TITLE_MAX_LENGTH];
 }BasicLayoutContainer;
-
 
 typedef struct Button {
     Rectangle rect;
@@ -32,6 +32,15 @@ typedef struct Checkbox {
     Vector2 position;
     bool* state;
 }Checkbox;
+
+typedef struct LayoutSection {
+    Rectangle container;
+    Rectangle contentArea;
+    Vector2 headingPosition;
+    DrawSectionContent drawContent;
+    void* userData;
+    char heading[TITLE_MAX_LENGTH];
+}LayoutSection;
 
 void drawBasicLayoutContainer(BasicLayoutContainer* layout);
 void drawButton(Button* button);
