@@ -21,6 +21,14 @@
 
 typedef struct GameContext GameContext;
 
+typedef struct DebugOutputOptions {
+    Vector2 position;
+    bool* onlyOutputOnChange;
+    float* outputFrequency;
+    Button increaseButton;
+    Button decreaseButton;
+}DebugOutputOptions;
+
 typedef struct ObjectCount {
     int activeCount;
     int capacity;
@@ -37,9 +45,7 @@ typedef struct ObjectCountOption {
 typedef struct ObjectCountSection {
     LayoutSection section;
     ObjectCountOption options[NUMBER_OF_POOL_COUNTS];
-    Vector2 outputOptionsPosition;
-    bool* onlyOutputOnChange;
-    float* outputFrequency;
+    DebugOutputOptions outputOptions;
 }ObjectCountSection;
 
 typedef struct ObjectPoolCount {

@@ -18,6 +18,7 @@ void drawObjectCountSectionContent(void* userData);
 void initDebugMenu(GameContext* ctx, DebugMenu* menu);
 void initObjectCountOption(ObjectCountOption* option, Vector2 position, char* title, bool* state);
 void initObjectCountSection(GameContext* ctx, ObjectCountSection* section, Rectangle* parent);
+void initOutputOptions(GameContext* ctx, DebugOutputOptions* options, Vector2 position);
 void outputDebugToTerminal(Debug* debug);
 void outputObjectCountToTerminal(const char* name, ObjectCount oc);
 void resetObjectCount(ObjectCount* oc, int capacity);
@@ -183,11 +184,35 @@ void initObjectCountSection(GameContext* ctx, ObjectCountSection* section, Recta
 
     float endPositionY = section->options[NUMBER_OF_POOL_COUNTS - 1].titlePosition.y + CHECKBOX_SIZE + MENU_MARGIN;
 
-    section->outputOptionsPosition.y = endPositionY + MENU_MARGIN;
-    section->outputOptionsPosition.x = section->section.contentArea.x;
+    Vector2 outputOptionsPosition;
 
-    section->onlyOutputOnChange = &ctx->debug.onlyOutputOnChange;
-    section->outputFrequency = &ctx->debug.outputFrequency;
+    outputOptionsPosition.y = endPositionY + MENU_MARGIN;
+    outputOptionsPosition.x = section->section.contentArea.x;
+
+    initOutputOptions(ctx, &section->outputOptions, outputOptionsPosition);
+}
+
+void initOutputOptions(GameContext* ctx, DebugOutputOptions* options, Vector2 position) {
+    
+    options->position = position;
+    options->onlyOutputOnChange = &ctx->debug.onlyOutputOnChange;
+    options->outputFrequency = &ctx->debug.outputFrequency;
+
+}
+
+void onClickDecrease(void* userData) {
+
+    float* value = (float*)userData;
+
+    if (*value <= 0.0f) return;
+    
+    float interval = *value <= 0.25f ? 0.1f : 0.25f;
+
+    if (*value - interval < 0.0f) {
+        *value = 0.0f;
+    } else {
+        *value -= interval;
+    }
 }
 
 void outputObjectCountToTerminal(const char* name, ObjectCount oc) {
