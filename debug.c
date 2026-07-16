@@ -55,7 +55,7 @@ bool debugMenu(GameContext* ctx) {
         BeginDrawing();
             drawBasicLayoutContainer(&menu.layout);
             drawButton(&menu.backButton);
-            drawObjectCountSection(&menu.objectCountSection);
+            drawLayoutSection(&menu.objectCountSection.section);
             drawOutputOptions(&menu.objectCountSection);
         EndDrawing();
 

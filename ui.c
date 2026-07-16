@@ -72,6 +72,15 @@ void drawButton(Button* button) {
     DrawTextPro(GetFontDefault(), button->text, button->textPosition, (Vector2){0,0}, 0, button->fontSize, BUTTON_FONT_SPACING, primaryColor);
 }
 
+void drawLayoutSection(LayoutSection* section) {
+    Vector2 origin = {0,0};
+    
+    DrawTextPro(GetFontDefault(), section->heading, section->headingPosition, origin, 0, SECTION_HEADING_FONT_SIZE, MENU_FONT_SPACING, primaryColor);
+    DrawRectanglePro(section->divider, origin, 0, primaryColor);
+
+    section->drawContent(section->userData);
+}
+
 void initBasicLayoutContainer(BasicLayoutContainer* layout, Rectangle area, char* heading) {
     layout->background = area;
     strcpy(layout->heading, heading);
