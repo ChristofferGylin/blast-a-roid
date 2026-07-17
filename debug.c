@@ -271,7 +271,7 @@ void initDebugOutputOptionsSection(GameContext* ctx, DebugOutputOptionsSection* 
 
     initCheckboxWithTitle(&section->options.outputOnChangeCheckbox, checkboxPosition, "Only output on change", &ctx->debug.onlyOutputOnChange);
     initButton(&section->options.decreaseButton, decreaseButtonRect, BUTTON_FONT_SIZE, "-", onClickDecrease, section->options.outputFrequency);
-    initButton(&section->options.increaseButton, increaseButtonRect, BUTTON_FONT_SIZE, "-", onClickIncrease, section->options.outputFrequency);
+    initButton(&section->options.increaseButton, increaseButtonRect, BUTTON_FONT_SIZE, "+", onClickIncrease, section->options.outputFrequency);
 }
 
 void onClickDecrease(void* userData) {
@@ -280,7 +280,7 @@ void onClickDecrease(void* userData) {
 
     if (*value <= 0.0f) return;
     
-    float interval = *value <= 0.25f ? 0.1f : 0.25f;
+    float interval = *value <= 0.25f ? 0.05f : 0.25f;
 
     if (*value - interval < 0.0f) {
         *value = 0.0f;
@@ -297,7 +297,7 @@ void onClickIncrease(void* userData) {
 
     if (*value >= MAX_VALUE) return;
     
-    float interval = *value <= 0.25f ? 0.1f : 0.25f;
+    float interval = *value < 0.25f ? 0.05f : 0.25f;
 
     if (*value + interval > MAX_VALUE) {
         *value = MAX_VALUE;
