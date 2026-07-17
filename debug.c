@@ -18,7 +18,7 @@ void drawObjectCountSectionContent(void* userData);
 void drawOutputOptions(void* userData);
 void initDebugMenu(GameContext* ctx, DebugMenu* menu);
 void initDebugOutputOptionsSection(GameContext* ctx, DebugOutputOptionsSection* section, Rectangle* parent);
-void initObjectCountOption(ObjectCountOption* option, Vector2 position, char* title, bool* state);
+void initCheckboxWithTitle(CheckboxWithTitle* option, Vector2 position, char* title, bool* state);
 void initObjectCountSection(GameContext* ctx, ObjectCountSection* section, Rectangle* parent);
 void onClickDecrease(void* userData);
 void onClickIncrease(void* userData);
@@ -67,7 +67,7 @@ bool debugMenu(GameContext* ctx) {
     return applicationIsRunning;
 }
 
-void drawObjectCountOption(ObjectCountOption* option) {    
+void drawCheckboxWithTitle(CheckboxWithTitle* option) {    
     drawCheckbox(&option->checkbox);
     DrawTextPro(GetFontDefault(), option->title, option->titlePosition, (Vector2){0,0}, 0, COUNT_OPTION_FONT_SIZE, MENU_FONT_SPACING, primaryColor);
 }
@@ -83,10 +83,10 @@ void drawObjectCountSection(ObjectCountSection* section) {
 }
 
 void drawObjectCountSectionContent(void* userData) {
-    ObjectCountOption* options = (ObjectCountOption*)userData;
+    CheckboxWithTitle* options = (CheckboxWithTitle*)userData;
 
     for (int i = 0; i < NUMBER_OF_POOL_COUNTS; i++) {
-        drawObjectCountOption(&options[i]);
+        drawCheckboxWithTitle(&options[i]);
     }
 }
 
@@ -176,7 +176,7 @@ void initDebugMenu(GameContext* ctx, DebugMenu* menu) {
     initDebugOutputOptionsSection(ctx, &menu->outputOptionsSection, &menu->layout.contentArea);
 }
 
-void initObjectCountOption(ObjectCountOption* option, Vector2 position, char* title, bool* state) {
+void initCheckboxWithTitle(CheckboxWithTitle* option, Vector2 position, char* title, bool* state) {
     
     int yCenter = position.y + ((MENU_MARGIN + CHECKBOX_SIZE) / 2.0f);
     
@@ -200,7 +200,7 @@ void initObjectCountSection(GameContext* ctx, ObjectCountSection* section, Recta
     #define OUTPUT(name)                                                                                                        \
         do {                                                                                                                    \
             Vector2 optionPosition = {0, yPosition};                                                                            \
-            initObjectCountOption(&section->options[index], optionPosition, #name, &ctx->debug.poolCount.name.showInDebug);     \
+            initCheckboxWithTitle(&section->options[index], optionPosition, #name, &ctx->debug.poolCount.name.showInDebug);     \
             yPosition += MENU_MARGIN + CHECKBOX_SIZE;                                                                           \
             index++;                                                                                                            \
         } while (0);                                                                                                

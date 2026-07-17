@@ -43,15 +43,15 @@ typedef struct ObjectCount {
     bool showInDebug;
 }ObjectCount;
 
-typedef struct ObjectCountOption {
+typedef struct CheckboxWithTitle {
     Checkbox checkbox;
     Vector2 titlePosition;
     char title[32];
-}ObjectCountOption;
+}CheckboxWithTitle;
 
 typedef struct ObjectCountSection {
     LayoutSection section;
-    ObjectCountOption options[NUMBER_OF_POOL_COUNTS];
+    CheckboxWithTitle options[NUMBER_OF_POOL_COUNTS];
     DebugOutputOptions outputOptions;
 }ObjectCountSection;
 
