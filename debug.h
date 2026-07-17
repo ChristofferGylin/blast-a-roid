@@ -29,6 +29,11 @@ typedef struct DebugOutputOptions {
     Rectangle valueDisplay;
 }DebugOutputOptions;
 
+typedef struct DebugOutputOptionsSection {
+    LayoutSection section;
+    DebugOutputOptions options;
+}DebugOutputOptionsSection;
+
 typedef struct ObjectCount {
     int activeCount;
     int capacity;
