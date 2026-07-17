@@ -27,6 +27,8 @@ typedef struct DebugOutputOptions {
     Button increaseButton;
     Button decreaseButton;
     Rectangle valueDisplay;
+    char frequencyHeadingText[10];
+    Vector2 frequencyHeadingPosition;
 }DebugOutputOptions;
 
 typedef struct DebugOutputOptionsSection {

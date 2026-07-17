@@ -94,6 +94,17 @@ void drawOutputOptions(void* userData) {
 
     DebugOutputOptions* outputOptions = (DebugOutputOptions*)userData;
 
+    DrawTextPro(
+        GetFontDefault(),
+        outputOptions->frequencyHeadingText,
+        outputOptions->frequencyHeadingPosition,
+        (Vector2){0, 0},
+        0,
+        SUB_SECTION_HEADING_FONT_SIZE,
+        MENU_FONT_SPACING,
+        primaryColor
+    );
+
     drawButton(&outputOptions->decreaseButton);
     drawButton(&outputOptions->increaseButton);
 
@@ -220,8 +231,12 @@ void initDebugOutputOptionsSection(GameContext* ctx, DebugOutputOptionsSection* 
     section->options.decreaseButton = (Button){0};
     section->options.increaseButton = (Button){0};
     section->options.valueDisplay = (Rectangle){0};
+     
     section->options.onlyOutputOnChange = &ctx->debug.onlyOutputOnChange;
     section->options.outputFrequency = &ctx->debug.outputFrequency;
+
+    section->options.frequencyHeadingPosition = (Vector2){0};
+    strcpy(section->options.frequencyHeadingText, "FREQUENCY");
 
     Rectangle layoutContainer;
     layoutContainer.x = parent->width / 2.0f;
@@ -233,12 +248,15 @@ void initDebugOutputOptionsSection(GameContext* ctx, DebugOutputOptionsSection* 
 
     const float SIZE = 42.0f;
     const float GAP = 10.0f;
+    const 
 
     Rectangle* contentArea = &section->section.contentArea;
 
     Rectangle decreaseButtonRect;
     Rectangle increaseButtonRect;
     Rectangle valueRect;
+
+    Vector2 frequencyHeadingSize = MeasureTextEx(GetFontDefault(), section->options.frequencyHeadingText, SUB_SECTION_HEADING_FONT_SIZE, MENU_FONT_SPACING);
 
     decreaseButtonRect.width = SIZE;
     decreaseButtonRect.height = SIZE;
@@ -249,14 +267,17 @@ void initDebugOutputOptionsSection(GameContext* ctx, DebugOutputOptionsSection* 
     valueRect.width = SIZE * 2.0f;
     valueRect.height = SIZE;
 
+    section->options.frequencyHeadingPosition.x = contentArea->x;
+    section->options.frequencyHeadingPosition.y = contentArea->y;
+
     decreaseButtonRect.x = contentArea->x;
-    decreaseButtonRect.y = contentArea->y;
+    decreaseButtonRect.y = section->options.frequencyHeadingPosition.y + frequencyHeadingSize.y + GAP;
 
     valueRect.x = decreaseButtonRect.x + decreaseButtonRect.width + GAP;
-    valueRect.y = contentArea->y;
+    valueRect.y = decreaseButtonRect.y;
 
     increaseButtonRect.x = valueRect.x + valueRect.width + GAP;
-    increaseButtonRect.y = contentArea->y;
+    increaseButtonRect.y = decreaseButtonRect.y;
 
     section->options.valueDisplay = valueRect;
 
