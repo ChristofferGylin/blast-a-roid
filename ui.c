@@ -147,7 +147,7 @@ void initCheckboxWithTitle(CheckboxWithTitle* option, Vector2 position, char* ti
     
     Vector2 titleSize = MeasureTextEx(GetFontDefault(), title, CHECKBOX_FONT_SIZE, MENU_FONT_SPACING);
     
-    Vector2 checkBoxPosition = {position.x + MENU_MARGIN, yCenter - CHECKBOX_SIZE / 2.0f};
+    Vector2 checkBoxPosition = {position.x, yCenter - CHECKBOX_SIZE / 2.0f};
     Vector2 titlePosition = {
         checkBoxPosition.x + CHECKBOX_SIZE + (MENU_MARGIN / 2.0f),
         yCenter - (titleSize.y / 2.0f)
