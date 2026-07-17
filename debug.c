@@ -97,6 +97,7 @@ void drawOutputOptions(void* userData) {
         primaryColor
     );
 
+    drawCheckboxWithTitle(&outputOptions->outputOnChangeCheckbox);
     drawButton(&outputOptions->decreaseButton);
     drawButton(&outputOptions->increaseButton);
 
