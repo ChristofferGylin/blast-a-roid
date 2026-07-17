@@ -206,6 +206,7 @@ void initDebugOutputOptionsSection(GameContext* ctx, DebugOutputOptionsSection* 
     section->options.decreaseButton = (Button){0};
     section->options.increaseButton = (Button){0};
     section->options.valueDisplay = (Rectangle){0};
+    section->options.outputOnChangeCheckbox = (CheckboxWithTitle){0};
      
     section->options.onlyOutputOnChange = &ctx->debug.onlyOutputOnChange;
     section->options.outputFrequency = &ctx->debug.outputFrequency;
@@ -256,6 +257,12 @@ void initDebugOutputOptionsSection(GameContext* ctx, DebugOutputOptionsSection* 
 
     section->options.valueDisplay = valueRect;
 
+    Vector2 checkboxPosition;
+
+    checkboxPosition.x = contentArea->x;
+    checkboxPosition.y = decreaseButtonRect.y + SIZE + GAP;
+
+    initCheckboxWithTitle(&section->options.outputOnChangeCheckbox, checkboxPosition, "Only output on change", &ctx->debug.onlyOutputOnChange);
     initButton(&section->options.decreaseButton, decreaseButtonRect, BUTTON_FONT_SIZE, "-", onClickDecrease, section->options.outputFrequency);
     initButton(&section->options.increaseButton, increaseButtonRect, BUTTON_FONT_SIZE, "-", onClickIncrease, section->options.outputFrequency);
 }

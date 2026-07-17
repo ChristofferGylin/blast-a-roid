@@ -26,6 +26,7 @@ typedef struct DebugOutputOptions {
     float* outputFrequency;
     Button increaseButton;
     Button decreaseButton;
+    CheckboxWithTitle outputOnChangeCheckbox;
     Rectangle valueDisplay;
     char frequencyHeadingText[10];
     Vector2 frequencyHeadingPosition;
