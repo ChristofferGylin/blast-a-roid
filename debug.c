@@ -236,11 +236,6 @@ void initDebugOutputOptionsSection(GameContext* ctx, DebugOutputOptionsSection* 
 
     Rectangle* contentArea = &section->section.contentArea;
 
-    Vector2 position;
-
-    position.x = contentArea->x + contentArea->width / 2.0f;
-    position.y = contentArea->y;
-
     Rectangle decreaseButtonRect;
     Rectangle increaseButtonRect;
     Rectangle valueRect;
@@ -254,14 +249,14 @@ void initDebugOutputOptionsSection(GameContext* ctx, DebugOutputOptionsSection* 
     valueRect.width = SIZE * 2.0f;
     valueRect.height = SIZE;
 
-    decreaseButtonRect.x = position.x;
-    decreaseButtonRect.y = position.y;
+    decreaseButtonRect.x = contentArea->x;
+    decreaseButtonRect.y = contentArea->y;
 
     valueRect.x = decreaseButtonRect.x + decreaseButtonRect.width + GAP;
-    valueRect.y = position.y;
+    valueRect.y = contentArea->y;
 
     increaseButtonRect.x = valueRect.x + valueRect.width + GAP;
-    increaseButtonRect.y = position.y;
+    increaseButtonRect.y = contentArea->y;
 
     section->options.valueDisplay = valueRect;
 
