@@ -15,7 +15,7 @@ void backButtonOnClick(void* userData);
 void drawPoolCountOption(ObjectCount* option, char* title, Vector2 position);
 void drawObjectCountSection(ObjectCountSection* section);
 void drawObjectCountSectionContent(void* userData);
-void drawOutputOptions(ObjectCountSection* section);
+void drawOutputOptions(void* userData);
 void initDebugMenu(GameContext* ctx, DebugMenu* menu);
 void initDebugOutputOptionsSection(GameContext* ctx, DebugOutputOptionsSection* section, Rectangle* parent);
 void initObjectCountOption(ObjectCountOption* option, Vector2 position, char* title, bool* state);
@@ -56,7 +56,7 @@ bool debugMenu(GameContext* ctx) {
             drawBasicLayoutContainer(&menu.layout);
             drawButton(&menu.backButton);
             drawLayoutSection(&menu.objectCountSection.section);
-            drawOutputOptions(&menu.objectCountSection);
+            drawLayoutSection(&menu.outputOptionsSection.section);
         EndDrawing();
 
         if (menu.exit) break;
@@ -90,20 +90,23 @@ void drawObjectCountSectionContent(void* userData) {
     }
 }
 
-void drawOutputOptions(ObjectCountSection* section) {
-    drawButton(&section->outputOptions.decreaseButton);
-    drawButton(&section->outputOptions.increaseButton);
+void drawOutputOptions(void* userData) {
 
-    float valueDisplayRoundness = getRoundness(section->outputOptions.valueDisplay, 8.0f);
+    DebugOutputOptions* outputOptions = (DebugOutputOptions*)userData;
+
+    drawButton(&outputOptions->decreaseButton);
+    drawButton(&outputOptions->increaseButton);
+
+    float valueDisplayRoundness = getRoundness(outputOptions->valueDisplay, 8.0f);
     float valueDisplaySegments = 10;
     int valueFontSize = 22;
     int valueFontSpacing = 4;
 
-    Rectangle* valueRect = &section->outputOptions.valueDisplay;
+    Rectangle* valueRect = &outputOptions->valueDisplay;
 
     char valueStr[32];
 
-    snprintf(valueStr, sizeof(valueStr), "%.2f", *section->outputOptions.outputFrequency);
+    snprintf(valueStr, sizeof(valueStr), "%.2f", *outputOptions->outputFrequency);
 
     Vector2 valueSize = MeasureTextEx(GetFontDefault(), valueStr, valueFontSize, valueFontSpacing);
     Vector2 valuePosition;
