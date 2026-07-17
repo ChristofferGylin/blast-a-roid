@@ -9,8 +9,6 @@
 #include "ui.h"
 #include "uiSizes.h"
 
-static const int COUNT_OPTION_FONT_SIZE = 18;
-
 void backButtonOnClick(void* userData);
 void drawPoolCountOption(ObjectCount* option, char* title, Vector2 position);
 void drawObjectCountSection(ObjectCountSection* section);
@@ -18,7 +16,6 @@ void drawObjectCountSectionContent(void* userData);
 void drawOutputOptions(void* userData);
 void initDebugMenu(GameContext* ctx, DebugMenu* menu);
 void initDebugOutputOptionsSection(GameContext* ctx, DebugOutputOptionsSection* section, Rectangle* parent);
-void initCheckboxWithTitle(CheckboxWithTitle* option, Vector2 position, char* title, bool* state);
 void initObjectCountSection(GameContext* ctx, ObjectCountSection* section, Rectangle* parent);
 void onClickDecrease(void* userData);
 void onClickIncrease(void* userData);
@@ -65,11 +62,6 @@ bool debugMenu(GameContext* ctx) {
     if (WindowShouldClose()) applicationIsRunning = false;
 
     return applicationIsRunning;
-}
-
-void drawCheckboxWithTitle(CheckboxWithTitle* option) {    
-    drawCheckbox(&option->checkbox);
-    DrawTextPro(GetFontDefault(), option->title, option->titlePosition, (Vector2){0,0}, 0, COUNT_OPTION_FONT_SIZE, MENU_FONT_SPACING, primaryColor);
 }
 
 void drawObjectCountSection(ObjectCountSection* section) {
@@ -174,23 +166,6 @@ void initDebugMenu(GameContext* ctx, DebugMenu* menu) {
     );
     initObjectCountSection(ctx, &menu->objectCountSection, &menu->layout.contentArea);
     initDebugOutputOptionsSection(ctx, &menu->outputOptionsSection, &menu->layout.contentArea);
-}
-
-void initCheckboxWithTitle(CheckboxWithTitle* option, Vector2 position, char* title, bool* state) {
-    
-    int yCenter = position.y + ((MENU_MARGIN + CHECKBOX_SIZE) / 2.0f);
-    
-    Vector2 titleSize = MeasureTextEx(GetFontDefault(), title, COUNT_OPTION_FONT_SIZE, MENU_FONT_SPACING);
-    
-    Vector2 checkBoxPosition = {position.x + MENU_MARGIN, yCenter - CHECKBOX_SIZE / 2.0f};
-    Vector2 titlePosition = {
-        checkBoxPosition.x + CHECKBOX_SIZE + (MENU_MARGIN / 2.0f),
-        yCenter - (titleSize.y / 2.0f)
-    };
-    
-    initCheckbox(&option->checkbox, state, checkBoxPosition);
-    strcpy(option->title, title);
-    option->titlePosition = titlePosition;
 }
 
 void initObjectCountSection(GameContext* ctx, ObjectCountSection* section, Rectangle* parent) {

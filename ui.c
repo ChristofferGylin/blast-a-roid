@@ -9,6 +9,8 @@
 #include "ui.h"
 #include "uiSizes.h"
 
+static const int CHECKBOX_FONT_SIZE = 18;
+
 void drawCheckbox(Checkbox* checkbox) {
     
     const float lineThickness = 3.0f;
@@ -41,6 +43,12 @@ void drawCheckbox(Checkbox* checkbox) {
         DrawLineEx(p1, p2, lineThickness, primaryColor);
         DrawLineEx(p2, p3, lineThickness, primaryColor);
     }
+}
+
+
+void drawCheckboxWithTitle(CheckboxWithTitle* option) {    
+    drawCheckbox(&option->checkbox);
+    DrawTextPro(GetFontDefault(), option->title, option->titlePosition, (Vector2){0,0}, 0, CHECKBOX_FONT_SIZE, MENU_FONT_SPACING, primaryColor);
 }
 
 void drawBasicLayoutContainer(BasicLayoutContainer* layout) {
@@ -106,11 +114,6 @@ void initBasicLayoutContainer(BasicLayoutContainer* layout, Rectangle area, char
     layout->contentArea.height = layout->container.height - (layout->contentArea.y - (layout->container.y + layout->divider.height));
 }
 
-void initCheckbox(Checkbox* checkbox, bool* state, Vector2 position) {
-    checkbox->position = position;
-    checkbox->state = state;
-}
-
 void initButton(Button* button, Rectangle rect, int fontSize, char* text, ButtonCallback callback, void* userData) {
     button->fontSize = fontSize;
     button->onClick = callback;
@@ -131,6 +134,28 @@ void initButton(Button* button, Rectangle rect, int fontSize, char* text, Button
 
     button->textPosition.x = button->rect.x + (button->rect.width / 2.0f) - (textSize.x / 2.0f);
     button->textPosition.y = button->rect.y + (button->rect.height / 2.0f) - (textSize.y / 2.0f);
+}
+
+void initCheckbox(Checkbox* checkbox, bool* state, Vector2 position) {
+    checkbox->position = position;
+    checkbox->state = state;
+}
+
+void initCheckboxWithTitle(CheckboxWithTitle* option, Vector2 position, char* title, bool* state) {
+    
+    int yCenter = position.y + ((MENU_MARGIN + CHECKBOX_SIZE) / 2.0f);
+    
+    Vector2 titleSize = MeasureTextEx(GetFontDefault(), title, CHECKBOX_FONT_SIZE, MENU_FONT_SPACING);
+    
+    Vector2 checkBoxPosition = {position.x + MENU_MARGIN, yCenter - CHECKBOX_SIZE / 2.0f};
+    Vector2 titlePosition = {
+        checkBoxPosition.x + CHECKBOX_SIZE + (MENU_MARGIN / 2.0f),
+        yCenter - (titleSize.y / 2.0f)
+    };
+    
+    initCheckbox(&option->checkbox, state, checkBoxPosition);
+    strcpy(option->title, title);
+    option->titlePosition = titlePosition;
 }
 
 void initLayoutSection(LayoutSection* section, Rectangle* parent, Rectangle container, char* heading, DrawSectionContent drawContent, void* userData) {
@@ -184,8 +209,6 @@ bool updateCheckbox(Checkbox* checkbox) {
 
         if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
             *checkbox->state = !*checkbox->state;
-            printf("Checkbox clicked\n");
-            printf("Checkbox state: %d\n", (int)*checkbox->state);
         }
     }
 
