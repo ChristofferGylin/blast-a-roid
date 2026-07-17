@@ -77,6 +77,7 @@ typedef struct Debug {
 typedef struct DebugMenu {
     BasicLayoutContainer layout;
     Button backButton;
+    DebugOutputOptionsSection outputOptionsSection;
     ObjectCountSection objectCountSection;
     bool exit;
 }DebugMenu;

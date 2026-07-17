@@ -17,9 +17,9 @@ void drawObjectCountSection(ObjectCountSection* section);
 void drawObjectCountSectionContent(void* userData);
 void drawOutputOptions(ObjectCountSection* section);
 void initDebugMenu(GameContext* ctx, DebugMenu* menu);
+void initDebugOutputOptionsSection(GameContext* ctx, DebugOutputOptionsSection* section, Rectangle* parent);
 void initObjectCountOption(ObjectCountOption* option, Vector2 position, char* title, bool* state);
 void initObjectCountSection(GameContext* ctx, ObjectCountSection* section, Rectangle* parent);
-void initOutputOptions(GameContext* ctx, DebugOutputOptions* options, Vector2 position);
 void onClickDecrease(void* userData);
 void onClickIncrease(void* userData);
 void outputDebugToTerminal(Debug* debug);
@@ -159,6 +159,7 @@ void initDebugMenu(GameContext* ctx, DebugMenu* menu) {
         &menu->exit
     );
     initObjectCountSection(ctx, &menu->objectCountSection, &menu->layout.contentArea);
+    initDebugOutputOptionsSection(ctx, &menu->outputOptionsSection, &menu->layout.contentArea);
 }
 
 void initObjectCountOption(ObjectCountOption* option, Vector2 position, char* title, bool* state) {
@@ -209,51 +210,60 @@ void initObjectCountSection(GameContext* ctx, ObjectCountSection* section, Recta
         section->options[i].titlePosition.x += section->section.contentArea.x;
         section->options[i].titlePosition.y += section->section.contentArea.y;
     }
-
-    float endPositionY = section->options[NUMBER_OF_POOL_COUNTS - 1].titlePosition.y + CHECKBOX_SIZE + MENU_MARGIN;
-
-    Vector2 outputOptionsPosition;
-
-    outputOptionsPosition.y = endPositionY + MENU_MARGIN;
-    outputOptionsPosition.x = section->section.contentArea.x;
-
-    initOutputOptions(ctx, &section->outputOptions, outputOptionsPosition);
 }
 
-void initOutputOptions(GameContext* ctx, DebugOutputOptions* options, Vector2 position) {
-    
-    options->onlyOutputOnChange = &ctx->debug.onlyOutputOnChange;
-    options->outputFrequency = &ctx->debug.outputFrequency;
+void initDebugOutputOptionsSection(GameContext* ctx, DebugOutputOptionsSection* section, Rectangle* parent) {
 
-    float size = 42.0f;
-    float gap = 10.0f;
+    section->options.decreaseButton = (Button){0};
+    section->options.increaseButton = (Button){0};
+    section->options.valueDisplay = (Rectangle){0};
+    section->options.onlyOutputOnChange = &ctx->debug.onlyOutputOnChange;
+    section->options.outputFrequency = &ctx->debug.outputFrequency;
+
+    Rectangle layoutContainer;
+    layoutContainer.x = parent->width / 2.0f;
+    layoutContainer.y = 0;
+    layoutContainer.width = parent->width / 2.0f;
+    layoutContainer.height = parent->height / 2.0f;
+
+    initLayoutSection(&section->section, parent, layoutContainer, "OUTPUT OPTIONS", drawOutputOptions, &section->options);
+
+    const float SIZE = 42.0f;
+    const float GAP = 10.0f;
+
+    Rectangle* contentArea = &section->section.contentArea;
+
+    Vector2 position;
+
+    position.x = contentArea->x + contentArea->width / 2.0f;
+    position.y = contentArea->y;
 
     Rectangle decreaseButtonRect;
     Rectangle increaseButtonRect;
     Rectangle valueRect;
 
-    decreaseButtonRect.width = size;
-    decreaseButtonRect.height = size;
+    decreaseButtonRect.width = SIZE;
+    decreaseButtonRect.height = SIZE;
 
-    increaseButtonRect.width = size;
-    increaseButtonRect.height = size;
+    increaseButtonRect.width = SIZE;
+    increaseButtonRect.height = SIZE;
 
-    valueRect.width = size * 2.0f;
-    valueRect.height = size;
+    valueRect.width = SIZE * 2.0f;
+    valueRect.height = SIZE;
 
     decreaseButtonRect.x = position.x;
     decreaseButtonRect.y = position.y;
 
-    valueRect.x = decreaseButtonRect.x + decreaseButtonRect.width + gap;
+    valueRect.x = decreaseButtonRect.x + decreaseButtonRect.width + GAP;
     valueRect.y = position.y;
 
-    increaseButtonRect.x = valueRect.x + valueRect.width + gap;
+    increaseButtonRect.x = valueRect.x + valueRect.width + GAP;
     increaseButtonRect.y = position.y;
 
-    initButton(&options->decreaseButton, decreaseButtonRect, BUTTON_FONT_SIZE, "-", onClickDecrease, options->outputFrequency);
-    initButton(&options->increaseButton, increaseButtonRect, BUTTON_FONT_SIZE, "-", onClickIncrease, options->outputFrequency);
-    options->valueDisplay = valueRect;
+    section->options.valueDisplay = valueRect;
 
+    initButton(&section->options.decreaseButton, decreaseButtonRect, BUTTON_FONT_SIZE, "-", onClickDecrease, section->options.outputFrequency);
+    initButton(&section->options.increaseButton, increaseButtonRect, BUTTON_FONT_SIZE, "-", onClickIncrease, section->options.outputFrequency);
 }
 
 void onClickDecrease(void* userData) {
