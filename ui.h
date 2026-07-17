@@ -33,6 +33,12 @@ typedef struct Checkbox {
     bool* state;
 }Checkbox;
 
+typedef struct CheckboxWithTitle {
+    Checkbox checkbox;
+    Vector2 titlePosition;
+    char title[32];
+}CheckboxWithTitle;
+
 typedef struct LayoutSection {
     Rectangle container;
     Rectangle contentArea;
