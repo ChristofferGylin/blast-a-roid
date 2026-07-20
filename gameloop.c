@@ -1,3 +1,4 @@
+#include "debug.h"
 #include "raylib.h"
 #include "gameContext.h"
 #include "gameloop.h"
@@ -43,6 +44,11 @@ GameResult gameLoop(GameContext* ctx) {
     initSpawning(ctx);
     resetSupernova(&ctx->supernova);
     ctx->pausTimer = 0;
+
+    if (ctx->debug.active) {
+        resetDebug(&ctx->debug);
+        printf("\n\n --- Start level %d ---\n\n", ctx->player.level);
+    }
 
     double waitForExitTime = 0;
     bool waitForExit = false;
@@ -142,6 +148,10 @@ GameResult gameLoop(GameContext* ctx) {
         if (waitForExit && waitForExitTime < GetTime()) {
             isFadeOutComplete = false;
             exit = true;
+        }
+
+        if (!isPaused) {
+            updateDebug(ctx);
         }
         
         BeginDrawing();

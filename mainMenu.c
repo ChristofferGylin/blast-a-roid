@@ -11,21 +11,17 @@
 #include <string.h>
 #include "fader.h"
 #include "runGameSession.h"
+#include "uiSizes.h"
 #include "utils.h"
 
-int fontSize = 32;
-int fontSpacing = 6;
-int nextItemGap = 20;
-int underLineHeight = 3;
-int underLineOffset = 3;
-int margin = 20;
-int roundnessRadius = 12.0f;
-int logoFontSize = 42;
-int logoFontSpacing = 8;
-
 void drawHighscores(Highscores* highscores, Rectangle container, HighlightTimers* highlightTimers);
+void drawMenu(Menu* menu);
+static Rectangle drawLayoutContainers();
 void initHighlightTimers(HighlightTimers* timers);
+void initMenu(GameContext* ctx, Menu* menu);
 void updateHighlightTimers(GameContext* ctx, HighlightTimers* timers);
+void updateMenu(Menu* menu);
+
 
 void drawHighscores(Highscores* highscores, Rectangle container, HighlightTimers* highlightTimers) {
 
@@ -219,38 +215,38 @@ Rectangle drawLayoutContainers() {
     };
 
     Rectangle highScoreContainer = {
-        margin,
-        margin,
-        ((SCREEN_WIDTH / 3) * 2) - (margin / 2) - margin,
-        SCREEN_HEIGHT - (margin * 2)
+        MENU_MARGIN,
+        MENU_MARGIN,
+        ((SCREEN_WIDTH / 3) * 2) - (MENU_MARGIN / 2) - MENU_MARGIN,
+        SCREEN_HEIGHT - (MENU_MARGIN * 2)
     };
 
     Rectangle logoContainer = {
-        SCREEN_WIDTH - (SCREEN_WIDTH / 3) + (margin / 2),
-        margin,
-        SCREEN_WIDTH / 3 - (margin / 2) - margin,
-        (SCREEN_HEIGHT / 4) - (margin / 2) - margin
+        SCREEN_WIDTH - (SCREEN_WIDTH / 3) + (MENU_MARGIN / 2),
+        MENU_MARGIN,
+        SCREEN_WIDTH / 3 - (MENU_MARGIN / 2) - MENU_MARGIN,
+        (SCREEN_HEIGHT / 4) - (MENU_MARGIN / 2) - MENU_MARGIN
     };
 
     Rectangle menuContainer = {
         logoContainer.x,
-        logoContainer.y + logoContainer.height + margin,
+        logoContainer.y + logoContainer.height + MENU_MARGIN,
         logoContainer.width,
-        ((SCREEN_HEIGHT / 4) * 3) - (margin / 2) - margin
+        ((SCREEN_HEIGHT / 4) * 3) - (MENU_MARGIN / 2) - MENU_MARGIN
     };
     
-    Vector2 logoSize = MeasureTextEx(GetFontDefault(), "BLAST-A-ROID", logoFontSize, logoFontSpacing);
+    Vector2 logoSize = MeasureTextEx(GetFontDefault(), "BLAST-A-ROID", MENU_HEADING_FONT_SIZE, MENU_HEADING_FONT_SPACING);
 
     Vector2 logoPosition = {
         logoContainer.x + (logoContainer.width / 2) - logoSize.x / 2,
         logoContainer.y + (logoContainer.height / 2) - logoSize.y / 2
     };
 
-    Vector2 highScoreHeadingSize = MeasureTextEx(GetFontDefault(), "HIGHSCORES", logoFontSize, logoFontSpacing);
+    Vector2 highScoreHeadingSize = MeasureTextEx(GetFontDefault(), "HIGHSCORES", MENU_HEADING_FONT_SIZE, MENU_HEADING_FONT_SPACING);
 
     Vector2 highScoreHeadingPos = {
         highScoreContainer.x + (highScoreContainer.width / 2) - highScoreHeadingSize.x / 2,
-        highScoreContainer.y + margin
+        highScoreContainer.y + MENU_MARGIN
     };
 
     DrawRectangleGradientV(background.x, background.y, background.width, background.height, topColor, bottomColor);
@@ -261,8 +257,8 @@ Rectangle drawLayoutContainers() {
         logoPosition,
         (Vector2){0, 0},
         0,
-        logoFontSize,
-        logoFontSpacing,
+        MENU_HEADING_FONT_SIZE,
+        MENU_HEADING_FONT_SPACING,
         primaryColor
     );
 
@@ -272,8 +268,8 @@ Rectangle drawLayoutContainers() {
         highScoreHeadingPos,
         (Vector2){0, 0},
         0,
-        logoFontSize,
-        logoFontSpacing,
+        MENU_HEADING_FONT_SIZE,
+        MENU_HEADING_FONT_SPACING,
         primaryColor
     );
 
@@ -289,9 +285,9 @@ Rectangle drawLayoutContainers() {
 
     DrawRectangle(highscoresLinePos.x, highscoresLinePos.y, highscoresLineSize.x, highscoresLineSize.y, primaryColor);
 
-    DrawRectangleRoundedLinesEx(highScoreContainer, getRoundness(highScoreContainer, roundnessRadius), 10, 3, primaryColor);
-    DrawRectangleRoundedLinesEx(logoContainer, getRoundness(logoContainer, roundnessRadius), 10, 3, primaryColor);
-    DrawRectangleRoundedLinesEx(menuContainer, getRoundness(menuContainer, roundnessRadius), 10, 3, primaryColor);
+    DrawRectangleRoundedLinesEx(highScoreContainer, getRoundness(highScoreContainer, MENU_ROUNDNESS_RADIUS), MENU_ROUNDNESS_SEGMENTS, MENU_LINE_THICKNESS, primaryColor);
+    DrawRectangleRoundedLinesEx(logoContainer, getRoundness(logoContainer, MENU_ROUNDNESS_RADIUS), MENU_ROUNDNESS_SEGMENTS, MENU_LINE_THICKNESS, primaryColor);
+    DrawRectangleRoundedLinesEx(menuContainer, getRoundness(menuContainer, MENU_ROUNDNESS_RADIUS), MENU_ROUNDNESS_SEGMENTS, MENU_LINE_THICKNESS, primaryColor);
 
     Rectangle highscoreTextContainer;
     highscoreTextContainer.x = highScoreContainer.x;
@@ -317,17 +313,17 @@ void drawMenu(Menu* menu) {
             pos,
             (Vector2){0, 0},
             0,
-            fontSize,
-            fontSpacing,
+            MENU_FONT_SIZE,
+            MENU_FONT_SPACING,
             primaryColor
         );
 
         if (item->isHovered) {
             DrawRectangle(
                 pos.x,
-                pos.y + item->size.y + underLineOffset,
+                pos.y + item->size.y + MENU_LINE_THICKNESS,
                 item->size.x,
-                underLineHeight,
+                MENU_LINE_THICKNESS,
                 primaryColor
             );
         }
@@ -341,18 +337,22 @@ void initHighlightTimers(HighlightTimers* timers) {
     timers->blinkVisible = true;
 }
 
-void initMenu(Menu* menu) {
+void initMenu(GameContext* ctx, Menu* menu) {
+
     char titles[][32] = {
         "START GAME",
         "OPTIONS",
         "ABOUT",
-        "EXIT"
+        "EXIT",
+        "DEBUG"
     };
 
     int menuY = 0;
 
-    for (int i = 0; i < 4; i++) {
-        Vector2 size = MeasureTextEx(GetFontDefault(), titles[i], fontSize, fontSpacing);
+    int numberOfItems = ctx->debug.active ? MAX_NUMBER_OF_MAIN_MENU_ITEMS : MAX_NUMBER_OF_MAIN_MENU_ITEMS - 1;
+
+    for (int i = 0; i < numberOfItems; i++) {
+        Vector2 size = MeasureTextEx(GetFontDefault(), titles[i], MENU_FONT_SIZE, MENU_FONT_SPACING);
 
         menu->items[i].basePosition = (Vector2){
             SCREEN_WIDTH - (SCREEN_WIDTH / 6) - size.x / 2,
@@ -363,12 +363,12 @@ void initMenu(Menu* menu) {
         menu->items[i].size = size;
         menu->items[i].isHovered = false;
 
-        menuY += size.y + nextItemGap;
+        menuY += size.y + MENU_ITEM_GAP;
     }
 
-    menu->count = 4;
+    menu->count = numberOfItems;
 
-    int menuHeight = menuY - nextItemGap;
+    int menuHeight = menuY - MENU_ITEM_GAP;
     menu->menuOffset = ((SCREEN_HEIGHT / 8) * 5) - (menuHeight / 2);
 
     menu->selected = -1;
@@ -377,7 +377,7 @@ void initMenu(Menu* menu) {
 void mainMenu(GameContext* ctx) {
     Menu menu;
     HighlightTimers highlightTimers;
-    initMenu(&menu);
+    initMenu(ctx, &menu);
     initHighlightTimers(&highlightTimers);
 
     float fadeInValue = 1.0f;
@@ -410,7 +410,13 @@ void mainMenu(GameContext* ctx) {
                 case 3:
                     isRunning = false;
                 break;
-        
+
+                case 4:
+                    if (ctx->debug.active) {
+                        menu.selected = -1;
+                        isRunning = debugMenu(ctx);
+                        break;
+                    }
                 default: 
                     printf("Error: Invalid menu choice (%d) in main menu\n", menu.selected);
                 break;
@@ -422,7 +428,6 @@ void mainMenu(GameContext* ctx) {
             Rectangle highscoreContainer = drawLayoutContainers();
             drawHighscores(&ctx->highscores, highscoreContainer, &highlightTimers);
             drawMenu(&menu);
-            
             if (!isFadeInComplete) {
                 isFadeInComplete = fadeIn(&fadeInValue);
             } else if (menu.selected != -1 && !isFadeOutComplete) {

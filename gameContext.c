@@ -1,6 +1,8 @@
+#include <stdbool.h>
 #include "animation.h"
 #include "asteroid.h"
 #include "constants.h"
+#include "debug.h"
 #include "gameContext.h"
 #include "player.h"
 #include "raylib.h"
@@ -14,13 +16,14 @@ void initSpawning(GameContext* ctx) {
     setNextEnemySpawnTime(ctx);
 }
 
-void initGameContext(GameContext* ctx) {
+void initGameContext(GameContext* ctx, bool debugActive) {
     initPlayer(&ctx->player);
     initObjectPools(ctx);
     loadAssets(ctx);
     initShip(ctx, &ctx->ship);
     initSpawning(ctx);
     initHighScores(&ctx->highscores);
+    initDebug(&ctx->debug, debugActive);
     ctx->pausTimer = 0;
     ctx->supernova = (Supernova){false, 0.0f, 0.0f};
     ctx->isBlackHoleActive = false;
