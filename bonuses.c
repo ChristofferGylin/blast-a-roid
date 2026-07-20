@@ -388,9 +388,11 @@ void updateBonuses(GameContext* ctx) {
         } else {
             updateRotation(&bonus->rotation, bonus->rotationSpeed);
 
-            Vector2 velocity = applySupernovaEffects(ctx, bonus->velocity);
-
-            updatePosition(&bonus->position, velocity);
+            if (ctx->supernova.detonated) {
+                updatePosition(&bonus->position, applySupernovaEffects(ctx,bonus->velocity));
+            } else {
+                updatePosition(&bonus->position, bonus->velocity);
+            }
 
             handleOutOfBounds(&bonus->position, bonus->size.x);
 

@@ -145,14 +145,11 @@ void addSpecialToSpawnPool(SpecialsSpawnPool* pool, SpecialType type) {
 Vector2 applySupernovaEffects(GameContext* ctx, Vector2 velocity) {
     
     const int velocityDivider = 4;
-    Vector2 newVelocity = velocity;
-    
-    if (ctx->supernova.detonated) {
-        newVelocity.x = newVelocity.x / velocityDivider;
-        newVelocity.y = newVelocity.y / velocityDivider;
-    }
-
-    return newVelocity;
+ 
+    return (Vector2) {
+        velocity.x / velocityDivider,
+        velocity.y / velocityDivider
+    };
 }
 
 void compactSpecialsSpawnPool(SpecialsSpawnPool* pool) {
@@ -369,20 +366,22 @@ void handleSpecialsMovement(GameContext* ctx) {
         SpecialPoolObject* specialObj = &pool->specials[i];
         if (!specialObj->active) continue;
 
-        Vector2 velocity = applySupernovaEffects(ctx, specialObj->special.velocity);
+        if (ctx->supernova.detonated) {
+            updatePosition(&specialObj->special.position, applySupernovaEffects(ctx,specialObj->special.velocity));
+        } else {
+            updatePosition(&specialObj->special.position, specialObj->special.velocity);
+        }
 
         if (specialObj->special.type == EXTRA_LIFE) {
             if (specialObj->special.ship.destroyed) continue;
 
             updateRotation(&specialObj->special.rotation, specialObj->special.rotationSpeed);
-            updatePosition(&specialObj->special.position, velocity);
             handleOutOfBounds(&specialObj->special.position, specialObj->special.size.y);
 
             specialObj->special.ship.rotation = specialObj->special.rotation;
             specialObj->special.ship.position = specialObj->special.position;
 
         } else {
-            updatePosition(&specialObj->special.position, velocity);
             handleOutOfBounds(&specialObj->special.position, specialObj->special.size.y);
         }
     }
