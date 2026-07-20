@@ -328,31 +328,39 @@ void resetObjectCount(ObjectCount* oc, int capacity) {
 
 void updateDebug(GameContext* ctx) {
 
+    if (!&ctx->debug.active) return;
+
     Debug* debug = &ctx->debug;
 
-    if (!debug->active) return;
+    bool hasChanged = false;
 
-    const float updateFrequency = 1.0f;
-
-    debug->updateTimer += GetFrameTime();
-
-    if (debug->updateTimer < updateFrequency) return;
-    
-    debug->updateTimer = 0.0f;
-
-    #define OUTPUT(name)                                                            \
-        do {                                                                        \
-            debug->poolCount.name.activeCount = ctx->objectPools.name.activeCount;  \
-            if (debug->poolCount.name.activeCount > debug->poolCount.name.spike) {  \
-                debug->poolCount.name.spike = debug->poolCount.name.activeCount;    \
-            }                                                                       \
+    #define OUTPUT(name)                                                                        \
+        do {                                                                                    \
+            if (debug->poolCount.name.showInDebug) {                                            \
+                if (debug->poolCount.name.activeCount != ctx->objectPools.name.activeCount) {   \
+                    hasChanged = true;                                                          \
+                    debug->poolCount.name.activeCount = ctx->objectPools.name.activeCount;      \
+                    if (debug->poolCount.name.activeCount > debug->poolCount.name.spike) {      \
+                        debug->poolCount.name.spike = debug->poolCount.name.activeCount;        \
+                    }                                                                           \
+                }                                                                               \
+            }                                                                                   \
         } while (0);
 
     POOL_COUNTS(OUTPUT)
 
     #undef OUTPUT
 
-    outputDebugToTerminal(debug);
+    if (debug->onlyOutputOnChange) {
+        if (hasChanged) outputDebugToTerminal(debug);
+    } else {
+        debug->updateTimer += GetFrameTime();
+
+        if (debug->updateTimer >= debug->outputFrequency) {
+            debug->updateTimer = 0.0f;
+            outputDebugToTerminal(debug);
+        }  
+    } 
 }
 
 bool updateObjectCountSection(ObjectCountSection* section) {
