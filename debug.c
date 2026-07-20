@@ -312,9 +312,10 @@ void outputObjectCountToTerminal(const char* name, ObjectCount oc) {
 
 void outputDebugToTerminal(Debug* debug) {
 
-    #define OUTPUT(name) \
-        outputObjectCountToTerminal(#name, debug->poolCount.name);
-
+    #define OUTPUT(name)                                                \
+        if (debug->poolCount.name.showInDebug) {                        \
+            outputObjectCountToTerminal(#name, debug->poolCount.name);  \
+        }
         POOL_COUNTS(OUTPUT)
     #undef OUTPUT
     printf("\n");
@@ -328,7 +329,7 @@ void resetObjectCount(ObjectCount* oc, int capacity) {
 
 void updateDebug(GameContext* ctx) {
 
-    if (!&ctx->debug.active) return;
+    if (!ctx->debug.active) return;
 
     Debug* debug = &ctx->debug;
 
