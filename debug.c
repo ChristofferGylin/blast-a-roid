@@ -133,20 +133,9 @@ void drawOutputOptions(void* userData) {
 
 void initDebug(Debug* debug, bool active) {
     debug->active = active;
-    debug->updateTimer = 0.0f;
+    
     debug->onlyOutputOnChange = true;
     debug->outputFrequency = 1.0f;
-
-    resetObjectCount(&debug->poolCount.asteroids, MAX_ASTEROIDS);
-    resetObjectCount(&debug->poolCount.bonuses, MAX_BONUSES);
-    resetObjectCount(&debug->poolCount.destroyedAsteroids, MAX_ASTEROIDS);
-    resetObjectCount(&debug->poolCount.enemies, MAX_ENEMIES);
-    resetObjectCount(&debug->poolCount.explosions, MAX_ANIMATIONS);
-    resetObjectCount(&debug->poolCount.shots, MAX_SHOTS);
-    resetObjectCount(&debug->poolCount.spawnableBonuses, NUMBER_OF_BONUS_TYPES);
-    resetObjectCount(&debug->poolCount.spawnableEnemies, NUMBER_OF_ENEMY_TYPES);
-    resetObjectCount(&debug->poolCount.specials, NUMBER_OF_SPECIALS);
-    resetObjectCount(&debug->poolCount.specialsSpawn, NUMBER_OF_SPECIALS);
 
     debug->poolCount.asteroids.showInDebug = true;
     debug->poolCount.bonuses.showInDebug = true;
@@ -158,6 +147,24 @@ void initDebug(Debug* debug, bool active) {
     debug->poolCount.spawnableEnemies.showInDebug = true;
     debug->poolCount.specials.showInDebug = true;
     debug->poolCount.specialsSpawn.showInDebug = true;
+
+    resetDebug(debug);
+}
+
+void resetDebug(Debug* debug) {
+
+    debug->updateTimer = 0.0f;
+
+    resetObjectCount(&debug->poolCount.asteroids, MAX_ASTEROIDS);
+    resetObjectCount(&debug->poolCount.bonuses, MAX_BONUSES);
+    resetObjectCount(&debug->poolCount.destroyedAsteroids, MAX_ASTEROIDS);
+    resetObjectCount(&debug->poolCount.enemies, MAX_ENEMIES);
+    resetObjectCount(&debug->poolCount.explosions, MAX_ANIMATIONS);
+    resetObjectCount(&debug->poolCount.shots, MAX_SHOTS);
+    resetObjectCount(&debug->poolCount.spawnableBonuses, NUMBER_OF_BONUS_TYPES);
+    resetObjectCount(&debug->poolCount.spawnableEnemies, NUMBER_OF_ENEMY_TYPES);
+    resetObjectCount(&debug->poolCount.specials, NUMBER_OF_SPECIALS);
+    resetObjectCount(&debug->poolCount.specialsSpawn, NUMBER_OF_SPECIALS);
 }
 
 void initDebugMenu(GameContext* ctx, DebugMenu* menu) {

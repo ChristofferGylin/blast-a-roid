@@ -81,6 +81,7 @@ typedef struct DebugMenu {
 
 bool debugMenu(GameContext* ctx);
 void initDebug(Debug* debug, bool active);
+void resetDebug(Debug* debug);
 void updateDebug(GameContext* ctx);
 
 #endif
