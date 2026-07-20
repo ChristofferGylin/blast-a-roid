@@ -172,10 +172,10 @@ void handleAsteroidsMovement(GameContext* ctx) {
 
         if (ast->destroyed) continue;
 
-        Vector2 velocity = applySupernovaEffects(ctx,ast->velocity);
+        //Vector2 velocity = applySupernovaEffects(ctx,ast->velocity);
 
         updateRotation(&ast->rotation, ast->rotationSpeed);
-        updatePosition(&ast->position, velocity);
+        updatePosition(&ast->position, ast->velocity);
 
         int asteroidSize = getAsteroidSize(ast->type);
 
