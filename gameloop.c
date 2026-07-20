@@ -43,8 +43,12 @@ GameResult gameLoop(GameContext* ctx) {
     initAsteroids(ctx);
     initSpawning(ctx);
     resetSupernova(&ctx->supernova);
-    resetDebug(&ctx->debug);
     ctx->pausTimer = 0;
+
+    if (ctx->debug.active) {
+        resetDebug(&ctx->debug);
+        printf("\n\n --- Start level %d ---\n\n", ctx->player.level);
+    }
 
     double waitForExitTime = 0;
     bool waitForExit = false;
