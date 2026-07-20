@@ -145,14 +145,11 @@ void addSpecialToSpawnPool(SpecialsSpawnPool* pool, SpecialType type) {
 Vector2 applySupernovaEffects(GameContext* ctx, Vector2 velocity) {
     
     const int velocityDivider = 4;
-    Vector2 newVelocity = velocity;
-    
-    if (ctx->supernova.detonated) {
-        newVelocity.x = newVelocity.x / velocityDivider;
-        newVelocity.y = newVelocity.y / velocityDivider;
-    }
-
-    return newVelocity;
+ 
+    return (Vector2) {
+        velocity.x / velocityDivider,
+        velocity.y / velocityDivider
+    };
 }
 
 void compactSpecialsSpawnPool(SpecialsSpawnPool* pool) {
