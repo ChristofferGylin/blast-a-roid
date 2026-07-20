@@ -110,10 +110,11 @@ void handleShipControls(GameContext* ctx)
         brakeShip(&ship->velocity, BRAKE_FACTOR);
     }
 
-    // Vector2 velocity = applySupernovaEffects(ctx, ship->velocity);
-
-    ship->position.x += GetFrameTime() * ship->velocity.x;
-    ship->position.y += GetFrameTime() * ship->velocity.y;
+    if (ctx->supernova.detonated) {
+        updatePosition(&ship->position, applySupernovaEffects(ctx,ship->velocity));
+    } else {
+        updatePosition(&ship->position, ship->velocity);
+    }
 
     handleOutOfBounds(&ship->position, SHIP_SIZE);
 }

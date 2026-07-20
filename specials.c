@@ -366,20 +366,22 @@ void handleSpecialsMovement(GameContext* ctx) {
         SpecialPoolObject* specialObj = &pool->specials[i];
         if (!specialObj->active) continue;
 
-        // Vector2 velocity = applySupernovaEffects(ctx, specialObj->special.velocity);
+        if (ctx->supernova.detonated) {
+            updatePosition(&specialObj->special.position, applySupernovaEffects(ctx,specialObj->special.velocity));
+        } else {
+            updatePosition(&specialObj->special.position, specialObj->special.velocity);
+        }
 
         if (specialObj->special.type == EXTRA_LIFE) {
             if (specialObj->special.ship.destroyed) continue;
 
             updateRotation(&specialObj->special.rotation, specialObj->special.rotationSpeed);
-            updatePosition(&specialObj->special.position, specialObj->special.velocity);
             handleOutOfBounds(&specialObj->special.position, specialObj->special.size.y);
 
             specialObj->special.ship.rotation = specialObj->special.rotation;
             specialObj->special.ship.position = specialObj->special.position;
 
         } else {
-            updatePosition(&specialObj->special.position, specialObj->special.velocity);
             handleOutOfBounds(&specialObj->special.position, specialObj->special.size.y);
         }
     }
