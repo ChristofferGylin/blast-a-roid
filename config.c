@@ -1,12 +1,33 @@
+#include <stdio.h>
+
 #include "config.h"
 #include "debug.h"
 #include "gameContext.h"
 #include "raylib.h"
 
-void loadConfigFromFile(GameContext* ctx);
+bool loadConfigFromFile(GameContext* ctx);
 
-void loadConfigFromFile(GameContext* ctx) {
+void initConfig(GameContext* ctx) {
+    
+    bool success = false;
+    
+    if (FileExists("./config.dat")) {
+        success = loadConfigFromFile(ctx);  
+    } 
+
+    if (success) {
+        printf("Successfully loaded highscores from file\n");
+    } else {
+        printf("Error: Could not load config from file, recreating file...\n");
+
+        resetConfig(ctx);
+        saveConfigToFile(ctx);
+    }
+}
+
+bool loadConfigFromFile(GameContext* ctx) {
     int size;
+    bool success = true;
 
     Config *configFromFile = (Config *)LoadFileData("./config.dat", &size);
 
@@ -43,6 +64,7 @@ void loadConfigFromFile(GameContext* ctx) {
         
     } else {
         printf("Error: Could not read config from file in loadConfigFromFile");
+        success = false;
     }
 
     UnloadFileData((unsigned char *)configFromFile);
@@ -50,6 +72,8 @@ void loadConfigFromFile(GameContext* ctx) {
     if (hasInvalidValues) {
         saveConfigToFile(ctx);
     }
+
+    return success;
 }
 
 void resetConfig(GameContext* ctx) {
