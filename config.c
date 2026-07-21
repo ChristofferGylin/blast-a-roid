@@ -4,6 +4,7 @@
 #include "raylib.h"
 
 void loadConfigFromFile(GameContext* ctx);
+void resetDebugConfig(GameContext* ctx);
 
 void loadConfigFromFile(GameContext* ctx) {
     int size;
@@ -50,6 +51,19 @@ void loadConfigFromFile(GameContext* ctx) {
     if (hasInvalidValues) {
         saveConfigToFile(ctx);
     }
+}
+
+void resetDebugConfig(GameContext* ctx) {
+    ctx->debug.onlyOutputOnChange = true;
+    ctx->debug.outputFrequency = DEFAULT_DEBUG_OUTPUT_FREQUENCY;
+
+    #define OUTPUT(name)                        \
+    do {                                        \
+            ctx->debug.poolCount.name = true;   \
+    } while (0);                                \
+    POOL_COUNTS(OUTPUT)
+
+    #undef OUTPUT
 }
 
 void saveConfigToFile(GameContext* ctx) {
