@@ -33,6 +33,6 @@ typedef struct ConfigSaveData
 {
     Config config;
     uint32_t checksum;
-};
+}ConfigSaveData;
 
 #endif

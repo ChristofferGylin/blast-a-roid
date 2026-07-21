@@ -285,12 +285,12 @@ void onClickDecrease(void* userData) {
 
     float* value = (float*)userData;
 
-    if (*value <= 0.0f) return;
+    if (*value <= MIN_DEBUG_OUTPUT_FREQUENCY) return;
     
     float interval = *value <= 0.25f ? 0.05f : 0.25f;
 
-    if (*value - interval < 0.0f) {
-        *value = 0.0f;
+    if (*value - interval < MIN_DEBUG_OUTPUT_FREQUENCY) {
+        *value = MIN_DEBUG_OUTPUT_FREQUENCY;
     } else {
         *value -= interval;
     }
@@ -298,16 +298,14 @@ void onClickDecrease(void* userData) {
 
 void onClickIncrease(void* userData) {
 
-    const float MAX_VALUE = 10.0f;
-
     float* value = (float*)userData;
 
-    if (*value >= MAX_VALUE) return;
+    if (*value >= MAX_DEBUG_OUTPUT_FREQUENCY) return;
     
     float interval = *value < 0.25f ? 0.05f : 0.25f;
 
-    if (*value + interval > MAX_VALUE) {
-        *value = MAX_VALUE;
+    if (*value + interval > MAX_DEBUG_OUTPUT_FREQUENCY) {
+        *value = MAX_DEBUG_OUTPUT_FREQUENCY;
     } else {
         *value += interval;
     }

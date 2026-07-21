@@ -6,6 +6,10 @@
 #include "ui.h"
 #define NUMBER_OF_POOL_COUNTS 10
 
+static const float MIN_DEBUG_OUTPUT_FREQUENCY = 0.0f;
+static const float MAX_DEBUG_OUTPUT_FREQUENCY = 10.0f;
+static const float DEFAULT_DEBUG_OUTPUT_FREQUENCY = 1.0f;
+
 #define POOL_COUNTS(X)               \
     X(asteroids)                     \
     X(bonuses)                       \
