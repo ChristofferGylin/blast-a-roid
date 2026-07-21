@@ -7,6 +7,24 @@
 
 bool loadConfigFromFile(GameContext* ctx);
 
+bool compareConfig(Config* config1, Config* config2) {
+
+    bool isIdentical = true;
+
+    if (config1->debug.onlyOutputOnChange != config2->debug.onlyOutputOnChange) isIdentical = false;
+    if (config1->debug.outputFrequency != config2->debug.outputFrequency) isIdentical = false;
+    
+    #define OUTPUT(name)                                                                                    \
+    do {                                                                                                    \
+            if (config.debug.poolCount.name != ctx->debug.poolCount.name.showInDebug) isIdentical = false;  \
+    } while (0);                                                                                            \
+    POOL_COUNTS(OUTPUT)
+
+    #undef OUTPUT
+
+    return isIdentical;
+}
+
 Config getConfig(GameContext* ctx) {
 
     Config config;

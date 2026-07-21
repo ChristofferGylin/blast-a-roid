@@ -3,6 +3,7 @@
 #include <string.h>
 
 #include "colors.h"
+#include "config.h"
 #include "debug.h"
 #include "gameContext.h"
 #include "raylib.h"
@@ -36,6 +37,8 @@ bool debugMenu(GameContext* ctx) {
     Debug* debug = &ctx->debug;
     DebugMenu menu;
 
+    Config initialConfigState = getConfig(ctx);
+
     initDebugMenu(ctx, &menu);
 
     bool applicationIsRunning = true;
@@ -65,7 +68,15 @@ bool debugMenu(GameContext* ctx) {
         if (menu.exit) break;
     }
 
-    if (WindowShouldClose()) applicationIsRunning = false;
+    if (WindowShouldClose()) {
+        applicationIsRunning = false;
+    } else {
+        Config endConfigState = getConfig(ctx);
+        
+        if (!compareConfig(&initialConfigState, &endConfigState)) {
+            saveConfigToFile(ctx);
+        }
+    }
 
     return applicationIsRunning;
 }
