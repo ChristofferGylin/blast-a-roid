@@ -35,4 +35,6 @@ typedef struct ConfigSaveData
     uint32_t checksum;
 }ConfigSaveData;
 
+void saveConfigToFile(GameContext* ctx);
+
 #endif

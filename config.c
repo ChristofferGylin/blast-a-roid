@@ -46,3 +46,24 @@ void loadConfigFromFile(GameContext* ctx) {
 
     UnloadFileData((unsigned char *)configFromFile);
 }
+
+void saveConfigToFile(GameContext* ctx) {
+    Config config;
+
+    config.debug.onlyOutputOnChange = ctx->debug.onlyOutputOnChange;
+    config.debug.outputFrequency = ctx->debug.outputFrequency;
+
+    #define OUTPUT(name)                                                        \
+        do {                                                                    \
+            config.debug.poolCount.name = ctx->debug.poolCount.name.showInDebug \
+        } while (0);                                                            \
+    POOL_COUNTS(OUTPUT)
+
+    #undef OUTPUT
+
+    bool success = SaveFileData("./config.dat", &config, sizeof(config));
+
+    if (!success) {
+        printf("Error: Could not save config to file in saveConfigToFile");
+    }    
+}
