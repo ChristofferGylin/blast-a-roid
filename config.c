@@ -34,6 +34,7 @@ void loadConfigFromFile(GameContext* ctx) {
                     ctx->debug.poolCount.name = configFromFile->debug.poolCount.name;                                   \
                 } else {                                                                                                \
                     ctx->debug.poolCount.name = true;                                                                   \
+                    hasInvalidValues = true;                                                                            \
                 }                                                                                                       \
             } while (0);                                                                                                \
         POOL_COUNTS(OUTPUT)
@@ -45,6 +46,10 @@ void loadConfigFromFile(GameContext* ctx) {
     }
 
     UnloadFileData((unsigned char *)configFromFile);
+
+    if (hasInvalidValues) {
+        saveConfigToFile(ctx);
+    }
 }
 
 void saveConfigToFile(GameContext* ctx) {
