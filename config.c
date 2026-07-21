@@ -16,7 +16,7 @@ bool compareConfig(Config* config1, Config* config2) {
     
     #define OUTPUT(name)                                                                                    \
     do {                                                                                                    \
-            if (config.debug.poolCount.name != ctx->debug.poolCount.name.showInDebug) isIdentical = false;  \
+        if (config1->debug.poolCount.name != config2->debug.poolCount.name) isIdentical = false;  \
     } while (0);                                                                                            \
     POOL_COUNTS(OUTPUT)
 
@@ -39,6 +39,8 @@ Config getConfig(GameContext* ctx) {
     POOL_COUNTS(OUTPUT)
 
     #undef OUTPUT
+
+    return config;
 }
 
 void initConfig(GameContext* ctx) {
@@ -50,7 +52,7 @@ void initConfig(GameContext* ctx) {
     } 
 
     if (success) {
-        printf("Successfully loaded highscores from file\n");
+        printf("Successfully loaded config from file\n");
     } else {
         printf("Error: Could not load config from file, recreating file...\n");
 
@@ -86,7 +88,7 @@ bool loadConfigFromFile(GameContext* ctx) {
         #define OUTPUT(name)                                                                                            \
             do {                                                                                                        \
                 if (configFromFile->debug.poolCount.name == true || configFromFile->debug.poolCount.name == false) {    \
-                    ctx->debug.poolCount.name = configFromFile->debug.poolCount.name;                                   \
+                    ctx->debug.poolCount.name.showInDebug = configFromFile->debug.poolCount.name;                       \
                 } else {                                                                                                \
                     ctx->debug.poolCount.name = true;                                                                   \
                     hasInvalidValues = true;                                                                            \
@@ -104,7 +106,9 @@ bool loadConfigFromFile(GameContext* ctx) {
     UnloadFileData((unsigned char *)configFromFile);
 
     if (hasInvalidValues) {
+        printf("Error: Config file had invalid values, saving new config file...\n");
         saveConfigToFile(ctx);
+        success = false;
     }
 
     return success;
