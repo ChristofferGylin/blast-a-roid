@@ -4,7 +4,6 @@
 #include "raylib.h"
 
 void loadConfigFromFile(GameContext* ctx);
-void resetDebugConfig(GameContext* ctx);
 
 void loadConfigFromFile(GameContext* ctx) {
     int size;
@@ -51,6 +50,10 @@ void loadConfigFromFile(GameContext* ctx) {
     if (hasInvalidValues) {
         saveConfigToFile(ctx);
     }
+}
+
+void resetConfig(GameContext* ctx) {
+    resetDebugConfig(ctx);
 }
 
 void resetDebugConfig(GameContext* ctx) {
