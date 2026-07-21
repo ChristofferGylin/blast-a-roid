@@ -7,6 +7,22 @@
 
 bool loadConfigFromFile(GameContext* ctx);
 
+Config getConfig(GameContext* ctx) {
+
+    Config config;
+
+    config.debug.onlyOutputOnChange = ctx->debug.onlyOutputOnChange;
+    config.debug.outputFrequency = ctx->debug.outputFrequency;
+    
+    #define OUTPUT(name)                                                            \
+    do {                                                                            \
+            config.debug.poolCount.name = ctx->debug.poolCount.name.showInDebug;    \
+    } while (0);                                                                    \
+    POOL_COUNTS(OUTPUT)
+
+    #undef OUTPUT
+}
+
 void initConfig(GameContext* ctx) {
     
     bool success = false;
@@ -84,10 +100,10 @@ void resetDebugConfig(GameContext* ctx) {
     ctx->debug.onlyOutputOnChange = true;
     ctx->debug.outputFrequency = DEFAULT_DEBUG_OUTPUT_FREQUENCY;
 
-    #define OUTPUT(name)                        \
-    do {                                        \
-            ctx->debug.poolCount.name = true;   \
-    } while (0);                                \
+    #define OUTPUT(name)                                    \
+    do {                                                    \
+            ctx->debug.poolCount.name.showInDebug = true;   \
+    } while (0);                                            \
     POOL_COUNTS(OUTPUT)
 
     #undef OUTPUT

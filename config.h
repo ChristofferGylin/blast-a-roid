@@ -35,6 +35,7 @@ typedef struct ConfigSaveData
     uint32_t checksum;
 }ConfigSaveData;
 
+Config getConfig(GameContext* ctx);
 void initConfig(GameContext* ctx);
 void resetConfig(GameContext* ctx);
 void resetDebugConfig(GameContext* ctx);
