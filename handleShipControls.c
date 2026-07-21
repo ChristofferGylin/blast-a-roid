@@ -44,7 +44,7 @@ void handleShipControls(GameContext* ctx)
     const double NOW_MILLIS = GetTime() * 1000;
     const float ROTATION_NUDGE_SPEED = 200.0f;
     const float ROTATION_SPEED = 270.0f;
-    const float THRUST_FACTOR = 2.5f;
+    const float THRUST_FACTOR = 300.0f;
 
     bool nudgeActive = NOW_MILLIS < ship->timeRotateActivated + NUDGE_DELAY;
 
@@ -88,8 +88,8 @@ void handleShipControls(GameContext* ctx)
     {
         float radians = (ship->rotation - 90.0f) * (PI / 180.0f);
 
-        ship->velocity.x += cosf(radians) * THRUST_FACTOR;
-        ship->velocity.y += sinf(radians) * THRUST_FACTOR;
+        ship->velocity.x += cosf(radians) * THRUST_FACTOR * GetFrameTime();
+        ship->velocity.y += sinf(radians) * THRUST_FACTOR * GetFrameTime();
 
         if (ship->velocity.x < -MAX_VELOCITY)
         {
