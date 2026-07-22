@@ -3,6 +3,7 @@
 #include <string.h>
 
 #include "colors.h"
+#include "config.h"
 #include "debug.h"
 #include "gameContext.h"
 #include "raylib.h"
@@ -36,6 +37,8 @@ bool debugMenu(GameContext* ctx) {
     Debug* debug = &ctx->debug;
     DebugMenu menu;
 
+    Config initialConfigState = getConfig(ctx);
+
     initDebugMenu(ctx, &menu);
 
     bool applicationIsRunning = true;
@@ -65,7 +68,15 @@ bool debugMenu(GameContext* ctx) {
         if (menu.exit) break;
     }
 
-    if (WindowShouldClose()) applicationIsRunning = false;
+    if (WindowShouldClose()) {
+        applicationIsRunning = false;
+    } else {
+        Config endConfigState = getConfig(ctx);
+        
+        if (!compareConfig(&initialConfigState, &endConfigState)) {
+            saveConfigToFile(ctx);
+        }
+    }
 
     return applicationIsRunning;
 }
@@ -285,12 +296,12 @@ void onClickDecrease(void* userData) {
 
     float* value = (float*)userData;
 
-    if (*value <= 0.0f) return;
+    if (*value <= MIN_DEBUG_OUTPUT_FREQUENCY) return;
     
     float interval = *value <= 0.25f ? 0.05f : 0.25f;
 
-    if (*value - interval < 0.0f) {
-        *value = 0.0f;
+    if (*value - interval < MIN_DEBUG_OUTPUT_FREQUENCY) {
+        *value = MIN_DEBUG_OUTPUT_FREQUENCY;
     } else {
         *value -= interval;
     }
@@ -298,16 +309,14 @@ void onClickDecrease(void* userData) {
 
 void onClickIncrease(void* userData) {
 
-    const float MAX_VALUE = 10.0f;
-
     float* value = (float*)userData;
 
-    if (*value >= MAX_VALUE) return;
+    if (*value >= MAX_DEBUG_OUTPUT_FREQUENCY) return;
     
     float interval = *value < 0.25f ? 0.05f : 0.25f;
 
-    if (*value + interval > MAX_VALUE) {
-        *value = MAX_VALUE;
+    if (*value + interval > MAX_DEBUG_OUTPUT_FREQUENCY) {
+        *value = MAX_DEBUG_OUTPUT_FREQUENCY;
     } else {
         *value += interval;
     }
