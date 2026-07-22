@@ -14,10 +14,10 @@ bool compareConfig(Config* config1, Config* config2) {
     if (config1->debug.onlyOutputOnChange != config2->debug.onlyOutputOnChange) isIdentical = false;
     if (config1->debug.outputFrequency != config2->debug.outputFrequency) isIdentical = false;
     
-    #define OUTPUT(name)                                                                                    \
-    do {                                                                                                    \
+    #define OUTPUT(name)                                                                          \
+    do {                                                                                          \
         if (config1->debug.poolCount.name != config2->debug.poolCount.name) isIdentical = false;  \
-    } while (0);                                                                                            \
+    } while (0);                                                                                            
     POOL_COUNTS(OUTPUT)
 
     #undef OUTPUT
@@ -35,7 +35,7 @@ Config getConfig(GameContext* ctx) {
     #define OUTPUT(name)                                                            \
     do {                                                                            \
             config.debug.poolCount.name = ctx->debug.poolCount.name.showInDebug;    \
-    } while (0);                                                                    \
+    } while (0);                                                                    
     POOL_COUNTS(OUTPUT)
 
     #undef OUTPUT
