@@ -26,7 +26,7 @@ void drawAudioTab(void* userData) {};
 
 void initOptionsMenu(OptionsMenu* menu) {
     menu->exit = false;
-    menu->onClickIncreaseArgs.max_Value = NUMBER_OF_OPTIONS_TABS;
+    menu->onClickIncreaseArgs.max_Value = NUMBER_OF_OPTIONS_TABS -1;
     menu->onClickIncreaseArgs.value = &menu->selectecTab;
     menu->selectecTab = 0;
 
@@ -55,14 +55,14 @@ void initOptionsMenu(OptionsMenu* menu) {
 
     previousTabButtonRect.width = 32;
     previousTabButtonRect.height = 32;
-    previousTabButtonRect.x = menu->tabs[0].contentArea.x + (menu->tabs[0].contentArea.width / 2.0f) - (largestHeadingSize / 2.0f) - previousTabButtonRect.width;
+    previousTabButtonRect.x = menu->tabs[0].contentArea.x + (menu->tabs[0].contentArea.width / 2.0f) - (largestHeadingSize / 2.0f) - (previousTabButtonRect.width * 2);
     previousTabButtonRect.y = menu->tabs[0].headingPosition.y;
 
     Rectangle nextTabButtonRect;
 
     nextTabButtonRect.width = 32;
     nextTabButtonRect.height = 32;
-    nextTabButtonRect.x = menu->tabs[0].contentArea.x + (menu->tabs[0].contentArea.width / 2.0f) + (largestHeadingSize / 2.0f);
+    nextTabButtonRect.x = menu->tabs[0].contentArea.x + (menu->tabs[0].contentArea.width / 2.0f) + (largestHeadingSize / 2.0f) + nextTabButtonRect.width;
     nextTabButtonRect.y = menu->tabs[0].headingPosition.y;
 
     initButton(&menu->nextTabButton, nextTabButtonRect, OPTIONS_TAB_HEADING_FONT_SIZE, ">", onClickIncrease, &menu->onClickIncreaseArgs);

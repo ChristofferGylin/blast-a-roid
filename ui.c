@@ -195,10 +195,10 @@ void onClickDecrease(void* userData) {
 
     OnClickIncreaseArgs* args = userData;
 
-    if (*args->value - 1 < 0) {
+    if ((*args->value) - 1 < 0) {
         *args->value = args->max_Value;
     } else {
-        *args->value--;
+        (*args->value)--;
     }
 }
 
@@ -206,10 +206,10 @@ void onClickIncrease(void* userData) {
 
     OnClickIncreaseArgs* args = userData;
 
-    if (*args->value + 1 > args->max_Value) {
+    if ((*args->value) + 1 > args->max_Value) {
         *args->value = 0;
     } else {
-        *args->value++;
+        (*args->value)++;
     }
 }
 
