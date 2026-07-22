@@ -14,6 +14,7 @@ void initOptionsMenuTab(LayoutSection* section, Rectangle* parent, char* heading
 void drawVideoTab(void* userData);
 void drawControlsTab(void* userData);
 void drawAudioTab(void* userData);
+void updateOptionsMenu(OptionsMenu* menu);
 
 
 void drawVideoTab(void* userData) {};
@@ -113,4 +114,10 @@ void drawOptionsMenuTab(OptionsMenu* menu) {
     DrawRectanglePro(section->divider, origin, 0, primaryColor);
 
     section->drawContent(section->userData);
+}
+
+void updateOptionsMenu(OptionsMenu* menu) {
+    updateButton(&menu->backButton);
+    updateButton(&menu->prevTabButton);
+    updateButton(&menu->nextTabButton);
 }
