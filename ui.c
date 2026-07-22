@@ -185,20 +185,31 @@ void initLayoutSection(LayoutSection* section, Rectangle* parent, Rectangle cont
     strcpy(section->heading, heading);
 }
 
+void onClickBack(void* userData) {
+    bool* exit = userData;
 
-void onClickNext(int* value, const int MAX_VALUE) {
-    if (*value + 1 > MAX_VALUE) {
-        *value = 0;
+    *exit = true;
+}
+
+void onClickDecrease(void* userData) {
+
+    OnClickIncreaseArgs* args = userData;
+
+    if (args->value - 1 < 0) {
+        args->value = args->max_Value;
     } else {
-        *value++;
+        args->value--;
     }
 }
 
-void onClickPrevious(int* value, const int MAX_VALUE) {
-    if (*value - 1 < 0) {
-        *value = MAX_VALUE;
+void onClickIncrease(void* userData) {
+
+    OnClickIncreaseArgs* args = userData;
+
+    if (args->value + 1 > args->max_Value) {
+        args->value = 0;
     } else {
-        *value--;
+        args->value++;
     }
 }
 

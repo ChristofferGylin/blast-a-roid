@@ -20,6 +20,7 @@ typedef struct OptionsMenu {
     Button nextTabButton;
     LayoutSection tabs[NUMBER_OF_OPTIONS_TABS];
     int selectecTab;
+    bool exit;
 }OptionsMenu;
 
 #endif

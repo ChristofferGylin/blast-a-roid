@@ -10,7 +10,6 @@
 #include "ui.h"
 #include "uiSizes.h"
 
-void backButtonOnClick(void* userData);
 void drawPoolCountOption(ObjectCount* option, char* title, Vector2 position);
 void drawObjectCountSection(ObjectCountSection* section);
 void drawObjectCountSectionContent(void* userData);
@@ -25,12 +24,6 @@ void outputObjectCountToTerminal(const char* name, ObjectCount oc);
 void resetObjectCount(ObjectCount* oc, int capacity);
 bool updateObjectCountSection(ObjectCountSection* section);
 bool updateOutputOptionsSection(DebugOutputOptionsSection* section);
-
-void backButtonOnClick(void* userData) {
-    bool* exit = userData;
-
-    *exit = true;
-}
 
 bool debugMenu(GameContext* ctx) {
 
@@ -186,7 +179,7 @@ void initDebugMenu(GameContext* ctx, DebugMenu* menu) {
         &menu->backButton,
         (Rectangle){MENU_MARGIN * 2.0f, (MENU_MARGIN * 2.0f) + MENU_LINE_THICKNESS, 0, 0},
         BUTTON_FONT_SIZE, "BACK",
-        backButtonOnClick,
+        onClickBack,
         &menu->exit
     );
     initObjectCountSection(ctx, &menu->objectCountSection, &menu->layout.contentArea);

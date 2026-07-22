@@ -1,6 +1,7 @@
 #include <string.h>
 
 #include "colors.h"
+#include "constants.h"
 #include "optionsMenu.h"
 #include "raylib.h"
 #include "ui.h"
@@ -9,6 +10,18 @@
 void drawOptionsMenu(OptionsMenu* menu);
 void drawOptionsMenuTab(OptionsMenu* menu);
 void initOptionsMenuTab(LayoutSection* section, Rectangle* parent, char* heading, DrawSectionContent drawContent, void* userData);
+
+void initOptionsMenu(OptionsMenu* menu) {
+    menu->exit = false;
+    initBasicLayoutContainer(&menu->layout, (Rectangle){0, 0, SCREEN_WIDTH, SCREEN_HEIGHT}, "OPTIONS");
+    initButton(
+        &menu->backButton,
+        (Rectangle){MENU_MARGIN * 2.0f, (MENU_MARGIN * 2.0f) + MENU_LINE_THICKNESS, 0, 0},
+        BUTTON_FONT_SIZE, "BACK",
+        onClickBack,
+        &menu->exit
+    );
+}
 
 void initOptionsMenuTab(LayoutSection* section, Rectangle* parent, char* heading, DrawSectionContent drawContent, void* userData) {
 
