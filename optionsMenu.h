@@ -16,7 +16,10 @@ typedef struct OptionsMenuTab {
 typedef struct OptionsMenu {
     BasicLayoutContainer layout;
     Button backButton;
-    OptionsMenuTab tabs[NUMBER_OF_OPTIONS_TABS];
+    Button prevTabButton;
+    Button nextTabButton;
+    LayoutSection tabs[NUMBER_OF_OPTIONS_TABS];
+    int selectecTab;
 }OptionsMenu;
 
 #endif

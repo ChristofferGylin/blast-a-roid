@@ -185,6 +185,23 @@ void initLayoutSection(LayoutSection* section, Rectangle* parent, Rectangle cont
     strcpy(section->heading, heading);
 }
 
+
+void onClickNext(int* value, const int MAX_VALUE) {
+    if (*value + 1 > MAX_VALUE) {
+        *value = 0;
+    } else {
+        *value++;
+    }
+}
+
+void onClickPrevious(int* value, const int MAX_VALUE) {
+    if (*value - 1 < 0) {
+        *value = MAX_VALUE;
+    } else {
+        *value--;
+    }
+}
+
 void updateButton(Button* button) {
     if (CheckCollisionPointRec(GetMousePosition(), button->rect)) {
         button->isHovered = true;

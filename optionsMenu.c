@@ -6,7 +6,8 @@
 #include "ui.h"
 #include "uiSizes.h"
 
-void drawOptionsMenuTab(LayoutSection* section);
+void drawOptionsMenu(OptionsMenu* menu);
+void drawOptionsMenuTab(OptionsMenu* menu);
 void initOptionsMenuTab(LayoutSection* section, Rectangle* parent, char* heading, DrawSectionContent drawContent, void* userData);
 
 void initOptionsMenuTab(LayoutSection* section, Rectangle* parent, char* heading, DrawSectionContent drawContent, void* userData) {
@@ -37,27 +38,24 @@ void initOptionsMenuTab(LayoutSection* section, Rectangle* parent, char* heading
     strcpy(section->heading, heading);
 }
 
-void drawOptionsMenuTab(LayoutSection* section) {
-    Vector2 origin = {0,0};
+void drawOptionsMenu(OptionsMenu* menu) {
+    BeginDrawing();
+        drawBasicLayoutContainer(&menu->layout);
+        drawButton(&menu->backButton);
+        drawOptionsMenuTab(menu);
+    EndDrawing();
+}
 
-    int gap = 100;
-    float centerX = section->container.x + (section->container.width / 2.0f);
+void drawOptionsMenuTab(OptionsMenu* menu) {
 
-    Vector2 previousTabButtonPosition = {
-        centerX - gap,
-        section->container.y
-    };
-    
-    Vector2 nextTabButtonPosition = {
-        centerX + gap,
-        section->container.y
-    };
+    LayoutSection* section = &menu->tabs[menu->selectecTab];
 
     Vector2 origin = {0,0};
-    DrawTextPro(GetFontDefault(), "<", previousTabButtonPosition, origin, 0, OPTIONS_TAB_HEADING_FONT_SIZE, MENU_FONT_SPACING, primaryColor);
+
+    drawButton(&menu->nextTabButton);
+    drawButton(&menu->prevTabButton);
     DrawTextPro(GetFontDefault(), section->heading, section->headingPosition, origin, 0, OPTIONS_TAB_HEADING_FONT_SIZE, MENU_FONT_SPACING, primaryColor);
     DrawRectanglePro(section->divider, origin, 0, primaryColor);
-    DrawTextPro(GetFontDefault(), ">", nextTabButtonPosition, origin, 0, OPTIONS_TAB_HEADING_FONT_SIZE, MENU_FONT_SPACING, primaryColor);
 
     section->drawContent(section->userData);
 }
