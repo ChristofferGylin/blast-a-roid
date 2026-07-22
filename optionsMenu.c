@@ -9,10 +9,22 @@
 
 void drawOptionsMenu(OptionsMenu* menu);
 void drawOptionsMenuTab(OptionsMenu* menu);
+void initOptionsMenu(OptionsMenu* menu);
 void initOptionsMenuTab(LayoutSection* section, Rectangle* parent, char* heading, DrawSectionContent drawContent, void* userData);
+void drawVideoTab(void* userData);
+void drawControlsTab(void* userData);
+void drawAudioTab(void* userData);
+
+
+void drawVideoTab(void* userData) {};
+void drawControlsTab(void* userData) {};
+void drawAudioTab(void* userData) {};
 
 void initOptionsMenu(OptionsMenu* menu) {
     menu->exit = false;
+    menu->onClickIncreaseArgs.max_Value = NUMBER_OF_OPTIONS_TABS;
+    menu->onClickIncreaseArgs.value = &menu->selectecTab;
+
     initBasicLayoutContainer(&menu->layout, (Rectangle){0, 0, SCREEN_WIDTH, SCREEN_HEIGHT}, "OPTIONS");
     initButton(
         &menu->backButton,
@@ -21,6 +33,36 @@ void initOptionsMenu(OptionsMenu* menu) {
         onClickBack,
         &menu->exit
     );
+    
+    initOptionsMenuTab(&menu->tabs[0], &menu->layout.contentArea, "VIDEO", drawVideoTab, &menu->videoTabData);
+    initOptionsMenuTab(&menu->tabs[1], &menu->layout.contentArea, "AUDIO", drawAudioTab, &menu->audioTabData);
+    initOptionsMenuTab(&menu->tabs[2], &menu->layout.contentArea, "CONTROLS", drawControlsTab, &menu->controlsTabData);
+
+    float largestHeadingSize = 0;
+
+    for (int i = 0; i < NUMBER_OF_OPTIONS_TABS; i++) {
+        Vector2 headingSize = MeasureTextEx(GetFontDefault(), menu->tabs[i].heading, OPTIONS_TAB_HEADING_FONT_SIZE, MENU_FONT_SPACING);
+
+        if (headingSize.x > largestHeadingSize) largestHeadingSize = headingSize.x;
+    }
+
+    Rectangle previousTabButtonRect;
+
+    previousTabButtonRect.width = 32;
+    previousTabButtonRect.height = 32;
+    previousTabButtonRect.x = menu->tabs[0].contentArea.x + (menu->tabs[0].contentArea.width / 2.0f) - (largestHeadingSize / 2.0f) - (previousTabButtonRect.width / 2.0f);
+    previousTabButtonRect.y = menu->tabs[0].headingPosition.y;
+
+    Rectangle nextTabButtonRect;
+
+    previousTabButtonRect.width = 32;
+    previousTabButtonRect.height = 32;
+    previousTabButtonRect.x = menu->tabs[0].contentArea.x + (menu->tabs[0].contentArea.width / 2.0f) + (largestHeadingSize / 2.0f) + (nextTabButtonRect.width / 2.0f);
+    previousTabButtonRect.y = menu->tabs[0].headingPosition.y;
+
+    initButton(&menu->nextTabButton, nextTabButtonRect, OPTIONS_TAB_HEADING_FONT_SIZE, ">", onClickIncrease, &menu->onClickIncreaseArgs);
+    initButton(&menu->prevTabButton, previousTabButtonRect, OPTIONS_TAB_HEADING_FONT_SIZE, "<", onClickDecrease, &menu->onClickIncreaseArgs);
+
 }
 
 void initOptionsMenuTab(LayoutSection* section, Rectangle* parent, char* heading, DrawSectionContent drawContent, void* userData) {

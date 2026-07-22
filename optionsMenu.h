@@ -7,6 +7,18 @@
 
 typedef void (*DrawOptionsTab)(void* userData);
 
+typedef struct AudioTabData {
+    
+}AudioTabData;
+
+typedef struct ControlsTabData {
+    
+}ControlsTabData;
+
+typedef struct VideoTabData {
+    
+}VideoTabData;
+
 typedef struct OptionsMenuTab {
     char heading[TITLE_MAX_LENGTH];
     DrawOptionsTab drawTab;
@@ -18,7 +30,11 @@ typedef struct OptionsMenu {
     Button backButton;
     Button prevTabButton;
     Button nextTabButton;
+    OnClickIncreaseArgs onClickIncreaseArgs;
     LayoutSection tabs[NUMBER_OF_OPTIONS_TABS];
+    AudioTabData audioTabData;
+    ControlsTabData controlsTabData;
+    VideoTabData videoTabData;
     int selectecTab;
     bool exit;
 }OptionsMenu;

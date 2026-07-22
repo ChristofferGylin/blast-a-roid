@@ -65,8 +65,8 @@ void initCheckbox(Checkbox* checkbox, bool* state, Vector2 position);
 void initCheckboxWithTitle(CheckboxWithTitle* option, Vector2 position, char* title, bool* state);
 void initLayoutSection(LayoutSection* section, Rectangle* parent, Rectangle container, char* heading, DrawSectionContent drawContent, void* userData);
 void onClickBack(void* userData);
-void onClickNext(int* value, const int MAX_VALUE);
-void onClickPrevious(int* value, const int MAX_VALUE);
+void onClickDecrease(void* userData);
+void onClickIncrease(void* userData);
 void updateButton(Button* button);
 bool updateCheckbox(Checkbox* checkbox);
 
