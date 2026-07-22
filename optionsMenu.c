@@ -1,10 +1,12 @@
 #include <string.h>
 
+#include "colors.h"
 #include "optionsMenu.h"
 #include "raylib.h"
 #include "ui.h"
 #include "uiSizes.h"
 
+void drawOptionsMenuTab(LayoutSection* section);
 void initOptionsMenuTab(LayoutSection* section, Rectangle* parent, char* heading, DrawSectionContent drawContent, void* userData);
 
 void initOptionsMenuTab(LayoutSection* section, Rectangle* parent, char* heading, DrawSectionContent drawContent, void* userData) {
@@ -17,7 +19,7 @@ void initOptionsMenuTab(LayoutSection* section, Rectangle* parent, char* heading
     section->container.width = parent->width;
     section->container.height = parent->height;
 
-    Vector2 headingSize = MeasureTextEx(GetFontDefault(), heading, SECTION_HEADING_FONT_SIZE, MENU_FONT_SPACING);
+    Vector2 headingSize = MeasureTextEx(GetFontDefault(), heading, OPTIONS_TAB_HEADING_FONT_SIZE, MENU_FONT_SPACING);
 
     section->headingPosition.x = section->container.x + (section->container.width / 2.0f) + (headingSize.x / 2.0f);
     section->headingPosition.y = section->container.y;
@@ -33,4 +35,29 @@ void initOptionsMenuTab(LayoutSection* section, Rectangle* parent, char* heading
     section->contentArea.height = section->container.y - section->contentArea.y;
 
     strcpy(section->heading, heading);
+}
+
+void drawOptionsMenuTab(LayoutSection* section) {
+    Vector2 origin = {0,0};
+
+    int gap = 100;
+    float centerX = section->container.x + (section->container.width / 2.0f);
+
+    Vector2 previousTabButtonPosition = {
+        centerX - gap,
+        section->container.y
+    };
+    
+    Vector2 nextTabButtonPosition = {
+        centerX + gap,
+        section->container.y
+    };
+
+    Vector2 origin = {0,0};
+    DrawTextPro(GetFontDefault(), "<", previousTabButtonPosition, origin, 0, OPTIONS_TAB_HEADING_FONT_SIZE, MENU_FONT_SPACING, primaryColor);
+    DrawTextPro(GetFontDefault(), section->heading, section->headingPosition, origin, 0, OPTIONS_TAB_HEADING_FONT_SIZE, MENU_FONT_SPACING, primaryColor);
+    DrawRectanglePro(section->divider, origin, 0, primaryColor);
+    DrawTextPro(GetFontDefault(), ">", nextTabButtonPosition, origin, 0, OPTIONS_TAB_HEADING_FONT_SIZE, MENU_FONT_SPACING, primaryColor);
+
+    section->drawContent(section->userData);
 }
