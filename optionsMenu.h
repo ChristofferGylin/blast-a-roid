@@ -39,4 +39,6 @@ typedef struct OptionsMenu {
     bool exit;
 }OptionsMenu;
 
+bool optionsMenu(GameContext* ctx);
+
 #endif

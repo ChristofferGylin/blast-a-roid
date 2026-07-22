@@ -1,5 +1,7 @@
 #include "constants.h"
 #include "colors.h"
+#include "debug.h"
+#include "optionsMenu.h"
 #include "raylib.h"
 #include "player.h"
 #include "gameContext.h"
@@ -400,7 +402,8 @@ void mainMenu(GameContext* ctx) {
                 break;
 
                 case 1:
-                    // TODO: Options
+                    menu.selected = -1;
+                    isRunning = optionsMenu(ctx);
                 break;
 
                 case 2: 
