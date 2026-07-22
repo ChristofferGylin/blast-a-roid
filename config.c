@@ -85,16 +85,21 @@ bool loadConfigFromFile(GameContext* ctx) {
             hasInvalidValues = true;
         }
 
+        printf("Before POOl_COUNT\n");
+
         #define OUTPUT(name)                                                                                            \
+            printf("POOL_COUNT start\n"); \
             do {                                                                                                        \
+                printf("%s %d\n", #name, configFromFile->debug.poolCount.name); \
                 if (configFromFile->debug.poolCount.name == true || configFromFile->debug.poolCount.name == false) {    \
                     ctx->debug.poolCount.name.showInDebug = configFromFile->debug.poolCount.name;                       \
                 } else {                                                                                                \
-                    ctx->debug.poolCount.name = true;                                                                   \
+                    ctx->debug.poolCount.name.showInDebug = true;                                                                   \
                     hasInvalidValues = true;                                                                            \
                 }                                                                                                       \
-            } while (0);                                                                                                \
-        POOL_COUNTS(OUTPUT)
+            } while (0);                                                                                                
+        
+            POOL_COUNTS(OUTPUT)
 
         #undef OUTPUT
         
