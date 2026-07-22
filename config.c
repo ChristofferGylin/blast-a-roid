@@ -130,7 +130,7 @@ void resetDebugConfig(GameContext* ctx) {
     #define OUTPUT(name)                                    \
     do {                                                    \
             ctx->debug.poolCount.name.showInDebug = true;   \
-    } while (0);                                            \
+    } while (0);                                            
     POOL_COUNTS(OUTPUT)
 
     #undef OUTPUT
