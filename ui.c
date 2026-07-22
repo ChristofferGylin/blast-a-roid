@@ -185,6 +185,34 @@ void initLayoutSection(LayoutSection* section, Rectangle* parent, Rectangle cont
     strcpy(section->heading, heading);
 }
 
+void onClickBack(void* userData) {
+    bool* exit = userData;
+
+    *exit = true;
+}
+
+void onClickDecrease(void* userData) {
+
+    OnClickIncreaseArgs* args = userData;
+
+    if ((*args->value) - 1 < 0) {
+        *args->value = args->max_Value;
+    } else {
+        (*args->value)--;
+    }
+}
+
+void onClickIncrease(void* userData) {
+
+    OnClickIncreaseArgs* args = userData;
+
+    if ((*args->value) + 1 > args->max_Value) {
+        *args->value = 0;
+    } else {
+        (*args->value)++;
+    }
+}
+
 void updateButton(Button* button) {
     if (CheckCollisionPointRec(GetMousePosition(), button->rect)) {
         button->isHovered = true;

@@ -49,6 +49,11 @@ typedef struct LayoutSection {
     char heading[TITLE_MAX_LENGTH];
 }LayoutSection;
 
+typedef struct OnClickIncreaseArgs {
+    int* value;
+    int max_Value;
+}OnClickIncreaseArgs;
+
 void drawBasicLayoutContainer(BasicLayoutContainer* layout);
 void drawButton(Button* button);
 void drawCheckbox(Checkbox* checkbox);
@@ -59,6 +64,9 @@ void initButton(Button* button, Rectangle rect, int fontSize, char* text, Button
 void initCheckbox(Checkbox* checkbox, bool* state, Vector2 position);
 void initCheckboxWithTitle(CheckboxWithTitle* option, Vector2 position, char* title, bool* state);
 void initLayoutSection(LayoutSection* section, Rectangle* parent, Rectangle container, char* heading, DrawSectionContent drawContent, void* userData);
+void onClickBack(void* userData);
+void onClickDecrease(void* userData);
+void onClickIncrease(void* userData);
 void updateButton(Button* button);
 bool updateCheckbox(Checkbox* checkbox);
 

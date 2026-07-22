@@ -10,7 +10,6 @@
 #include "ui.h"
 #include "uiSizes.h"
 
-void backButtonOnClick(void* userData);
 void drawPoolCountOption(ObjectCount* option, char* title, Vector2 position);
 void drawObjectCountSection(ObjectCountSection* section);
 void drawObjectCountSectionContent(void* userData);
@@ -18,19 +17,11 @@ void drawOutputOptions(void* userData);
 void initDebugMenu(GameContext* ctx, DebugMenu* menu);
 void initDebugOutputOptionsSection(GameContext* ctx, DebugOutputOptionsSection* section, Rectangle* parent);
 void initObjectCountSection(GameContext* ctx, ObjectCountSection* section, Rectangle* parent);
-void onClickDecrease(void* userData);
-void onClickIncrease(void* userData);
 void outputDebugToTerminal(Debug* debug);
 void outputObjectCountToTerminal(const char* name, ObjectCount oc);
 void resetObjectCount(ObjectCount* oc, int capacity);
 bool updateObjectCountSection(ObjectCountSection* section);
 bool updateOutputOptionsSection(DebugOutputOptionsSection* section);
-
-void backButtonOnClick(void* userData) {
-    bool* exit = userData;
-
-    *exit = true;
-}
 
 bool debugMenu(GameContext* ctx) {
 
@@ -186,7 +177,7 @@ void initDebugMenu(GameContext* ctx, DebugMenu* menu) {
         &menu->backButton,
         (Rectangle){MENU_MARGIN * 2.0f, (MENU_MARGIN * 2.0f) + MENU_LINE_THICKNESS, 0, 0},
         BUTTON_FONT_SIZE, "BACK",
-        backButtonOnClick,
+        onClickBack,
         &menu->exit
     );
     initObjectCountSection(ctx, &menu->objectCountSection, &menu->layout.contentArea);
@@ -290,36 +281,6 @@ void initDebugOutputOptionsSection(GameContext* ctx, DebugOutputOptionsSection* 
     initCheckboxWithTitle(&section->options.outputOnChangeCheckbox, checkboxPosition, "Only output on change", &ctx->debug.onlyOutputOnChange);
     initButton(&section->options.decreaseButton, decreaseButtonRect, BUTTON_FONT_SIZE, "-", onClickDecrease, section->options.outputFrequency);
     initButton(&section->options.increaseButton, increaseButtonRect, BUTTON_FONT_SIZE, "+", onClickIncrease, section->options.outputFrequency);
-}
-
-void onClickDecrease(void* userData) {
-
-    float* value = (float*)userData;
-
-    if (*value <= MIN_DEBUG_OUTPUT_FREQUENCY) return;
-    
-    float interval = *value <= 0.25f ? 0.05f : 0.25f;
-
-    if (*value - interval < MIN_DEBUG_OUTPUT_FREQUENCY) {
-        *value = MIN_DEBUG_OUTPUT_FREQUENCY;
-    } else {
-        *value -= interval;
-    }
-}
-
-void onClickIncrease(void* userData) {
-
-    float* value = (float*)userData;
-
-    if (*value >= MAX_DEBUG_OUTPUT_FREQUENCY) return;
-    
-    float interval = *value < 0.25f ? 0.05f : 0.25f;
-
-    if (*value + interval > MAX_DEBUG_OUTPUT_FREQUENCY) {
-        *value = MAX_DEBUG_OUTPUT_FREQUENCY;
-    } else {
-        *value += interval;
-    }
 }
 
 void outputObjectCountToTerminal(const char* name, ObjectCount oc) {
