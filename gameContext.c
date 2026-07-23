@@ -13,12 +13,6 @@
 #include "specials.h"
 #include "ship.h"
 
-static const int FPS_TITLE_FONT_SIZE = 18;
-static const int FPS_TITLE_FONT_SPACING = 8;
-static const int FPS_CURRENT_VALUE_FONT_SIZE = 24;
-static const int FPS_VALUE_FONT_SIZE = 12;
-static const int FPS_GAP = 8;
-
 void initSpawning(GameContext* ctx) {
     setSpawnDelay(ctx);
     setNextEnemySpawnTime(ctx);
@@ -40,7 +34,7 @@ void initFps(Fps* fps) {
     Vector2 highestTitleSize = MeasureTextEx(GetFontDefault(), fps->render.titles.highest, FPS_TITLE_FONT_SIZE, FPS_TITLE_FONT_SPACING);
     Vector2 lowestTitleSize = MeasureTextEx(GetFontDefault(), fps->render.titles.lowest, FPS_TITLE_FONT_SIZE, FPS_TITLE_FONT_SPACING);
     
-    Vector2 valueSize = MeasureTextEx(GetFontDefault(), value, FPS_CURRENT_VALUE_FONT_SIZE, FPS_TITLE_FONT_SPACING);
+    Vector2 valueSize = MeasureTextEx(GetFontDefault(), value, FPS_VALUE_FONT_SIZE, FPS_TITLE_FONT_SPACING);
 
     float totalHeight =
         currentTitleSize.y +

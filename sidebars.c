@@ -11,6 +11,7 @@
 #include "gameContext.h"
 #include "specials.h"
 
+void renderFps(Fps* fps);
 void renderSidebarLeft(GameContext* ctx);
 void renderSidebarRight(GameContext* ctx);
 
@@ -190,17 +191,7 @@ RenderPositions renderBlock(char text[], int startY, bool isLeftSide) {
     return (RenderPositions){contentPosition, contentSize, endYPosition};
 }
 
-void renderFps(Fps* fps, Vector2 position) {
-
-    const int FPS_TITLE_FONT_SIZE = 18;
-    const int FPS_TITLE_FONT_SPACING = 8;
-    const int FPS_CURRENT_VALUE_FONT_SIZE = 24;
-    const int FPS_VALUE_FONT_SIZE = 12;
-    const int FPS_GAP = 8;
-
-    char currentTitle[] = "Current:";
-    char highestTitle[] = "Highest:";
-    char lowestTitle[] = "Lowest:";
+void renderFps(Fps* fps) {
 
     char currentValue[4] = "-";
     char highestValue[4] = "-";
@@ -218,42 +209,85 @@ void renderFps(Fps* fps, Vector2 position) {
         snprintf(lowestValue, sizeof(lowestValue), "%d", fps->lowestFps);
     }
 
-    Vector2 currentTitleSize = MeasureTextEx(GetFontDefault(), currentTitle, FPS_TITLE_FONT_SIZE, FPS_TITLE_FONT_SPACING);
-    Vector2 highestTitleSize = MeasureTextEx(GetFontDefault(), highestTitle, FPS_TITLE_FONT_SIZE, FPS_TITLE_FONT_SPACING);
-    Vector2 lowestTitleSize = MeasureTextEx(GetFontDefault(), lowestTitle, FPS_TITLE_FONT_SIZE, FPS_TITLE_FONT_SPACING);
-    
-    Vector2 currentValueSize = MeasureTextEx(GetFontDefault(), currentValue, FPS_CURRENT_VALUE_FONT_SIZE, FPS_TITLE_FONT_SPACING);
+    Vector2 currentValueSize = MeasureTextEx(GetFontDefault(), currentValue, FPS_VALUE_FONT_SIZE, FPS_TITLE_FONT_SPACING);
     Vector2 highestValueSize = MeasureTextEx(GetFontDefault(), highestValue, FPS_VALUE_FONT_SIZE, FPS_TITLE_FONT_SPACING);
     Vector2 lowestValueSize = MeasureTextEx(GetFontDefault(), lowestValue, FPS_VALUE_FONT_SIZE, FPS_TITLE_FONT_SPACING);
 
-    Vector2 currentTitlePosition = position;
+    Vector2 currentValuePosition = fps->render.positions.currentValue;
+    Vector2 highestValuePosition = fps->render.positions.currentValue;
+    Vector2 lowestValuePosition = fps->render.positions.currentValue;
 
-    Vector2 currentvaluePosition = {
-        currentTitlePosition.x + currentTitleSize.x - currentValueSize.x,
-        currentTitlePosition.y + currentTitleSize.y + FPS_GAP
-    };
+    currentValuePosition.x -= currentValueSize.x;
+    highestValuePosition.x -= highestValueSize.x;
+    lowestValuePosition.x -= lowestValueSize.x;
 
-    Vector2 highestTitlePosition = {
-        position.x,
-        currentvaluePosition.y + currentValueSize.y + (FPS_GAP * 2)
-    };
+    Vector2 origin = {0, 0};
 
-    Vector2 highestValuePosition = {
-        currentTitlePosition.x + currentTitleSize.x - currentValueSize.x,
-        highestTitlePosition.y + highestTitleSize.y + FPS_GAP
-    };
+    DrawTextPro(
+        GetFontDefault(),
+        fps->render.titles.current,
+        fps->render.positions.currentTitle,
+        origin,
+        0,
+        FPS_TITLE_FONT_SIZE,
+        FPS_TITLE_FONT_SPACING,
+        primaryColor
+    );
 
-    Vector2 lowestTitlePosition = {
-        position.x,
-        highestValuePosition.y + highestValueSize.y + (FPS_GAP * 2)
-    };
+    DrawTextPro(
+        GetFontDefault(),
+        currentValue,
+        fps->render.positions.currentValue,
+        origin,
+        0,
+        FPS_VALUE_FONT_SIZE,
+        FPS_TITLE_FONT_SPACING,
+        primaryColor
+    );
 
-    Vector2 lowestValuePosition = {
-        currentTitlePosition.x + currentTitleSize.x - lowestValueSize.x,
-        lowestTitlePosition.y + lowestTitleSize.y + FPS_GAP
-    };
+    DrawTextPro(
+        GetFontDefault(),
+        fps->render.titles.highest,
+        fps->render.positions.highestTitle,
+        origin,
+        0,
+        FPS_TITLE_FONT_SIZE,
+        FPS_TITLE_FONT_SPACING,
+        primaryColor
+    );
 
+    DrawTextPro(
+        GetFontDefault(),
+        highestValue,
+        fps->render.positions.highestValue,
+        origin,
+        0,
+        FPS_VALUE_FONT_SIZE,
+        FPS_TITLE_FONT_SPACING,
+        primaryColor
+    );
+    
+    DrawTextPro(
+        GetFontDefault(),
+        fps->render.titles.lowest,
+        fps->render.positions.lowestTitle,
+        origin,
+        0,
+        FPS_TITLE_FONT_SIZE,
+        FPS_TITLE_FONT_SPACING,
+        primaryColor
+    );
 
+    DrawTextPro(
+        GetFontDefault(),
+        lowestValue,
+        fps->render.positions.lowestValue,
+        origin,
+        0,
+        FPS_VALUE_FONT_SIZE,
+        FPS_TITLE_FONT_SPACING,
+        primaryColor
+    );    
 }
 
 void renderStats(uint64_t value, Vector2 position, Vector2 size) {
@@ -301,6 +335,10 @@ void renderSidebarLeft(GameContext* ctx) {
         };
 
         renderMultiplierIcon(ctx, ctx->player.powerups.levelBonusMultiplier, multiplierIconPosition);
+    }
+
+    if (ctx->options.video.showFps) {
+        renderFps(&ctx->fps);
     }
 }
 
