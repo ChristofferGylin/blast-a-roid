@@ -12,8 +12,9 @@
 
 void drawOptionsMenu(OptionsMenu* menu);
 void drawOptionsMenuTab(OptionsMenu* menu);
-void initOptionsMenu(OptionsMenu* menu);
+void initOptionsMenu(GameContext* ctx, OptionsMenu* menu);
 void initOptionsMenuTab(LayoutSection* section, Rectangle* parent, char* heading, DrawSectionContent drawContent, void* userData);
+void initVideoTabData(GameContext* ctx, Rectangle* parent, VideoTabData* tabData);
 void drawVideoTab(void* userData);
 void drawControlsTab(void* userData);
 void drawAudioTab(void* userData);
@@ -22,7 +23,7 @@ void updateOptionsMenu(OptionsMenu* menu);
 void drawControlsTab(void* userData) {};
 void drawAudioTab(void* userData) {};
 
-void initOptionsMenu(OptionsMenu* menu) {
+void initOptionsMenu(GameContext* ctx, OptionsMenu* menu) {
     menu->exit = false;
     menu->onClickIncreaseArgs.max_Value = NUMBER_OF_OPTIONS_TABS -1;
     menu->onClickIncreaseArgs.value = &menu->selectecTab;
@@ -36,6 +37,8 @@ void initOptionsMenu(OptionsMenu* menu) {
         onClickBack,
         &menu->exit
     );
+
+    initVideoTabData(ctx, &menu->layout.contentArea, &menu->videoTabData);
     
     initOptionsMenuTab(&menu->tabs[0], &menu->layout.contentArea, "VIDEO", drawVideoTab, &menu->videoTabData);
     initOptionsMenuTab(&menu->tabs[1], &menu->layout.contentArea, "AUDIO", drawAudioTab, &menu->audioTabData);
@@ -96,6 +99,13 @@ void initOptionsMenuTab(LayoutSection* section, Rectangle* parent, char* heading
     strcpy(section->heading, heading);
 }
 
+void initVideoTabData(GameContext* ctx, Rectangle* parent, VideoTabData* tabData) {
+    Vector2 position = {parent->x, parent->y};
+    
+    initCheckboxWithTitle(&tabData->checkboxes[0], position, "Show FPS", &ctx->options.video.showFps);
+
+}
+
 void drawOptionsMenu(OptionsMenu* menu) {
     BeginDrawing();
         drawBasicLayoutContainer(&menu->layout);
@@ -131,7 +141,7 @@ bool optionsMenu(GameContext* ctx) {
     
     OptionsMenu menu;
 
-    initOptionsMenu(&menu);
+    initOptionsMenu(ctx, &menu);
 
     bool applicationIsRunning = true;
 
