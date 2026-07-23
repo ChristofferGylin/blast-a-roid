@@ -43,6 +43,8 @@ Config getConfig(GameContext* ctx) {
 
     #undef OUTPUT
 
+    config.options.video.showFps = ctx->options.video.showFps;
+
     return config;
 }
 
