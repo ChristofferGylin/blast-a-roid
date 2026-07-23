@@ -3,6 +3,7 @@
 #include "config.h"
 #include "debug.h"
 #include "gameContext.h"
+#include "options.h"
 #include "raylib.h"
 
 bool loadConfigFromFile(GameContext* ctx);

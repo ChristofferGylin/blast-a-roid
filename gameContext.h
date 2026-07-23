@@ -8,6 +8,7 @@
 #include "enemies.h"
 #include "shooting.h"
 #include "animation.h"
+#include "options.h"
 #include "player.h"
 #include "ship.h"
 #include "specials.h"
@@ -96,6 +97,7 @@ typedef struct GameContext {
     Supernova supernova;
     bool isBlackHoleActive;
     Highscores highscores;
+    Options options;
 }GameContext;
 
 void initGameContext(GameContext* ctx, bool debugActive);
