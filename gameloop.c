@@ -20,10 +20,14 @@
 #include "enemies.h"
 #include "gameContext.h"
 #include "specials.h"
+#include "showFps.h"
 
 GameResult gameLoop(GameContext* ctx) {
 
     GameResult result = GAME_CONTINUE;
+    Fps fps;
+
+    initFps(&fps);
 
     const int WAIT_TIME = 2;
 
@@ -42,7 +46,6 @@ GameResult gameLoop(GameContext* ctx) {
     initObjectPools(ctx);
     initAsteroids(ctx);
     initSpawning(ctx);
-    initFps(&ctx->fps);
     resetSupernova(&ctx->supernova);
     ctx->pausTimer = 0;
 
@@ -125,7 +128,7 @@ GameResult gameLoop(GameContext* ctx) {
             if (ctx->ship.isShieldActive) {
                 updateShieldAnimation();
             }
-            updateFps(ctx);
+            updateFps(ctx, &fps);
         }        
 
         if (ctx->ship.destroyed && GetTime() >= ctx->ship.timeDestroyed + WAIT_TIME && !exit && !reset) {
@@ -165,7 +168,7 @@ GameResult gameLoop(GameContext* ctx) {
             renderSpecials(&ctx->objectPools.specials);
             renderEnemies(&ctx->objectPools.enemies);
             renderAnimationPool(&ctx->objectPools.explosions);
-            renderSidebars(ctx);
+            renderSidebars(ctx, &fps);
             
             if (isPaused) drawPausMenu(&pauseMenu);
 

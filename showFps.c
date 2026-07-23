@@ -1,0 +1,181 @@
+#include <stdio.h>
+#include <string.h>
+
+#include "colors.h"
+#include "constants.h"
+#include "gameContext.h"
+#include "showFps.h"
+
+void drawFps(GameContext* ctx, Fps* fps) {
+
+    if (!ctx->options.video.showFps) return;
+
+    char currentValue[4] = "-";
+    char highestValue[4] = "-";
+    char lowestValue[4] = "-";
+
+    if (fps->currentFps > 0) {
+        snprintf(currentValue, sizeof(currentValue), "%d", fps->currentFps);
+    }
+
+    if (fps->highestFps > 0) {
+        snprintf(highestValue, sizeof(highestValue), "%d", fps->highestFps);
+    }
+
+    if (fps->lowestFps > 0) {
+        snprintf(lowestValue, sizeof(lowestValue), "%d", fps->lowestFps);
+    }
+
+    Vector2 currentValueSize = MeasureTextEx(GetFontDefault(), currentValue, FPS_VALUE_FONT_SIZE, FPS_TITLE_FONT_SPACING);
+    Vector2 highestValueSize = MeasureTextEx(GetFontDefault(), highestValue, FPS_VALUE_FONT_SIZE, FPS_TITLE_FONT_SPACING);
+    Vector2 lowestValueSize = MeasureTextEx(GetFontDefault(), lowestValue, FPS_VALUE_FONT_SIZE, FPS_TITLE_FONT_SPACING);
+
+    Vector2 currentValuePosition = fps->render.positions.currentValue;
+    Vector2 highestValuePosition = fps->render.positions.currentValue;
+    Vector2 lowestValuePosition = fps->render.positions.currentValue;
+
+    currentValuePosition.x -= currentValueSize.x;
+    highestValuePosition.x -= highestValueSize.x;
+    lowestValuePosition.x -= lowestValueSize.x;
+
+    Vector2 origin = {0, 0};
+
+    DrawTextPro(
+        GetFontDefault(),
+        fps->render.titles.current,
+        fps->render.positions.currentTitle,
+        origin,
+        0,
+        FPS_TITLE_FONT_SIZE,
+        FPS_TITLE_FONT_SPACING,
+        primaryColor
+    );
+
+    DrawTextPro(
+        GetFontDefault(),
+        currentValue,
+        fps->render.positions.currentValue,
+        origin,
+        0,
+        FPS_VALUE_FONT_SIZE,
+        FPS_TITLE_FONT_SPACING,
+        primaryColor
+    );
+
+    DrawTextPro(
+        GetFontDefault(),
+        fps->render.titles.highest,
+        fps->render.positions.highestTitle,
+        origin,
+        0,
+        FPS_TITLE_FONT_SIZE,
+        FPS_TITLE_FONT_SPACING,
+        primaryColor
+    );
+
+    DrawTextPro(
+        GetFontDefault(),
+        highestValue,
+        fps->render.positions.highestValue,
+        origin,
+        0,
+        FPS_VALUE_FONT_SIZE,
+        FPS_TITLE_FONT_SPACING,
+        primaryColor
+    );
+    
+    DrawTextPro(
+        GetFontDefault(),
+        fps->render.titles.lowest,
+        fps->render.positions.lowestTitle,
+        origin,
+        0,
+        FPS_TITLE_FONT_SIZE,
+        FPS_TITLE_FONT_SPACING,
+        primaryColor
+    );
+
+    DrawTextPro(
+        GetFontDefault(),
+        lowestValue,
+        fps->render.positions.lowestValue,
+        origin,
+        0,
+        FPS_VALUE_FONT_SIZE,
+        FPS_TITLE_FONT_SPACING,
+        primaryColor
+    );    
+}
+
+void initFps(Fps* fps) {
+
+    strcpy(fps->render.titles.current, "CURRENT");
+    strcpy(fps->render.titles.highest, "HIGHEST");
+    strcpy(fps->render.titles.lowest, "LOWEST");
+
+    char value[] = "100";
+    
+    fps->currentFps = 0;
+    fps->highestFps = 0;
+    fps->lowestFps = 0;
+
+    Vector2 currentTitleSize = MeasureTextEx(GetFontDefault(), fps->render.titles.current, FPS_TITLE_FONT_SIZE, FPS_TITLE_FONT_SPACING);
+    Vector2 highestTitleSize = MeasureTextEx(GetFontDefault(), fps->render.titles.highest, FPS_TITLE_FONT_SIZE, FPS_TITLE_FONT_SPACING);
+    Vector2 lowestTitleSize = MeasureTextEx(GetFontDefault(), fps->render.titles.lowest, FPS_TITLE_FONT_SIZE, FPS_TITLE_FONT_SPACING);
+    
+    Vector2 valueSize = MeasureTextEx(GetFontDefault(), value, FPS_VALUE_FONT_SIZE, FPS_TITLE_FONT_SPACING);
+
+    float totalHeight =
+        currentTitleSize.y +
+        highestTitleSize.y +
+        lowestTitleSize.y +
+        (valueSize.y * 3) + 
+        (FPS_GAP * 9); 
+
+    float center = (SIDEBAR_WIDTH / 2.0f);
+
+    fps->render.positions.currentTitle = (Vector2){
+        center - (currentTitleSize.x / 2.0f),
+        SCREEN_HEIGHT - totalHeight
+    };
+
+    fps->render.positions.currentValue = (Vector2){
+        center + (valueSize.x / 2),
+        fps->render.positions.currentTitle.y + currentTitleSize.y + FPS_GAP
+    };
+
+    fps->render.positions.highestTitle = (Vector2){
+        center - (highestTitleSize.x / 2.0f),
+        fps->render.positions.currentValue.y + valueSize.y + (FPS_GAP * 2)
+    };
+
+    fps->render.positions.highestValue = (Vector2){
+        center + (valueSize.x / 2),
+        fps->render.positions.highestTitle.y + highestTitleSize.y + FPS_GAP
+    };
+
+    fps->render.positions.lowestTitle = (Vector2){
+        center - (lowestTitleSize.x / 2.0f),
+        fps->render.positions.highestValue.y + valueSize.y + (FPS_GAP * 2)
+    };
+
+    fps->render.positions.lowestValue = (Vector2){
+        center + (valueSize.x / 2),
+        fps->render.positions.lowestTitle.y + lowestTitleSize.y + FPS_GAP
+    };
+}
+
+void updateFps(GameContext* ctx, Fps* fps) {
+
+    if (!ctx->options.video.showFps) return;
+
+    fps->currentFps = GetFPS();
+
+    if (fps->currentFps > fps->highestFps) {
+        fps->highestFps = fps->currentFps;
+    }
+
+    if (fps->lowestFps == 0 || fps->currentFps < fps->lowestFps) {
+        fps->lowestFps = fps->currentFps;
+    }
+}

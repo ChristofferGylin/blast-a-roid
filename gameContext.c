@@ -18,65 +18,6 @@ void initSpawning(GameContext* ctx) {
     setNextEnemySpawnTime(ctx);
 }
 
-void initFps(Fps* fps) {
-
-    strcpy(fps->render.titles.current, "CURRENT");
-    strcpy(fps->render.titles.highest, "HIGHEST");
-    strcpy(fps->render.titles.lowest, "LOWEST");
-
-    char value[] = "100";
-    
-    fps->currentFps = 0;
-    fps->highestFps = 0;
-    fps->lowestFps = 0;
-
-    Vector2 currentTitleSize = MeasureTextEx(GetFontDefault(), fps->render.titles.current, FPS_TITLE_FONT_SIZE, FPS_TITLE_FONT_SPACING);
-    Vector2 highestTitleSize = MeasureTextEx(GetFontDefault(), fps->render.titles.highest, FPS_TITLE_FONT_SIZE, FPS_TITLE_FONT_SPACING);
-    Vector2 lowestTitleSize = MeasureTextEx(GetFontDefault(), fps->render.titles.lowest, FPS_TITLE_FONT_SIZE, FPS_TITLE_FONT_SPACING);
-    
-    Vector2 valueSize = MeasureTextEx(GetFontDefault(), value, FPS_VALUE_FONT_SIZE, FPS_TITLE_FONT_SPACING);
-
-    float totalHeight =
-        currentTitleSize.y +
-        highestTitleSize.y +
-        lowestTitleSize.y +
-        (valueSize.y * 3) + 
-        (FPS_GAP * 9); 
-
-    float center = (SIDEBAR_WIDTH / 2.0f);
-
-    fps->render.positions.currentTitle = (Vector2){
-        center - (currentTitleSize.x / 2.0f),
-        SCREEN_HEIGHT - totalHeight
-    };
-
-    fps->render.positions.currentValue = (Vector2){
-        center + (valueSize.x / 2),
-        fps->render.positions.currentTitle.y + currentTitleSize.y + FPS_GAP
-    };
-
-    fps->render.positions.highestTitle = (Vector2){
-        center - (highestTitleSize.x / 2.0f),
-        fps->render.positions.currentValue.y + valueSize.y + (FPS_GAP * 2)
-    };
-
-    fps->render.positions.highestValue = (Vector2){
-        center + (valueSize.x / 2),
-        fps->render.positions.highestTitle.y + highestTitleSize.y + FPS_GAP
-    };
-
-    fps->render.positions.lowestTitle = (Vector2){
-        center - (lowestTitleSize.x / 2.0f),
-        fps->render.positions.highestValue.y + valueSize.y + (FPS_GAP * 2)
-    };
-
-    fps->render.positions.lowestValue = (Vector2){
-        center + (valueSize.x / 2),
-        fps->render.positions.lowestTitle.y + lowestTitleSize.y + FPS_GAP
-    };
-
-}
-
 void initGameContext(GameContext* ctx, bool debugActive) {
     initPlayer(&ctx->player);
     initObjectPools(ctx);
@@ -86,7 +27,6 @@ void initGameContext(GameContext* ctx, bool debugActive) {
     initHighScores(&ctx->highscores);
     initDebug(&ctx->debug, debugActive);
     initConfig(ctx);
-    initFps(&ctx->fps);
     ctx->pausTimer = 0;
     ctx->supernova = (Supernova){false, 0.0f, 0.0f};
     ctx->isBlackHoleActive = false;
@@ -141,23 +81,6 @@ void loadAssets(GameContext* ctx) {
     ctx->assets.sprites.shot = LoadTexture("./assets/sprites/shot.png");
     ctx->assets.sprites.stopIcon = LoadTexture("./assets/sprites/stop_icon.png");
     ctx->assets.sprites.triShotIcon = LoadTexture("./assets/sprites/tri_shot_icon.png");
-}
-
-void updateFps(GameContext* ctx) {
-
-    if (!ctx->options.video.showFps) return;
-
-    Fps* fps = &ctx->fps;
-
-    fps->currentFps = GetFPS();
-
-    if (fps->currentFps > fps->highestFps) {
-        fps->highestFps = fps->currentFps;
-    }
-
-    if (fps->lowestFps == 0 || fps->currentFps < fps->lowestFps) {
-        fps->lowestFps = fps->currentFps;
-    }
 }
 
 void unloadAssets(GameContext* ctx) {
