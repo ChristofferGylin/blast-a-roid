@@ -86,10 +86,31 @@ typedef struct Supernova {
     double shakeTimer;
 }Supernova;
 
+typedef struct RenderFpsPositions {
+    Vector2 currentTitle;
+    Vector2 highestTitle;
+    Vector2 lowestTitle;
+    Vector2 currentValue;
+    Vector2 highestValue;
+    Vector2 lowestValue;
+}RenderFpsPositions;
+
+typedef struct RenderFpsTitles {
+    char current[8];
+    char highest[8];
+    char lowest[7];
+}RenderFpsTitles;
+
+typedef struct RenderFps {
+    RenderFpsPositions positions;
+    RenderFpsTitles titles;
+}RenderFps;
+
 typedef struct Fps {
     int currentFps;
     int lowestFps;
     int highestFps;
+    RenderFps render;
 }Fps;
 
 typedef struct GameContext {

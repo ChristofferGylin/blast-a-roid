@@ -1,4 +1,5 @@
 #include <stdbool.h>
+#include <string.h>
 #include "animation.h"
 #include "asteroid.h"
 #include "config.h"
@@ -12,15 +13,74 @@
 #include "specials.h"
 #include "ship.h"
 
+static const int FPS_TITLE_FONT_SIZE = 18;
+static const int FPS_TITLE_FONT_SPACING = 8;
+static const int FPS_CURRENT_VALUE_FONT_SIZE = 24;
+static const int FPS_VALUE_FONT_SIZE = 12;
+static const int FPS_GAP = 8;
+
 void initSpawning(GameContext* ctx) {
     setSpawnDelay(ctx);
     setNextEnemySpawnTime(ctx);
 }
 
 void initFps(Fps* fps) {
+
+    strcpy(fps->render.titles.current, "CURRENT");
+    strcpy(fps->render.titles.highest, "HIGHEST");
+    strcpy(fps->render.titles.lowest, "LOWEST");
+
+    char value[] = "100";
+    
     fps->currentFps = 0;
     fps->highestFps = 0;
     fps->lowestFps = 0;
+
+    Vector2 currentTitleSize = MeasureTextEx(GetFontDefault(), fps->render.titles.current, FPS_TITLE_FONT_SIZE, FPS_TITLE_FONT_SPACING);
+    Vector2 highestTitleSize = MeasureTextEx(GetFontDefault(), fps->render.titles.highest, FPS_TITLE_FONT_SIZE, FPS_TITLE_FONT_SPACING);
+    Vector2 lowestTitleSize = MeasureTextEx(GetFontDefault(), fps->render.titles.lowest, FPS_TITLE_FONT_SIZE, FPS_TITLE_FONT_SPACING);
+    
+    Vector2 valueSize = MeasureTextEx(GetFontDefault(), value, FPS_CURRENT_VALUE_FONT_SIZE, FPS_TITLE_FONT_SPACING);
+
+    float totalHeight =
+        currentTitleSize.y +
+        highestTitleSize.y +
+        lowestTitleSize.y +
+        (valueSize.y * 3) + 
+        (FPS_GAP * 9); 
+
+    float center = (SIDEBAR_WIDTH / 2.0f);
+
+    fps->render.positions.currentTitle = (Vector2){
+        center - (currentTitleSize.x / 2.0f),
+        SCREEN_HEIGHT - totalHeight
+    };
+
+    fps->render.positions.currentValue = (Vector2){
+        center + (valueSize.x / 2),
+        fps->render.positions.currentTitle.y + currentTitleSize.y + FPS_GAP
+    };
+
+    fps->render.positions.highestTitle = (Vector2){
+        center - (highestTitleSize.x / 2.0f),
+        fps->render.positions.currentValue.y + valueSize.y + (FPS_GAP * 2)
+    };
+
+    fps->render.positions.highestValue = (Vector2){
+        center + (valueSize.x / 2),
+        fps->render.positions.highestTitle.y + highestTitleSize.y + FPS_GAP
+    };
+
+    fps->render.positions.lowestTitle = (Vector2){
+        center - (lowestTitleSize.x / 2.0f),
+        fps->render.positions.highestValue.y + valueSize.y + (FPS_GAP * 2)
+    };
+
+    fps->render.positions.lowestValue = (Vector2){
+        center + (valueSize.x / 2),
+        fps->render.positions.lowestTitle.y + lowestTitleSize.y + FPS_GAP
+    };
+
 }
 
 void initGameContext(GameContext* ctx, bool debugActive) {

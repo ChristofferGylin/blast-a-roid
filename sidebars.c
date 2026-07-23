@@ -190,6 +190,71 @@ RenderPositions renderBlock(char text[], int startY, bool isLeftSide) {
     return (RenderPositions){contentPosition, contentSize, endYPosition};
 }
 
+void renderFps(Fps* fps, Vector2 position) {
+
+    const int FPS_TITLE_FONT_SIZE = 18;
+    const int FPS_TITLE_FONT_SPACING = 8;
+    const int FPS_CURRENT_VALUE_FONT_SIZE = 24;
+    const int FPS_VALUE_FONT_SIZE = 12;
+    const int FPS_GAP = 8;
+
+    char currentTitle[] = "Current:";
+    char highestTitle[] = "Highest:";
+    char lowestTitle[] = "Lowest:";
+
+    char currentValue[4] = "-";
+    char highestValue[4] = "-";
+    char lowestValue[4] = "-";
+
+    if (fps->currentFps > 0) {
+        snprintf(currentValue, sizeof(currentValue), "%d", fps->currentFps);
+    }
+
+    if (fps->highestFps > 0) {
+        snprintf(highestValue, sizeof(highestValue), "%d", fps->highestFps);
+    }
+
+    if (fps->lowestFps > 0) {
+        snprintf(lowestValue, sizeof(lowestValue), "%d", fps->lowestFps);
+    }
+
+    Vector2 currentTitleSize = MeasureTextEx(GetFontDefault(), currentTitle, FPS_TITLE_FONT_SIZE, FPS_TITLE_FONT_SPACING);
+    Vector2 highestTitleSize = MeasureTextEx(GetFontDefault(), highestTitle, FPS_TITLE_FONT_SIZE, FPS_TITLE_FONT_SPACING);
+    Vector2 lowestTitleSize = MeasureTextEx(GetFontDefault(), lowestTitle, FPS_TITLE_FONT_SIZE, FPS_TITLE_FONT_SPACING);
+    
+    Vector2 currentValueSize = MeasureTextEx(GetFontDefault(), currentValue, FPS_CURRENT_VALUE_FONT_SIZE, FPS_TITLE_FONT_SPACING);
+    Vector2 highestValueSize = MeasureTextEx(GetFontDefault(), highestValue, FPS_VALUE_FONT_SIZE, FPS_TITLE_FONT_SPACING);
+    Vector2 lowestValueSize = MeasureTextEx(GetFontDefault(), lowestValue, FPS_VALUE_FONT_SIZE, FPS_TITLE_FONT_SPACING);
+
+    Vector2 currentTitlePosition = position;
+
+    Vector2 currentvaluePosition = {
+        currentTitlePosition.x + currentTitleSize.x - currentValueSize.x,
+        currentTitlePosition.y + currentTitleSize.y + FPS_GAP
+    };
+
+    Vector2 highestTitlePosition = {
+        position.x,
+        currentvaluePosition.y + currentValueSize.y + (FPS_GAP * 2)
+    };
+
+    Vector2 highestValuePosition = {
+        currentTitlePosition.x + currentTitleSize.x - currentValueSize.x,
+        highestTitlePosition.y + highestTitleSize.y + FPS_GAP
+    };
+
+    Vector2 lowestTitlePosition = {
+        position.x,
+        highestValuePosition.y + highestValueSize.y + (FPS_GAP * 2)
+    };
+
+    Vector2 lowestValuePosition = {
+        currentTitlePosition.x + currentTitleSize.x - lowestValueSize.x,
+        lowestTitlePosition.y + lowestTitleSize.y + FPS_GAP
+    };
+
+
+}
 
 void renderStats(uint64_t value, Vector2 position, Vector2 size) {
 
