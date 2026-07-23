@@ -37,12 +37,12 @@ void initOptionsMenu(GameContext* ctx, OptionsMenu* menu) {
         onClickBack,
         &menu->exit
     );
-
-    initVideoTabData(ctx, &menu->layout.contentArea, &menu->videoTabData);
     
     initOptionsMenuTab(&menu->tabs[0], &menu->layout.contentArea, "VIDEO", drawVideoTab, &menu->videoTabData);
     initOptionsMenuTab(&menu->tabs[1], &menu->layout.contentArea, "AUDIO", drawAudioTab, &menu->audioTabData);
     initOptionsMenuTab(&menu->tabs[2], &menu->layout.contentArea, "CONTROLS", drawControlsTab, &menu->controlsTabData);
+
+    initVideoTabData(ctx, &menu->tabs[0].contentArea, &menu->videoTabData);
 
     float largestHeadingSize = 0;
 

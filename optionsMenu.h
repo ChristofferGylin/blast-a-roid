@@ -22,6 +22,7 @@ typedef struct VideoTabData {
 
 typedef struct OptionsMenuTab {
     char heading[TITLE_MAX_LENGTH];
+    Rectangle contentArea;
     DrawOptionsTab drawTab;
     void *userData;
 }OptionsMenuTab;
