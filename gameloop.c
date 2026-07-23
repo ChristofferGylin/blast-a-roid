@@ -125,6 +125,7 @@ GameResult gameLoop(GameContext* ctx) {
             if (ctx->ship.isShieldActive) {
                 updateShieldAnimation();
             }
+            updateFps(ctx);
         }        
 
         if (ctx->ship.destroyed && GetTime() >= ctx->ship.timeDestroyed + WAIT_TIME && !exit && !reset) {

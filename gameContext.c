@@ -143,6 +143,23 @@ void loadAssets(GameContext* ctx) {
     ctx->assets.sprites.triShotIcon = LoadTexture("./assets/sprites/tri_shot_icon.png");
 }
 
+void updateFps(GameContext* ctx) {
+
+    if (!ctx->options.video.showFps) return;
+
+    Fps* fps = &ctx->fps;
+
+    fps->currentFps = GetFPS();
+
+    if (fps->currentFps > fps->highestFps) {
+        fps->highestFps = fps->currentFps;
+    }
+
+    if (fps->lowestFps == 0 || fps->currentFps < fps->lowestFps) {
+        fps->lowestFps = fps->currentFps;
+    }
+}
+
 void unloadAssets(GameContext* ctx) {
     unloadAnimation(&ctx->assets.animations.blackHole);
     unloadAnimation(&ctx->assets.animations.comet);
