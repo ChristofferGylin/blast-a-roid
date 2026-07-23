@@ -71,6 +71,13 @@ bool loadConfigFromFile(GameContext* ctx) {
     bool hasInvalidValues = false;
 
     if (configFromFile && size == sizeof(Config)) {
+
+        if (configFromFile->options.video.showFps == true || configFromFile->options.video.showFps == false) {
+            ctx->options.video.showFps = configFromFile->options.video.showFps;
+        } else {
+            ctx->options.video.showFps = false;
+            hasInvalidValues = true;
+        }
         
         if (configFromFile->debug.onlyOutputOnChange == true ||configFromFile->debug.onlyOutputOnChange == false) {
             ctx->debug.onlyOutputOnChange = configFromFile->debug.onlyOutputOnChange;
