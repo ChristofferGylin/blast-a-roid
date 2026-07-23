@@ -3,6 +3,8 @@
 
 #include <stdbool.h>
 
+static const bool SHOW_FPS_DEFAULT_VALUE = false;
+
 typedef struct VideoOptions {
     bool showFps;
 }VideoOptions;

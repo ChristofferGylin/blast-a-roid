@@ -79,7 +79,7 @@ bool loadConfigFromFile(GameContext* ctx) {
         if (configFromFile->options.video.showFps == true || configFromFile->options.video.showFps == false) {
             ctx->options.video.showFps = configFromFile->options.video.showFps;
         } else {
-            ctx->options.video.showFps = false;
+            ctx->options.video.showFps = SHOW_FPS_DEFAULT_VALUE;
             hasInvalidValues = true;
         }
         
