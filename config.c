@@ -23,6 +23,8 @@ bool compareConfig(Config* config1, Config* config2) {
 
     #undef OUTPUT
 
+    if (config1->options.video.showFps != config2->options.video.showFps) isIdentical = false;
+
     return isIdentical;
 }
 
