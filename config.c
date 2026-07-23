@@ -118,6 +118,7 @@ bool loadConfigFromFile(GameContext* ctx) {
 
 void resetConfig(GameContext* ctx) {
     resetDebugConfig(ctx);
+    resetOptionsToDefault(&ctx->options);
 }
 
 void resetDebugConfig(GameContext* ctx) {
