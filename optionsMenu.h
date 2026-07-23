@@ -16,7 +16,7 @@ typedef struct ControlsTabData {
 }ControlsTabData;
 
 typedef struct VideoTabData {
-    
+    VideoOptions options;
 }VideoTabData;
 
 typedef struct OptionsMenuTab {
