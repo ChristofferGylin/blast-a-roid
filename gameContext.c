@@ -32,6 +32,7 @@ void initGameContext(GameContext* ctx, bool debugActive) {
     initHighScores(&ctx->highscores);
     initDebug(&ctx->debug, debugActive);
     initConfig(ctx);
+    initFps(&ctx->fps);
     ctx->pausTimer = 0;
     ctx->supernova = (Supernova){false, 0.0f, 0.0f};
     ctx->isBlackHoleActive = false;
