@@ -12,19 +12,25 @@
 
 void drawOptionsMenu(OptionsMenu* menu);
 void drawOptionsMenuTab(OptionsMenu* menu);
-void initOptionsMenu(OptionsMenu* menu);
-void initOptionsMenuTab(LayoutSection* section, Rectangle* parent, char* heading, DrawSectionContent drawContent, void* userData);
+void initOptionsMenu(GameContext* ctx, OptionsMenu* menu);
+void initOptionsMenuTab(OptionsMenuTab* tab, Rectangle* parent, char* heading, Callback drawContent, Callback updateTab, void* userData);
+void initVideoTabData(GameContext* ctx, Rectangle* parent, VideoTabData* tabData);
 void drawVideoTab(void* userData);
 void drawControlsTab(void* userData);
 void drawAudioTab(void* userData);
 void updateOptionsMenu(OptionsMenu* menu);
+void updateOptionsMenuTab(OptionsMenu* menu);
+void updateAudioTab(void* userData);
+void updateControlsTab(void* userData);
+void updateVideoTab(void* userData);
 
+void updateAudioTab(void* userData) {};
+void updateControlsTab(void* userData) {};
 
-void drawVideoTab(void* userData) {};
 void drawControlsTab(void* userData) {};
 void drawAudioTab(void* userData) {};
 
-void initOptionsMenu(OptionsMenu* menu) {
+void initOptionsMenu(GameContext* ctx, OptionsMenu* menu) {
     menu->exit = false;
     menu->onClickIncreaseArgs.max_Value = NUMBER_OF_OPTIONS_TABS -1;
     menu->onClickIncreaseArgs.value = &menu->selectecTab;
@@ -39,14 +45,16 @@ void initOptionsMenu(OptionsMenu* menu) {
         &menu->exit
     );
     
-    initOptionsMenuTab(&menu->tabs[0], &menu->layout.contentArea, "VIDEO", drawVideoTab, &menu->videoTabData);
-    initOptionsMenuTab(&menu->tabs[1], &menu->layout.contentArea, "AUDIO", drawAudioTab, &menu->audioTabData);
-    initOptionsMenuTab(&menu->tabs[2], &menu->layout.contentArea, "CONTROLS", drawControlsTab, &menu->controlsTabData);
+    initOptionsMenuTab(&menu->tabs[0], &menu->layout.contentArea, "VIDEO", drawVideoTab, updateVideoTab, &menu->videoTabData);
+    initOptionsMenuTab(&menu->tabs[1], &menu->layout.contentArea, "AUDIO", drawAudioTab, updateAudioTab, &menu->audioTabData);
+    initOptionsMenuTab(&menu->tabs[2], &menu->layout.contentArea, "CONTROLS", drawControlsTab, updateControlsTab, &menu->controlsTabData);
+
+    initVideoTabData(ctx, &menu->tabs[0].layout.contentArea, &menu->videoTabData);
 
     float largestHeadingSize = 0;
 
     for (int i = 0; i < NUMBER_OF_OPTIONS_TABS; i++) {
-        Vector2 headingSize = MeasureTextEx(GetFontDefault(), menu->tabs[i].heading, OPTIONS_TAB_HEADING_FONT_SIZE, MENU_FONT_SPACING);
+        Vector2 headingSize = MeasureTextEx(GetFontDefault(), menu->tabs[i].layout.heading, OPTIONS_TAB_HEADING_FONT_SIZE, MENU_FONT_SPACING);
 
         if (headingSize.x > largestHeadingSize) largestHeadingSize = headingSize.x;
     }
@@ -55,47 +63,56 @@ void initOptionsMenu(OptionsMenu* menu) {
 
     previousTabButtonRect.width = 32;
     previousTabButtonRect.height = 32;
-    previousTabButtonRect.x = menu->tabs[0].contentArea.x + (menu->tabs[0].contentArea.width / 2.0f) - (largestHeadingSize / 2.0f) - (previousTabButtonRect.width * 2);
-    previousTabButtonRect.y = menu->tabs[0].headingPosition.y;
+    previousTabButtonRect.x = menu->tabs[0].layout.contentArea.x + (menu->tabs[0].layout.contentArea.width / 2.0f) - (largestHeadingSize / 2.0f) - (previousTabButtonRect.width * 2);
+    previousTabButtonRect.y = menu->tabs[0].layout.headingPosition.y;
 
     Rectangle nextTabButtonRect;
 
     nextTabButtonRect.width = 32;
     nextTabButtonRect.height = 32;
-    nextTabButtonRect.x = menu->tabs[0].contentArea.x + (menu->tabs[0].contentArea.width / 2.0f) + (largestHeadingSize / 2.0f) + nextTabButtonRect.width;
-    nextTabButtonRect.y = menu->tabs[0].headingPosition.y;
+    nextTabButtonRect.x = menu->tabs[0].layout.contentArea.x + (menu->tabs[0].layout.contentArea.width / 2.0f) + (largestHeadingSize / 2.0f) + nextTabButtonRect.width;
+    nextTabButtonRect.y = menu->tabs[0].layout.headingPosition.y;
 
     initButton(&menu->nextTabButton, nextTabButtonRect, OPTIONS_TAB_HEADING_FONT_SIZE, ">", onClickIncrease, &menu->onClickIncreaseArgs);
     initButton(&menu->prevTabButton, previousTabButtonRect, OPTIONS_TAB_HEADING_FONT_SIZE, "<", onClickDecrease, &menu->onClickIncreaseArgs);
 
 }
 
-void initOptionsMenuTab(LayoutSection* section, Rectangle* parent, char* heading, DrawSectionContent drawContent, void* userData) {
+void initOptionsMenuTab(OptionsMenuTab* tab, Rectangle* parent, char* heading, Callback drawContent, Callback updateTab, void* userData) {
 
-    section->drawContent = drawContent;
-    section->userData = userData;
+    tab->updateTab = updateTab;
 
-    section->container.x = parent->x + MENU_MARGIN;
-    section->container.y = parent->y + MENU_MARGIN;
-    section->container.width = parent->width - (MENU_MARGIN * 2);
-    section->container.height = parent->height - (MENU_MARGIN * 2);
+    tab->layout.drawContent = drawContent;
+    tab->layout.userData = userData;
+
+    tab->layout.container.x = parent->x + MENU_MARGIN;
+    tab->layout.container.y = parent->y + MENU_MARGIN;
+    tab->layout.container.width = parent->width - (MENU_MARGIN * 2);
+    tab->layout.container.height = parent->height - (MENU_MARGIN * 2);
 
     Vector2 headingSize = MeasureTextEx(GetFontDefault(), heading, OPTIONS_TAB_HEADING_FONT_SIZE, MENU_FONT_SPACING);
 
-    section->headingPosition.x = section->container.x + (section->container.width / 2.0f) - (headingSize.x / 2.0f);
-    section->headingPosition.y = section->container.y;
+    tab->layout.headingPosition.x = tab->layout.container.x + (tab->layout.container.width / 2.0f) - (headingSize.x / 2.0f);
+    tab->layout.headingPosition.y = tab->layout.container.y;
 
-    section->divider.x = section->headingPosition.x;
-    section->divider.y = section->headingPosition.y + headingSize.y + (MENU_MARGIN / 2.0f); 
-    section->divider.width = headingSize.x;
-    section->divider.height = SECTION_DIVIDER_LINE_THICKNESS;
+    tab->layout.divider.x = tab->layout.headingPosition.x;
+    tab->layout.divider.y = tab->layout.headingPosition.y + headingSize.y + (MENU_MARGIN / 2.0f); 
+    tab->layout.divider.width = headingSize.x;
+    tab->layout.divider.height = SECTION_DIVIDER_LINE_THICKNESS;
 
-    section->contentArea.x = section->container.x;
-    section->contentArea.y = section->divider.y + section->divider.height + MENU_MARGIN;
-    section->contentArea.width = section->container.width;
-    section->contentArea.height = section->container.height - (section->contentArea.y - section->container.y);
+    tab->layout.contentArea.x = tab->layout.container.x;
+    tab->layout.contentArea.y = tab->layout.divider.y + tab->layout.divider.height + MENU_MARGIN;
+    tab->layout.contentArea.width = tab->layout.container.width;
+    tab->layout.contentArea.height = tab->layout.container.height - (tab->layout.contentArea.y - tab->layout.container.y);
 
-    strcpy(section->heading, heading);
+    strcpy(tab->layout.heading, heading);
+}
+
+void initVideoTabData(GameContext* ctx, Rectangle* parent, VideoTabData* tabData) {
+    Vector2 position = {parent->x, parent->y};
+    
+    initCheckboxWithTitle(&tabData->checkboxes[0], position, "Show FPS", &ctx->options.video.showFps);
+
 }
 
 void drawOptionsMenu(OptionsMenu* menu) {
@@ -107,7 +124,7 @@ void drawOptionsMenu(OptionsMenu* menu) {
 }
 
 void drawOptionsMenuTab(OptionsMenu* menu) {
-    LayoutSection* section = &menu->tabs[menu->selectecTab];
+    LayoutSection* section = &menu->tabs[menu->selectecTab].layout;
 
     Vector2 origin = {0,0};
 
@@ -119,13 +136,21 @@ void drawOptionsMenuTab(OptionsMenu* menu) {
     section->drawContent(section->userData);
 }
 
+void drawVideoTab(void* userData) {
+    VideoTabData* data = userData;
+
+    for (int i = 0; i < NUMBER_OF_VIDEO_OPTIONS; i++) {
+        drawCheckboxWithTitle(&data->checkboxes[i]);
+    }
+}
+
 bool optionsMenu(GameContext* ctx) {
 
     Config initialConfigState = getConfig(ctx);
     
     OptionsMenu menu;
 
-    initOptionsMenu(&menu);
+    initOptionsMenu(ctx, &menu);
 
     bool applicationIsRunning = true;
 
@@ -153,4 +178,19 @@ void updateOptionsMenu(OptionsMenu* menu) {
     updateButton(&menu->backButton);
     updateButton(&menu->prevTabButton);
     updateButton(&menu->nextTabButton);
+    updateOptionsMenuTab(menu);
+}
+
+void updateOptionsMenuTab(OptionsMenu* menu) {
+    OptionsMenuTab* tab = &menu->tabs[menu->selectecTab];
+
+    tab->updateTab(tab->layout.userData);
+}
+
+void updateVideoTab(void* userData) {
+    VideoTabData* tabData = userData;
+
+    for (int i = 0; i < NUMBER_OF_VIDEO_OPTIONS; i++) {
+        updateCheckbox(&tabData->checkboxes[i].checkbox);
+    }
 }

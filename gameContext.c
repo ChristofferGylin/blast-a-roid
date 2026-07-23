@@ -1,4 +1,5 @@
 #include <stdbool.h>
+#include <string.h>
 #include "animation.h"
 #include "asteroid.h"
 #include "config.h"

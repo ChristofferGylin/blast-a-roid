@@ -10,6 +10,7 @@
 #include <stdbool.h>
 #include "gameContext.h"
 #include "specials.h"
+#include "showFps.h"
 
 void renderSidebarLeft(GameContext* ctx);
 void renderSidebarRight(GameContext* ctx);
@@ -190,7 +191,6 @@ RenderPositions renderBlock(char text[], int startY, bool isLeftSide) {
     return (RenderPositions){contentPosition, contentSize, endYPosition};
 }
 
-
 void renderStats(uint64_t value, Vector2 position, Vector2 size) {
 
     const int fontSize = 18;
@@ -256,7 +256,8 @@ void renderSidebarRight(GameContext* ctx) {
     renderLives(ctx, livesPosition.contentPosition, livesPosition.contentSize);
 }
 
-void renderSidebars(GameContext* ctx) {
+void renderSidebars(GameContext* ctx, Fps* fps) {
     renderSidebarLeft(ctx);
     renderSidebarRight(ctx);
+    drawFps(ctx, fps);
 }

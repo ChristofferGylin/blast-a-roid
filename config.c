@@ -3,6 +3,7 @@
 #include "config.h"
 #include "debug.h"
 #include "gameContext.h"
+#include "options.h"
 #include "raylib.h"
 
 bool loadConfigFromFile(GameContext* ctx);
@@ -22,6 +23,8 @@ bool compareConfig(Config* config1, Config* config2) {
 
     #undef OUTPUT
 
+    if (config1->options.video.showFps != config2->options.video.showFps) isIdentical = false;
+
     return isIdentical;
 }
 
@@ -39,6 +42,8 @@ Config getConfig(GameContext* ctx) {
     POOL_COUNTS(OUTPUT)
 
     #undef OUTPUT
+
+    config.options.video.showFps = ctx->options.video.showFps;
 
     return config;
 }
@@ -70,6 +75,13 @@ bool loadConfigFromFile(GameContext* ctx) {
     bool hasInvalidValues = false;
 
     if (configFromFile && size == sizeof(Config)) {
+
+        if (configFromFile->options.video.showFps == true || configFromFile->options.video.showFps == false) {
+            ctx->options.video.showFps = configFromFile->options.video.showFps;
+        } else {
+            ctx->options.video.showFps = SHOW_FPS_DEFAULT_VALUE;
+            hasInvalidValues = true;
+        }
         
         if (configFromFile->debug.onlyOutputOnChange == true ||configFromFile->debug.onlyOutputOnChange == false) {
             ctx->debug.onlyOutputOnChange = configFromFile->debug.onlyOutputOnChange;
@@ -117,6 +129,7 @@ bool loadConfigFromFile(GameContext* ctx) {
 
 void resetConfig(GameContext* ctx) {
     resetDebugConfig(ctx);
+    resetOptionsToDefault(&ctx->options);
 }
 
 void resetDebugConfig(GameContext* ctx) {

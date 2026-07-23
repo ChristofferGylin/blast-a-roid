@@ -5,6 +5,7 @@
 #include <stdbool.h>
 
 #include "debug.h"
+#include "options.h"
 
 typedef struct ObjectPoolCountConfig {
     bool asteroids;
@@ -27,13 +28,8 @@ typedef struct DebugConfig {
 
 typedef struct Config {
     DebugConfig debug;
+    Options options;
 }Config;
-
-typedef struct ConfigSaveData
-{
-    Config config;
-    uint32_t checksum;
-}ConfigSaveData;
 
 bool compareConfig(Config* config1, Config* config2);
 Config getConfig(GameContext* ctx);

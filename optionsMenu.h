@@ -4,8 +4,9 @@
 #include "ui.h"
 
 #define NUMBER_OF_OPTIONS_TABS 3
+#define NUMBER_OF_VIDEO_OPTIONS 1
 
-typedef void (*DrawOptionsTab)(void* userData);
+typedef void (*Callback)(void* userData);
 
 typedef struct AudioTabData {
     
@@ -16,13 +17,12 @@ typedef struct ControlsTabData {
 }ControlsTabData;
 
 typedef struct VideoTabData {
-    
+    CheckboxWithTitle checkboxes[NUMBER_OF_VIDEO_OPTIONS];
 }VideoTabData;
 
 typedef struct OptionsMenuTab {
-    char heading[TITLE_MAX_LENGTH];
-    DrawOptionsTab drawTab;
-    void *userData;
+    LayoutSection layout;
+    Callback updateTab;
 }OptionsMenuTab;
 
 typedef struct OptionsMenu {
@@ -31,7 +31,7 @@ typedef struct OptionsMenu {
     Button prevTabButton;
     Button nextTabButton;
     OnClickIncreaseArgs onClickIncreaseArgs;
-    LayoutSection tabs[NUMBER_OF_OPTIONS_TABS];
+    OptionsMenuTab tabs[NUMBER_OF_OPTIONS_TABS];
     AudioTabData audioTabData;
     ControlsTabData controlsTabData;
     VideoTabData videoTabData;

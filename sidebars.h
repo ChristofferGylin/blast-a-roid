@@ -6,6 +6,7 @@
 
 typedef struct Player Player;
 typedef struct GameContext GameContext;
+typedef struct Fps Fps;
 
 typedef struct RenderPositions {
     Vector2 contentPosition;
@@ -16,7 +17,7 @@ typedef struct RenderPositions {
 RenderPositions renderBlock(char text[], int startY, bool isLeftSide);
 void renderLives(GameContext* ctx, Vector2 position, Vector2 size);
 void renderShieldPower(float shieldPower, Vector2 position, Vector2 size);
-void renderSidebars(GameContext* ctx);
+void renderSidebars(GameContext* ctx, Fps* fps);
 void renderStats(uint64_t value, Vector2 position, Vector2 size);
 
 #endif
