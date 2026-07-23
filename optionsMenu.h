@@ -4,6 +4,7 @@
 #include "ui.h"
 
 #define NUMBER_OF_OPTIONS_TABS 3
+#define NUMBER_OF_VIDEO_OPTIONS 1
 
 typedef void (*DrawOptionsTab)(void* userData);
 
@@ -16,7 +17,7 @@ typedef struct ControlsTabData {
 }ControlsTabData;
 
 typedef struct VideoTabData {
-    VideoOptions options;
+    CheckboxWithTitle checkboxes[NUMBER_OF_VIDEO_OPTIONS];
 }VideoTabData;
 
 typedef struct OptionsMenuTab {

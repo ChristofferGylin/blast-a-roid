@@ -19,8 +19,6 @@ void drawControlsTab(void* userData);
 void drawAudioTab(void* userData);
 void updateOptionsMenu(OptionsMenu* menu);
 
-
-void drawVideoTab(void* userData) {};
 void drawControlsTab(void* userData) {};
 void drawAudioTab(void* userData) {};
 
@@ -117,6 +115,14 @@ void drawOptionsMenuTab(OptionsMenu* menu) {
     DrawRectanglePro(section->divider, origin, 0, primaryColor);
 
     section->drawContent(section->userData);
+}
+
+void drawVideoTab(void* userData) {
+    VideoTabData* data = userData;
+
+    for (int i = 0; i < NUMBER_OF_VIDEO_OPTIONS; i++) {
+        drawCheckboxWithTitle(&data->checkboxes[i]);
+    }
 }
 
 bool optionsMenu(GameContext* ctx) {
