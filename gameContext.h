@@ -86,6 +86,12 @@ typedef struct Supernova {
     double shakeTimer;
 }Supernova;
 
+typedef struct Fps {
+    int currentFps;
+    int lowestFps;
+    int highestFps;
+}Fps;
+
 typedef struct GameContext {
     Assets assets;
     Debug debug;
@@ -98,8 +104,10 @@ typedef struct GameContext {
     bool isBlackHoleActive;
     Highscores highscores;
     Options options;
+    Fps fps;
 }GameContext;
 
+void initFps(Fps* fps);
 void initGameContext(GameContext* ctx, bool debugActive);
 void initObjectPools(GameContext* ctx);
 void initSpawning(GameContext* ctx);

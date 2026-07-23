@@ -17,6 +17,12 @@ void initSpawning(GameContext* ctx) {
     setNextEnemySpawnTime(ctx);
 }
 
+void initFps(Fps* fps) {
+    fps->currentFps = 0;
+    fps->highestFps = 0;
+    fps->lowestFps = 0;
+}
+
 void initGameContext(GameContext* ctx, bool debugActive) {
     initPlayer(&ctx->player);
     initObjectPools(ctx);
