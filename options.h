@@ -9,7 +9,8 @@ typedef struct VideoOptions {
 
 typedef struct Options {
     VideoOptions video;
-};
+}Options;
 
+void resetOptionsToDefault(Options* options);
 
 #endif
