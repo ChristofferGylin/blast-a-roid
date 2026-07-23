@@ -31,12 +31,6 @@ typedef struct Config {
     Options options;
 }Config;
 
-typedef struct ConfigSaveData
-{
-    Config config;
-    uint32_t checksum;
-}ConfigSaveData;
-
 bool compareConfig(Config* config1, Config* config2);
 Config getConfig(GameContext* ctx);
 void initConfig(GameContext* ctx);
