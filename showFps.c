@@ -128,15 +128,15 @@ void drawFrameTime(GameContext* ctx, FrameTime* frameTime) {
     char lowestValue[32] = "-";
 
     if (frameTime->values.current > 0) {
-        snprintf(currentValue, sizeof(currentValue), "%.2lf", frameTime->values.current);
+        snprintf(currentValue, sizeof(currentValue), "%.2lf ms", frameTime->values.current);
     }
 
     if (frameTime->values.highest > 0) {
-        snprintf(highestValue, sizeof(highestValue), "%.2lf", frameTime->values.highest);
+        snprintf(highestValue, sizeof(highestValue), "%.2lf ms", frameTime->values.highest);
     }
 
     if (frameTime->values.lowest > 0) {
-        snprintf(lowestValue, sizeof(lowestValue), "%.2lf", frameTime->values.lowest);
+        snprintf(lowestValue, sizeof(lowestValue), "%.2lf ms", frameTime->values.lowest);
     }
 
     Vector2 currentValueSize = MeasureTextEx(GetFontDefault(), currentValue, FRAME_TIME_VALUE_FONT_SIZE, FPS_TITLE_FONT_SPACING);
@@ -415,9 +415,20 @@ void updateFps(GameContext* ctx, Fps* fps) {
 
     if (fps->currentFps > fps->highestFps) {
         fps->highestFps = fps->currentFps;
-    }
-
-    if (fps->lowestFps == 0 || fps->currentFps < fps->lowestFps) {
+    } else if (fps->lowestFps == 0 || fps->currentFps < fps->lowestFps) {
         fps->lowestFps = fps->currentFps;
+    }
+}
+
+void updateFrameTime(GameContext* ctx, FrameTime* frameTime) {
+
+    if (!ctx->options.video.showFps) return;
+
+    frameTime->values.current = GetFrameTime() * 1000;
+
+    if (frameTime->values.current > frameTime->values.highest) {
+        frameTime->values.highest = frameTime->values.current;
+    } else if (frameTime->values.lowest == 0 || frameTime->values.current < frameTime->values.lowest) {
+        frameTime->values.lowest = frameTime->values.current;
     }
 }

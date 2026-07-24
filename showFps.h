@@ -11,7 +11,7 @@ static const int FPS_TITLE_FONT_SIZE = 18;
 static const int FPS_TITLE_FONT_SPACING = 8;
 static const int FPS_VALUE_FONT_SIZE = 72;
 static const int FPS_GAP = 8;
-static const int FRAME_TIME_VALUE_FONT_SIZE = 24;
+static const int FRAME_TIME_VALUE_FONT_SIZE = 12;
 
 typedef struct RenderFpsPositions {
     Vector2 currentTitle;
