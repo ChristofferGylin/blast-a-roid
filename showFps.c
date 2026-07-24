@@ -112,14 +112,16 @@ void initFps(Fps* fps) {
     strcpy(fps->render.titles.current, "CURRENT");
     strcpy(fps->render.titles.highest, "HIGHEST");
     strcpy(fps->render.titles.lowest, "LOWEST");
+    strcpy(fps->render.titles.heading, "FPS");
 
-    char value[] = "100";
+    char value[] = "999";
     
     fps->currentFps = 0;
     fps->highestFps = 0;
     fps->lowestFps = 0;
 
     Vector2 currentTitleSize = MeasureTextEx(GetFontDefault(), fps->render.titles.current, FPS_TITLE_FONT_SIZE, FPS_TITLE_FONT_SPACING);
+    Vector2 headingSize = MeasureTextEx(GetFontDefault(), fps->render.titles.heading, FPS_HEADING_FONT_SIZE, FPS_TITLE_FONT_SPACING);
     Vector2 highestTitleSize = MeasureTextEx(GetFontDefault(), fps->render.titles.highest, FPS_TITLE_FONT_SIZE, FPS_TITLE_FONT_SPACING);
     Vector2 lowestTitleSize = MeasureTextEx(GetFontDefault(), fps->render.titles.lowest, FPS_TITLE_FONT_SIZE, FPS_TITLE_FONT_SPACING);
     
@@ -134,9 +136,14 @@ void initFps(Fps* fps) {
 
     float center = (SIDEBAR_WIDTH / 2.0f);
 
-    fps->render.positions.currentTitle = (Vector2){
+    fps->render.positions.heading = (Vector2){
         center - (currentTitleSize.x / 2.0f),
         SCREEN_HEIGHT - totalHeight
+    };
+
+    fps->render.positions.currentTitle = (Vector2){
+        center - (currentTitleSize.x / 2.0f),
+        fps->render.positions.heading.y + headingSize.y + (FPS_GAP * 2)
     };
 
     fps->render.positions.currentValue = (Vector2){
