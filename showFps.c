@@ -31,14 +31,25 @@ void drawFps(GameContext* ctx, Fps* fps) {
     Vector2 lowestValueSize = MeasureTextEx(GetFontDefault(), lowestValue, FPS_VALUE_FONT_SIZE, FPS_TITLE_FONT_SPACING);
 
     Vector2 currentValuePosition = fps->render.positions.currentValue;
-    Vector2 highestValuePosition = fps->render.positions.currentValue;
-    Vector2 lowestValuePosition = fps->render.positions.currentValue;
+    Vector2 highestValuePosition = fps->render.positions.highestValue;
+    Vector2 lowestValuePosition = fps->render.positions.lowestValue;
 
     currentValuePosition.x -= currentValueSize.x;
     highestValuePosition.x -= highestValueSize.x;
     lowestValuePosition.x -= lowestValueSize.x;
 
     Vector2 origin = {0, 0};
+
+    DrawTextPro(
+        GetFontDefault(),
+        fps->render.titles.heading,
+        fps->render.positions.heading,
+        origin,
+        0,
+        FPS_HEADING_FONT_SIZE,
+        FPS_TITLE_FONT_SPACING,
+        primaryColorDimmed60
+    );
 
     DrawTextPro(
         GetFontDefault(),
@@ -54,7 +65,7 @@ void drawFps(GameContext* ctx, Fps* fps) {
     DrawTextPro(
         GetFontDefault(),
         currentValue,
-        fps->render.positions.currentValue,
+        currentValuePosition,
         origin,
         0,
         FPS_VALUE_FONT_SIZE,
@@ -76,7 +87,7 @@ void drawFps(GameContext* ctx, Fps* fps) {
     DrawTextPro(
         GetFontDefault(),
         highestValue,
-        fps->render.positions.highestValue,
+        highestValuePosition,
         origin,
         0,
         FPS_VALUE_FONT_SIZE,
@@ -98,13 +109,15 @@ void drawFps(GameContext* ctx, Fps* fps) {
     DrawTextPro(
         GetFontDefault(),
         lowestValue,
-        fps->render.positions.lowestValue,
+        lowestValuePosition,
         origin,
         0,
         FPS_VALUE_FONT_SIZE,
         FPS_TITLE_FONT_SPACING,
         primaryColor
-    );    
+    );
+
+    DrawRectanglePro(fps->render.line, origin, 0, primaryColorDimmed60);
 }
 
 void initFps(Fps* fps) {
@@ -112,31 +125,47 @@ void initFps(Fps* fps) {
     strcpy(fps->render.titles.current, "CURRENT");
     strcpy(fps->render.titles.highest, "HIGHEST");
     strcpy(fps->render.titles.lowest, "LOWEST");
+    strcpy(fps->render.titles.heading, "FPS");
 
-    char value[] = "100";
+    char value[] = "999";
     
     fps->currentFps = 0;
     fps->highestFps = 0;
     fps->lowestFps = 0;
 
     Vector2 currentTitleSize = MeasureTextEx(GetFontDefault(), fps->render.titles.current, FPS_TITLE_FONT_SIZE, FPS_TITLE_FONT_SPACING);
+    Vector2 headingSize = MeasureTextEx(GetFontDefault(), fps->render.titles.heading, FPS_HEADING_FONT_SIZE, FPS_TITLE_FONT_SPACING);
     Vector2 highestTitleSize = MeasureTextEx(GetFontDefault(), fps->render.titles.highest, FPS_TITLE_FONT_SIZE, FPS_TITLE_FONT_SPACING);
     Vector2 lowestTitleSize = MeasureTextEx(GetFontDefault(), fps->render.titles.lowest, FPS_TITLE_FONT_SIZE, FPS_TITLE_FONT_SPACING);
     
     Vector2 valueSize = MeasureTextEx(GetFontDefault(), value, FPS_VALUE_FONT_SIZE, FPS_TITLE_FONT_SPACING);
 
     float totalHeight =
+        headingSize.y +
+        FPS_LINE_THICKNESS +
         currentTitleSize.y +
         highestTitleSize.y +
         lowestTitleSize.y +
         (valueSize.y * 3) + 
-        (FPS_GAP * 9); 
+        (FPS_GAP * 12); 
 
     float center = (SIDEBAR_WIDTH / 2.0f);
 
+    fps->render.positions.heading = (Vector2){
+        center - (headingSize.x / 2.0f),
+        SCREEN_HEIGHT - totalHeight
+    };
+
+    fps->render.line = (Rectangle){
+        fps->render.positions.heading.x,
+        fps->render.positions.heading.y + headingSize.y,
+        headingSize.x,
+        FPS_LINE_THICKNESS
+    };
+
     fps->render.positions.currentTitle = (Vector2){
         center - (currentTitleSize.x / 2.0f),
-        SCREEN_HEIGHT - totalHeight
+        fps->render.line.y + fps->render.line.height + (FPS_GAP * 3)
     };
 
     fps->render.positions.currentValue = (Vector2){
