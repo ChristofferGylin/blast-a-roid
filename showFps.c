@@ -350,7 +350,7 @@ void initFrameTime(FrameTime* frameTime) {
         (valueSize.y * 3) + 
         (FPS_GAP * 13); 
 
-    float center = (SIDEBAR_WIDTH / 2.0f);
+    float center = SCREEN_WIDTH - (SIDEBAR_WIDTH / 2.0f);
 
     frameTime->positions.heading1 = (Vector2){
         center - (heading1Size.x / 2.0f),
