@@ -115,7 +115,9 @@ void drawFps(GameContext* ctx, Fps* fps) {
         FPS_VALUE_FONT_SIZE,
         FPS_TITLE_FONT_SPACING,
         primaryColor
-    );    
+    );
+
+    DrawRectanglePro(fps->render.line, origin, 0, primaryColorDimmed60);
 }
 
 void initFps(Fps* fps) {
@@ -140,22 +142,30 @@ void initFps(Fps* fps) {
 
     float totalHeight =
         headingSize.y +
+        FPS_LINE_THICKNESS +
         currentTitleSize.y +
         highestTitleSize.y +
         lowestTitleSize.y +
         (valueSize.y * 3) + 
-        (FPS_GAP * 11); 
+        (FPS_GAP * 12); 
 
     float center = (SIDEBAR_WIDTH / 2.0f);
 
     fps->render.positions.heading = (Vector2){
-        center - (currentTitleSize.x / 2.0f),
+        center - (headingSize.x / 2.0f),
         SCREEN_HEIGHT - totalHeight
+    };
+
+    fps->render.line = (Rectangle){
+        fps->render.positions.heading.x,
+        fps->render.positions.heading.y + headingSize.y,
+        headingSize.x,
+        FPS_LINE_THICKNESS
     };
 
     fps->render.positions.currentTitle = (Vector2){
         center - (currentTitleSize.x / 2.0f),
-        fps->render.positions.heading.y + headingSize.y + (FPS_GAP * 2)
+        fps->render.line.y + fps->render.line.height + (FPS_GAP * 3)
     };
 
     fps->render.positions.currentValue = (Vector2){
