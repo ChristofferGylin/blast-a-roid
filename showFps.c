@@ -42,6 +42,17 @@ void drawFps(GameContext* ctx, Fps* fps) {
 
     DrawTextPro(
         GetFontDefault(),
+        fps->render.titles.heading,
+        fps->render.positions.heading,
+        origin,
+        0,
+        FPS_HEADING_FONT_SIZE,
+        FPS_TITLE_FONT_SPACING,
+        primaryColorDimmed60
+    );
+
+    DrawTextPro(
+        GetFontDefault(),
         fps->render.titles.current,
         fps->render.positions.currentTitle,
         origin,
@@ -128,11 +139,12 @@ void initFps(Fps* fps) {
     Vector2 valueSize = MeasureTextEx(GetFontDefault(), value, FPS_VALUE_FONT_SIZE, FPS_TITLE_FONT_SPACING);
 
     float totalHeight =
+        headingSize.y +
         currentTitleSize.y +
         highestTitleSize.y +
         lowestTitleSize.y +
         (valueSize.y * 3) + 
-        (FPS_GAP * 9); 
+        (FPS_GAP * 11); 
 
     float center = (SIDEBAR_WIDTH / 2.0f);
 
