@@ -79,6 +79,7 @@ typedef struct Fps {
 }Fps;
 
 void drawFps(GameContext* ctx, Fps* fps);
+void drawFrameTime(GameContext* ctx, FrameTime* frameTime);
 void initFps(Fps* fps);
 void initFrameTime(FrameTime* frameTime);
 void updateFps(GameContext* ctx, Fps* fps);

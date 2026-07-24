@@ -119,6 +119,131 @@ void drawFps(GameContext* ctx, Fps* fps) {
 
     DrawRectanglePro(fps->render.line, origin, 0, primaryColorDimmed60);
 }
+void drawFrameTime(GameContext* ctx, FrameTime* frameTime) {
+
+    if (!ctx->options.video.showFps) return;
+
+    char currentValue[32] = "-";
+    char highestValue[32] = "-";
+    char lowestValue[32] = "-";
+
+    if (frameTime->values.current > 0) {
+        snprintf(currentValue, sizeof(currentValue), "%.2lf", frameTime->values.current);
+    }
+
+    if (frameTime->values.highest > 0) {
+        snprintf(highestValue, sizeof(highestValue), "%.2lf", frameTime->values.highest);
+    }
+
+    if (frameTime->values.lowest > 0) {
+        snprintf(lowestValue, sizeof(lowestValue), "%.2lf", frameTime->values.lowest);
+    }
+
+    Vector2 currentValueSize = MeasureTextEx(GetFontDefault(), currentValue, FRAME_TIME_VALUE_FONT_SIZE, FPS_TITLE_FONT_SPACING);
+    Vector2 highestValueSize = MeasureTextEx(GetFontDefault(), highestValue, FRAME_TIME_VALUE_FONT_SIZE, FPS_TITLE_FONT_SPACING);
+    Vector2 lowestValueSize = MeasureTextEx(GetFontDefault(), lowestValue, FRAME_TIME_VALUE_FONT_SIZE, FPS_TITLE_FONT_SPACING);
+
+    Vector2 currentValuePosition = frameTime->positions.currentValue;
+    Vector2 highestValuePosition = frameTime->positions.highestValue;
+    Vector2 lowestValuePosition = frameTime->positions.lowestValue;
+
+    currentValuePosition.x -= currentValueSize.x;
+    highestValuePosition.x -= highestValueSize.x;
+    lowestValuePosition.x -= lowestValueSize.x;
+
+    Vector2 origin = {0, 0};
+
+    DrawTextPro(
+        GetFontDefault(),
+        frameTime->titles.heading1,
+        frameTime->positions.heading1,
+        origin,
+        0,
+        FPS_HEADING_FONT_SIZE,
+        FPS_TITLE_FONT_SPACING,
+        primaryColorDimmed60
+    );
+
+    DrawTextPro(
+        GetFontDefault(),
+        frameTime->titles.heading2,
+        frameTime->positions.heading2,
+        origin,
+        0,
+        FPS_HEADING_FONT_SIZE,
+        FPS_TITLE_FONT_SPACING,
+        primaryColorDimmed60
+    );
+
+    DrawTextPro(
+        GetFontDefault(),
+        frameTime->titles.current,
+        frameTime->positions.currentTitle,
+        origin,
+        0,
+        FPS_TITLE_FONT_SIZE,
+        FPS_TITLE_FONT_SPACING,
+        primaryColor
+    );
+
+    DrawTextPro(
+        GetFontDefault(),
+        currentValue,
+        currentValuePosition,
+        origin,
+        0,
+        FRAME_TIME_VALUE_FONT_SIZE,
+        FPS_TITLE_FONT_SPACING,
+        primaryColor
+    );
+
+    DrawTextPro(
+        GetFontDefault(),
+        frameTime->titles.highest,
+        frameTime->positions.highestTitle,
+        origin,
+        0,
+        FPS_TITLE_FONT_SIZE,
+        FPS_TITLE_FONT_SPACING,
+        primaryColor
+    );
+
+    DrawTextPro(
+        GetFontDefault(),
+        highestValue,
+        highestValuePosition,
+        origin,
+        0,
+        FRAME_TIME_VALUE_FONT_SIZE,
+        FPS_TITLE_FONT_SPACING,
+        primaryColor
+    );
+    
+    DrawTextPro(
+        GetFontDefault(),
+        frameTime->titles.lowest,
+        frameTime->positions.lowestTitle,
+        origin,
+        0,
+        FPS_TITLE_FONT_SIZE,
+        FPS_TITLE_FONT_SPACING,
+        primaryColor
+    );
+
+    DrawTextPro(
+        GetFontDefault(),
+        lowestValue,
+        lowestValuePosition,
+        origin,
+        0,
+        FRAME_TIME_VALUE_FONT_SIZE,
+        FPS_TITLE_FONT_SPACING,
+        primaryColor
+    );
+
+    DrawRectanglePro(frameTime->line1, origin, 0, primaryColorDimmed60);
+    DrawRectanglePro(frameTime->line2, origin, 0, primaryColorDimmed60);
+}
 
 void initFps(Fps* fps) {
 
