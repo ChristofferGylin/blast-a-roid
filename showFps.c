@@ -159,7 +159,7 @@ void drawFrameTime(GameContext* ctx, FrameTime* frameTime) {
         frameTime->positions.heading1,
         origin,
         0,
-        FPS_HEADING_FONT_SIZE,
+        FRAME_TIME_HEADING_FONT_SIZE,
         FPS_TITLE_FONT_SPACING,
         primaryColorDimmed60
     );
@@ -170,7 +170,7 @@ void drawFrameTime(GameContext* ctx, FrameTime* frameTime) {
         frameTime->positions.heading2,
         origin,
         0,
-        FPS_HEADING_FONT_SIZE,
+        FRAME_TIME_HEADING_FONT_SIZE,
         FPS_TITLE_FONT_SPACING,
         primaryColorDimmed60
     );
@@ -333,8 +333,8 @@ void initFrameTime(FrameTime* frameTime) {
     frameTime->values.lowest = 0;
 
     Vector2 currentTitleSize = MeasureTextEx(GetFontDefault(), frameTime->titles.current, FPS_TITLE_FONT_SIZE, FPS_TITLE_FONT_SPACING);
-    Vector2 heading1Size = MeasureTextEx(GetFontDefault(), frameTime->titles.heading1, FPS_HEADING_FONT_SIZE, FPS_TITLE_FONT_SPACING);
-    Vector2 heading2Size = MeasureTextEx(GetFontDefault(), frameTime->titles.heading2, FPS_HEADING_FONT_SIZE, FPS_TITLE_FONT_SPACING);
+    Vector2 heading1Size = MeasureTextEx(GetFontDefault(), frameTime->titles.heading1, FRAME_TIME_HEADING_FONT_SIZE, FPS_TITLE_FONT_SPACING);
+    Vector2 heading2Size = MeasureTextEx(GetFontDefault(), frameTime->titles.heading2, FRAME_TIME_HEADING_FONT_SIZE, FPS_TITLE_FONT_SPACING);
     Vector2 highestTitleSize = MeasureTextEx(GetFontDefault(), frameTime->titles.highest, FPS_TITLE_FONT_SIZE, FPS_TITLE_FONT_SPACING);
     Vector2 lowestTitleSize = MeasureTextEx(GetFontDefault(), frameTime->titles.lowest, FPS_TITLE_FONT_SIZE, FPS_TITLE_FONT_SPACING);
     

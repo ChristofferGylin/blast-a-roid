@@ -260,4 +260,5 @@ void renderSidebars(GameContext* ctx, Fps* fps) {
     renderSidebarLeft(ctx);
     renderSidebarRight(ctx);
     drawFps(ctx, fps);
+    drawFrameTime(ctx, &fps->frameTime);
 }

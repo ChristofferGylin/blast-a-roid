@@ -12,6 +12,7 @@ static const int FPS_TITLE_FONT_SPACING = 8;
 static const int FPS_VALUE_FONT_SIZE = 72;
 static const int FPS_GAP = 8;
 static const int FRAME_TIME_VALUE_FONT_SIZE = 12;
+static const int FRAME_TIME_HEADING_FONT_SIZE = 30;
 
 typedef struct RenderFpsPositions {
     Vector2 currentTitle;
@@ -83,5 +84,6 @@ void drawFrameTime(GameContext* ctx, FrameTime* frameTime);
 void initFps(Fps* fps);
 void initFrameTime(FrameTime* frameTime);
 void updateFps(GameContext* ctx, Fps* fps);
+void updateFrameTime(GameContext* ctx, FrameTime* frameTime);
 
 #endif
