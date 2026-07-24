@@ -35,11 +35,45 @@ typedef struct RenderFps {
     Rectangle line;
 }RenderFps;
 
+typedef struct FrameTimePositions {
+    Vector2 currentTitle;
+    Vector2 currentValue;
+    Vector2 heading1;
+    Vector2 heading2;
+    Vector2 highestTitle;
+    Vector2 highestValue;
+    Vector2 lowesTitle;
+    Vector2 lowestValue;
+}FrameTimePositions;
+
+typedef struct FrameTimeTitles {
+    char current[8];
+    char heading1[6];
+    char heading1[5];
+    char highest[8];
+    char lowest[7];
+}FrameTimeTitles;
+
+
+typedef struct FrameTimeValues {
+    float current;
+    float highest;
+    float lowest;
+}FrameTimeValues;
+
+typedef struct FrameTime {
+    FrameTimePositions positions;
+    FrameTimeTitles titles;
+    FrameTimeValues values;
+    Rectangle line;
+}FrameTime;
+
 typedef struct Fps {
     int currentFps;
     int lowestFps;
     int highestFps;
     RenderFps render;
+    FrameTime frameTime;
 }Fps;
 
 void drawFps(GameContext* ctx, Fps* fps);
