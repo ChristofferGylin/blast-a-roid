@@ -31,8 +31,8 @@ void drawFps(GameContext* ctx, Fps* fps) {
     Vector2 lowestValueSize = MeasureTextEx(GetFontDefault(), lowestValue, FPS_VALUE_FONT_SIZE, FPS_TITLE_FONT_SPACING);
 
     Vector2 currentValuePosition = fps->render.positions.currentValue;
-    Vector2 highestValuePosition = fps->render.positions.currentValue;
-    Vector2 lowestValuePosition = fps->render.positions.currentValue;
+    Vector2 highestValuePosition = fps->render.positions.highestValue;
+    Vector2 lowestValuePosition = fps->render.positions.lowestValue;
 
     currentValuePosition.x -= currentValueSize.x;
     highestValuePosition.x -= highestValueSize.x;
@@ -54,7 +54,7 @@ void drawFps(GameContext* ctx, Fps* fps) {
     DrawTextPro(
         GetFontDefault(),
         currentValue,
-        fps->render.positions.currentValue,
+        currentValuePosition,
         origin,
         0,
         FPS_VALUE_FONT_SIZE,
@@ -76,7 +76,7 @@ void drawFps(GameContext* ctx, Fps* fps) {
     DrawTextPro(
         GetFontDefault(),
         highestValue,
-        fps->render.positions.highestValue,
+        highestValuePosition,
         origin,
         0,
         FPS_VALUE_FONT_SIZE,
@@ -98,7 +98,7 @@ void drawFps(GameContext* ctx, Fps* fps) {
     DrawTextPro(
         GetFontDefault(),
         lowestValue,
-        fps->render.positions.lowestValue,
+        lowestValuePosition,
         origin,
         0,
         FPS_VALUE_FONT_SIZE,
