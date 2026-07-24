@@ -28,6 +28,7 @@ GameResult gameLoop(GameContext* ctx) {
     Fps fps;
 
     initFps(&fps);
+    initFrameTime(&fps.frameTime);
 
     const int WAIT_TIME = 2;
 
@@ -129,6 +130,7 @@ GameResult gameLoop(GameContext* ctx) {
                 updateShieldAnimation();
             }
             updateFps(ctx, &fps);
+            updateFrameTime(ctx, &fps.frameTime);
         }        
 
         if (ctx->ship.destroyed && GetTime() >= ctx->ship.timeDestroyed + WAIT_TIME && !exit && !reset) {
