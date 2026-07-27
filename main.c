@@ -24,14 +24,14 @@ int main(int argc, char* argv[]){
 
     initConfig(&ctx);
 
-    if (ctx.options.video.isVSyncEnabled) {
+    if (ctx.options.video.vSync) {
         SetConfigFlags(FLAG_VSYNC_HINT);
     }
 
     InitWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "Blast-A-Roid");
     InitAudioDevice();
 
-    if (!ctx.options.video.isVSyncEnabled) {
+    if (!ctx.options.video.vSync) {
         setUserRefreshRate();
     }
 

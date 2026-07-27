@@ -8,7 +8,7 @@ static const bool IS_V_SYNC_ENABLED_DEFAULT_VALUE = false;
 
 typedef struct VideoOptions {
     bool showFps;
-    bool isVSyncEnabled;
+    bool vSync;
 }VideoOptions;
 
 typedef struct Options {

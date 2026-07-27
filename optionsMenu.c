@@ -116,7 +116,7 @@ void initVideoTabData(GameContext* ctx, Rectangle* parent, VideoTabData* tabData
 
     position.y += yOffset;
 
-    initCheckboxWithTitle(&tabData->checkboxes[1], position, "V-Sync", &ctx->options.video.isVSyncEnabled);
+    initCheckboxWithTitle(&tabData->checkboxes[1], position, "V-Sync", &ctx->options.video.vSync);
 
 }
 

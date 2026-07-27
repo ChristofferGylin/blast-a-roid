@@ -24,7 +24,7 @@ bool compareConfig(Config* config1, Config* config2) {
     #undef OUTPUT
 
     if (config1->options.video.showFps != config2->options.video.showFps) isIdentical = false;
-    if (config1->options.video.isVSyncEnabled != config2->options.video.isVSyncEnabled) isIdentical = false;
+    if (config1->options.video.vSync != config2->options.video.vSync) isIdentical = false;
 
     return isIdentical;
 }
@@ -45,7 +45,7 @@ Config getConfig(GameContext* ctx) {
     #undef OUTPUT
 
     config.options.video.showFps = ctx->options.video.showFps;
-    config.options.video.isVSyncEnabled = ctx->options.video.isVSyncEnabled;
+    config.options.video.vSync = ctx->options.video.vSync;
 
     return config;
 }
@@ -85,10 +85,10 @@ bool loadConfigFromFile(GameContext* ctx) {
             hasInvalidValues = true;
         }
         
-        if (configFromFile->options.video.isVSyncEnabled == true || configFromFile->options.video.isVSyncEnabled == false) {
-            ctx->options.video.isVSyncEnabled = configFromFile->options.video.isVSyncEnabled;
+        if (configFromFile->options.video.vSync == true || configFromFile->options.video.vSync == false) {
+            ctx->options.video.vSync = configFromFile->options.video.vSync;
         } else {
-            ctx->options.video.isVSyncEnabled = IS_V_SYNC_ENABLED_DEFAULT_VALUE;
+            ctx->options.video.vSync = IS_V_SYNC_ENABLED_DEFAULT_VALUE;
             hasInvalidValues = true;
         }
         
