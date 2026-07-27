@@ -44,6 +44,7 @@ Config getConfig(GameContext* ctx) {
     #undef OUTPUT
 
     config.options.video.showFps = ctx->options.video.showFps;
+    config.options.video.isVSyncEnabled = ctx->options.video.isVSyncEnabled;
 
     return config;
 }
