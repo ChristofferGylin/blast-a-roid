@@ -98,6 +98,7 @@ typedef struct GameContext {
     bool isBlackHoleActive;
     Highscores highscores;
     Options options;
+    bool isVsyncEnabled;
 }GameContext;
 
 void initGameContext(GameContext* ctx, bool debugActive);
