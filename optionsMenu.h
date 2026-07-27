@@ -4,7 +4,7 @@
 #include "ui.h"
 
 #define NUMBER_OF_OPTIONS_TABS 3
-#define NUMBER_OF_VIDEO_OPTIONS 1
+#define NUMBER_OF_VIDEO_OPTIONS 2
 
 typedef void (*Callback)(void* userData);
 

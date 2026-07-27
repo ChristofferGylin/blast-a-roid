@@ -112,6 +112,7 @@ void initVideoTabData(GameContext* ctx, Rectangle* parent, VideoTabData* tabData
     Vector2 position = {parent->x, parent->y};
     
     initCheckboxWithTitle(&tabData->checkboxes[0], position, "Show FPS", &ctx->options.video.showFps);
+    initCheckboxWithTitle(&tabData->checkboxes[1], position, "V-Sync", &ctx->options.video.isVSyncEnabled);
 
 }
 
