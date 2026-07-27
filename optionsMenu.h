@@ -4,7 +4,7 @@
 #include "ui.h"
 
 #define NUMBER_OF_OPTIONS_TABS 3
-#define NUMBER_OF_VIDEO_OPTIONS 1
+#define NUMBER_OF_VIDEO_OPTIONS 2
 
 typedef void (*Callback)(void* userData);
 
@@ -18,6 +18,10 @@ typedef struct ControlsTabData {
 
 typedef struct VideoTabData {
     CheckboxWithTitle checkboxes[NUMBER_OF_VIDEO_OPTIONS];
+    char warningText[48];
+    Vector2 warningTextPosition;
+    bool isWarningTextVisible;
+    GameContext* ctx;
 }VideoTabData;
 
 typedef struct OptionsMenuTab {

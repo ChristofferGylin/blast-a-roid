@@ -110,9 +110,20 @@ void initOptionsMenuTab(OptionsMenuTab* tab, Rectangle* parent, char* heading, C
 
 void initVideoTabData(GameContext* ctx, Rectangle* parent, VideoTabData* tabData) {
     Vector2 position = {parent->x, parent->y};
+    int yOffset = CHECKBOX_SIZE * 2;
     
     initCheckboxWithTitle(&tabData->checkboxes[0], position, "Show FPS", &ctx->options.video.showFps);
 
+    position.y += yOffset;
+
+    initCheckboxWithTitle(&tabData->checkboxes[1], position, "V-Sync", &ctx->options.video.vSync);
+
+    position.y += yOffset;
+
+    tabData->warningTextPosition = position;
+    strcpy(tabData->warningText, "Game restart needed for changes to take effect.");
+    tabData->isWarningTextVisible = false;
+    tabData->ctx = ctx;
 }
 
 void drawOptionsMenu(OptionsMenu* menu) {
@@ -141,6 +152,19 @@ void drawVideoTab(void* userData) {
 
     for (int i = 0; i < NUMBER_OF_VIDEO_OPTIONS; i++) {
         drawCheckboxWithTitle(&data->checkboxes[i]);
+    }
+
+    if (data->isWarningTextVisible) {
+        DrawTextPro(
+            GetFontDefault(),
+            data->warningText,
+            data->warningTextPosition,
+            (Vector2){0,0},
+            0,
+            20,
+            MENU_FONT_SPACING,
+            RAYWHITE
+        );
     }
 }
 
@@ -192,5 +216,11 @@ void updateVideoTab(void* userData) {
 
     for (int i = 0; i < NUMBER_OF_VIDEO_OPTIONS; i++) {
         updateCheckbox(&tabData->checkboxes[i].checkbox);
+    }
+
+    if (tabData->ctx->isVsyncEnabled != tabData->ctx->options.video.vSync) {
+        tabData->isWarningTextVisible = true;
+    } else {
+        tabData->isWarningTextVisible = false;
     }
 }
