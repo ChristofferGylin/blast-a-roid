@@ -18,6 +18,10 @@ typedef struct ControlsTabData {
 
 typedef struct VideoTabData {
     CheckboxWithTitle checkboxes[NUMBER_OF_VIDEO_OPTIONS];
+    char warningText[48];
+    Vector2 warningTextPosition;
+    bool isWarningTextVisible;
+    GameContext* ctx;
 }VideoTabData;
 
 typedef struct OptionsMenuTab {
