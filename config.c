@@ -85,6 +85,13 @@ bool loadConfigFromFile(GameContext* ctx) {
             hasInvalidValues = true;
         }
         
+        if (configFromFile->options.video.isVSyncEnabled == true || configFromFile->options.video.isVSyncEnabled == false) {
+            ctx->options.video.isVSyncEnabled = configFromFile->options.video.isVSyncEnabled;
+        } else {
+            ctx->options.video.isVSyncEnabled = IS_V_SYNC_ENABLED_DEFAULT_VALUE;
+            hasInvalidValues = true;
+        }
+        
         if (configFromFile->debug.onlyOutputOnChange == true ||configFromFile->debug.onlyOutputOnChange == false) {
             ctx->debug.onlyOutputOnChange = configFromFile->debug.onlyOutputOnChange;
         } else {
