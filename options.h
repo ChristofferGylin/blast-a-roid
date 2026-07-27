@@ -15,6 +15,7 @@ typedef struct Options {
     VideoOptions video;
 }Options;
 
+void setUserRefreshRate();
 void resetOptionsToDefault(Options* options);
 
 #endif

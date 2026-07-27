@@ -3,6 +3,7 @@
 #include <string.h>
 #include "raylib.h"
 #include "constants.h"
+#include "config.h"
 #include "mainMenu.h"
 #include "gameContext.h"
 
@@ -21,9 +22,19 @@ int main(int argc, char* argv[]){
         }
     }
 
+    initConfig(&ctx);
+
+    if (ctx.options.video.isVSyncEnabled) {
+        SetConfigFlags(FLAG_VSYNC_HINT);
+    }
+
     InitWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "Blast-A-Roid");
     InitAudioDevice();
-    SetTargetFPS(144);
+
+    if (!ctx.options.video.isVSyncEnabled) {
+        setUserRefreshRate();
+    }
+
     SetRandomSeed(time(NULL));
     srand((unsigned)time(NULL));
     SetExitKey(KEY_NULL);
