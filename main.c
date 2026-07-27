@@ -26,6 +26,9 @@ int main(int argc, char* argv[]){
 
     if (ctx.options.video.vSync) {
         SetConfigFlags(FLAG_VSYNC_HINT);
+        ctx.isVsyncEnabled = true;
+    } else {
+        ctx.isVsyncEnabled = false;
     }
 
     InitWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "Blast-A-Roid");
