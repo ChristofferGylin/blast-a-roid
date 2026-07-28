@@ -57,6 +57,8 @@ typedef struct DropdownMenu {
     int itemCount;
     int selected;
     bool isOpen;
+    Rectangle button;
+    Rectangle downArrow;
     Rectangle rectClosed;
     Rectangle rectOpen;
     Vector2 titlePosition;

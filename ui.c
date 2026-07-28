@@ -11,6 +11,8 @@
 
 static const int CHECKBOX_FONT_SIZE = 18;
 static const int DROPDOWN_MENU_FONT_SIZE = 18;
+static const int DROPDOWN_MENU_DOWN_ARROW_SIZE = 18;
+static const int DROPDOWN_MENU_BUTTON_SIZE = 42;
 
 void drawCheckbox(Checkbox* checkbox) {
     
@@ -204,6 +206,16 @@ void initDropdownMenu(DropdownMenu* menu, DropDownTitles items, int itemsCount, 
     } else {
         menu->rectClosed.height = rect.height;
     }
+
+    menu->button.x = menu->rectClosed.x + menu->rectClosed.width - menu->rectClosed.height;
+    menu->button.y = menu->rectClosed.y;
+    menu->button.width = menu->rectClosed.height;
+    menu->button.height = menu->rectClosed.height;
+
+    menu->downArrow.x = menu->button.x + (ITEM_GAP / 2.0f);
+    menu->downArrow.y = menu->button.y + (ITEM_GAP / 2.0f);
+    menu->downArrow.width = menu->button.width - (ITEM_GAP);
+    menu->downArrow.width = menu->button.height - (ITEM_GAP);
 
     menu->titlePosition.x = menu->rectClosed.x + (ITEM_GAP / 2.0f);
     menu->titlePosition.y = menu->rectClosed.y + (ITEM_GAP / 2.0f);
