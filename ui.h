@@ -4,7 +4,10 @@
 #include <stdbool.h>
 
 #include "raylib.h"
+#include "utils.h"
+
 #define TITLE_MAX_LENGTH 32
+#define DROPDOWN_MAX_LENGTH 32
 
 typedef void (*ButtonCallback)(void* userData);
 typedef void (*DrawSectionContent)(void* userData);
@@ -38,6 +41,16 @@ typedef struct CheckboxWithTitle {
     Vector2 titlePosition;
     char title[32];
 }CheckboxWithTitle;
+
+typedef struct DropdownMenu {
+    char items[DROPDOWN_MAX_LENGTH];
+    int selected;
+    Rectangle rectClosed;
+    Rectangle rectOpen;
+    Callback callback;
+    void* userData;
+}DropdownMenu;
+
 
 typedef struct LayoutSection {
     Rectangle container;
