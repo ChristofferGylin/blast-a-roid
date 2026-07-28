@@ -183,7 +183,7 @@ void drawDownArrow(Vector2 position, float width, Color color) {
     DrawLineEx(line2Start, lineEnd, ARROW_LINE_THICKNESS, color);
 }
 
-void initDropdownMenu(DropdownMenu* menu, DropDownTitles items, int itemsCount, int selected, Rectangle rect, Callback callback, void* userData) {
+void initDropdownMenu(DropdownMenu* menu, DropDownTitles items, int itemsCount, int selected, Rectangle rect, DropDownCallback callback, void* userData) {
     
     menu->callback = callback;
     menu->itemCount = itemsCount;
@@ -339,6 +339,61 @@ bool updateCheckbox(Checkbox* checkbox) {
 
         if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
             *checkbox->state = !*checkbox->state;
+        }
+    }
+
+    return isHovered;
+}
+
+bool updateDropdownMenu(DropdownMenu* menu) {
+    bool isHovered = false;
+    bool isMousePressed = IsMouseButtonPressed(MOUSE_BUTTON_LEFT);
+    Vector2 mousePosition = GetMousePosition();
+
+    if (menu->isOpen) {
+        if (isMousePressed && CheckCollisionPointRec(mousePosition, menu->rectOpen)) {
+            menu->isOpen = false;
+        }
+
+        if (CheckCollisionPointRec(mousePosition, menu->button)) {
+            
+            menu->isHovered = true;
+            isHovered = true;
+            
+            if (isMousePressed) {
+                menu->isOpen = false;
+            }
+        } else {
+            menu->isHovered = false;
+        }
+
+        for (int i = 0; i < menu->itemCount; i++) {
+            if (CheckCollisionPointRec(mousePosition, menu->items[i].rect)) {
+                
+                menu->items[i].isHovered = true;
+                isHovered = true;
+                
+                if (isMousePressed) {
+                    menu->selected = i;
+                    menu->isOpen = false;
+                    menu->callback(i, menu->userData);
+                }
+
+            } else {
+                menu->items[i].isHovered = false;
+            }
+        }
+    } else {
+        if (CheckCollisionPointRec(mousePosition, menu->rectClosed)) {
+            menu->isHovered = true;
+            isHovered = true;
+
+            if (isMousePressed) {
+                menu->isOpen = true;
+            }
+
+        } else {
+            menu->isHovered = false;
         }
     }
 

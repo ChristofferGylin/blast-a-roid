@@ -10,6 +10,7 @@
 #define DROPDOWN_MAX_ITEMS 32
 #define DROPDOWN_MAX_LENGTH 64
 
+typedef void (*DropDownCallback)(int selected, void* userData);
 typedef void (*ButtonCallback)(void* userData);
 typedef void (*DrawSectionContent)(void* userData);
 
@@ -63,7 +64,7 @@ typedef struct DropdownMenu {
     Rectangle rectClosed;
     Rectangle rectOpen;
     Vector2 titlePosition;
-    Callback callback;
+    DropDownCallback callback;
     void* userData;
 }DropdownMenu;
 
@@ -93,12 +94,13 @@ void initBasicLayoutContainer(BasicLayoutContainer* layout, Rectangle area, char
 void initButton(Button* button, Rectangle rect, int fontSize, char* text, ButtonCallback callback, void* userData);
 void initCheckbox(Checkbox* checkbox, bool* state, Vector2 position);
 void initCheckboxWithTitle(CheckboxWithTitle* option, Vector2 position, char* title, bool* state);
-void initDropdownMenu(DropdownMenu* menu, DropDownTitles items, int itemsCount, int selected, Rectangle rect, Callback callback, void* userData);
+void initDropdownMenu(DropdownMenu* menu, DropDownTitles items, int itemsCount, int selected, Rectangle rect, DropDownCallback callback, void* userData);
 void initLayoutSection(LayoutSection* section, Rectangle* parent, Rectangle container, char* heading, DrawSectionContent drawContent, void* userData);
 void onClickBack(void* userData);
 void onClickDecrease(void* userData);
 void onClickIncrease(void* userData);
 void updateButton(Button* button);
 bool updateCheckbox(Checkbox* checkbox);
+bool updateDropdownMenu(DropdownMenu* menu);
 
 #endif
