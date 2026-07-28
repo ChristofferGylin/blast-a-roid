@@ -161,6 +161,28 @@ void initCheckboxWithTitle(CheckboxWithTitle* option, Vector2 position, char* ti
     option->titlePosition = titlePosition;
 }
 
+void drawDownArrow(Vector2 position, float width, Color color) {
+    const int ARROW_LINE_THICKNESS = 2;
+
+    Vector2 line1Start = {
+        position.x,
+        position.y
+    };
+
+    Vector2 line2Start = {
+        position.x + width,
+        position.y
+    };
+
+    Vector2 lineEnd = {
+        position.x + (width / 2.0f),
+        position.y + (width / 2.0f)
+    };
+
+    DrawLineEx(line1Start, lineEnd, ARROW_LINE_THICKNESS, color);
+    DrawLineEx(line2Start, lineEnd, ARROW_LINE_THICKNESS, color);
+}
+
 void initDropdownMenu(DropdownMenu* menu, DropDownTitles items, int itemsCount, int selected, Rectangle rect, Callback callback, void* userData) {
     
     menu->callback = callback;
