@@ -89,6 +89,7 @@ void drawButton(Button* button);
 void drawCheckbox(Checkbox* checkbox);
 void drawCheckboxWithTitle(CheckboxWithTitle* option);
 void drawDownArrow(Vector2 position, float width, Color color);
+void drawDropdownMenu(DropdownMenu* menu);
 void drawLayoutSection(LayoutSection* section);
 void initBasicLayoutContainer(BasicLayoutContainer* layout, Rectangle area, char* heading);
 void initButton(Button* button, Rectangle rect, int fontSize, char* text, ButtonCallback callback, void* userData);

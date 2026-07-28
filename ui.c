@@ -83,6 +83,50 @@ void drawButton(Button* button) {
     DrawTextPro(GetFontDefault(), button->text, button->textPosition, (Vector2){0,0}, 0, button->fontSize, BUTTON_FONT_SPACING, primaryColor);
 }
 
+void drawDropdownMenu(DropdownMenu* menu) {
+    
+    int segments = 10;
+    float roundnessRadius = 3;
+    Vector2 origin = {0, 0};
+    if (menu->isOpen) { 
+        float roundness = getRoundness(menu->rectOpen, roundnessRadius);
+
+        DrawRectangleRounded(menu->rectOpen, roundness, segments, BLACK);
+        DrawRectangleRounded(menu->rectOpen, roundness, segments, primaryColorDimmed30);
+        DrawRectangleRoundedLinesEx(menu->rectOpen, roundness, segments, MENU_LINE_THICKNESS, primaryColor);
+        
+        for (int i = 0; i < menu->itemCount; i++) {
+            
+            DropdownItem* item = &menu->items[i];
+
+            if (item->isHovered) {
+                DrawRectanglePro(item->rect, origin, 0, Fade(WHITE, 0.3f));
+            }
+
+            DrawTextPro(GetFontDefault(), item->title, item->titlePosition, origin, 0, DROPDOWN_MENU_FONT_SIZE, MENU_FONT_SPACING, primaryColor);
+
+            if (i =! menu->itemCount - 1) {
+                DrawLine(
+                    item->rect.x,
+                    item->rect.y + item->rect.height,
+                    item->rect.x + item->rect.width,
+                    item->rect.y + item->rect.height,
+                    primaryColor
+                );
+            }
+        }
+
+    } else {
+        float roundness = getRoundness(menu->rectClosed, roundnessRadius);
+
+        DrawRectangleRounded(menu->rectOpen, roundness, segments, BLACK);
+        DrawRectangleRounded(menu->rectOpen, roundness, segments, primaryColorDimmed30);
+        DrawRectangleRoundedLinesEx(menu->rectClosed, roundness, segments, MENU_LINE_THICKNESS, primaryColor);
+        DrawTextPro(GetFontDefault(), menu->items[menu->selected].title, menu->titlePosition, origin, 0, DROPDOWN_MENU_FONT_SIZE, MENU_FONT_SPACING, primaryColor);
+        drawDownArrow((Vector2){menu->downArrow.x, menu->downArrow.y}, menu->downArrow.width, primaryColor);        
+    }
+}
+
 void drawLayoutSection(LayoutSection* section) {
     Vector2 origin = {0,0};
     
