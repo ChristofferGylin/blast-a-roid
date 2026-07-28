@@ -10,6 +10,7 @@
 #include "uiSizes.h"
 
 static const int CHECKBOX_FONT_SIZE = 18;
+static const int DROPDOWN_MENU_FONT_SIZE = 18;
 
 void drawCheckbox(Checkbox* checkbox) {
     
@@ -156,6 +157,71 @@ void initCheckboxWithTitle(CheckboxWithTitle* option, Vector2 position, char* ti
     initCheckbox(&option->checkbox, state, checkBoxPosition);
     strcpy(option->title, title);
     option->titlePosition = titlePosition;
+}
+
+void initDropdownMenu(DropdownMenu* menu, DropDownTitles items, int itemsCount, int selected, Rectangle rect, Callback callback, void* userData) {
+    
+    menu->callback = callback;
+    menu->itemCount = itemsCount;
+    menu->selected = selected;
+    menu->userData = userData;
+    
+    float widestItemSize = 0;
+    float tallestItemSize = 0;
+
+    const int ITEM_GAP = 4;
+
+    for (int i = 0; i < itemsCount; i++) {
+        
+        strcpy(menu->items[i].title, items[i]);
+        
+        Vector2 itemSize = MeasureTextEx(GetFontDefault(), menu->items[i].title, DROPDOWN_MENU_FONT_SIZE, MENU_FONT_SPACING);
+
+        if (itemSize.x > widestItemSize) widestItemSize = itemSize.x;
+        if (itemSize.y > tallestItemSize) tallestItemSize = itemSize.y;
+    }
+
+    float itemHeight = tallestItemSize + ITEM_GAP;
+    float itemWidth = widestItemSize + ITEM_GAP;
+
+    menu->rectOpen.x = rect.x;
+    menu->rectOpen.y = rect.y;
+    menu->rectOpen.width = itemWidth;
+    menu->rectOpen.height = itemHeight * (itemsCount + 1);
+
+    menu->rectClosed.x = rect.x;
+    menu->rectClosed.y = rect.y;
+
+    if (rect.width == 0) {
+        menu->rectClosed.width = itemWidth;
+    } else {
+        menu->rectClosed.width = rect.width;
+    }
+
+    if (rect.height == 0) {
+        menu->rectClosed.height = itemHeight;
+    } else {
+        menu->rectClosed.height = rect.height;
+    }
+
+    menu->titlePosition.x = menu->rectClosed.x + (ITEM_GAP / 2.0f);
+    menu->titlePosition.y = menu->rectClosed.y + (ITEM_GAP / 2.0f);
+
+    float itemYPosition = rect.y + itemHeight;
+
+    for (int i = 0; i < itemsCount; i++) {
+        menu->items[i].isHovered = false;
+        
+        menu->items[i].rect.x = rect.x; 
+        menu->items[i].rect.y = itemYPosition;
+        menu->items[i].rect.width = itemWidth;
+        menu->items[i].rect.height = itemHeight;
+
+        menu->items[i].titlePosition.x = menu->items[i].rect.x + (ITEM_GAP / 2.0f);
+        menu->items[i].titlePosition.y = menu->items[i].rect.y + (ITEM_GAP / 2.0f);
+        
+        itemYPosition += itemHeight;
+    }
 }
 
 void initLayoutSection(LayoutSection* section, Rectangle* parent, Rectangle container, char* heading, DrawSectionContent drawContent, void* userData) {
