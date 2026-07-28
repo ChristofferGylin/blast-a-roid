@@ -165,6 +165,7 @@ void initDropdownMenu(DropdownMenu* menu, DropDownTitles items, int itemsCount, 
     menu->itemCount = itemsCount;
     menu->selected = selected;
     menu->userData = userData;
+    menu->isOpen = false;
     
     float widestItemSize = 0;
     float tallestItemSize = 0;
@@ -211,7 +212,7 @@ void initDropdownMenu(DropdownMenu* menu, DropDownTitles items, int itemsCount, 
 
     for (int i = 0; i < itemsCount; i++) {
         menu->items[i].isHovered = false;
-        
+
         menu->items[i].rect.x = rect.x; 
         menu->items[i].rect.y = itemYPosition;
         menu->items[i].rect.width = itemWidth;

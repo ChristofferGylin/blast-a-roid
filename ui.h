@@ -56,6 +56,7 @@ typedef struct DropdownMenu {
     DropdownItem items[DROPDOWN_MAX_ITEMS];
     int itemCount;
     int selected;
+    bool isOpen;
     Rectangle rectClosed;
     Rectangle rectOpen;
     Vector2 titlePosition;
