@@ -251,8 +251,12 @@ void initDropdownMenu(DropdownMenu* menu, DropDownTitles items, int itemsCount, 
         if (itemSize.y > tallestItemSize) tallestItemSize = itemSize.y;
     }
 
+    if (widestItemSize < rect.width) widestItemSize = rect.width;
+
     float itemHeight = tallestItemSize + ITEM_GAP;
-    float itemWidth = widestItemSize + ITEM_GAP;
+    float itemWidth =  widestItemSize + ITEM_GAP;
+
+    if (itemWidth < rect.width) itemWidth = rect.width;
 
     menu->rectOpen.x = rect.x;
     menu->rectOpen.y = rect.y;
