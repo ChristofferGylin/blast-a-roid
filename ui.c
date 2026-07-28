@@ -167,6 +167,7 @@ void initDropdownMenu(DropdownMenu* menu, DropDownTitles items, int itemsCount, 
     menu->itemCount = itemsCount;
     menu->selected = selected;
     menu->userData = userData;
+    menu->isHovered = false;
     menu->isOpen = false;
     
     float widestItemSize = 0;
