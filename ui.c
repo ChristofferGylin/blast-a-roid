@@ -84,11 +84,10 @@ void drawButton(Button* button) {
 }
 
 void drawDropdownMenu(DropdownMenu* menu) {
-    
     int segments = 10;
     float roundnessRadius = 3;
     Vector2 origin = {0, 0};
-    if (menu->isOpen) { 
+    if (menu->isOpen) {
         float roundness = getRoundness(menu->rectOpen, roundnessRadius);
 
         DrawRectangleRounded(menu->rectOpen, roundness, segments, BLACK);
@@ -105,7 +104,7 @@ void drawDropdownMenu(DropdownMenu* menu) {
 
             DrawTextPro(GetFontDefault(), item->title, item->titlePosition, origin, 0, DROPDOWN_MENU_FONT_SIZE, MENU_FONT_SPACING, primaryColor);
 
-            if (i =! menu->itemCount - 1) {
+            if (i != menu->itemCount - 1) {
                 DrawLine(
                     item->rect.x,
                     item->rect.y + item->rect.height,
@@ -119,11 +118,11 @@ void drawDropdownMenu(DropdownMenu* menu) {
     } else {
         float roundness = getRoundness(menu->rectClosed, roundnessRadius);
 
-        DrawRectangleRounded(menu->rectOpen, roundness, segments, BLACK);
-        DrawRectangleRounded(menu->rectOpen, roundness, segments, primaryColorDimmed30);
+        DrawRectangleRounded(menu->rectClosed, roundness, segments, BLACK);
+        DrawRectangleRounded(menu->rectClosed, roundness, segments, primaryColorDimmed30);
         DrawRectangleRoundedLinesEx(menu->rectClosed, roundness, segments, MENU_LINE_THICKNESS, primaryColor);
         DrawTextPro(GetFontDefault(), menu->items[menu->selected].title, menu->titlePosition, origin, 0, DROPDOWN_MENU_FONT_SIZE, MENU_FONT_SPACING, primaryColor);
-        drawDownArrow((Vector2){menu->downArrow.x, menu->downArrow.y}, menu->downArrow.width, primaryColor);        
+        drawDownArrow((Vector2){menu->downArrow.x, menu->downArrow.y}, menu->downArrow.width, primaryColor);
     }
 }
 
@@ -286,7 +285,7 @@ void initDropdownMenu(DropdownMenu* menu, DropDownTitles items, int itemsCount, 
     menu->downArrow.x = menu->button.x + (ITEM_GAP / 2.0f);
     menu->downArrow.y = menu->button.y + (ITEM_GAP / 2.0f);
     menu->downArrow.width = menu->button.width - (ITEM_GAP);
-    menu->downArrow.width = menu->button.height - (ITEM_GAP);
+    menu->downArrow.height = menu->button.height - (ITEM_GAP);
 
     menu->titlePosition.x = menu->rectClosed.x + (ITEM_GAP / 2.0f);
     menu->titlePosition.y = menu->rectClosed.y + (ITEM_GAP / 2.0f);

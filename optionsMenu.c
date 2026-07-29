@@ -10,7 +10,7 @@
 #include "ui.h"
 #include "uiSizes.h"
 
-void drawOptionsMenu(OptionsMenu* menu);
+void drawOptionsMenu(OptionsMenu* menu, DropdownMenu* dropdownMenu);
 void drawOptionsMenuTab(OptionsMenu* menu);
 void initOptionsMenu(GameContext* ctx, OptionsMenu* menu);
 void initOptionsMenuTab(OptionsMenuTab* tab, Rectangle* parent, char* heading, Callback drawContent, Callback updateTab, void* userData);
@@ -126,11 +126,12 @@ void initVideoTabData(GameContext* ctx, Rectangle* parent, VideoTabData* tabData
     tabData->ctx = ctx;
 }
 
-void drawOptionsMenu(OptionsMenu* menu) {
+void drawOptionsMenu(OptionsMenu* menu, DropdownMenu* dropdownMenu) {
     BeginDrawing();
         drawBasicLayoutContainer(&menu->layout);
         drawButton(&menu->backButton);
         drawOptionsMenuTab(menu);
+        drawDropdownMenu(dropdownMenu);
     EndDrawing();
 }
 
@@ -168,11 +169,32 @@ void drawVideoTab(void* userData) {
     }
 }
 
+void dropdownCallback(int index, void* userData) {
+    printf("\n%d\n", index);
+}
+
 bool optionsMenu(GameContext* ctx) {
 
     Config initialConfigState = getConfig(ctx);
     
     OptionsMenu menu;
+
+    DropDownTitles dropdownTitles = {
+        "Item 1",
+        "Item 2",
+        "Item 3",
+    };
+
+    DropdownMenu dropdownMenu;
+    initDropdownMenu(
+        &dropdownMenu,
+        dropdownTitles,
+        3,
+        0,
+        (Rectangle){SCREEN_WIDTH / 2.0f, SCREEN_HEIGHT / 2.0f, 100, 0},
+        dropdownCallback,
+        NULL
+    );
 
     initOptionsMenu(ctx, &menu);
 
@@ -180,7 +202,8 @@ bool optionsMenu(GameContext* ctx) {
 
     while (!WindowShouldClose()) {
         updateOptionsMenu(&menu);
-        drawOptionsMenu(&menu);
+        updateDropdownMenu(&dropdownMenu);
+        drawOptionsMenu(&menu, &dropdownMenu);
 
         if (menu.exit) break;
     }
