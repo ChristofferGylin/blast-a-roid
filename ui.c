@@ -10,6 +10,9 @@
 #include "uiSizes.h"
 
 static const int CHECKBOX_FONT_SIZE = 18;
+static const int DROPDOWN_MENU_FONT_SIZE = 18;
+static const int DROPDOWN_MENU_DOWN_ARROW_SIZE = 18;
+static const int DROPDOWN_MENU_BUTTON_SIZE = 42;
 
 void drawCheckbox(Checkbox* checkbox) {
     
@@ -78,6 +81,56 @@ void drawButton(Button* button) {
     DrawRectangleRoundedLinesEx(button->rect, roundness, MENU_ROUNDNESS_SEGMENTS, 2, primaryColor);
 
     DrawTextPro(GetFontDefault(), button->text, button->textPosition, (Vector2){0,0}, 0, button->fontSize, BUTTON_FONT_SPACING, primaryColor);
+}
+
+void drawDropdownMenu(DropdownMenu* menu) {
+    int segments = 10;
+    float roundnessRadius = 3;
+    Vector2 origin = {0, 0};
+    if (menu->isOpen) {
+        float roundness = getRoundness(menu->rectOpen, roundnessRadius);
+
+        DrawRectangleRounded(menu->rectOpen, roundness, segments, BLACK);
+        DrawRectangleRounded(menu->rectOpen, roundness, segments, primaryColorDimmed20);
+        DrawRectangleRoundedLinesEx(menu->rectOpen, roundness, segments, MENU_LINE_THICKNESS, primaryColor);
+        
+        for (int i = 0; i < menu->itemCount; i++) {
+            
+            DropdownItem* item = &menu->items[i];
+
+            if (item->isHovered) {
+                DrawRectanglePro(item->rect, origin, 0, Fade(WHITE, 0.3f));
+            }
+
+            DrawTextPro(GetFontDefault(), item->title, item->titlePosition, origin, 0, DROPDOWN_MENU_FONT_SIZE, MENU_FONT_SPACING, primaryColor);
+
+            if (i != menu->itemCount - 1) {
+                DrawLine(
+                    item->rect.x,
+                    item->rect.y + item->rect.height,
+                    item->rect.x + item->rect.width,
+                    item->rect.y + item->rect.height,
+                    primaryColor
+                );
+            }
+        }
+
+    } else {
+        float roundness = getRoundness(menu->rectClosed, roundnessRadius);
+
+        Color buttonColor = menu->isHovered ? primaryColorDimmed50 : primaryColorDimmed30;
+
+        DrawRectangleRounded(menu->rectClosed, roundness, segments, BLACK);
+        DrawRectangleRounded(menu->rectClosed, roundness, segments, primaryColorDimmed20);
+        DrawRectangleRoundedLinesEx(menu->rectClosed, roundness, segments, MENU_LINE_THICKNESS, primaryColor);
+        BeginScissorMode(menu->button.x, menu->button.y, menu->button.width, menu->button.height);
+            DrawRectangleRounded(menu->rectClosed, roundness, segments, buttonColor);
+        EndScissorMode();
+        BeginScissorMode(menu->textArea.x, menu->textArea.y, menu->textArea.width, menu->textArea.height);
+            DrawTextPro(GetFontDefault(), menu->items[menu->selected].title, menu->titlePosition, origin, 0, DROPDOWN_MENU_FONT_SIZE, MENU_FONT_SPACING, primaryColor);
+        EndScissorMode();
+        drawDownArrow((Vector2){menu->downArrow.x, menu->downArrow.y}, menu->downArrow.width, primaryColor);
+    }
 }
 
 void drawLayoutSection(LayoutSection* section) {
@@ -156,6 +209,112 @@ void initCheckboxWithTitle(CheckboxWithTitle* option, Vector2 position, char* ti
     initCheckbox(&option->checkbox, state, checkBoxPosition);
     strcpy(option->title, title);
     option->titlePosition = titlePosition;
+}
+
+void drawDownArrow(Vector2 position, float width, Color color) {
+    const int ARROW_LINE_THICKNESS = 2;
+
+    Vector2 line1Start = {
+        position.x,
+        position.y
+    };
+
+    Vector2 line2Start = {
+        position.x + width,
+        position.y
+    };
+
+    Vector2 lineEnd = {
+        position.x + (width / 2.0f),
+        position.y + (width / 2.0f)
+    };
+
+    DrawLineEx(line1Start, lineEnd, ARROW_LINE_THICKNESS, color);
+    DrawLineEx(line2Start, lineEnd, ARROW_LINE_THICKNESS, color);
+}
+
+void initDropdownMenu(DropdownMenu* menu, DropDownTitles items, int itemsCount, int selected, Rectangle rect, DropDownCallback callback, void* userData) {
+    
+    menu->callback = callback;
+    menu->itemCount = itemsCount;
+    menu->selected = selected;
+    menu->userData = userData;
+    menu->isHovered = false;
+    menu->isOpen = false;
+    
+    float widestItemSize = 0;
+    float tallestItemSize = 0;
+
+    const int ITEM_GAP = 8;
+
+    for (int i = 0; i < itemsCount; i++) {
+        
+        strcpy(menu->items[i].title, items[i]);
+        
+        Vector2 itemSize = MeasureTextEx(GetFontDefault(), menu->items[i].title, DROPDOWN_MENU_FONT_SIZE, MENU_FONT_SPACING);
+
+        if (itemSize.x > widestItemSize) widestItemSize = itemSize.x;
+        if (itemSize.y > tallestItemSize) tallestItemSize = itemSize.y;
+    }
+
+    float itemHeight = tallestItemSize + ITEM_GAP;
+    float itemWidth =  widestItemSize + itemHeight + (ITEM_GAP);
+
+    if (itemWidth < rect.width) itemWidth = rect.width;
+
+    menu->rectOpen.x = rect.x;
+    menu->rectOpen.y = rect.y;
+    menu->rectOpen.width = itemWidth;
+    menu->rectOpen.height = itemHeight * (itemsCount);
+
+    menu->rectClosed.x = rect.x;
+    menu->rectClosed.y = rect.y;
+
+    if (rect.width == 0) {
+        menu->rectClosed.width = itemWidth;
+    } else {
+        menu->rectClosed.width = rect.width;
+    }
+
+    if (rect.height == 0) {
+        menu->rectClosed.height = itemHeight;
+    } else {
+        menu->rectClosed.height = rect.height;
+    }
+
+    menu->button.x = menu->rectClosed.x + menu->rectClosed.width - menu->rectClosed.height;
+    menu->button.y = menu->rectClosed.y;
+    menu->button.width = menu->rectClosed.height;
+    menu->button.height = menu->rectClosed.height;
+
+    menu->downArrow.width = menu->button.width - (ITEM_GAP);
+    menu->downArrow.height = menu->downArrow.width / 2.0f;
+    menu->downArrow.x = menu->button.x + (ITEM_GAP / 2.0f);
+    menu->downArrow.y = menu->button.y + (menu->button.height / 2.0f) - (menu->downArrow.height / 2.0f);
+
+    menu->titlePosition.x = menu->rectClosed.x + (ITEM_GAP / 2.0f);
+    menu->titlePosition.y = menu->rectClosed.y + (ITEM_GAP / 2.0f);
+
+    menu->textArea.x = menu->rectClosed.x;
+    menu->textArea.y = menu->rectClosed.y;
+    menu->textArea.width = menu->rectClosed.width - menu->button.width;
+    menu->textArea.height = menu->rectClosed.height;
+
+    float itemYPosition = rect.y;
+
+    for (int i = 0; i < itemsCount; i++) {
+        menu->items[i].isHovered = false;
+
+        menu->items[i].rect.x = rect.x; 
+        menu->items[i].rect.y = itemYPosition;
+        menu->items[i].rect.width = itemWidth;
+        menu->items[i].rect.height = itemHeight;
+
+        menu->items[i].titlePosition.x = menu->items[i].rect.x + (ITEM_GAP / 2.0f);
+        menu->items[i].titlePosition.y = menu->items[i].rect.y + (ITEM_GAP / 2.0f);
+        
+        itemYPosition += itemHeight;
+    }
 }
 
 void initLayoutSection(LayoutSection* section, Rectangle* parent, Rectangle container, char* heading, DrawSectionContent drawContent, void* userData) {
@@ -237,6 +396,49 @@ bool updateCheckbox(Checkbox* checkbox) {
 
         if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
             *checkbox->state = !*checkbox->state;
+        }
+    }
+
+    return isHovered;
+}
+
+bool updateDropdownMenu(DropdownMenu* menu) {
+    bool isHovered = false;
+    bool isMousePressed = IsMouseButtonPressed(MOUSE_BUTTON_LEFT);
+    Vector2 mousePosition = GetMousePosition();
+
+    if (menu->isOpen) {
+        if (isMousePressed && !CheckCollisionPointRec(mousePosition, menu->rectOpen)) {
+            menu->isOpen = false;
+        }
+
+        for (int i = 0; i < menu->itemCount; i++) {
+            if (CheckCollisionPointRec(mousePosition, menu->items[i].rect)) {
+                
+                menu->items[i].isHovered = true;
+                isHovered = true;
+                
+                if (isMousePressed) {
+                    menu->selected = i;
+                    menu->isOpen = false;
+                    menu->callback(i, menu->userData);
+                }
+
+            } else {
+                menu->items[i].isHovered = false;
+            }
+        }
+    } else {
+        if (CheckCollisionPointRec(mousePosition, menu->rectClosed)) {
+            menu->isHovered = true;
+            isHovered = true;
+
+            if (isMousePressed) {
+                menu->isOpen = true;
+            }
+
+        } else {
+            menu->isHovered = false;
         }
     }
 

@@ -4,6 +4,7 @@
 #include "raylib.h"
 
 typedef struct Rectangle Rectangle;
+typedef void (*Callback)(void* userData);
 
 typedef struct FloatRange {
     float min;
