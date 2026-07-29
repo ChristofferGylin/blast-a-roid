@@ -265,7 +265,7 @@ void initDropdownMenu(DropdownMenu* menu, DropDownTitles items, int itemsCount, 
     menu->rectOpen.x = rect.x;
     menu->rectOpen.y = rect.y;
     menu->rectOpen.width = itemWidth;
-    menu->rectOpen.height = itemHeight * (itemsCount + 1);
+    menu->rectOpen.height = itemHeight * (itemsCount);
 
     menu->rectClosed.x = rect.x;
     menu->rectClosed.y = rect.y;
@@ -300,7 +300,7 @@ void initDropdownMenu(DropdownMenu* menu, DropDownTitles items, int itemsCount, 
     menu->textArea.width = menu->rectClosed.width - menu->button.width;
     menu->textArea.height = menu->rectClosed.height;
 
-    float itemYPosition = rect.y + itemHeight;
+    float itemYPosition = rect.y;
 
     for (int i = 0; i < itemsCount; i++) {
         menu->items[i].isHovered = false;
