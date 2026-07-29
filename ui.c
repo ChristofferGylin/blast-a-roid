@@ -124,7 +124,7 @@ void drawDropdownMenu(DropdownMenu* menu) {
         DrawRectangleRounded(menu->rectClosed, roundness, segments, primaryColorDimmed20);
         DrawRectangleRoundedLinesEx(menu->rectClosed, roundness, segments, MENU_LINE_THICKNESS, primaryColor);
         BeginScissorMode(menu->button.x, menu->button.y, menu->button.width, menu->button.height);
-            DrawRectangleRounded(menu->rectClosed, roundness, segments, primaryColorDimmed60);
+            DrawRectangleRounded(menu->rectClosed, roundness, segments, buttonColor);
         EndScissorMode();
         BeginScissorMode(menu->textArea.x, menu->textArea.y, menu->textArea.width, menu->textArea.height);
             DrawTextPro(GetFontDefault(), menu->items[menu->selected].title, menu->titlePosition, origin, 0, DROPDOWN_MENU_FONT_SIZE, MENU_FONT_SPACING, primaryColor);
