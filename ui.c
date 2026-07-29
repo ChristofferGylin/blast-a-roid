@@ -238,7 +238,7 @@ void initDropdownMenu(DropdownMenu* menu, DropDownTitles items, int itemsCount, 
     float widestItemSize = 0;
     float tallestItemSize = 0;
 
-    const int ITEM_GAP = 4;
+    const int ITEM_GAP = 8;
 
     for (int i = 0; i < itemsCount; i++) {
         
@@ -250,10 +250,8 @@ void initDropdownMenu(DropdownMenu* menu, DropDownTitles items, int itemsCount, 
         if (itemSize.y > tallestItemSize) tallestItemSize = itemSize.y;
     }
 
-    if (widestItemSize < rect.width) widestItemSize = rect.width;
-
     float itemHeight = tallestItemSize + ITEM_GAP;
-    float itemWidth =  widestItemSize + ITEM_GAP;
+    float itemWidth =  widestItemSize + itemHeight + (ITEM_GAP);
 
     if (itemWidth < rect.width) itemWidth = rect.width;
 

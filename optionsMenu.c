@@ -180,7 +180,7 @@ bool optionsMenu(GameContext* ctx) {
     OptionsMenu menu;
 
     DropDownTitles dropdownTitles = {
-        "Item 1",
+        "Item 1565674636i7456865757",
         "Item 2",
         "Item 3",
     };
@@ -191,7 +191,7 @@ bool optionsMenu(GameContext* ctx) {
         dropdownTitles,
         3,
         0,
-        (Rectangle){SCREEN_WIDTH / 2.0f, SCREEN_HEIGHT / 2.0f, 100, 0},
+        (Rectangle){SCREEN_WIDTH / 2.0f, SCREEN_HEIGHT / 2.0f, 0, 0},
         dropdownCallback,
         NULL
     );
