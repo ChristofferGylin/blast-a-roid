@@ -280,10 +280,10 @@ void initDropdownMenu(DropdownMenu* menu, DropDownTitles items, int itemsCount, 
     menu->button.width = menu->rectClosed.height;
     menu->button.height = menu->rectClosed.height;
 
-    menu->downArrow.x = menu->button.x + (ITEM_GAP / 2.0f);
-    menu->downArrow.y = menu->button.y + (ITEM_GAP / 2.0f);
     menu->downArrow.width = menu->button.width - (ITEM_GAP);
-    menu->downArrow.height = menu->button.height - (ITEM_GAP);
+    menu->downArrow.height = menu->downArrow.width / 2.0f;
+    menu->downArrow.x = menu->button.x + (ITEM_GAP / 2.0f);
+    menu->downArrow.y = menu->button.y + (menu->button.height / 2.0f) - (menu->downArrow.height / 2.0f);
 
     menu->titlePosition.x = menu->rectClosed.x + (ITEM_GAP / 2.0f);
     menu->titlePosition.y = menu->rectClosed.y + (ITEM_GAP / 2.0f);
