@@ -408,20 +408,8 @@ bool updateDropdownMenu(DropdownMenu* menu) {
     Vector2 mousePosition = GetMousePosition();
 
     if (menu->isOpen) {
-        if (isMousePressed && CheckCollisionPointRec(mousePosition, menu->rectOpen)) {
+        if (isMousePressed && !CheckCollisionPointRec(mousePosition, menu->rectOpen)) {
             menu->isOpen = false;
-        }
-
-        if (CheckCollisionPointRec(mousePosition, menu->button)) {
-            
-            menu->isHovered = true;
-            isHovered = true;
-            
-            if (isMousePressed) {
-                menu->isOpen = false;
-            }
-        } else {
-            menu->isHovered = false;
         }
 
         for (int i = 0; i < menu->itemCount; i++) {
