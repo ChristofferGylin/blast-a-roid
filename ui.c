@@ -91,7 +91,7 @@ void drawDropdownMenu(DropdownMenu* menu) {
         float roundness = getRoundness(menu->rectOpen, roundnessRadius);
 
         DrawRectangleRounded(menu->rectOpen, roundness, segments, BLACK);
-        DrawRectangleRounded(menu->rectOpen, roundness, segments, primaryColorDimmed30);
+        DrawRectangleRounded(menu->rectOpen, roundness, segments, primaryColorDimmed20);
         DrawRectangleRoundedLinesEx(menu->rectOpen, roundness, segments, MENU_LINE_THICKNESS, primaryColor);
         
         for (int i = 0; i < menu->itemCount; i++) {
@@ -118,10 +118,17 @@ void drawDropdownMenu(DropdownMenu* menu) {
     } else {
         float roundness = getRoundness(menu->rectClosed, roundnessRadius);
 
+        Color buttonColor = menu->isHovered ? primaryColorDimmed50 : primaryColorDimmed30;
+
         DrawRectangleRounded(menu->rectClosed, roundness, segments, BLACK);
-        DrawRectangleRounded(menu->rectClosed, roundness, segments, primaryColorDimmed30);
+        DrawRectangleRounded(menu->rectClosed, roundness, segments, primaryColorDimmed20);
         DrawRectangleRoundedLinesEx(menu->rectClosed, roundness, segments, MENU_LINE_THICKNESS, primaryColor);
-        DrawTextPro(GetFontDefault(), menu->items[menu->selected].title, menu->titlePosition, origin, 0, DROPDOWN_MENU_FONT_SIZE, MENU_FONT_SPACING, primaryColor);
+        BeginScissorMode(menu->button.x, menu->button.y, menu->button.width, menu->button.height);
+            DrawRectangleRounded(menu->rectClosed, roundness, segments, primaryColorDimmed60);
+        EndScissorMode();
+        BeginScissorMode(menu->textArea.x, menu->textArea.y, menu->textArea.width, menu->textArea.height);
+            DrawTextPro(GetFontDefault(), menu->items[menu->selected].title, menu->titlePosition, origin, 0, DROPDOWN_MENU_FONT_SIZE, MENU_FONT_SPACING, primaryColor);
+        EndScissorMode();
         drawDownArrow((Vector2){menu->downArrow.x, menu->downArrow.y}, menu->downArrow.width, primaryColor);
     }
 }
@@ -287,6 +294,11 @@ void initDropdownMenu(DropdownMenu* menu, DropDownTitles items, int itemsCount, 
 
     menu->titlePosition.x = menu->rectClosed.x + (ITEM_GAP / 2.0f);
     menu->titlePosition.y = menu->rectClosed.y + (ITEM_GAP / 2.0f);
+
+    menu->textArea.x = menu->rectClosed.x;
+    menu->textArea.y = menu->rectClosed.y;
+    menu->textArea.width = menu->rectClosed.width - menu->button.width;
+    menu->textArea.height = menu->rectClosed.height;
 
     float itemYPosition = rect.y + itemHeight;
 

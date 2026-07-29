@@ -63,6 +63,7 @@ typedef struct DropdownMenu {
     Rectangle downArrow;
     Rectangle rectClosed;
     Rectangle rectOpen;
+    Rectangle textArea;
     Vector2 titlePosition;
     DropDownCallback callback;
     void* userData;

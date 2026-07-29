@@ -191,7 +191,7 @@ bool optionsMenu(GameContext* ctx) {
         dropdownTitles,
         3,
         0,
-        (Rectangle){SCREEN_WIDTH / 2.0f, SCREEN_HEIGHT / 2.0f, 0, 0},
+        (Rectangle){SCREEN_WIDTH / 2.0f, SCREEN_HEIGHT / 2.0f, 150, 0},
         dropdownCallback,
         NULL
     );
