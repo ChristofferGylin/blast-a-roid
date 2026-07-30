@@ -18,6 +18,7 @@ void initVideoTabData(GameContext* ctx, Rectangle* parent, VideoTabData* tabData
 void drawVideoTab(void* userData);
 void drawControlsTab(void* userData);
 void drawAudioTab(void* userData);
+void setMonitorCallback(int monitor, void* userData);
 void updateOptionsMenu(OptionsMenu* menu);
 void updateOptionsMenuTab(OptionsMenu* menu);
 void updateAudioTab(void* userData);
@@ -108,10 +109,61 @@ void initOptionsMenuTab(OptionsMenuTab* tab, Rectangle* parent, char* heading, C
     strcpy(tab->layout.heading, heading);
 }
 
+void setMonitorCallback(int monitor, void* userData) {
+    GameContext* ctx = userData;
+    SetWindowMonitor(monitor);
+
+    ctx->options.video.selectecMonitor = monitor;
+    ctx->options.video.isMonitorSetByUser = true;
+
+    if (!ctx->options.video.vSync) {
+        setUserRefreshRate();
+    }
+};
+
 void initVideoTabData(GameContext* ctx, Rectangle* parent, VideoTabData* tabData) {
     Vector2 position = {parent->x, parent->y};
     int yOffset = CHECKBOX_SIZE * 2;
+
+    int monitorCount = GetMonitorCount();
     
+
+    DropDownTitles monitorTitles;
+
+    for (int i = 0; i < monitorCount; i++) {
+        strcpy(monitorTitles[i], GetMonitorName(i));
+    }
+
+    strcpy(tabData->monitorSelect.heading, "Selected monitor");
+
+    tabData->monitorSelect.headingPosition = position;
+
+    Vector2 headingSize = MeasureTextEx(
+        GetFontDefault(),
+        tabData->monitorSelect.heading,
+        OPTIONS_MENU_FONT_SIZE,
+        MENU_FONT_SPACING
+    );
+
+    position.y += headingSize.y + (CHECKBOX_SIZE / 2.0f);
+    
+    initDropdownMenu(
+        &tabData->monitorSelect.dropdown,
+        monitorTitles,
+        monitorCount,
+        GetCurrentMonitor(),
+        (Rectangle){
+            position.x,
+            position.y,
+            200,
+            0,
+        },
+        setMonitorCallback,
+        ctx
+    );
+
+    position.y += yOffset;
+
     initCheckboxWithTitle(&tabData->checkboxes[0], position, "Show FPS", &ctx->options.video.showFps);
 
     position.y += yOffset;
@@ -124,6 +176,8 @@ void initVideoTabData(GameContext* ctx, Rectangle* parent, VideoTabData* tabData
     strcpy(tabData->warningText, "Game restart needed for changes to take effect.");
     tabData->isWarningTextVisible = false;
     tabData->ctx = ctx;
+
+    
 }
 
 void drawOptionsMenu(OptionsMenu* menu) {
@@ -161,11 +215,24 @@ void drawVideoTab(void* userData) {
             data->warningTextPosition,
             (Vector2){0,0},
             0,
-            20,
+            OPTIONS_MENU_FONT_SIZE,
             MENU_FONT_SPACING,
             RAYWHITE
         );
     }
+
+    DrawTextPro(
+        GetFontDefault(),
+        data->monitorSelect.heading,
+        data->monitorSelect.headingPosition,
+        (Vector2){0,0},
+        0,
+        OPTIONS_MENU_FONT_SIZE,
+        MENU_HEADING_FONT_SPACING,
+        primaryColor
+    );
+
+    drawDropdownMenu(&data->monitorSelect.dropdown);
 }
 
 bool optionsMenu(GameContext* ctx) {
@@ -213,6 +280,8 @@ void updateOptionsMenuTab(OptionsMenu* menu) {
 
 void updateVideoTab(void* userData) {
     VideoTabData* tabData = userData;
+
+    updateDropdownMenu(&tabData->monitorSelect.dropdown);
 
     for (int i = 0; i < NUMBER_OF_VIDEO_OPTIONS; i++) {
         updateCheckbox(&tabData->checkboxes[i].checkbox);

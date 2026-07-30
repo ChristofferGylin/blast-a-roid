@@ -23,6 +23,8 @@ bool compareConfig(Config* config1, Config* config2) {
 
     #undef OUTPUT
 
+    if (config1->options.video.isMonitorSetByUser != config2->options.video.isMonitorSetByUser) isIdentical = false;
+    if (config1->options.video.selectecMonitor != config2->options.video.selectecMonitor) isIdentical = false;
     if (config1->options.video.showFps != config2->options.video.showFps) isIdentical = false;
     if (config1->options.video.vSync != config2->options.video.vSync) isIdentical = false;
 
@@ -44,6 +46,8 @@ Config getConfig(GameContext* ctx) {
 
     #undef OUTPUT
 
+    config.options.video.isMonitorSetByUser = ctx->options.video.isMonitorSetByUser;
+    config.options.video.selectecMonitor = ctx->options.video.selectecMonitor;
     config.options.video.showFps = ctx->options.video.showFps;
     config.options.video.vSync = ctx->options.video.vSync;
 
@@ -77,6 +81,20 @@ bool loadConfigFromFile(GameContext* ctx) {
     bool hasInvalidValues = false;
 
     if (configFromFile && size == sizeof(Config)) {
+
+        if (configFromFile->options.video.isMonitorSetByUser == true || configFromFile->options.video.isMonitorSetByUser == false) {
+            ctx->options.video.isMonitorSetByUser = configFromFile->options.video.isMonitorSetByUser;
+        } else {
+            ctx->options.video.isMonitorSetByUser = IS_MONITOR_SET_BY_USER_DEFAULT_VALUE;
+            hasInvalidValues = true;
+        }
+
+        if (configFromFile->options.video.selectecMonitor >= 0 || configFromFile->options.video.selectecMonitor < 99 ) {
+            ctx->options.video.selectecMonitor = configFromFile->options.video.selectecMonitor;
+        } else {
+            ctx->options.video.selectecMonitor = SELECTED_MONITOR_DEFAULT_VALUE;
+            hasInvalidValues = true;
+        }
 
         if (configFromFile->options.video.showFps == true || configFromFile->options.video.showFps == false) {
             ctx->options.video.showFps = configFromFile->options.video.showFps;
