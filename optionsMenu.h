@@ -6,6 +6,8 @@
 
 #define NUMBER_OF_OPTIONS_TABS 3
 #define NUMBER_OF_VIDEO_OPTIONS 2
+#define MONITOR_NAME_MAX_LENGTH 64
+#define MAX_NUMBER_OF_MONITORS 10
 
 typedef struct AudioTabData {
     
@@ -15,11 +17,19 @@ typedef struct ControlsTabData {
     
 }ControlsTabData;
 
+typedef struct MonitorSelect {
+    char heading[MAX_NAME_LENGTH];
+    Vector2 headingPosition;
+    DropdownMenu dropdown;
+}MonitorSelect;
+
+
 typedef struct VideoTabData {
     CheckboxWithTitle checkboxes[NUMBER_OF_VIDEO_OPTIONS];
     char warningText[48];
     Vector2 warningTextPosition;
     bool isWarningTextVisible;
+    MonitorSelect monitorSelect;
     GameContext* ctx;
 }VideoTabData;
 
