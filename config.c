@@ -78,6 +78,20 @@ bool loadConfigFromFile(GameContext* ctx) {
 
     if (configFromFile && size == sizeof(Config)) {
 
+        if (configFromFile->options.video.isMonitorSetByUser == true || configFromFile->options.video.isMonitorSetByUser == false) {
+            ctx->options.video.isMonitorSetByUser = configFromFile->options.video.isMonitorSetByUser;
+        } else {
+            ctx->options.video.isMonitorSetByUser = IS_MONITOR_SET_BY_USER_DEFAULT_VALUE;
+            hasInvalidValues = true;
+        }
+
+        if (configFromFile->options.video.selectecMonitor > 0 || configFromFile->options.video.selectecMonitor > 99 ) {
+            ctx->options.video.selectecMonitor = configFromFile->options.video.selectecMonitor;
+        } else {
+            ctx->options.video.selectecMonitor = SELECTED_MONITOR_DEFAULT_VALUE;
+            hasInvalidValues = true;
+        }
+
         if (configFromFile->options.video.showFps == true || configFromFile->options.video.showFps == false) {
             ctx->options.video.showFps = configFromFile->options.video.showFps;
         } else {
