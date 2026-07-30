@@ -130,7 +130,14 @@ void initVideoTabData(GameContext* ctx, Rectangle* parent, VideoTabData* tabData
 
     tabData->monitorSelect.headingPosition = position;
 
-    position.y += yOffset;
+    Vector2 headingSize = MeasureTextEx(
+        GetFontDefault(),
+        tabData->monitorSelect.heading,
+        OPTIONS_MENU_FONT_SIZE,
+        MENU_FONT_SPACING
+    );
+
+    position.y += headingSize.y + (CHECKBOX_SIZE / 2.0f);
     
     initDropdownMenu(
         &tabData->monitorSelect.dropdown,
@@ -147,7 +154,7 @@ void initVideoTabData(GameContext* ctx, Rectangle* parent, VideoTabData* tabData
         NULL
     );
 
-    position.y += yOffset * 2;
+    position.y += yOffset;
 
     initCheckboxWithTitle(&tabData->checkboxes[0], position, "Show FPS", &ctx->options.video.showFps);
 
@@ -189,8 +196,6 @@ void drawOptionsMenuTab(OptionsMenu* menu) {
 void drawVideoTab(void* userData) {
     VideoTabData* data = userData;
 
-    drawDropdownMenu(&data->monitorSelect.dropdown);
-
     for (int i = 0; i < NUMBER_OF_VIDEO_OPTIONS; i++) {
         drawCheckboxWithTitle(&data->checkboxes[i]);
     }
@@ -202,11 +207,24 @@ void drawVideoTab(void* userData) {
             data->warningTextPosition,
             (Vector2){0,0},
             0,
-            20,
+            OPTIONS_MENU_FONT_SIZE,
             MENU_FONT_SPACING,
             RAYWHITE
         );
     }
+
+    DrawTextPro(
+        GetFontDefault(),
+        data->monitorSelect.heading,
+        data->monitorSelect.headingPosition,
+        (Vector2){0,0},
+        0,
+        OPTIONS_MENU_FONT_SIZE,
+        MENU_HEADING_FONT_SPACING,
+        primaryColor
+    );
+
+    drawDropdownMenu(&data->monitorSelect.dropdown);
 }
 
 bool optionsMenu(GameContext* ctx) {
