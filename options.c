@@ -14,6 +14,8 @@ void setUserRefreshRate() {
 }
 
 void resetOptionsToDefault(Options* options) {
+    options->video.isMonitorSetByUser = false;
+    options->video.selectecMonitor = 0;
     options->video.showFps = SHOW_FPS_DEFAULT_VALUE;
     options->video.vSync = IS_V_SYNC_ENABLED_DEFAULT_VALUE;
 }
