@@ -253,6 +253,8 @@ void updateOptionsMenuTab(OptionsMenu* menu) {
 void updateVideoTab(void* userData) {
     VideoTabData* tabData = userData;
 
+    updateDropdownMenu(&tabData->monitorSelect.dropdown);
+
     for (int i = 0; i < NUMBER_OF_VIDEO_OPTIONS; i++) {
         updateCheckbox(&tabData->checkboxes[i].checkbox);
     }
