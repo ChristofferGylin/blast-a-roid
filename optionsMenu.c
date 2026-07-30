@@ -18,6 +18,7 @@ void initVideoTabData(GameContext* ctx, Rectangle* parent, VideoTabData* tabData
 void drawVideoTab(void* userData);
 void drawControlsTab(void* userData);
 void drawAudioTab(void* userData);
+void setMonitorCallback(int monitor, void* userData);
 void updateOptionsMenu(OptionsMenu* menu);
 void updateOptionsMenuTab(OptionsMenu* menu);
 void updateAudioTab(void* userData);
@@ -108,10 +109,46 @@ void initOptionsMenuTab(OptionsMenuTab* tab, Rectangle* parent, char* heading, C
     strcpy(tab->layout.heading, heading);
 }
 
+void setMonitorCallback(int monitor, void* userData) {
+    SetWindowMonitor(monitor);
+};
+
 void initVideoTabData(GameContext* ctx, Rectangle* parent, VideoTabData* tabData) {
     Vector2 position = {parent->x, parent->y};
     int yOffset = CHECKBOX_SIZE * 2;
+
+    int monitorCount = GetMonitorCount();
     
+
+    DropDownTitles monitorTitles;
+
+    for (int i = 0; i < monitorCount; i++) {
+        strcpy(monitorTitles[i], GetMonitorName(i));
+    }
+
+    strcpy(tabData->monitorSelect.heading, "Selected monitor");
+
+    tabData->monitorSelect.headingPosition = position;
+
+    position.y += yOffset;
+    
+    initDropdownMenu(
+        &tabData->monitorSelect.dropdown,
+        monitorTitles,
+        monitorCount,
+        GetCurrentMonitor(),
+        (Rectangle){
+            position.x,
+            position.y,
+            200,
+            0,
+        },
+        setMonitorCallback,
+        NULL
+    );
+
+    position.y += yOffset * 2;
+
     initCheckboxWithTitle(&tabData->checkboxes[0], position, "Show FPS", &ctx->options.video.showFps);
 
     position.y += yOffset;
@@ -124,6 +161,8 @@ void initVideoTabData(GameContext* ctx, Rectangle* parent, VideoTabData* tabData
     strcpy(tabData->warningText, "Game restart needed for changes to take effect.");
     tabData->isWarningTextVisible = false;
     tabData->ctx = ctx;
+
+    
 }
 
 void drawOptionsMenu(OptionsMenu* menu) {
