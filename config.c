@@ -89,7 +89,7 @@ bool loadConfigFromFile(GameContext* ctx) {
             hasInvalidValues = true;
         }
 
-        if (configFromFile->options.video.selectecMonitor > 0 || configFromFile->options.video.selectecMonitor > 99 ) {
+        if (configFromFile->options.video.selectecMonitor >= 0 || configFromFile->options.video.selectecMonitor < 99 ) {
             ctx->options.video.selectecMonitor = configFromFile->options.video.selectecMonitor;
         } else {
             ctx->options.video.selectecMonitor = SELECTED_MONITOR_DEFAULT_VALUE;

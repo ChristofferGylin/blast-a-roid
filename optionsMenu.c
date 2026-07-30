@@ -110,7 +110,11 @@ void initOptionsMenuTab(OptionsMenuTab* tab, Rectangle* parent, char* heading, C
 }
 
 void setMonitorCallback(int monitor, void* userData) {
+    GameContext* ctx = userData;
     SetWindowMonitor(monitor);
+
+    ctx->options.video.selectecMonitor = monitor;
+    ctx->options.video.isMonitorSetByUser = true;
 };
 
 void initVideoTabData(GameContext* ctx, Rectangle* parent, VideoTabData* tabData) {
@@ -151,7 +155,7 @@ void initVideoTabData(GameContext* ctx, Rectangle* parent, VideoTabData* tabData
             0,
         },
         setMonitorCallback,
-        NULL
+        ctx
     );
 
     position.y += yOffset;
