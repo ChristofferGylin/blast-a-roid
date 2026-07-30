@@ -115,6 +115,10 @@ void setMonitorCallback(int monitor, void* userData) {
 
     ctx->options.video.selectecMonitor = monitor;
     ctx->options.video.isMonitorSetByUser = true;
+
+    if (!ctx->options.video.vSync) {
+        setUserRefreshRate();
+    }
 };
 
 void initVideoTabData(GameContext* ctx, Rectangle* parent, VideoTabData* tabData) {
