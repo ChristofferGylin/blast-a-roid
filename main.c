@@ -34,6 +34,14 @@ int main(int argc, char* argv[]){
     InitWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "Blast-A-Roid");
     InitAudioDevice();
 
+    if (
+        ctx.options.video.isMonitorSetByUser &&
+        ctx.options.video.selectecMonitor >= 0 &&
+        ctx.options.video.selectecMonitor < GetMonitorCount()
+    ) {
+        SetWindowMonitor(ctx.options.video.selectecMonitor);
+    }
+
     if (!ctx.options.video.vSync) {
         setUserRefreshRate();
     }
