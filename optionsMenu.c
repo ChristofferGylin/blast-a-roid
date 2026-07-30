@@ -189,6 +189,8 @@ void drawOptionsMenuTab(OptionsMenu* menu) {
 void drawVideoTab(void* userData) {
     VideoTabData* data = userData;
 
+    drawDropdownMenu(&data->monitorSelect.dropdown);
+
     for (int i = 0; i < NUMBER_OF_VIDEO_OPTIONS; i++) {
         drawCheckboxWithTitle(&data->checkboxes[i]);
     }
