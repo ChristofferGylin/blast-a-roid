@@ -14,6 +14,7 @@ void setUserRefreshRate() {
 }
 
 void resetOptionsToDefault(Options* options) {
+    options->video.fullscreen = FULLSCREEN_DEFAULT_VALUE;
     options->video.isMonitorSetByUser = IS_MONITOR_SET_BY_USER_DEFAULT_VALUE;
     options->video.selectecMonitor = SELECTED_MONITOR_DEFAULT_VALUE;
     options->video.showFps = SHOW_FPS_DEFAULT_VALUE;
