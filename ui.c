@@ -189,12 +189,14 @@ void initButton(Button* button, Rectangle rect, int fontSize, char* text, Button
     button->textPosition.y = button->rect.y + (button->rect.height / 2.0f) - (textSize.y / 2.0f);
 }
 
-void initCheckbox(Checkbox* checkbox, bool* state, Vector2 position) {
+void initCheckbox(Checkbox* checkbox, bool* state, Vector2 position, Callback callback, void* userData) {
     checkbox->position = position;
     checkbox->state = state;
+    checkbox->callback = callback;
+    checkbox->userData = userData;
 }
 
-void initCheckboxWithTitle(CheckboxWithTitle* option, Vector2 position, char* title, bool* state) {
+void initCheckboxWithTitle(CheckboxWithTitle* option, Vector2 position, char* title, bool* state, Callback callback, void* userData) {
     
     int yCenter = position.y + ((MENU_MARGIN + CHECKBOX_SIZE) / 2.0f);
     
@@ -206,7 +208,7 @@ void initCheckboxWithTitle(CheckboxWithTitle* option, Vector2 position, char* ti
         yCenter - (titleSize.y / 2.0f)
     };
     
-    initCheckbox(&option->checkbox, state, checkBoxPosition);
+    initCheckbox(&option->checkbox, state, checkBoxPosition, callback, userData);
     strcpy(option->title, title);
     option->titlePosition = titlePosition;
 }

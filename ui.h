@@ -36,12 +36,16 @@ typedef struct Button {
 typedef struct Checkbox {
     Vector2 position;
     bool* state;
+    Callback callback;
+    void* userData;
 }Checkbox;
 
 typedef struct CheckboxWithTitle {
     Checkbox checkbox;
     Vector2 titlePosition;
     char title[32];
+    Callback callback;
+    void* userData;
 }CheckboxWithTitle;
 
 typedef char DropDownTitles[DROPDOWN_MAX_ITEMS][DROPDOWN_MAX_LENGTH];
