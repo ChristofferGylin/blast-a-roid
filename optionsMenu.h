@@ -5,7 +5,7 @@
 #include "utils.h"
 
 #define NUMBER_OF_OPTIONS_TABS 3
-#define NUMBER_OF_VIDEO_OPTIONS 2
+#define NUMBER_OF_VIDEO_OPTIONS 3
 #define MONITOR_NAME_MAX_LENGTH 64
 #define MAX_NUMBER_OF_MONITORS 10
 static const int OPTIONS_MENU_FONT_SIZE = 18;
@@ -26,7 +26,6 @@ typedef struct MonitorSelect {
 
 
 typedef struct VideoTabData {
-    bool* fullscreen;
     CheckboxWithTitle checkboxes[NUMBER_OF_VIDEO_OPTIONS];
     char warningText[48];
     Vector2 warningTextPosition;

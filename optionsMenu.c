@@ -164,11 +164,15 @@ void initVideoTabData(GameContext* ctx, Rectangle* parent, VideoTabData* tabData
 
     position.y += yOffset;
 
-    initCheckboxWithTitle(&tabData->checkboxes[0], position, "Show FPS", &ctx->options.video.showFps);
+    initCheckboxWithTitle(&tabData->checkboxes[0], position, "Fullscreen", &ctx->options.video.fullscreen);
 
     position.y += yOffset;
 
-    initCheckboxWithTitle(&tabData->checkboxes[1], position, "V-Sync", &ctx->options.video.vSync);
+    initCheckboxWithTitle(&tabData->checkboxes[1], position, "Show FPS", &ctx->options.video.showFps);
+
+    position.y += yOffset;
+
+    initCheckboxWithTitle(&tabData->checkboxes[2], position, "V-Sync", &ctx->options.video.vSync);
 
     position.y += yOffset;
 
@@ -176,7 +180,6 @@ void initVideoTabData(GameContext* ctx, Rectangle* parent, VideoTabData* tabData
     strcpy(tabData->warningText, "Game restart needed for changes to take effect.");
     tabData->isWarningTextVisible = false;
     tabData->ctx = ctx;
-    tabData->fullscreen = &ctx->options.video.fullscreen;
 }
 
 void drawOptionsMenu(OptionsMenu* menu) {
