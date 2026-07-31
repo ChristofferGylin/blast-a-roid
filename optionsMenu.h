@@ -26,6 +26,7 @@ typedef struct MonitorSelect {
 
 
 typedef struct VideoTabData {
+    bool* fullscreen;
     CheckboxWithTitle checkboxes[NUMBER_OF_VIDEO_OPTIONS];
     char warningText[48];
     Vector2 warningTextPosition;

@@ -176,8 +176,7 @@ void initVideoTabData(GameContext* ctx, Rectangle* parent, VideoTabData* tabData
     strcpy(tabData->warningText, "Game restart needed for changes to take effect.");
     tabData->isWarningTextVisible = false;
     tabData->ctx = ctx;
-
-    
+    tabData->fullscreen = &ctx->options.video.fullscreen;
 }
 
 void drawOptionsMenu(OptionsMenu* menu) {
