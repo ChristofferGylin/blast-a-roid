@@ -5,7 +5,6 @@
 #include "config.h"
 #include "constants.h"
 #include "debug.h"
-#include "drawing.h"
 #include "gameContext.h"
 #include "player.h"
 #include "raylib.h"
@@ -27,7 +26,7 @@ void initGameContext(GameContext* ctx, bool debugActive) {
     initSpawning(ctx);
     initHighScores(&ctx->highscores);
     initDebug(&ctx->debug, debugActive);
-    initDrawing(&ctx->drawing);
+    ctx->renderTexture = LoadRenderTexture(SCREEN_WIDTH, SCREEN_HEIGHT);
     ctx->pausTimer = 0;
     ctx->supernova = (Supernova){false, 0.0f, 0.0f};
     ctx->isBlackHoleActive = false;

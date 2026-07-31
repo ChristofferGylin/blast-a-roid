@@ -3,7 +3,6 @@
 
 #include "bonuses.h"
 #include "debug.h"
-#include "drawing.h"
 #include "raylib.h"
 #include "asteroid.h"
 #include "enemies.h"
@@ -90,7 +89,6 @@ typedef struct Supernova {
 typedef struct GameContext {
     Assets assets;
     Debug debug;
-    Drawing drawing;
     ObjectPools objectPools;
     Player player;
     Ship ship;
@@ -101,6 +99,7 @@ typedef struct GameContext {
     Highscores highscores;
     Options options;
     bool isVsyncEnabled;
+    RenderTexture2D renderTexture;
 }GameContext;
 
 void initGameContext(GameContext* ctx, bool debugActive);

@@ -1,6 +1,7 @@
 #include "constants.h"
 #include "colors.h"
 #include "debug.h"
+#include "drawing.h"
 #include "optionsMenu.h"
 #include "raylib.h"
 #include "player.h"
@@ -425,8 +426,7 @@ void mainMenu(GameContext* ctx) {
                 break;
             }
         }
-
-        BeginDrawing();
+        BeginTextureMode(ctx->renderTexture);
             ClearBackground(BLACK);
             Rectangle highscoreContainer = drawLayoutContainers();
             drawHighscores(&ctx->highscores, highscoreContainer, &highlightTimers);
@@ -436,7 +436,8 @@ void mainMenu(GameContext* ctx) {
             } else if (menu.selected != -1 && !isFadeOutComplete) {
                 isFadeOutComplete = fadeOut(&fadeOutValue);
             }
-        EndDrawing();
+        EndTextureMode();
+        renderToScreen(ctx->renderTexture);
     }
 }
 
