@@ -28,6 +28,12 @@ typedef struct Animations {
     Animation ufo3;
 }Animations;
 
+typedef struct Drawing {
+    Rectangle srcRect;
+    Rectangle dstRect;
+    RenderTexture2D renderTexture;
+}Drawing;
+
 typedef struct Samples {
     Sound alarm;
     Sound explosion;
@@ -89,6 +95,7 @@ typedef struct Supernova {
 typedef struct GameContext {
     Assets assets;
     Debug debug;
+    Drawing drawing;
     ObjectPools objectPools;
     Player player;
     Ship ship;
