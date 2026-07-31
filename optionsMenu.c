@@ -18,6 +18,7 @@ void initVideoTabData(GameContext* ctx, Rectangle* parent, VideoTabData* tabData
 void drawVideoTab(void* userData);
 void drawControlsTab(void* userData);
 void drawAudioTab(void* userData);
+void setFullscreenCallback(void* userData);
 void setMonitorCallback(int monitor, void* userData);
 void updateOptionsMenu(OptionsMenu* menu);
 void updateOptionsMenuTab(OptionsMenu* menu);
@@ -109,6 +110,10 @@ void initOptionsMenuTab(OptionsMenuTab* tab, Rectangle* parent, char* heading, C
     strcpy(tab->layout.heading, heading);
 }
 
+void setFullscreenCallback(void* userData) {
+ ToggleFullscreen();
+}
+
 void setMonitorCallback(int monitor, void* userData) {
     GameContext* ctx = userData;
     SetWindowMonitor(monitor);
@@ -164,7 +169,7 @@ void initVideoTabData(GameContext* ctx, Rectangle* parent, VideoTabData* tabData
 
     position.y += yOffset;
 
-    initCheckboxWithTitle(&tabData->checkboxes[0], position, "Fullscreen", &ctx->options.video.fullscreen, NULL, NULL);
+    initCheckboxWithTitle(&tabData->checkboxes[0], position, "Fullscreen", &ctx->options.video.fullscreen, setFullscreenCallback, NULL);
 
     position.y += yOffset;
 
