@@ -111,7 +111,7 @@ void initOptionsMenuTab(OptionsMenuTab* tab, Rectangle* parent, char* heading, C
 }
 
 void setFullscreenCallback(void* userData) {
- ToggleFullscreen();
+ ToggleBorderlessWindowed();
 }
 
 void setMonitorCallback(int monitor, void* userData) {

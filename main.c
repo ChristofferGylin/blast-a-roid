@@ -47,7 +47,7 @@ int main(int argc, char* argv[]){
     }
 
     if (ctx.options.video.fullscreen) {
-        ToggleFullscreen();
+        ToggleBorderlessWindowed();
     }
 
     SetRandomSeed(time(NULL));
