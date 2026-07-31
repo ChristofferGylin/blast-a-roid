@@ -13,6 +13,22 @@
 #include "specials.h"
 #include "ship.h"
 
+void initDrawing(Drawing* drawing) {
+    drawing->renderTexture = LoadRenderTexture(SCREEN_WIDTH, SCREEN_HEIGHT);
+    drawing->srcRect = (Rectangle) {
+        0,
+        0,
+        SCREEN_WIDTH,
+        -SCREEN_HEIGHT
+    };
+    drawing->dstRect = (Rectangle) {
+        0,
+        0,
+        GetScreenWidth(),
+        GetScreenHeight()
+    };
+}
+
 void initSpawning(GameContext* ctx) {
     setSpawnDelay(ctx);
     setNextEnemySpawnTime(ctx);
@@ -26,6 +42,7 @@ void initGameContext(GameContext* ctx, bool debugActive) {
     initSpawning(ctx);
     initHighScores(&ctx->highscores);
     initDebug(&ctx->debug, debugActive);
+    initDrawing(&ctx->drawing);
     ctx->pausTimer = 0;
     ctx->supernova = (Supernova){false, 0.0f, 0.0f};
     ctx->isBlackHoleActive = false;
