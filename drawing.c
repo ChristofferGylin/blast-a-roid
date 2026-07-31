@@ -1,4 +1,6 @@
+#include "constants.h"
 #include "drawing.h"
+#include "raylib.h"
 
 void drawGame(Rectangle src, Rectangle dst, RenderTexture2D renderTexture) {
     BeginDrawing();
@@ -13,4 +15,20 @@ void drawGame(Rectangle src, Rectangle dst, RenderTexture2D renderTexture) {
     );
 
     EndDrawing();
+}
+
+void initDrawing(Drawing* drawing) {
+    drawing->renderTexture = LoadRenderTexture(SCREEN_WIDTH, SCREEN_HEIGHT);
+    drawing->srcRect = (Rectangle) {
+        0,
+        0,
+        SCREEN_WIDTH,
+        -SCREEN_HEIGHT
+    };
+    drawing->dstRect = (Rectangle) {
+        0,
+        0,
+        GetScreenWidth(),
+        GetScreenHeight()
+    };
 }

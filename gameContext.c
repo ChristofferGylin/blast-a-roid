@@ -5,6 +5,7 @@
 #include "config.h"
 #include "constants.h"
 #include "debug.h"
+#include "drawing.h"
 #include "gameContext.h"
 #include "player.h"
 #include "raylib.h"
@@ -12,22 +13,6 @@
 #include "shooting.h"
 #include "specials.h"
 #include "ship.h"
-
-void initDrawing(Drawing* drawing) {
-    drawing->renderTexture = LoadRenderTexture(SCREEN_WIDTH, SCREEN_HEIGHT);
-    drawing->srcRect = (Rectangle) {
-        0,
-        0,
-        SCREEN_WIDTH,
-        -SCREEN_HEIGHT
-    };
-    drawing->dstRect = (Rectangle) {
-        0,
-        0,
-        GetScreenWidth(),
-        GetScreenHeight()
-    };
-}
 
 void initSpawning(GameContext* ctx) {
     setSpawnDelay(ctx);

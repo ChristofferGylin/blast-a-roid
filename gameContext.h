@@ -3,6 +3,7 @@
 
 #include "bonuses.h"
 #include "debug.h"
+#include "drawing.h"
 #include "raylib.h"
 #include "asteroid.h"
 #include "enemies.h"
@@ -27,12 +28,6 @@ typedef struct Animations {
     Animation ufo2;
     Animation ufo3;
 }Animations;
-
-typedef struct Drawing {
-    Rectangle srcRect;
-    Rectangle dstRect;
-    RenderTexture2D renderTexture;
-}Drawing;
 
 typedef struct Samples {
     Sound alarm;
