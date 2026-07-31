@@ -398,7 +398,10 @@ bool updateCheckbox(Checkbox* checkbox) {
 
         if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
             *checkbox->state = !*checkbox->state;
-            checkbox->callback(checkbox->userData);
+
+            if (checkbox->callback != NULL) {
+                checkbox->callback(checkbox->userData);
+            }
         }
     }
 

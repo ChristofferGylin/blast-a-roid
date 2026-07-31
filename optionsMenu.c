@@ -164,15 +164,15 @@ void initVideoTabData(GameContext* ctx, Rectangle* parent, VideoTabData* tabData
 
     position.y += yOffset;
 
-    initCheckboxWithTitle(&tabData->checkboxes[0], position, "Fullscreen", &ctx->options.video.fullscreen);
+    initCheckboxWithTitle(&tabData->checkboxes[0], position, "Fullscreen", &ctx->options.video.fullscreen, NULL, NULL);
 
     position.y += yOffset;
 
-    initCheckboxWithTitle(&tabData->checkboxes[1], position, "Show FPS", &ctx->options.video.showFps);
+    initCheckboxWithTitle(&tabData->checkboxes[1], position, "Show FPS", &ctx->options.video.showFps, NULL, NULL);
 
     position.y += yOffset;
 
-    initCheckboxWithTitle(&tabData->checkboxes[2], position, "V-Sync", &ctx->options.video.vSync);
+    initCheckboxWithTitle(&tabData->checkboxes[2], position, "V-Sync", &ctx->options.video.vSync, NULL, NULL);
 
     position.y += yOffset;
 
