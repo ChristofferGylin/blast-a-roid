@@ -387,7 +387,7 @@ void onClickIncrease(void* userData) {
 }
 
 void updateButton(Button* button) {
-    if (CheckCollisionPointRec(GetMousePosition(), button->rect)) {
+    if (CheckCollisionPointRec(getVirtualMousePosition(), button->rect)) {
         button->isHovered = true;
 
         if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
@@ -405,7 +405,7 @@ bool updateCheckbox(Checkbox* checkbox) {
 
     Rectangle box = {checkbox->position.x, checkbox->position.y, CHECKBOX_SIZE, CHECKBOX_SIZE};
 
-    if (CheckCollisionPointRec(GetMousePosition(), box)) {
+    if (CheckCollisionPointRec(getVirtualMousePosition(), box)) {
         isHovered = true;
 
         if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
@@ -423,7 +423,7 @@ bool updateCheckbox(Checkbox* checkbox) {
 bool updateDropdownMenu(DropdownMenu* menu) {
     bool isHovered = false;
     bool isMousePressed = IsMouseButtonPressed(MOUSE_BUTTON_LEFT);
-    Vector2 mousePosition = GetMousePosition();
+    Vector2 mousePosition = getVirtualMousePosition();
 
     if (menu->isOpen) {
         if (isMousePressed && !CheckCollisionPointRec(mousePosition, menu->rectOpen)) {
