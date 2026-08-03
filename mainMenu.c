@@ -464,7 +464,7 @@ void updateHighlightTimers(GameContext* ctx, HighlightTimers* timers) {
 }
 
 void updateMenu(Menu* menu) {
-    Vector2 mouse = GetMousePosition();
+    Vector2 mouse = getVirtualMousePosition();
 
     for (int i = 0; i < menu->count; i++) {
         MenuItem* item = &menu->items[i];
