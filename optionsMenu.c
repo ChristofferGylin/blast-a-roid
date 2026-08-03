@@ -4,13 +4,14 @@
 #include "colors.h"
 #include "config.h"
 #include "constants.h"
+#include "drawing.h"
 #include "gameContext.h"
 #include "optionsMenu.h"
 #include "raylib.h"
 #include "ui.h"
 #include "uiSizes.h"
 
-void drawOptionsMenu(OptionsMenu* menu);
+void drawOptionsMenu(GameContext* ctx, OptionsMenu* menu);
 void drawOptionsMenuTab(OptionsMenu* menu);
 void initOptionsMenu(GameContext* ctx, OptionsMenu* menu);
 void initOptionsMenuTab(OptionsMenuTab* tab, Rectangle* parent, char* heading, Callback drawContent, Callback updateTab, void* userData);
@@ -111,7 +112,7 @@ void initOptionsMenuTab(OptionsMenuTab* tab, Rectangle* parent, char* heading, C
 }
 
 void setFullscreenCallback(void* userData) {
- ToggleBorderlessWindowed();
+    ToggleBorderlessWindowed();
 }
 
 void setMonitorCallback(int monitor, void* userData) {
@@ -187,12 +188,15 @@ void initVideoTabData(GameContext* ctx, Rectangle* parent, VideoTabData* tabData
     tabData->ctx = ctx;
 }
 
-void drawOptionsMenu(OptionsMenu* menu) {
-    BeginDrawing();
+void drawOptionsMenu(GameContext* ctx, OptionsMenu* menu) {
+    
+    BeginTextureMode(ctx->renderTexture);
         drawBasicLayoutContainer(&menu->layout);
         drawButton(&menu->backButton);
         drawOptionsMenuTab(menu);
-    EndDrawing();
+    EndTextureMode();
+
+    renderToScreen(ctx->renderTexture);
 }
 
 void drawOptionsMenuTab(OptionsMenu* menu) {
@@ -254,7 +258,7 @@ bool optionsMenu(GameContext* ctx) {
 
     while (!WindowShouldClose()) {
         updateOptionsMenu(&menu);
-        drawOptionsMenu(&menu);
+        drawOptionsMenu(ctx, &menu);
 
         if (menu.exit) break;
     }

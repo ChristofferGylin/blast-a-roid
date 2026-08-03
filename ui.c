@@ -235,6 +235,18 @@ void drawDownArrow(Vector2 position, float width, Color color) {
     DrawLineEx(line2Start, lineEnd, ARROW_LINE_THICKNESS, color);
 }
 
+Vector2 getVirtualMousePosition() {
+    Vector2 mousePos = GetMousePosition();
+    Vector2 screenSize = {GetScreenWidth(), GetScreenHeight()};
+
+    Vector2 virtualMousePos = {
+        scaleFloat(0, screenSize.x, 0, SCREEN_WIDTH, mousePos.x),
+        scaleFloat(0, screenSize.y, 0, SCREEN_HEIGHT, mousePos.y),
+    };
+
+    return virtualMousePos;
+}
+
 void initDropdownMenu(DropdownMenu* menu, DropDownTitles items, int itemsCount, int selected, Rectangle rect, DropDownCallback callback, void* userData) {
     
     menu->callback = callback;

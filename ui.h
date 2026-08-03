@@ -96,6 +96,7 @@ void drawCheckboxWithTitle(CheckboxWithTitle* option);
 void drawDownArrow(Vector2 position, float width, Color color);
 void drawDropdownMenu(DropdownMenu* menu);
 void drawLayoutSection(LayoutSection* section);
+Vector2 getVirtualMousePosition();
 void initBasicLayoutContainer(BasicLayoutContainer* layout, Rectangle area, char* heading);
 void initButton(Button* button, Rectangle rect, int fontSize, char* text, ButtonCallback callback, void* userData);
 void initCheckbox(Checkbox* checkbox, bool* state, Vector2 position, Callback callback, void* userData);
