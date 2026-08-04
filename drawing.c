@@ -36,31 +36,15 @@ void initRendering(Rendering* rendering) {
     rendering->renderTexture = LoadRenderTexture(SCREEN_WIDTH, SCREEN_HEIGHT);
 }
 
-void renderToScreen(RenderTexture2D renderTexture) {
+void renderToScreen(Rendering* rendering) {
     BeginDrawing();
-
-        Rectangle src = {
-            0,
-            0,
-            SCREEN_WIDTH,
-            -SCREEN_HEIGHT
-        };
-
-        Rectangle dst = {
-            0,
-            0,
-            GetScreenWidth(),
-            GetScreenHeight()
-        };
-
         DrawTexturePro(
-            renderTexture.texture,
-            src,
-            dst,
+            rendering->renderTexture.texture,
+            rendering->srcRect,
+            rendering->dstRect,
             (Vector2){0,0},
             0,
             WHITE
         );
-
     EndDrawing();
 }

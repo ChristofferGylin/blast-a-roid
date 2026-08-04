@@ -11,6 +11,6 @@ typedef struct Rendering {
 
 Vector2 getRenderSize(float aspectWidth, float aspectHeight);
 void initRendering(Rendering* rendering);
-void renderToScreen(RenderTexture2D renderTexture);
+void renderToScreen(Rendering* rendering);
 
 #endif

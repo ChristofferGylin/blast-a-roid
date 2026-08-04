@@ -426,7 +426,7 @@ void mainMenu(GameContext* ctx) {
                 break;
             }
         }
-        BeginTextureMode(ctx->renderTexture);
+        BeginTextureMode(ctx->rendering.renderTexture);
             ClearBackground(BLACK);
             Rectangle highscoreContainer = drawLayoutContainers();
             drawHighscores(&ctx->highscores, highscoreContainer, &highlightTimers);
@@ -437,7 +437,7 @@ void mainMenu(GameContext* ctx) {
                 isFadeOutComplete = fadeOut(&fadeOutValue);
             }
         EndTextureMode();
-        renderToScreen(ctx->renderTexture);
+        renderToScreen(&ctx->rendering);
     }
 }
 

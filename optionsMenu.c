@@ -190,13 +190,13 @@ void initVideoTabData(GameContext* ctx, Rectangle* parent, VideoTabData* tabData
 
 void drawOptionsMenu(GameContext* ctx, OptionsMenu* menu) {
     
-    BeginTextureMode(ctx->renderTexture);
+    BeginTextureMode(ctx->rendering.renderTexture);
         drawBasicLayoutContainer(&menu->layout);
         drawButton(&menu->backButton);
         drawOptionsMenuTab(menu);
     EndTextureMode();
 
-    renderToScreen(ctx->renderTexture);
+    renderToScreen(&ctx->rendering);
 }
 
 void drawOptionsMenuTab(OptionsMenu* menu) {
