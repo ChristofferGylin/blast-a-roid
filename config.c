@@ -23,6 +23,7 @@ bool compareConfig(Config* config1, Config* config2) {
 
     #undef OUTPUT
 
+    if (config1->options.video.fullscreen != config2->options.video.fullscreen) isIdentical = false;
     if (config1->options.video.isMonitorSetByUser != config2->options.video.isMonitorSetByUser) isIdentical = false;
     if (config1->options.video.selectecMonitor != config2->options.video.selectecMonitor) isIdentical = false;
     if (config1->options.video.showFps != config2->options.video.showFps) isIdentical = false;
