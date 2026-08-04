@@ -9,7 +9,7 @@ typedef struct Rendering {
     RenderTexture2D renderTexture;
 }Rendering;
 
-Vector2 getRenderSize(float aspectWidth, float aspectHeight);
+Rectangle getRenderRect(float aspectWidth, float aspectHeight);
 void initRendering(Rendering* rendering);
 void renderToScreen(Rendering* rendering);
 

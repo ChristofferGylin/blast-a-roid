@@ -2,22 +2,25 @@
 #include "drawing.h"
 #include "raylib.h"
 
-Vector2 getRenderSize(float aspectWidth, float aspectHeight) {
+Rectangle getRenderRect(float aspectWidth, float aspectHeight) {
 
-    Vector2 screenSize = {0};
+    Rectangle rect = {0};
 
     float screenWidth = GetScreenWidth();
     float screenHeight = GetScreenHeight();
 
-    screenSize.y = screenHeight;
-    screenSize.x = (screenHeight * aspectWidth) / aspectHeight;
+    rect.width = (screenHeight * aspectWidth) / aspectHeight;
+    rect.height = screenHeight;
 
-    if (screenSize.x > screenWidth) {
-        screenSize.x = screenWidth;
-        screenSize.y = (screenWidth * aspectHeight) / aspectWidth;
+    if (rect.width > screenWidth) {
+        rect.width = screenWidth;
+        rect.height = (screenWidth * aspectHeight) / aspectWidth;
     }
 
-    return screenSize;
+    rect.x = (screenWidth / 2.0f) - (rect.width / 2.0f);
+    rect.y = (screenHeight / 2.0f) - (rect.height / 2.0f);
+
+    return rect;
 }
 
 void initRendering(Rendering* rendering) {
@@ -26,12 +29,7 @@ void initRendering(Rendering* rendering) {
     rendering->srcRect.width = SCREEN_WIDTH;
     rendering->srcRect.height = -SCREEN_HEIGHT;
 
-    Vector2 renderSize = getRenderSize(16.0f, 9.0f);
-
-    rendering->dstRect.x = 0;
-    rendering->dstRect.y = 0;
-    rendering->dstRect.width = renderSize.x;
-    rendering->dstRect.height = renderSize.y;
+    rendering->dstRect = getRenderRect(16.0f, 9.0f);
 
     rendering->renderTexture = LoadRenderTexture(SCREEN_WIDTH, SCREEN_HEIGHT);
 }
