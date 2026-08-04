@@ -392,6 +392,7 @@ void mainMenu(GameContext* ctx) {
     while (!WindowShouldClose() && isRunning) {
         updateMenu(&menu);
         updateHighlightTimers(ctx, &highlightTimers);
+        updateRendering(&ctx->rendering);
 
         if (isFadeOutComplete) {
             switch (menu.selected) {
