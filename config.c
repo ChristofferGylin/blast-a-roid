@@ -47,6 +47,7 @@ Config getConfig(GameContext* ctx) {
 
     #undef OUTPUT
 
+    config.options.video.fullscreen = ctx->options.video.fullscreen;
     config.options.video.isMonitorSetByUser = ctx->options.video.isMonitorSetByUser;
     config.options.video.selectecMonitor = ctx->options.video.selectecMonitor;
     config.options.video.showFps = ctx->options.video.showFps;
