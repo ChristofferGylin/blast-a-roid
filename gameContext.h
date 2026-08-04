@@ -3,6 +3,7 @@
 
 #include "bonuses.h"
 #include "debug.h"
+#include "drawing.h"
 #include "raylib.h"
 #include "asteroid.h"
 #include "enemies.h"
@@ -99,7 +100,7 @@ typedef struct GameContext {
     Highscores highscores;
     Options options;
     bool isVsyncEnabled;
-    RenderTexture2D renderTexture;
+    Rendering rendering;
 }GameContext;
 
 void initGameContext(GameContext* ctx, bool debugActive);
