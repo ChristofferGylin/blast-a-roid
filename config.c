@@ -84,6 +84,13 @@ bool loadConfigFromFile(GameContext* ctx) {
 
     if (configFromFile && size == sizeof(Config)) {
 
+        if (configFromFile->options.video.fullscreen == true || configFromFile->options.video.fullscreen == false) {
+            ctx->options.video.fullscreen = configFromFile->options.video.fullscreen;
+        } else {
+            ctx->options.video.fullscreen = FULLSCREEN_DEFAULT_VALUE;
+            hasInvalidValues = true;
+        }
+
         if (configFromFile->options.video.isMonitorSetByUser == true || configFromFile->options.video.isMonitorSetByUser == false) {
             ctx->options.video.isMonitorSetByUser = configFromFile->options.video.isMonitorSetByUser;
         } else {
