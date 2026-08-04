@@ -12,5 +12,6 @@ typedef struct Rendering {
 Rectangle getRenderRect(float aspectWidth, float aspectHeight);
 void initRendering(Rendering* rendering);
 void renderToScreen(Rendering* rendering);
+void updateRendering(Rendering* rendering);
 
 #endif

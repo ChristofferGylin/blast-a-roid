@@ -2,6 +2,9 @@
 #include "drawing.h"
 #include "raylib.h"
 
+static const float ASPECT_WIDTH = 16.0f;
+static const float ASPECT_HEIGHT = 9.0f;
+
 Rectangle getRenderRect(float aspectWidth, float aspectHeight) {
 
     Rectangle rect = {0};
@@ -29,7 +32,7 @@ void initRendering(Rendering* rendering) {
     rendering->srcRect.width = SCREEN_WIDTH;
     rendering->srcRect.height = -SCREEN_HEIGHT;
 
-    rendering->dstRect = getRenderRect(16.0f, 9.0f);
+    rendering->dstRect = getRenderRect(ASPECT_WIDTH, ASPECT_HEIGHT);
 
     rendering->renderTexture = LoadRenderTexture(SCREEN_WIDTH, SCREEN_HEIGHT);
 }
@@ -46,4 +49,10 @@ void renderToScreen(Rendering* rendering) {
             WHITE
         );
     EndDrawing();
+}
+
+void updateRendering(Rendering* rendering) {
+    if (IsWindowResized()) {
+        rendering->dstRect = getRenderRect(ASPECT_WIDTH, ASPECT_HEIGHT);
+    }
 }
