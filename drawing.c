@@ -38,6 +38,7 @@ void initRendering(Rendering* rendering) {
 
 void renderToScreen(Rendering* rendering) {
     BeginDrawing();
+        ClearBackground(BLACK);
         DrawTexturePro(
             rendering->renderTexture.texture,
             rendering->srcRect,

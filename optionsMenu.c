@@ -21,7 +21,7 @@ void drawControlsTab(void* userData);
 void drawAudioTab(void* userData);
 void setFullscreenCallback(void* userData);
 void setMonitorCallback(int monitor, void* userData);
-void updateOptionsMenu(OptionsMenu* menu);
+void updateOptionsMenu(GameContext* ctx, OptionsMenu* menu);
 void updateOptionsMenuTab(OptionsMenu* menu);
 void updateAudioTab(void* userData);
 void updateControlsTab(void* userData);
@@ -112,7 +112,10 @@ void initOptionsMenuTab(OptionsMenuTab* tab, Rectangle* parent, char* heading, C
 }
 
 void setFullscreenCallback(void* userData) {
+    Rendering* rendering = userData;
+    
     ToggleBorderlessWindowed();
+    initRendering(rendering);
 }
 
 void setMonitorCallback(int monitor, void* userData) {
@@ -170,7 +173,7 @@ void initVideoTabData(GameContext* ctx, Rectangle* parent, VideoTabData* tabData
 
     position.y += yOffset;
 
-    initCheckboxWithTitle(&tabData->checkboxes[0], position, "Fullscreen", &ctx->options.video.fullscreen, setFullscreenCallback, NULL);
+    initCheckboxWithTitle(&tabData->checkboxes[0], position, "Fullscreen", &ctx->options.video.fullscreen, setFullscreenCallback, &ctx->rendering);
 
     position.y += yOffset;
 
@@ -257,7 +260,7 @@ bool optionsMenu(GameContext* ctx) {
     bool applicationIsRunning = true;
 
     while (!WindowShouldClose()) {
-        updateOptionsMenu(&menu);
+        updateOptionsMenu(ctx, &menu);
         drawOptionsMenu(ctx, &menu);
 
         if (menu.exit) break;
@@ -276,11 +279,15 @@ bool optionsMenu(GameContext* ctx) {
     return applicationIsRunning;
 }
 
-void updateOptionsMenu(OptionsMenu* menu) {
+void updateOptionsMenu(GameContext* ctx, OptionsMenu* menu) {
     updateButton(&menu->backButton);
     updateButton(&menu->prevTabButton);
     updateButton(&menu->nextTabButton);
     updateOptionsMenuTab(menu);
+
+    if (IsWindowResized()) {
+        initRendering(&ctx->rendering);
+    }
 }
 
 void updateOptionsMenuTab(OptionsMenu* menu) {
