@@ -20,6 +20,22 @@ Vector2 getRenderSize(float aspectWidth, float aspectHeight) {
     return screenSize;
 }
 
+void initRendering(Rendering* rendering) {
+    rendering->srcRect.x = 0;
+    rendering->srcRect.y = 0;
+    rendering->srcRect.width = SCREEN_WIDTH;
+    rendering->srcRect.height = -SCREEN_HEIGHT;
+
+    Vector2 renderSize = getRenderSize(16.0f, 9.0f);
+
+    rendering->dstRect.x = 0;
+    rendering->dstRect.y = 0;
+    rendering->dstRect.width = renderSize.x;
+    rendering->dstRect.height = renderSize.y;
+
+    rendering->renderTexture = LoadRenderTexture(SCREEN_WIDTH, SCREEN_HEIGHT);
+}
+
 void renderToScreen(RenderTexture2D renderTexture) {
     BeginDrawing();
 
