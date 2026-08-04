@@ -284,10 +284,7 @@ void updateOptionsMenu(GameContext* ctx, OptionsMenu* menu) {
     updateButton(&menu->prevTabButton);
     updateButton(&menu->nextTabButton);
     updateOptionsMenuTab(menu);
-
-    if (IsWindowResized()) {
-        initRendering(&ctx->rendering);
-    }
+    updateRendering(&ctx->rendering);
 }
 
 void updateOptionsMenuTab(OptionsMenu* menu) {
