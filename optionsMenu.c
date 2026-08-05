@@ -194,6 +194,7 @@ void initVideoTabData(GameContext* ctx, Rectangle* parent, VideoTabData* tabData
 void drawOptionsMenu(GameContext* ctx, OptionsMenu* menu) {
     
     BeginTextureMode(ctx->rendering.renderTexture);
+        ClearBackground(BLACK);
         drawBasicLayoutContainer(&menu->layout);
         drawButton(&menu->backButton);
         drawOptionsMenuTab(menu);
