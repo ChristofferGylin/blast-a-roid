@@ -3,6 +3,7 @@
 #include "colors.h"
 #include "constants.h"
 #include <stdbool.h>
+#include "ui.h"
 #include "utils.h"
 #include <string.h>
 
@@ -112,7 +113,7 @@ void initPausMenu(PausMenu* menu) {
 }
 
 void updatePausMenu(PausMenu* menu) {
-    Vector2 mouse = GetMousePosition();
+    Vector2 mouse = getVirtualMousePosition();
 
     for (int i = 0; i < menu->count; i++) {
         PausMenuItem* item = &menu->items[i];

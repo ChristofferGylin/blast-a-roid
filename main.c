@@ -46,6 +46,10 @@ int main(int argc, char* argv[]){
         setUserRefreshRate();
     }
 
+    if (ctx.options.video.fullscreen) {
+        ToggleBorderlessWindowed();
+    }
+
     SetRandomSeed(time(NULL));
     srand((unsigned)time(NULL));
     SetExitKey(KEY_NULL);

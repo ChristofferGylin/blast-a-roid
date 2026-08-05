@@ -115,7 +115,7 @@ GameResult highscoreScreen(GameContext* ctx) {
                 key = GetCharPressed();
             }
 
-            if (CheckCollisionPointRec(GetMousePosition(), button) && letterCount > 0) {
+            if (CheckCollisionPointRec(getVirtualMousePosition(), button) && letterCount > 0) {
                 isButtonHovered = true;
                 SetMouseCursor(MOUSE_CURSOR_POINTING_HAND);
                 if (IsMouseButtonPressed(0)) {

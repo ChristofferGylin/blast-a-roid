@@ -23,6 +23,7 @@ bool compareConfig(Config* config1, Config* config2) {
 
     #undef OUTPUT
 
+    if (config1->options.video.fullscreen != config2->options.video.fullscreen) isIdentical = false;
     if (config1->options.video.isMonitorSetByUser != config2->options.video.isMonitorSetByUser) isIdentical = false;
     if (config1->options.video.selectecMonitor != config2->options.video.selectecMonitor) isIdentical = false;
     if (config1->options.video.showFps != config2->options.video.showFps) isIdentical = false;
@@ -46,6 +47,7 @@ Config getConfig(GameContext* ctx) {
 
     #undef OUTPUT
 
+    config.options.video.fullscreen = ctx->options.video.fullscreen;
     config.options.video.isMonitorSetByUser = ctx->options.video.isMonitorSetByUser;
     config.options.video.selectecMonitor = ctx->options.video.selectecMonitor;
     config.options.video.showFps = ctx->options.video.showFps;
@@ -81,6 +83,13 @@ bool loadConfigFromFile(GameContext* ctx) {
     bool hasInvalidValues = false;
 
     if (configFromFile && size == sizeof(Config)) {
+
+        if (configFromFile->options.video.fullscreen == true || configFromFile->options.video.fullscreen == false) {
+            ctx->options.video.fullscreen = configFromFile->options.video.fullscreen;
+        } else {
+            ctx->options.video.fullscreen = FULLSCREEN_DEFAULT_VALUE;
+            hasInvalidValues = true;
+        }
 
         if (configFromFile->options.video.isMonitorSetByUser == true || configFromFile->options.video.isMonitorSetByUser == false) {
             ctx->options.video.isMonitorSetByUser = configFromFile->options.video.isMonitorSetByUser;

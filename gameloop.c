@@ -65,6 +65,7 @@ GameResult gameLoop(GameContext* ctx) {
 
     while(!WindowShouldClose())
     {
+        updateRendering(&ctx->rendering);
 
         if (IsKeyPressed(KEY_ESCAPE)) {
             isPaused = !isPaused;
@@ -161,7 +162,7 @@ GameResult gameLoop(GameContext* ctx) {
             updateDebug(ctx);
         }
         
-        BeginDrawing();
+        BeginTextureMode(ctx->rendering.renderTexture);
             ClearBackground(BLACK);
             renderShip(&ctx->ship);
             renderAsteroids(ctx);
@@ -180,7 +181,9 @@ GameResult gameLoop(GameContext* ctx) {
                 isFadeOutComplete = fadeOut(&fadeOutValue);
             }
             
-        EndDrawing();
+        EndTextureMode();
+
+        renderToScreen(&ctx->rendering);
 
         if (exit && isFadeOutComplete) {
             break;

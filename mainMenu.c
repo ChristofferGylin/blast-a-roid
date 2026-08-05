@@ -1,6 +1,7 @@
 #include "constants.h"
 #include "colors.h"
 #include "debug.h"
+#include "drawing.h"
 #include "optionsMenu.h"
 #include "raylib.h"
 #include "player.h"
@@ -391,6 +392,7 @@ void mainMenu(GameContext* ctx) {
     while (!WindowShouldClose() && isRunning) {
         updateMenu(&menu);
         updateHighlightTimers(ctx, &highlightTimers);
+        updateRendering(&ctx->rendering);
 
         if (isFadeOutComplete) {
             switch (menu.selected) {
@@ -425,8 +427,7 @@ void mainMenu(GameContext* ctx) {
                 break;
             }
         }
-
-        BeginDrawing();
+        BeginTextureMode(ctx->rendering.renderTexture);
             ClearBackground(BLACK);
             Rectangle highscoreContainer = drawLayoutContainers();
             drawHighscores(&ctx->highscores, highscoreContainer, &highlightTimers);
@@ -436,7 +437,8 @@ void mainMenu(GameContext* ctx) {
             } else if (menu.selected != -1 && !isFadeOutComplete) {
                 isFadeOutComplete = fadeOut(&fadeOutValue);
             }
-        EndDrawing();
+        EndTextureMode();
+        renderToScreen(&ctx->rendering);
     }
 }
 
@@ -463,7 +465,7 @@ void updateHighlightTimers(GameContext* ctx, HighlightTimers* timers) {
 }
 
 void updateMenu(Menu* menu) {
-    Vector2 mouse = GetMousePosition();
+    Vector2 mouse = getVirtualMousePosition();
 
     for (int i = 0; i < menu->count; i++) {
         MenuItem* item = &menu->items[i];

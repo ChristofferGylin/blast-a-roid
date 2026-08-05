@@ -4,13 +4,14 @@
 #include "colors.h"
 #include "config.h"
 #include "constants.h"
+#include "drawing.h"
 #include "gameContext.h"
 #include "optionsMenu.h"
 #include "raylib.h"
 #include "ui.h"
 #include "uiSizes.h"
 
-void drawOptionsMenu(OptionsMenu* menu);
+void drawOptionsMenu(GameContext* ctx, OptionsMenu* menu);
 void drawOptionsMenuTab(OptionsMenu* menu);
 void initOptionsMenu(GameContext* ctx, OptionsMenu* menu);
 void initOptionsMenuTab(OptionsMenuTab* tab, Rectangle* parent, char* heading, Callback drawContent, Callback updateTab, void* userData);
@@ -18,8 +19,9 @@ void initVideoTabData(GameContext* ctx, Rectangle* parent, VideoTabData* tabData
 void drawVideoTab(void* userData);
 void drawControlsTab(void* userData);
 void drawAudioTab(void* userData);
+void setFullscreenCallback(void* userData);
 void setMonitorCallback(int monitor, void* userData);
-void updateOptionsMenu(OptionsMenu* menu);
+void updateOptionsMenu(GameContext* ctx, OptionsMenu* menu);
 void updateOptionsMenuTab(OptionsMenu* menu);
 void updateAudioTab(void* userData);
 void updateControlsTab(void* userData);
@@ -109,6 +111,13 @@ void initOptionsMenuTab(OptionsMenuTab* tab, Rectangle* parent, char* heading, C
     strcpy(tab->layout.heading, heading);
 }
 
+void setFullscreenCallback(void* userData) {
+    Rendering* rendering = userData;
+    
+    ToggleBorderlessWindowed();
+    initRendering(rendering);
+}
+
 void setMonitorCallback(int monitor, void* userData) {
     GameContext* ctx = userData;
     SetWindowMonitor(monitor);
@@ -164,11 +173,15 @@ void initVideoTabData(GameContext* ctx, Rectangle* parent, VideoTabData* tabData
 
     position.y += yOffset;
 
-    initCheckboxWithTitle(&tabData->checkboxes[0], position, "Show FPS", &ctx->options.video.showFps);
+    initCheckboxWithTitle(&tabData->checkboxes[0], position, "Fullscreen", &ctx->options.video.fullscreen, setFullscreenCallback, &ctx->rendering);
 
     position.y += yOffset;
 
-    initCheckboxWithTitle(&tabData->checkboxes[1], position, "V-Sync", &ctx->options.video.vSync);
+    initCheckboxWithTitle(&tabData->checkboxes[1], position, "Show FPS", &ctx->options.video.showFps, NULL, NULL);
+
+    position.y += yOffset;
+
+    initCheckboxWithTitle(&tabData->checkboxes[2], position, "V-Sync", &ctx->options.video.vSync, NULL, NULL);
 
     position.y += yOffset;
 
@@ -176,16 +189,18 @@ void initVideoTabData(GameContext* ctx, Rectangle* parent, VideoTabData* tabData
     strcpy(tabData->warningText, "Game restart needed for changes to take effect.");
     tabData->isWarningTextVisible = false;
     tabData->ctx = ctx;
-
-    
 }
 
-void drawOptionsMenu(OptionsMenu* menu) {
-    BeginDrawing();
+void drawOptionsMenu(GameContext* ctx, OptionsMenu* menu) {
+    
+    BeginTextureMode(ctx->rendering.renderTexture);
+        ClearBackground(BLACK);
         drawBasicLayoutContainer(&menu->layout);
         drawButton(&menu->backButton);
         drawOptionsMenuTab(menu);
-    EndDrawing();
+    EndTextureMode();
+
+    renderToScreen(&ctx->rendering);
 }
 
 void drawOptionsMenuTab(OptionsMenu* menu) {
@@ -246,8 +261,8 @@ bool optionsMenu(GameContext* ctx) {
     bool applicationIsRunning = true;
 
     while (!WindowShouldClose()) {
-        updateOptionsMenu(&menu);
-        drawOptionsMenu(&menu);
+        updateOptionsMenu(ctx, &menu);
+        drawOptionsMenu(ctx, &menu);
 
         if (menu.exit) break;
     }
@@ -265,11 +280,12 @@ bool optionsMenu(GameContext* ctx) {
     return applicationIsRunning;
 }
 
-void updateOptionsMenu(OptionsMenu* menu) {
+void updateOptionsMenu(GameContext* ctx, OptionsMenu* menu) {
     updateButton(&menu->backButton);
     updateButton(&menu->prevTabButton);
     updateButton(&menu->nextTabButton);
     updateOptionsMenuTab(menu);
+    updateRendering(&ctx->rendering);
 }
 
 void updateOptionsMenuTab(OptionsMenu* menu) {

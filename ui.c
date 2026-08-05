@@ -189,12 +189,14 @@ void initButton(Button* button, Rectangle rect, int fontSize, char* text, Button
     button->textPosition.y = button->rect.y + (button->rect.height / 2.0f) - (textSize.y / 2.0f);
 }
 
-void initCheckbox(Checkbox* checkbox, bool* state, Vector2 position) {
+void initCheckbox(Checkbox* checkbox, bool* state, Vector2 position, Callback callback, void* userData) {
     checkbox->position = position;
     checkbox->state = state;
+    checkbox->callback = callback;
+    checkbox->userData = userData;
 }
 
-void initCheckboxWithTitle(CheckboxWithTitle* option, Vector2 position, char* title, bool* state) {
+void initCheckboxWithTitle(CheckboxWithTitle* option, Vector2 position, char* title, bool* state, Callback callback, void* userData) {
     
     int yCenter = position.y + ((MENU_MARGIN + CHECKBOX_SIZE) / 2.0f);
     
@@ -206,7 +208,7 @@ void initCheckboxWithTitle(CheckboxWithTitle* option, Vector2 position, char* ti
         yCenter - (titleSize.y / 2.0f)
     };
     
-    initCheckbox(&option->checkbox, state, checkBoxPosition);
+    initCheckbox(&option->checkbox, state, checkBoxPosition, callback, userData);
     strcpy(option->title, title);
     option->titlePosition = titlePosition;
 }
@@ -231,6 +233,18 @@ void drawDownArrow(Vector2 position, float width, Color color) {
 
     DrawLineEx(line1Start, lineEnd, ARROW_LINE_THICKNESS, color);
     DrawLineEx(line2Start, lineEnd, ARROW_LINE_THICKNESS, color);
+}
+
+Vector2 getVirtualMousePosition() {
+    Vector2 mousePos = GetMousePosition();
+    Vector2 screenSize = {GetScreenWidth(), GetScreenHeight()};
+
+    Vector2 virtualMousePos = {
+        scaleFloat(0, screenSize.x, 0, SCREEN_WIDTH, mousePos.x),
+        scaleFloat(0, screenSize.y, 0, SCREEN_HEIGHT, mousePos.y),
+    };
+
+    return virtualMousePos;
 }
 
 void initDropdownMenu(DropdownMenu* menu, DropDownTitles items, int itemsCount, int selected, Rectangle rect, DropDownCallback callback, void* userData) {
@@ -373,7 +387,7 @@ void onClickIncrease(void* userData) {
 }
 
 void updateButton(Button* button) {
-    if (CheckCollisionPointRec(GetMousePosition(), button->rect)) {
+    if (CheckCollisionPointRec(getVirtualMousePosition(), button->rect)) {
         button->isHovered = true;
 
         if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
@@ -391,11 +405,15 @@ bool updateCheckbox(Checkbox* checkbox) {
 
     Rectangle box = {checkbox->position.x, checkbox->position.y, CHECKBOX_SIZE, CHECKBOX_SIZE};
 
-    if (CheckCollisionPointRec(GetMousePosition(), box)) {
+    if (CheckCollisionPointRec(getVirtualMousePosition(), box)) {
         isHovered = true;
 
         if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
             *checkbox->state = !*checkbox->state;
+
+            if (checkbox->callback != NULL) {
+                checkbox->callback(checkbox->userData);
+            }
         }
     }
 
@@ -405,7 +423,7 @@ bool updateCheckbox(Checkbox* checkbox) {
 bool updateDropdownMenu(DropdownMenu* menu) {
     bool isHovered = false;
     bool isMousePressed = IsMouseButtonPressed(MOUSE_BUTTON_LEFT);
-    Vector2 mousePosition = GetMousePosition();
+    Vector2 mousePosition = getVirtualMousePosition();
 
     if (menu->isOpen) {
         if (isMousePressed && !CheckCollisionPointRec(mousePosition, menu->rectOpen)) {

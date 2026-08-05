@@ -191,7 +191,7 @@ void initObjectCountSection(GameContext* ctx, ObjectCountSection* section, Recta
     #define OUTPUT(name)                                                                                                        \
         do {                                                                                                                    \
             Vector2 optionPosition = {0, yPosition};                                                                            \
-            initCheckboxWithTitle(&section->options[index], optionPosition, #name, &ctx->debug.poolCount.name.showInDebug);     \
+            initCheckboxWithTitle(&section->options[index], optionPosition, #name, &ctx->debug.poolCount.name.showInDebug, NULL, NULL);     \
             yPosition += MENU_MARGIN + CHECKBOX_SIZE;                                                                           \
             index++;                                                                                                            \
         } while (0);                                                                                                
@@ -278,7 +278,7 @@ void initDebugOutputOptionsSection(GameContext* ctx, DebugOutputOptionsSection* 
     checkboxPosition.x = contentArea->x;
     checkboxPosition.y = decreaseButtonRect.y + SIZE + GAP;
 
-    initCheckboxWithTitle(&section->options.outputOnChangeCheckbox, checkboxPosition, "Only output on change", &ctx->debug.onlyOutputOnChange);
+    initCheckboxWithTitle(&section->options.outputOnChangeCheckbox, checkboxPosition, "Only output on change", &ctx->debug.onlyOutputOnChange, NULL, NULL);
     initButton(&section->options.decreaseButton, decreaseButtonRect, BUTTON_FONT_SIZE, "-", onClickDecrease, section->options.outputFrequency);
     initButton(&section->options.increaseButton, increaseButtonRect, BUTTON_FONT_SIZE, "+", onClickIncrease, section->options.outputFrequency);
 }

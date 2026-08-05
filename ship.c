@@ -57,11 +57,11 @@ void initShip(GameContext* ctx, Ship* ship) {
     ship->timeDestroyed = 0.0f;
     ship->timeSpawned = GetTime();
     ship->timeRotateActivated = 0.0f;
-    ship->position.x = GetScreenWidth() / 2;
-    ship->position.y = GetScreenHeight() / 2;
-    ship->rotation = 0;
-    ship->velocity.x = 0;
-    ship->velocity.y = 0;
+    ship->position.x = SCREEN_WIDTH / 2.0f;
+    ship->position.y = SCREEN_HEIGHT / 2.0f;
+    ship->rotation = 0.0f;
+    ship->velocity.x = 0.0f;
+    ship->velocity.y = 0.0f;
 
     DestroyedShipPiece destroyedBase = {
         (Vector2){0, 0},
@@ -174,8 +174,8 @@ void resetShip(Ship* ship) {
     ship->isShieldActive = false;
     ship->isRotateActive = false;
     ship->destroyed = false;
-    ship->position.x = GetScreenWidth() / 2;
-    ship->position.y = GetScreenHeight() / 2;
+    ship->position.x = SCREEN_WIDTH / 2.0f;
+    ship->position.y = SCREEN_HEIGHT / 2.0f;
     ship->rotation = 0;
     ship->velocity.x = 0;
     ship->velocity.y = 0;
