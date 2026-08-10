@@ -1,8 +1,8 @@
 #ifndef GAMEOVER_H
 #define GAMEOVER_H
 
-typedef struct Player Player;
+typedef struct GameContext GameContext;
 
-void gameOver(Player* player);
+void gameOver(GameContext* ctx);
 
 #endif

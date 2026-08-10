@@ -1,4 +1,5 @@
 #include "colors.h"
+#include "drawing.h"
 #include "raylib.h"
 #include <stdio.h>
 #include <stdlib.h>
@@ -91,6 +92,7 @@ GameResult highscoreScreen(GameContext* ctx) {
 
     while(!WindowShouldClose())
     {
+        updateRendering(&ctx->rendering);
 
         if (!exit) {
 
@@ -161,7 +163,7 @@ GameResult highscoreScreen(GameContext* ctx) {
         Color buttonBorderColor = primaryColor;
         Color buttonTextColor = primaryColor;
 
-        BeginDrawing();
+        BeginTextureMode(ctx->rendering.renderTexture);
             ClearBackground(BLACK);
             DrawTextPro(GetFontDefault(), title, titlePosition, titleOrigin, 0, titleFontSize, titleFontSpacing, primaryColor);
             DrawTextPro(GetFontDefault(), text1, text1Position, text1Origin, 0, textFontSize, textFontSpacing, primaryColor);
@@ -186,7 +188,9 @@ GameResult highscoreScreen(GameContext* ctx) {
                 isFadeOutComplete = fadeOut(&fadeOutValue);
             }
 
-        EndDrawing();
+        EndTextureMode();
+
+        renderToScreen(&ctx->rendering);
 
         if (exit && isFadeOutComplete) break;
     }
