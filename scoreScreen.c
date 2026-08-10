@@ -156,6 +156,8 @@ void scoreScreen(GameContext* ctx) {
 
     while (!WindowShouldClose()) {
 
+        updateRendering(&ctx->rendering);
+
         if (isFadeInComplete && !isWaiting) {
 
             if (!isCountUpFinished) {
@@ -212,7 +214,7 @@ void scoreScreen(GameContext* ctx) {
 
         int yOffset = (SCREEN_HEIGHT / 2) - (TEXT_BLOCK_HEIGHT / 2);
 
-        BeginDrawing();
+        BeginTextureMode(ctx->rendering.renderTexture);
             ClearBackground(BLACK);
             DrawTextPro(GetFontDefault(), headingText, headingPosition, headingOrigin, 0, HEADING_FONT_SIZE, FONT_SPACING, primaryColor);
             yOffset = renderScoreLine(ctx, displayBonus, "BONUS:", yOffset, true, currentMultiplier, bonusCountUpState.isZeroPadded);
@@ -225,7 +227,9 @@ void scoreScreen(GameContext* ctx) {
                 isFadeOutComplete = fadeOut(&fadeOutValue);
             }
 
-        EndDrawing();
+        EndTextureMode();
+
+        renderToScreen(&ctx->rendering);
 
         if (exit && isFadeOutComplete) break;
     }
