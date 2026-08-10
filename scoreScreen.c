@@ -1,4 +1,5 @@
 #include "colors.h"
+#include "drawing.h"
 #include "raylib.h"
 #include <stdbool.h>
 #include "fader.h"
