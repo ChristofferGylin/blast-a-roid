@@ -120,7 +120,14 @@ void setFullscreenCallback(void* userData) {
 
 void setMonitorCallback(int monitor, void* userData) {
     GameContext* ctx = userData;
-    SetWindowMonitor(monitor);
+
+    if (ctx->options.video.fullscreen) {
+        setFullscreenCallback(ctx);
+        SetWindowMonitor(monitor);
+        setFullscreenCallback(ctx);
+    } else {
+        SetWindowMonitor(monitor);
+    }
 
     ctx->options.video.selectecMonitor = monitor;
     ctx->options.video.isMonitorSetByUser = true;
