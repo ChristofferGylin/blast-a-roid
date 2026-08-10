@@ -1,4 +1,6 @@
 #include "colors.h"
+#include "drawing.h"
+#include "gameContext.h"
 #include "raylib.h"
 #include <stdio.h>
 #include <stdlib.h>
@@ -7,7 +9,9 @@
 #include "player.h"
 #include "constants.h"
 
-void gameOver(Player* player) {
+void gameOver(GameContext* ctx) {
+
+    Player* player = &ctx->player;
 
     float fadeInValue = 1.0f;
     float fadeOutValue = 0.0f;
@@ -26,13 +30,16 @@ void gameOver(Player* player) {
     Vector2 textOrigin = {textSize.x / 2, textSize.y / 2}; 
     while(!WindowShouldClose())
     {
+
+        updateRendering(&ctx->rendering);
+
         if (isFadeInComplete) {
             if (timer + waitTime <= GetTime()) {
                 exit = true;
             }
         }
 
-        BeginDrawing();
+        BeginTextureMode(ctx->rendering.renderTexture);
             ClearBackground(BLACK);
             DrawTextPro(GetFontDefault(), "GAME OVER", textPosition, textOrigin, 0, fontSize, fontSpacing, primaryColor);
             
@@ -42,7 +49,9 @@ void gameOver(Player* player) {
                 isFadeOutComplete = fadeOut(&fadeOutValue);
             }
 
-        EndDrawing();
+        EndTextureMode();
+
+        renderToScreen(&ctx->rendering);
 
         if (exit && isFadeOutComplete) break;
     }

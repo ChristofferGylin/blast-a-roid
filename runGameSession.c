@@ -23,7 +23,7 @@ bool runGameSession(GameContext* ctx) {
         }
 
         if (ctx->player.lives < 0) {
-            gameOver(&ctx->player);
+            gameOver(ctx);
             result = highscoreScreen(ctx);
 
             if (result == EXIT_TO_DESKTOP) {
