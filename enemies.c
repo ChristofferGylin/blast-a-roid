@@ -120,14 +120,8 @@ void handleEnemiesCollisions(GameContext* ctx) {
                 knockbackByImpact(ship->position, &ship->velocity, enemy->position, enemy->velocity);
                 playSoundPositioned(ctx->assets.samples.metalPlink, enemy->position.x);
             } else {
-                newExplosion(ctx, enemy->position);
-                dropNewBonus(ctx, &enemyObject->enemy);
-
-                ctx->player.score += enemy->score;
-                ctx->player.levelBonus += enemy->score * ctx->player.timeBonusMultiplier; 
-
-                enemyObject->active = false;
-                enemyPoolHasChanges = true;
+                knockbackByImpact(enemy->position, &enemy->velocity, ship->position, ship->velocity);
+                // TODO: Play thud knockback sound 
             }
         } else if (CheckCollisionCircles(enemy->position, enemy->size / 2, ship->position, SHIP_SIZE / 2)) {
             
