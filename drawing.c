@@ -35,6 +35,7 @@ void initRendering(Rendering* rendering) {
     rendering->dstRect = getRenderRect(ASPECT_WIDTH, ASPECT_HEIGHT);
 
     rendering->renderTexture = LoadRenderTexture(SCREEN_WIDTH, SCREEN_HEIGHT);
+    SetTextureFilter(rendering->renderTexture.texture, TEXTURE_FILTER_POINT);
 }
 
 void renderToScreen(Rendering* rendering) {
