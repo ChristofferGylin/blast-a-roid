@@ -88,6 +88,21 @@ void loadAssets(GameContext* ctx) {
     ctx->assets.sprites.triShotIcon = LoadTexture("./assets/sprites/tri_shot_icon.png");
 }
 
+void setTextureFilters(GameContext* ctx) {
+    SetTextureFilter(ctx->assets.sprites.asteroid, TEXTURE_FILTER_POINT);
+    SetTextureFilter(ctx->assets.sprites.blueGem, TEXTURE_FILTER_POINT);
+    SetTextureFilter(ctx->assets.sprites.destroyedShip1, TEXTURE_FILTER_POINT);
+    SetTextureFilter(ctx->assets.sprites.destroyedShip2, TEXTURE_FILTER_POINT);
+    SetTextureFilter(ctx->assets.sprites.destroyedShip3, TEXTURE_FILTER_POINT);
+    SetTextureFilter(ctx->assets.sprites.enemyShot1, TEXTURE_FILTER_POINT);
+    SetTextureFilter(ctx->assets.sprites.lockIcon, TEXTURE_FILTER_POINT);
+    SetTextureFilter(ctx->assets.sprites.longShotIcon, TEXTURE_FILTER_POINT);
+    SetTextureFilter(ctx->assets.sprites.ship, TEXTURE_FILTER_POINT);
+    SetTextureFilter(ctx->assets.sprites.shot, TEXTURE_FILTER_POINT);
+    SetTextureFilter(ctx->assets.sprites.stopIcon, TEXTURE_FILTER_POINT);
+    SetTextureFilter(ctx->assets.sprites.triShotIcon, TEXTURE_FILTER_POINT);
+}
+
 void unloadAssets(GameContext* ctx) {
     unloadAnimation(&ctx->assets.animations.blackHole);
     unloadAnimation(&ctx->assets.animations.comet);
@@ -124,19 +139,4 @@ void unloadAssets(GameContext* ctx) {
     UnloadTexture(ctx->assets.sprites.shot);
     UnloadTexture(ctx->assets.sprites.stopIcon);
     UnloadTexture(ctx->assets.sprites.triShotIcon);
-}
-
-void setTextureFilters(GameContext* ctx) {
-    SetTextureFilter(ctx->assets.sprites.asteroid, TEXTURE_FILTER_POINT);
-    SetTextureFilter(ctx->assets.sprites.blueGem, TEXTURE_FILTER_POINT);
-    SetTextureFilter(ctx->assets.sprites.destroyedShip1, TEXTURE_FILTER_POINT);
-    SetTextureFilter(ctx->assets.sprites.destroyedShip2, TEXTURE_FILTER_POINT);
-    SetTextureFilter(ctx->assets.sprites.destroyedShip3, TEXTURE_FILTER_POINT);
-    SetTextureFilter(ctx->assets.sprites.enemyShot1, TEXTURE_FILTER_POINT);
-    SetTextureFilter(ctx->assets.sprites.lockIcon, TEXTURE_FILTER_POINT);
-    SetTextureFilter(ctx->assets.sprites.longShotIcon, TEXTURE_FILTER_POINT);
-    SetTextureFilter(ctx->assets.sprites.ship, TEXTURE_FILTER_POINT);
-    SetTextureFilter(ctx->assets.sprites.shot, TEXTURE_FILTER_POINT);
-    SetTextureFilter(ctx->assets.sprites.stopIcon, TEXTURE_FILTER_POINT);
-    SetTextureFilter(ctx->assets.sprites.triShotIcon, TEXTURE_FILTER_POINT);
 }
