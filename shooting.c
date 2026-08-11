@@ -96,7 +96,7 @@ void handleShooting(GameContext* ctx) {
 
     const int SHOT_COOLDOWN_TIME = 100;
     const int AUTO_BURST_COOLDOWN_TIME = 400;
-    const int SHOT_LIFE_TIME = 800;
+    const int SHOT_LIFE_TIME = 750;
     const int SHOT_SIZE = 6;
     const int SHOT_VELOCITY = 450;
     const int MAX_SHOTS_BURST = 6;
