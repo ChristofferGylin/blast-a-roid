@@ -17,6 +17,7 @@ static const int GEM_RENDER_SIZE = 32;
 static const int GEM_COLLISION_SIZE = 24;
 static const int EXPLOSION_SIZE = 32;
 static const int SHIP_SIZE = 32;
+static const int SHIP_RENDER_SIZE = 36;
 static const int SHIELD_SIZE = 48;
 static const int METAL_ASTEROID_SIZE = 32;
 static const int MULTIPLIER_COLLISION_SIZE = 18;
