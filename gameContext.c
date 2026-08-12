@@ -52,6 +52,7 @@ void loadAssets(GameContext* ctx) {
     initAnimation(&ctx->assets.animations.explosion, "./assets/animations/explosion.png", "./assets/animations/explosion.json", 24.0f, (Vector2){EXPLOSION_SIZE, EXPLOSION_SIZE}, false);
     initAnimation(&ctx->assets.animations.metalAsteroid, "./assets/animations/metal_asteroid.png", "./assets/animations/metal_asteroid.json", 24.0f, (Vector2){METAL_ASTEROID_SIZE, METAL_ASTEROID_SIZE}, true);
     initAnimation(&ctx->assets.animations.multiplier, "./assets/animations/multiplier.png", "./assets/animations/multiplier.json", 24.0f, (Vector2){MULTIPLIER_RENDER_SIZE, MULTIPLIER_RENDER_SIZE}, true);
+    initAnimation(&ctx->assets.animations.ship, "./assets/animations/ship.png", "./assets/animations/ship.json", 30.0f, (Vector2){SHIP_RENDER_SIZE, SHIP_RENDER_SIZE}, true);
     initAnimation(&ctx->assets.animations.spikyAsteroid, "./assets/animations/spiky_asteroid.png", "./assets/animations/spiky_asteroid.json", 30.0f, (Vector2){SPIKY_ASTEROID_SIZE, SPIKY_ASTEROID_SIZE}, true);
     initAnimation(&ctx->assets.animations.supernova, "./assets/animations/supernova.png", "./assets/animations/supernova.json", 30.0f, (Vector2){SUPERNOVA_RENDER_SIZE, SUPERNOVA_RENDER_SIZE}, false);
     initAnimation(&ctx->assets.animations.ufo1, "./assets/animations/ufo1.png", "./assets/animations/ufo1.json", 24.0f, (Vector2){UFO_1_SIZE, UFO_1_SIZE}, true);
@@ -90,6 +91,7 @@ void unloadAssets(GameContext* ctx) {
     unloadAnimation(&ctx->assets.animations.explosion);
     unloadAnimation(&ctx->assets.animations.metalAsteroid);
     unloadAnimation(&ctx->assets.animations.multiplier);
+    unloadAnimation(&ctx->assets.animations.ship);
     unloadAnimation(&ctx->assets.animations.spikyAsteroid);
     unloadAnimation(&ctx->assets.animations.supernova);
     unloadAnimation(&ctx->assets.animations.ufo1);
