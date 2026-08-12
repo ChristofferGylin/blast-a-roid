@@ -172,6 +172,10 @@ void updateAnimation(AnimationInstance* aniInst) {
     }
 }
 
+void updateRotationAnimation(AnimationInstance* aniInst, float rotation) {
+    aniInst->currentFrame = (int)(rotation / 360.0f * aniInst->animation->frameCount + 0.5f) % aniInst->animation->frameCount;
+}
+
 void updateAnimationPool(AnimationPool* pool) {
     
     if (pool->activeCount == 0) return;

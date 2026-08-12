@@ -47,6 +47,7 @@ void renderAnimation(AnimationInstance* aniInst);
 void renderAnimationPool(AnimationPool* pool);
 void unloadAnimation(Animation* animation);
 void updateAnimation(AnimationInstance* aniInst);
+void updateRotationAnimation(AnimationInstance* aniInst, float rotation);
 void updateAnimationPool(AnimationPool* pool);
 
 #endif
