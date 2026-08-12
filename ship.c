@@ -53,7 +53,6 @@ void initShip(GameContext* ctx, Ship* ship) {
     ship->isShieldActive = false;
     ship->isRotateActive = false;
     ship->destroyed = false;
-    ship->sprite = &ctx->assets.sprites.ship;
     ship->timeDestroyed = 0.0f;
     ship->timeSpawned = GetTime();
     ship->timeRotateActivated = 0.0f;
@@ -62,6 +61,8 @@ void initShip(GameContext* ctx, Ship* ship) {
     ship->rotation = 0.0f;
     ship->velocity.x = 0.0f;
     ship->velocity.y = 0.0f;
+
+    initAnimtionInstance(&ship->animation, &ctx->assets.animations.ship, ship->position, 0.0f, 24, false);
 
     DestroyedShipPiece destroyedBase = {
         (Vector2){0, 0},

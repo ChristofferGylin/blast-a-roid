@@ -14,6 +14,7 @@ typedef struct DestroyedShipPiece {
 }DestroyedShipPiece;
 
 typedef struct {
+    AnimationInstance animation;
     Vector2 position;
     Vector2 velocity;
     float rotation;
@@ -23,7 +24,6 @@ typedef struct {
     double timeDestroyed;
     double timeRotateActivated;
     double timeSpawned;
-    Texture2D* sprite;
     DestroyedShipPiece destroyedPieces[3]; 
 }Ship;
 
