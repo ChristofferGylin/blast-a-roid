@@ -102,15 +102,7 @@ void renderShip(Ship* ship) {
         renderDestroyedShip(ship);
     } else {
 
-        Texture2D sprite = *ship->sprite;
-        DrawTexturePro(
-            sprite,
-            (Rectangle){0, 0, sprite.width, sprite.height},
-            (Rectangle){ship->position.x, ship->position.y, SHIP_SIZE, SHIP_SIZE},
-            (Vector2){ SHIP_SIZE / 2.0f, SHIP_SIZE / 2.0f},
-            ship->rotation,
-            WHITE
-        );
+        renderAnimation(&ship->animation);
         renderShield(ship);
     }
 }
