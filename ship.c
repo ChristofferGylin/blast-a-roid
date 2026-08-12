@@ -174,3 +174,8 @@ void resetShip(Ship* ship) {
     ship->velocity.y = 0;
     ship->timeSpawned = GetTime();
 }
+
+void updateShip(Ship* ship) {
+    ship->animation.position = ship->position;
+    updateRotationAnimation(&ship->animation, ship->rotation);
+}
