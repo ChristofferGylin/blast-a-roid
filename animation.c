@@ -89,7 +89,7 @@ void initAnimation(Animation* animation, char* spritesheetPath, const char* json
     }
 
     animation->texture = LoadTexture(spritesheetPath);
-    SetTextureFilter(animation->texture, TEXTURE_FILTER_POINT);
+    SetTextureFilter(animation->texture, TEXTURE_FILTER_BILINEAR);
     animation->size = size;
     animation->fps = fps;
     animation->isLoop = isLoop;

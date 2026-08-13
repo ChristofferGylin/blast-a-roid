@@ -90,18 +90,18 @@ void loadAssets(GameContext* ctx) {
 }
 
 void setTextureFilters(GameContext* ctx) {
-    SetTextureFilter(ctx->assets.sprites.asteroid, TEXTURE_FILTER_POINT);
-    SetTextureFilter(ctx->assets.sprites.blueGem, TEXTURE_FILTER_POINT);
-    SetTextureFilter(ctx->assets.sprites.destroyedShip1, TEXTURE_FILTER_POINT);
-    SetTextureFilter(ctx->assets.sprites.destroyedShip2, TEXTURE_FILTER_POINT);
-    SetTextureFilter(ctx->assets.sprites.destroyedShip3, TEXTURE_FILTER_POINT);
-    SetTextureFilter(ctx->assets.sprites.enemyShot1, TEXTURE_FILTER_POINT);
-    SetTextureFilter(ctx->assets.sprites.lockIcon, TEXTURE_FILTER_POINT);
-    SetTextureFilter(ctx->assets.sprites.longShotIcon, TEXTURE_FILTER_POINT);
-    SetTextureFilter(ctx->assets.sprites.ship, TEXTURE_FILTER_POINT);
-    SetTextureFilter(ctx->assets.sprites.shot, TEXTURE_FILTER_POINT);
-    SetTextureFilter(ctx->assets.sprites.stopIcon, TEXTURE_FILTER_POINT);
-    SetTextureFilter(ctx->assets.sprites.triShotIcon, TEXTURE_FILTER_POINT);
+    SetTextureFilter(ctx->assets.sprites.asteroid, TEXTURE_FILTER_BILINEAR);
+    SetTextureFilter(ctx->assets.sprites.blueGem, TEXTURE_FILTER_BILINEAR);
+    SetTextureFilter(ctx->assets.sprites.destroyedShip1, TEXTURE_FILTER_BILINEAR);
+    SetTextureFilter(ctx->assets.sprites.destroyedShip2, TEXTURE_FILTER_BILINEAR);
+    SetTextureFilter(ctx->assets.sprites.destroyedShip3, TEXTURE_FILTER_BILINEAR);
+    SetTextureFilter(ctx->assets.sprites.enemyShot1, TEXTURE_FILTER_BILINEAR);
+    SetTextureFilter(ctx->assets.sprites.lockIcon, TEXTURE_FILTER_BILINEAR);
+    SetTextureFilter(ctx->assets.sprites.longShotIcon, TEXTURE_FILTER_BILINEAR);
+    SetTextureFilter(ctx->assets.sprites.ship, TEXTURE_FILTER_BILINEAR);
+    SetTextureFilter(ctx->assets.sprites.shot, TEXTURE_FILTER_BILINEAR);
+    SetTextureFilter(ctx->assets.sprites.stopIcon, TEXTURE_FILTER_BILINEAR);
+    SetTextureFilter(ctx->assets.sprites.triShotIcon, TEXTURE_FILTER_BILINEAR);
 }
 
 void unloadAssets(GameContext* ctx) {
