@@ -174,6 +174,8 @@ void resetShip(Ship* ship) {
     ship->velocity.x = 0;
     ship->velocity.y = 0;
     ship->timeSpawned = GetTime();
+
+    updateShip(ship);
 }
 
 void updateShip(Ship* ship) {
