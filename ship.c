@@ -63,6 +63,7 @@ void initShip(GameContext* ctx, Ship* ship) {
     ship->velocity.y = 0.0f;
 
     initAnimtionInstance(&ship->animation, &ctx->assets.animations.ship, ship->position, 0.0f, 24, false);
+    SetTextureFilter(ship->animation.animation->texture, TEXTURE_FILTER_BILINEAR);
 
     DestroyedShipPiece destroyedBase = {
         (Vector2){0, 0},
