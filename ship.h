@@ -3,6 +3,8 @@
 #ifndef SHIP_H
 #define SHIP_H
 
+#include "animation.h"
+
 typedef struct GameContext GameContext;
 
 typedef struct DestroyedShipPiece {
@@ -13,7 +15,8 @@ typedef struct DestroyedShipPiece {
     Texture2D* sprite;
 }DestroyedShipPiece;
 
-typedef struct {
+typedef struct Ship {
+    AnimationInstance animation;
     Vector2 position;
     Vector2 velocity;
     float rotation;
@@ -23,7 +26,6 @@ typedef struct {
     double timeDestroyed;
     double timeRotateActivated;
     double timeSpawned;
-    Texture2D* sprite;
     DestroyedShipPiece destroyedPieces[3]; 
 }Ship;
 
@@ -36,5 +38,6 @@ void renderDestroyedShip(Ship* ship);
 void renderShip(Ship* ship);
 void resetDestroyedPieces(Ship* ship);
 void resetShip(Ship* ship);
+void updateShip(Ship* ship);
 
 #endif

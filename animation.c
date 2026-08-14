@@ -122,8 +122,8 @@ void renderAnimation(AnimationInstance* aniInst) {
     DrawTexturePro(
         aniInst->animation->texture,
         aniInst->animation->frames[aniInst->currentFrame],
-        (Rectangle){round(aniInst->position.x),  round(aniInst->position.y), round(aniInst->animation->size.x), round(aniInst->animation->size.y)},
-        (Vector2){aniInst->animation->size.x / 2, aniInst->animation->size.y / 2},
+        (Rectangle){aniInst->position.x,  aniInst->position.y, aniInst->animation->size.x, aniInst->animation->size.y},
+        (Vector2){aniInst->animation->size.x / 2.0f, aniInst->animation->size.y / 2.0f},
         aniInst->rotation,
         WHITE
     );
@@ -170,6 +170,10 @@ void updateAnimation(AnimationInstance* aniInst) {
             }
         }
     }
+}
+
+void updateRotationAnimation(AnimationInstance* aniInst, float rotation) {
+    aniInst->currentFrame = (int)(rotation / 360.0f * aniInst->animation->frameCount + 0.5f) % aniInst->animation->frameCount;
 }
 
 void updateAnimationPool(AnimationPool* pool) {

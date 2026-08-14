@@ -126,6 +126,7 @@ GameResult gameLoop(GameContext* ctx) {
             updateEnemies(ctx);
             updateBonuses(ctx);
             updateAsteroidsAnimations(ctx);
+            updateShip(&ctx->ship);
 
             if (ctx->ship.isShieldActive) {
                 updateShieldAnimation();

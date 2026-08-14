@@ -53,7 +53,6 @@ void initShip(GameContext* ctx, Ship* ship) {
     ship->isShieldActive = false;
     ship->isRotateActive = false;
     ship->destroyed = false;
-    ship->sprite = &ctx->assets.sprites.ship;
     ship->timeDestroyed = 0.0f;
     ship->timeSpawned = GetTime();
     ship->timeRotateActivated = 0.0f;
@@ -62,6 +61,9 @@ void initShip(GameContext* ctx, Ship* ship) {
     ship->rotation = 0.0f;
     ship->velocity.x = 0.0f;
     ship->velocity.y = 0.0f;
+
+    initAnimtionInstance(&ship->animation, &ctx->assets.animations.ship, ship->position, 0.0f, 24, false);
+    SetTextureFilter(ship->animation.animation->texture, TEXTURE_FILTER_BILINEAR);
 
     DestroyedShipPiece destroyedBase = {
         (Vector2){0, 0},
@@ -101,15 +103,7 @@ void renderShip(Ship* ship) {
         renderDestroyedShip(ship);
     } else {
 
-        Texture2D sprite = *ship->sprite;
-        DrawTexturePro(
-            sprite,
-            (Rectangle){0, 0, sprite.width, sprite.height},
-            (Rectangle){ship->position.x, ship->position.y, SHIP_SIZE, SHIP_SIZE},
-            (Vector2){ SHIP_SIZE / 2.0f, SHIP_SIZE / 2.0f},
-            ship->rotation,
-            WHITE
-        );
+        renderAnimation(&ship->animation);
         renderShield(ship);
     }
 }
@@ -180,4 +174,11 @@ void resetShip(Ship* ship) {
     ship->velocity.x = 0;
     ship->velocity.y = 0;
     ship->timeSpawned = GetTime();
+
+    updateShip(ship);
+}
+
+void updateShip(Ship* ship) {
+    ship->animation.position = ship->position;
+    updateRotationAnimation(&ship->animation, ship->rotation);
 }
