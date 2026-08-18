@@ -194,7 +194,6 @@ GameResult gameLoop(GameContext* ctx) {
             updateAsteroidsAnimations(ctx);
             resetPowerups(&ctx->player);
             initBonusSpawnPool(ctx);
-            initEnemyPool(&ctx->objectPools.enemies);
             initShotObjectPool(&ctx->objectPools.shots);
 
             fadeOutValue = 0.0f;
