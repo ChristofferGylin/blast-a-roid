@@ -103,7 +103,7 @@ void handleEnemiesCollisions(GameContext* ctx) {
     EnemyObjectPool* enemyPool = &ctx->objectPools.enemies;
     Ship* ship = &ctx->ship;
 
-    if (enemyPool->activeCount == 0) return;
+    if (enemyPool->activeCount == 0 || ship->destroyed) return;
     
     bool enemyPoolHasChanges = false;
 
