@@ -384,7 +384,7 @@ void initEnemySpawnPool(GameContext* ctx) {
 
 void initSpikyAsteroid(GameContext* ctx, Enemy* enemy) {
 
-    enemy->endPosition = (Vector2){0, 0};
+    enemy->endPosition = getRandomPositionOffScreen(SPIKY_ASTEROID_SIZE);
     enemy->startPosition = getRandomPositionOffScreen(SPIKY_ASTEROID_SIZE);
 
     enemy->acceleration = 300.0f;
