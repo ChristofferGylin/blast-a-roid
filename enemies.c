@@ -727,6 +727,11 @@ void updateSpikyAsteroid(GameContext* ctx, Enemy* enemy) {
 
     Ship* ship = &ctx->ship;
 
+    if (ship->destroyed) {
+        ufoGoOffScreen(ctx, enemy);
+        return;
+    }
+
     if (CheckCollisionCircles(enemy->position, enemy->size / 2.0f, ship->position, SHIP_SIZE)) {
         enemy->destination = ship->position;
     } else {
@@ -747,6 +752,11 @@ bool updateUfo2(GameContext* ctx, Enemy* enemy) {
     int attackDurationTime = 45;
     bool hasBeenRemoved = false;
 
+    if (ctx->ship.destroyed) {
+        ufoGoOffScreen(ctx, enemy);
+        return hasBeenRemoved;
+    }
+
     if (now <= enemy->spawnTime + attackDurationTime + ctx->pausTimer) {
 
         Ship* ship = &ctx->ship;
@@ -760,7 +770,7 @@ bool updateUfo2(GameContext* ctx, Enemy* enemy) {
 
     } else {
         enemy->isAttacking = false;
-       hasBeenRemoved = ufoGoOffScreen(ctx, enemy);
+        hasBeenRemoved = ufoGoOffScreen(ctx, enemy);
     }
 
     handleEnemyShooting(ctx, enemy);
