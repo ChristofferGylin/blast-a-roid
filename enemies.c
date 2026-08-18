@@ -716,7 +716,7 @@ bool ufoGoOffScreen(GameContext* ctx, Enemy* enemy) {
          remove = true;
     }
 
-    if (!ctx->ship.destroyed) remove = false;
+    if (ctx->ship.destroyed) remove = false;
 
     if (remove) removeEnemy(&ctx->objectPools.enemies, enemy);
 
