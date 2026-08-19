@@ -7,7 +7,7 @@
 #include "raylib.h"
 #include "utils.h"
 
-#define NUMBER_OF_SPECIALS 5
+#define NUMBER_OF_SPECIALS 1
 typedef struct Supernova Supernova;
 
 typedef enum SpecialType {
