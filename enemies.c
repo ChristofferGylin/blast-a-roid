@@ -252,13 +252,6 @@ void handleEnemyShooting(GameContext* ctx, Enemy* enemy) {
             enemy->shooting.aimPoint = predictiveAim(ctx->ship.position, ctx->ship.velocity, enemy->position, PREDICTIVE_AIM_TIME);
         }
 
-        
-    } else {
-        coolDownTime = shotProps->fireRate;
-    }
-
-    if ((GetTime() * 1000) > shotProps->lastShot + coolDownTime) {
-
         if (GetRandomValue(1, 10) > shotProps->perfectHitChance) {
             float theta = GetRandomValue(0, 1000) / 1000.0f * 2.0f * PI;
             float radius = sqrtf(GetRandomValue(0, 1000) / 1000.0f) * shotProps->spreadRadian;
@@ -266,6 +259,12 @@ void handleEnemyShooting(GameContext* ctx, Enemy* enemy) {
             enemy->shooting.aimPoint.x += cosf(theta) * radius;
             enemy->shooting.aimPoint.y += sinf(theta) * radius;
         }
+        
+    } else {
+        coolDownTime = shotProps->fireRate;
+    }
+
+    if ((GetTime() * 1000) > shotProps->lastShot + coolDownTime) {
         
         float angle = atan2(enemy->shooting.aimPoint.y - enemy->position.y, enemy->shooting.aimPoint.x - enemy->position.x);
 
