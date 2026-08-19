@@ -624,7 +624,11 @@ void updateSupernova(GameContext* ctx ,Special* special) {
         supernova->detonationTime = GetTime() - ctx->pausTimer;
 
         for (int j = 0; j < astPool->activeCount; j++) {
-            if (!astPool->asteroids[j].active || astPool->asteroids[j].asteroid.destroyed) continue;
+            if (
+                !astPool->asteroids[j].active ||
+                astPool->asteroids[j].asteroid.destroyed ||
+                astPool->asteroids[j].asteroid.type == METAL_ASTEROID
+            ) continue;
 
             astPool->asteroids[j].asteroid.destroyTime = getRandomFloat(ASTEROID_DESTRUCTION_SPAN.min, ASTEROID_DESTRUCTION_SPAN.max);
         }
