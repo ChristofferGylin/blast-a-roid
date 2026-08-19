@@ -550,6 +550,8 @@ void updateSpecials(GameContext* ctx) {
             case MULTIPLIER:
             case COMET:
             case EXTRA_LIFE:
+                updateRotationAnimation(specialObj->special.ship.animation.animation, specialObj->special.ship.rotation);
+                specialObj->special.ship.animation.position = specialObj->special.ship.position;
                 break;
     
             case SUPERNOVA:
