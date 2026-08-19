@@ -241,26 +241,32 @@ void handleEnemyShooting(GameContext* ctx, Enemy* enemy) {
     ShootingProperties* shotProps = &enemy->shooting;
 
     int coolDownTime = 0;
+    const float PREDICTIVE_AIM_TIME = 1.0f;
 
     if (shotProps->shotCount == 0) {
         coolDownTime = shotProps->salvoRate;
-    } else {
-        coolDownTime = shotProps->fireRate;
-    }
 
-    if ((GetTime() * 1000) > shotProps->lastShot + coolDownTime) {
-
-        Vector2 aimPos = ctx->ship.position;
+        if (enemy->type == UFO_1) {
+            enemy->shooting.aimPoint = ctx->ship.position;
+        } else {
+            enemy->shooting.aimPoint = predictiveAim(ctx->ship.position, ctx->ship.velocity, enemy->position, PREDICTIVE_AIM_TIME);
+        }
 
         if (GetRandomValue(1, 10) > shotProps->perfectHitChance) {
             float theta = GetRandomValue(0, 1000) / 1000.0f * 2.0f * PI;
             float radius = sqrtf(GetRandomValue(0, 1000) / 1000.0f) * shotProps->spreadRadian;
 
-            aimPos.x += cosf(theta) * radius;
-            aimPos.y += sinf(theta) * radius;
+            enemy->shooting.aimPoint.x += cosf(theta) * radius;
+            enemy->shooting.aimPoint.y += sinf(theta) * radius;
         }
         
-        float angle = atan2(aimPos.y - enemy->position.y, aimPos.x - enemy->position.x);
+    } else {
+        coolDownTime = shotProps->fireRate;
+    }
+
+    if ((GetTime() * 1000) > shotProps->lastShot + coolDownTime) {
+        
+        float angle = atan2(enemy->shooting.aimPoint.y - enemy->position.y, enemy->shooting.aimPoint.x - enemy->position.x);
 
         Vector2 shotSpawnPosition = {
                 enemy->position.x + (cosf(angle) * (enemy->size / 2.0f)),
@@ -314,6 +320,7 @@ void initEnemy(GameContext* ctx, Enemy* enemy, EnemyType type) {
 
     enemy->shooting.shotCount = 0;
     enemy->shooting.lastShot = GetTime() * 1000;
+    enemy->shooting.aimPoint = (Vector2){0,0};
 
     switch (type)
     {
