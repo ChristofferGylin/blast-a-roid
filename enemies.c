@@ -241,10 +241,18 @@ void handleEnemyShooting(GameContext* ctx, Enemy* enemy) {
     ShootingProperties* shotProps = &enemy->shooting;
 
     int coolDownTime = 0;
+    const float PREDICTIVE_AIM_TIME = 1.0f;
 
     if (shotProps->shotCount == 0) {
         coolDownTime = shotProps->salvoRate;
-        enemy->shooting.aimPoint = ctx->ship.position;
+
+        if (enemy->type == UFO_1) {
+            enemy->shooting.aimPoint = ctx->ship.position;
+        } else {
+            enemy->shooting.aimPoint = predictiveAim(ctx->ship.position, ctx->ship.velocity, enemy->position, PREDICTIVE_AIM_TIME);
+        }
+
+        
     } else {
         coolDownTime = shotProps->fireRate;
     }
