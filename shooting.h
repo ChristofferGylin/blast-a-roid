@@ -35,6 +35,7 @@ typedef struct ShootingProperties {
     int salvoSize;
     float fireRate;
     float salvoRate;
+    Vector2 aimPoint;
     ShotProperties shot;
 }ShootingProperties;
 

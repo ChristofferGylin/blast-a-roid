@@ -314,6 +314,7 @@ void initEnemy(GameContext* ctx, Enemy* enemy, EnemyType type) {
 
     enemy->shooting.shotCount = 0;
     enemy->shooting.lastShot = GetTime() * 1000;
+    enemy->shooting.aimPoint = (Vector2){0,0};
 
     switch (type)
     {
