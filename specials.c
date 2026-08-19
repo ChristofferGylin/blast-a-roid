@@ -81,6 +81,8 @@ void addSpecialToPool(GameContext* ctx, SpecialType type) {
         case EXTRA_LIFE:
             newSpecial.position = getRandomPositionOffScreen(SHIP_SIZE);
             newSpecial.rotation = GetRandomValue(0,359);
+            newSpecial.animation.position = newSpecial.position;
+            newSpecial.animation.rotation = newSpecial.rotation;
             newSpecial.rotationSpeed = GetRandomValue(0,1) == 1 ? EXTRA_LIFE_ROTATION_SPEED : -EXTRA_LIFE_ROTATION_SPEED;
             newSpecial.size = (Vector2){SHIP_SIZE, SHIP_SIZE};
 
