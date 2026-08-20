@@ -24,6 +24,8 @@
 
 GameResult gameLoop(GameContext* ctx) {
 
+    HideCursor();
+
     GameResult result = GAME_CONTINUE;
     Fps fps;
 
@@ -72,6 +74,7 @@ GameResult gameLoop(GameContext* ctx) {
         }
 
         if (isPaused) {
+            ShowCursor();
             updatePausMenu(&pauseMenu);
             ctx->pausTimer += GetFrameTime();
 
@@ -96,6 +99,8 @@ GameResult gameLoop(GameContext* ctx) {
                 pauseMenu.selected = -1;
             }
         } else if (isFadeInComplete) {
+
+            HideCursor();
 
             if (!waitForExit) {
                 spawnEnemy(ctx);

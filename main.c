@@ -58,6 +58,7 @@ int main(int argc, char* argv[]){
     mainMenu(&ctx);
     
     unloadAssets(&ctx);
+    ShowCursor();
     CloseAudioDevice();
     CloseWindow();
 

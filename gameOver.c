@@ -11,6 +11,8 @@
 
 void gameOver(GameContext* ctx) {
 
+    HideCursor();
+
     Player* player = &ctx->player;
 
     float fadeInValue = 1.0f;

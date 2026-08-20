@@ -390,6 +390,7 @@ void mainMenu(GameContext* ctx) {
     bool isRunning = true;
 
     while (!WindowShouldClose() && isRunning) {
+        ShowCursor();
         updateMenu(&menu);
         updateHighlightTimers(ctx, &highlightTimers);
         updateRendering(&ctx->rendering);

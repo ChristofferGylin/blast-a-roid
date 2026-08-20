@@ -118,6 +118,8 @@ int renderScoreLine(GameContext* ctx, uint64_t value, char title[], int startY, 
 
 void scoreScreen(GameContext* ctx) {
 
+    HideCursor();
+
     Player* player = &ctx->player;
     
     float fadeInValue = 1.0f;
