@@ -378,6 +378,7 @@ void initMenu(GameContext* ctx, Menu* menu) {
 }
 
 void mainMenu(GameContext* ctx) {
+    ShowCursor();
     Menu menu;
     HighlightTimers highlightTimers;
     initMenu(ctx, &menu);
