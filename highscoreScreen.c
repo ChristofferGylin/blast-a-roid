@@ -14,6 +14,8 @@
 
 GameResult highscoreScreen(GameContext* ctx) {
 
+    ShowCursor();
+
     GameResult result = EXIT_TO_MENU;
     NewHighscore newHighscoreResult = checkHighscore(ctx);
     if (!newHighscoreResult.hasNewHighscore) return result;
