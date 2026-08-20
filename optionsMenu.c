@@ -259,6 +259,8 @@ void drawVideoTab(void* userData) {
 
 bool optionsMenu(GameContext* ctx) {
 
+    ShowCursor();
+
     Config initialConfigState = getConfig(ctx);
     
     OptionsMenu menu;
