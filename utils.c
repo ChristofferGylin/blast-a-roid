@@ -102,14 +102,12 @@ void goToDestination(Vector2 position, Vector2  destination, Vector2* velocity, 
 }
 
 void knockback(Vector2* targetVelocity, Vector2 forceDirection, float force) {
-    
-    double dt = GetFrameTime();
 
     forceDirection = Vector2Normalize(forceDirection);
     forceDirection = Vector2Scale(forceDirection, force);
 
-    targetVelocity->x = forceDirection.x * dt;
-    targetVelocity->y = forceDirection.y * dt;
+    targetVelocity->x += forceDirection.x;
+    targetVelocity->y += forceDirection.y;
 }
 
 void knockbackPoolball(Vector2 targetPosition, Vector2* targetVelocity, Vector2 forcePosition, int force) {

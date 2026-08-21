@@ -192,12 +192,14 @@ void handleEnemiesHitDetection(GameContext* ctx) {
                 } else {
 
                     if (enemy->isMoveable) {
-                        const float knockbackForce = 35.0f;
-                        knockback(&enemy->velocity, shotObj->shot.direction, knockbackForce);
+                        float knockbackForce = 35.0f;
 
                         if (enemy->type == SPIKY_ASTEROID) {
+                            knockbackForce = 35.0f;
                             playSoundPositioned(ctx->assets.samples.metalPlink, enemy->position.x);
                         }
+
+                        knockback(&enemy->velocity, shotObj->shot.direction, knockbackForce);
                     }
 
                     destroyShot(shotObj);
