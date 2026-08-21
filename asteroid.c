@@ -146,8 +146,8 @@ void handleAsteroidCollisions(GameContext* ctx) {
 
                         // if asteroid has health after hit it is of type METAL_ASTEROID
 
-                        const int knockbackForce = 200;
-                        knockback(ast->position, &ast->velocity, shotObj->shot.position, knockbackForce);
+                        const float knockbackForce = 200.0f;
+                        knockback(&ast->velocity, shotObj->shot.direction, knockbackForce);
                         playSoundPositioned(ctx->assets.samples.metalPlink, ast->position.x);
                     }
                 } 
