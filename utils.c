@@ -101,7 +101,16 @@ void goToDestination(Vector2 position, Vector2  destination, Vector2* velocity, 
     velocity->y += steering.y * GetFrameTime();
 }
 
-void knockback(Vector2 targetPosition, Vector2* targetVelocity, Vector2 forcePosition, int force) {
+void knockback(Vector2* targetVelocity, Vector2 forceDirection, float force) {
+
+    forceDirection = Vector2Normalize(forceDirection);
+    forceDirection = Vector2Scale(forceDirection, force);
+
+    targetVelocity->x += forceDirection.x;
+    targetVelocity->y += forceDirection.y;
+}
+
+void knockbackPoolball(Vector2 targetPosition, Vector2* targetVelocity, Vector2 forcePosition, int force) {
     Vector2 hitDirection = Vector2Subtract(targetPosition, forcePosition);
     hitDirection = Vector2Normalize(hitDirection);
 
