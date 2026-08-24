@@ -4,7 +4,7 @@
 #include "ui.h"
 #include "utils.h"
 
-#define NUMBER_OF_OPTIONS_TABS 3
+#define NUMBER_OF_OPTIONS_TABS 4
 #define NUMBER_OF_VIDEO_OPTIONS 3
 #define MONITOR_NAME_MAX_LENGTH 64
 #define MAX_NUMBER_OF_MONITORS 10
