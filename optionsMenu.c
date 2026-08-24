@@ -36,8 +36,8 @@ void drawAudioTab(void* userData) {};
 void initOptionsMenu(GameContext* ctx, OptionsMenu* menu) {
     menu->exit = false;
     menu->onClickIncreaseArgs.max_Value = NUMBER_OF_OPTIONS_TABS -1;
-    menu->onClickIncreaseArgs.value = &menu->selectecTab;
-    menu->selectecTab = 0;
+    menu->onClickIncreaseArgs.value = &menu->selectedTab;
+    menu->selectedTab = 0;
 
     initBasicLayoutContainer(&menu->layout, (Rectangle){0, 0, SCREEN_WIDTH, SCREEN_HEIGHT}, "OPTIONS");
     initButton(
@@ -211,7 +211,7 @@ void drawOptionsMenu(GameContext* ctx, OptionsMenu* menu) {
 }
 
 void drawOptionsMenuTab(OptionsMenu* menu) {
-    LayoutSection* section = &menu->tabs[menu->selectecTab].layout;
+    LayoutSection* section = &menu->tabs[menu->selectedTab].layout;
 
     Vector2 origin = {0,0};
 
@@ -298,7 +298,7 @@ void updateOptionsMenu(GameContext* ctx, OptionsMenu* menu) {
 }
 
 void updateOptionsMenuTab(OptionsMenu* menu) {
-    OptionsMenuTab* tab = &menu->tabs[menu->selectecTab];
+    OptionsMenuTab* tab = &menu->tabs[menu->selectedTab];
 
     tab->updateTab(tab->layout.userData);
 }

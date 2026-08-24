@@ -49,7 +49,7 @@ typedef struct OptionsMenu {
     AudioTabData audioTabData;
     ControlsTabData controlsTabData;
     VideoTabData videoTabData;
-    int selectecTab;
+    int selectedTab;
     bool exit;
 }OptionsMenu;
 
