@@ -48,6 +48,13 @@ typedef struct CheckboxWithTitle {
     void* userData;
 }CheckboxWithTitle;
 
+typedef struct DialogBox {
+    Rectangle container;
+    Button cancelButton;
+    Button proceedButton;
+    char text[128];
+}DialogBox;
+
 typedef char DropDownTitles[DROPDOWN_MAX_ITEMS][DROPDOWN_MAX_LENGTH];
 
 typedef struct DropdownItem {

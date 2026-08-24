@@ -226,6 +226,10 @@ void drawOptionsMenuTab(OptionsMenu* menu) {
     section->drawContent(section->userData);
 }
 
+void drawHighscoresTab(void* userData) {
+    HighscoresTabData* data = userData;
+}
+
 void drawVideoTab(void* userData) {
     VideoTabData* data = userData;
 
