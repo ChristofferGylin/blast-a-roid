@@ -52,6 +52,8 @@ typedef struct DialogBox {
     Rectangle container;
     Button cancelButton;
     Button proceedButton;
+    bool isVisible;
+    Vector2 textPosition;
     char text[128];
 }DialogBox;
 
@@ -108,6 +110,7 @@ void initBasicLayoutContainer(BasicLayoutContainer* layout, Rectangle area, char
 void initButton(Button* button, Rectangle rect, int fontSize, char* text, ButtonCallback callback, void* userData);
 void initCheckbox(Checkbox* checkbox, bool* state, Vector2 position, Callback callback, void* userData);
 void initCheckboxWithTitle(CheckboxWithTitle* option, Vector2 position, char* title, bool* state, Callback callback, void* userData);
+void initDialogBox(GameContext* ctx, DialogBox* dialogBox, char* text, char* cancelButtonText, char* proceedButtonText, Callback callback, void* userData);
 void initDropdownMenu(DropdownMenu* menu, DropDownTitles items, int itemsCount, int selected, Rectangle rect, DropDownCallback callback, void* userData);
 void initLayoutSection(LayoutSection* section, Rectangle* parent, Rectangle container, char* heading, DrawSectionContent drawContent, void* userData);
 void onClickBack(void* userData);

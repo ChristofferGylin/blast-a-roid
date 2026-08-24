@@ -179,6 +179,12 @@ void shake(Vector2* position , double startTime, float duration) {
     position->y += shakeY; 
 }
 
+void toggleBoolCallback(void* userData) {
+    bool* value = userData;
+
+    *value = !(*value);
+}
+
 void updatePosition(Vector2* position, Vector2 velocity) {
     position->x += GetFrameTime() * velocity.x;
     position->y += GetFrameTime() * velocity.y;

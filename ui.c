@@ -4,6 +4,7 @@
 
 #include "colors.h"
 #include "constants.h"
+#include "gameContext.h"
 #include "raylib.h"
 #include "utils.h"
 #include "ui.h"
@@ -211,6 +212,54 @@ void initCheckboxWithTitle(CheckboxWithTitle* option, Vector2 position, char* ti
     initCheckbox(&option->checkbox, state, checkBoxPosition, callback, userData);
     strcpy(option->title, title);
     option->titlePosition = titlePosition;
+}
+
+void initDialogBox(GameContext* ctx, DialogBox* dialogBox, char* text, char* cancelButtonText, char* proceedButtonText, Callback callback, void* userData) {
+    
+    const float BUTTON_WIDTH = 100.0f;
+
+    dialogBox->isVisible = false;
+    
+    strcpy(dialogBox->text, text);
+
+    initButton(
+        &dialogBox->cancelButton,
+        (Rectangle){0, 0, BUTTON_WIDTH, 0},
+        BUTTON_FONT_SIZE,
+        "Cancel",
+        toggleBoolCallback,
+        &dialogBox->isVisible
+    );
+    
+    initButton(
+        &dialogBox->proceedButton,
+        (Rectangle){0, 0, BUTTON_WIDTH, 0},
+        BUTTON_FONT_SIZE,
+        "Erase",
+        callback,
+        userData
+    );
+
+    Vector2 textSize = MeasureTextEx(GetFontDefault(), dialogBox->text, MENU_FONT_SIZE, MENU_FONT_SPACING);
+    
+    if (((BUTTON_WIDTH * 2.0f) + (MENU_MARGIN * 3.0f)) > (textSize.x + (MENU_MARGIN + 2.0f))) {
+        dialogBox->container.width = (BUTTON_WIDTH * 2.0f) + (MENU_MARGIN * 3.0f);
+    } else {
+        dialogBox->container.width = textSize.x + (MENU_MARGIN + 2.0f);
+    }
+
+    dialogBox->container.height = textSize.y + dialogBox->cancelButton.rect.height + (MENU_MARGIN * 3.0f);
+    dialogBox->container.x = (SCREEN_WIDTH / 2.0f) - (dialogBox->container.width / 2.0f);
+    dialogBox->container.y = (SCREEN_HEIGHT / 2.0f) - (dialogBox->container.height / 2.0f);
+
+    dialogBox->textPosition.x = dialogBox->container.x + MENU_MARGIN;
+    dialogBox->textPosition.y = dialogBox->container.y + MENU_MARGIN;
+
+    dialogBox->cancelButton.rect.x = dialogBox->container.x + (dialogBox->container.width / 2.0f) - (BUTTON_WIDTH + (MENU_MARGIN / 2.0f));
+    dialogBox->cancelButton.rect.y = dialogBox->container.y + dialogBox->container.height - MENU_MARGIN;
+    
+    dialogBox->proceedButton.rect.x = dialogBox->container.x + (dialogBox->container.width / 2.0f) + (MENU_MARGIN / 2.0f);
+    dialogBox->proceedButton.rect.y = dialogBox->container.y + dialogBox->container.height - MENU_MARGIN;
 }
 
 void drawDownArrow(Vector2 position, float width, Color color) {
