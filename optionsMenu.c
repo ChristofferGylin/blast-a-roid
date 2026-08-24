@@ -19,12 +19,14 @@ void initVideoTabData(GameContext* ctx, Rectangle* parent, VideoTabData* tabData
 void drawVideoTab(void* userData);
 void drawControlsTab(void* userData);
 void drawAudioTab(void* userData);
+void drawHighscoresTab(void* userData);
 void setFullscreenCallback(void* userData);
 void setMonitorCallback(int monitor, void* userData);
 void updateOptionsMenu(GameContext* ctx, OptionsMenu* menu);
 void updateOptionsMenuTab(OptionsMenu* menu);
 void updateAudioTab(void* userData);
 void updateControlsTab(void* userData);
+void updateHighscoresTab(void* userData);
 void updateVideoTab(void* userData);
 
 void updateAudioTab(void* userData) {};
@@ -51,6 +53,7 @@ void initOptionsMenu(GameContext* ctx, OptionsMenu* menu) {
     initOptionsMenuTab(&menu->tabs[0], &menu->layout.contentArea, "VIDEO", drawVideoTab, updateVideoTab, &menu->videoTabData);
     initOptionsMenuTab(&menu->tabs[1], &menu->layout.contentArea, "AUDIO", drawAudioTab, updateAudioTab, &menu->audioTabData);
     initOptionsMenuTab(&menu->tabs[2], &menu->layout.contentArea, "CONTROLS", drawControlsTab, updateControlsTab, &menu->controlsTabData);
+    initOptionsMenuTab(&menu->tabs[3], &menu->layout.contentArea, "HIGHSCORES", drawHighscoresTab, updateHighscoresTab, &menu->highscoresTabData);
 
     initVideoTabData(ctx, &menu->tabs[0].layout.contentArea, &menu->videoTabData);
 

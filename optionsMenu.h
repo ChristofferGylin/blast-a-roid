@@ -18,6 +18,10 @@ typedef struct ControlsTabData {
     
 }ControlsTabData;
 
+typedef struct HighscoresTabData {
+    
+}HighscoresTabData;
+
 typedef struct MonitorSelect {
     char heading[17];
     Vector2 headingPosition;
@@ -48,6 +52,7 @@ typedef struct OptionsMenu {
     OptionsMenuTab tabs[NUMBER_OF_OPTIONS_TABS];
     AudioTabData audioTabData;
     ControlsTabData controlsTabData;
+    HighscoresTabData highscoresTabData;
     VideoTabData videoTabData;
     int selectedTab;
     bool exit;
