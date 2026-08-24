@@ -214,7 +214,7 @@ void initCheckboxWithTitle(CheckboxWithTitle* option, Vector2 position, char* ti
     option->titlePosition = titlePosition;
 }
 
-void initDialogBox(GameContext* ctx, DialogBox* dialogBox, char* text, char* cancelButtonText, char* proceedButtonText, Callback callback, void* userData) {
+void initDialogBox(DialogBox* dialogBox, char* text, char* cancelButtonText, char* proceedButtonText, Callback callback, void* userData) {
     
     const float BUTTON_WIDTH = 100.0f;
 
@@ -467,6 +467,11 @@ bool updateCheckbox(Checkbox* checkbox) {
     }
 
     return isHovered;
+}
+
+bool updateDialogBox(DialogBox* dialogBox) {
+    updateButton(&dialogBox->cancelButton);
+    updateButton(&dialogBox->proceedButton);
 }
 
 bool updateDropdownMenu(DropdownMenu* menu) {

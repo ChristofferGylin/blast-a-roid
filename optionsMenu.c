@@ -310,6 +310,13 @@ void updateOptionsMenuTab(OptionsMenu* menu) {
     tab->updateTab(tab->layout.userData);
 }
 
+void updateHighscoresTab(void* userData) {
+    HighscoresTabData* tabData = userData;
+
+    updateButton(&tabData->eraseHighScoresButton);
+    updateDialogBox(&tabData->confirmDialogBox);
+}
+
 void updateVideoTab(void* userData) {
     VideoTabData* tabData = userData;
 

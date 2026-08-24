@@ -19,7 +19,8 @@ typedef struct ControlsTabData {
 }ControlsTabData;
 
 typedef struct HighscoresTabData {
-    
+    Button eraseHighScoresButton;
+    DialogBox confirmDialogBox;
 }HighscoresTabData;
 
 typedef struct MonitorSelect {
