@@ -79,6 +79,7 @@ void initOptionsMenu(GameContext* ctx, OptionsMenu* menu) {
     initOptionsMenuTab(&menu->tabs[3], &menu->layout.contentArea, "HIGHSCORES", drawHighscoresTab, updateHighscoresTab, &menu->highscoresTabData);
 
     initVideoTabData(ctx, &menu->tabs[0].layout.contentArea, &menu->videoTabData);
+    initHighscoresTabData(ctx, &menu->tabs[3].layout.contentArea, &menu->highscoresTabData);
 
     float largestHeadingSize = 0;
 
