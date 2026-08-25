@@ -123,11 +123,6 @@ void resetHighscores(Highscores* highscores) {
     saveHighscores(highscores->scores);
 }
 
-void resetHighscoresCallback(void* userData) {
-    Highscores* highscores = userData;
-    resetHighscores(highscores);
-}
-
 void resetLastHighscore(Highscores* highscores) {
     highscores->hasNewHighscore = false;
     highscores->latestScoreIndex = 0;

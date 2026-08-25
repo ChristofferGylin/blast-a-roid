@@ -21,6 +21,7 @@ void drawVideoTab(void* userData);
 void drawControlsTab(void* userData);
 void drawAudioTab(void* userData);
 void drawHighscoresTab(void* userData);
+void resetHighscoresCallback(void* userData);
 void setFullscreenCallback(void* userData);
 void setMonitorCallback(int monitor, void* userData);
 void updateOptionsMenu(GameContext* ctx, OptionsMenu* menu);
@@ -321,6 +322,11 @@ bool optionsMenu(GameContext* ctx) {
     }
 
     return applicationIsRunning;
+}
+
+void resetHighscoresCallback(void* userData) {
+    Highscores* highscores = userData;
+    resetHighscores(highscores);
 }
 
 void updateOptionsMenu(GameContext* ctx, OptionsMenu* menu) {
