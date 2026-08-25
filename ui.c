@@ -246,11 +246,7 @@ void initDialogBox(DialogBox* dialogBox, char* text, char* cancelButtonText, cha
     Vector2 textSize = MeasureTextEx(GetFontDefault(), dialogBox->text, DIALOG_BOX_FONT_SIZE, MENU_FONT_SPACING);
     
     float totalButtonWidth = (BUTTON_WIDTH * 2.0f) + (MENU_MARGIN * 3.0f);
-    float totalTextWidth = textSize.x + (MENU_MARGIN * 2.0f);
-
-    printf("totalButtonWidth: %f", totalButtonWidth);
-    printf("textWidth: %f", textSize.x);
-    printf("totalTextWidth: %f", totalTextWidth);
+    float totalTextWidth = textSize.x + (MENU_MARGIN * 4.0f);
 
     if (totalButtonWidth > totalTextWidth) {
         dialogBox->container.width = totalButtonWidth;
@@ -258,12 +254,12 @@ void initDialogBox(DialogBox* dialogBox, char* text, char* cancelButtonText, cha
         dialogBox->container.width = totalTextWidth;
     }
 
-    dialogBox->container.height = textSize.y + buttonHeight + (MENU_MARGIN * 3.0f);
+    dialogBox->container.height = textSize.y + buttonHeight + (MENU_MARGIN * 5.0f);
     dialogBox->container.x = (SCREEN_WIDTH / 2.0f) - (dialogBox->container.width / 2.0f);
     dialogBox->container.y = (SCREEN_HEIGHT / 2.0f) - (dialogBox->container.height / 2.0f);
 
-    dialogBox->textPosition.x = dialogBox->container.x + MENU_MARGIN;
-    dialogBox->textPosition.y = dialogBox->container.y + MENU_MARGIN;
+    dialogBox->textPosition.x = dialogBox->container.x + (dialogBox->container.width / 2.0f) - (textSize.x / 2.0f);
+    dialogBox->textPosition.y = dialogBox->container.y + (MENU_MARGIN * 2.0f);
 
     initButton(
         &dialogBox->cancelButton,
