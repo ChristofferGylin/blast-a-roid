@@ -15,6 +15,7 @@ void drawOptionsMenu(GameContext* ctx, OptionsMenu* menu);
 void drawOptionsMenuTab(OptionsMenu* menu);
 void initOptionsMenu(GameContext* ctx, OptionsMenu* menu);
 void initOptionsMenuTab(OptionsMenuTab* tab, Rectangle* parent, char* heading, Callback drawContent, Callback updateTab, void* userData);
+void initHighscoresTabData(GameContext* ctx, Rectangle* parent, HighscoresTabData* tabData);
 void initVideoTabData(GameContext* ctx, Rectangle* parent, VideoTabData* tabData);
 void drawVideoTab(void* userData);
 void drawControlsTab(void* userData);
@@ -34,6 +35,28 @@ void updateControlsTab(void* userData) {};
 
 void drawControlsTab(void* userData) {};
 void drawAudioTab(void* userData) {};
+
+void initHighscoresTabData(GameContext* ctx, Rectangle* parent, HighscoresTabData* tabData) {
+    Vector2 position = {parent->x, parent->y};
+    
+    initButton(
+        &tabData->eraseHighScoresButton,
+        (Rectangle){position.x, position.y, 0, 0},
+        BUTTON_FONT_SIZE,
+        "Erase highscores",
+        toggleBoolCallback,
+        &tabData->confirmDialogBox.isVisible
+    );
+    
+    initDialogBox(
+        &tabData->confirmDialogBox,
+        "Are you sure you want to erase the highscore list?",
+        "Cancel",
+        "Erase",
+        resetHighscoresCallback,
+        &ctx->highscores
+    );
+}
 
 void initOptionsMenu(GameContext* ctx, OptionsMenu* menu) {
     menu->exit = false;

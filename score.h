@@ -39,6 +39,7 @@ void addScore(Player* player, Asteroid* ast);
 NewHighscore checkHighscore(GameContext* ctx);
 void initHighScores(Highscores* highscores);
 void resetHighscores(Highscores* highscores);
+void resetHighscoresCallback(void* userData);
 void resetLastHighscore(Highscores* highscores);
 void resetTimeBonusMultiplier(GameContext* ctx);
 void updateLevelBonus(Player* player);
