@@ -14,6 +14,7 @@ static const int CHECKBOX_FONT_SIZE = 18;
 static const int DROPDOWN_MENU_FONT_SIZE = 18;
 static const int DROPDOWN_MENU_DOWN_ARROW_SIZE = 18;
 static const int DROPDOWN_MENU_BUTTON_SIZE = 42;
+static const float DIALOG_BOX_FONT_SIZE = 16.0f;
 
 void drawCheckbox(Checkbox* checkbox) {
     
@@ -242,12 +243,19 @@ void initDialogBox(DialogBox* dialogBox, char* text, char* cancelButtonText, cha
 
     float buttonHeight = dialogBox->cancelButton.rect.height;
 
-    Vector2 textSize = MeasureTextEx(GetFontDefault(), dialogBox->text, MENU_FONT_SIZE, MENU_FONT_SPACING);
+    Vector2 textSize = MeasureTextEx(GetFontDefault(), dialogBox->text, DIALOG_BOX_FONT_SIZE, MENU_FONT_SPACING);
     
-    if (((BUTTON_WIDTH * 2.0f) + (MENU_MARGIN * 3.0f)) > (textSize.x + (MENU_MARGIN + 2.0f))) {
-        dialogBox->container.width = (BUTTON_WIDTH * 2.0f) + (MENU_MARGIN * 3.0f);
+    float totalButtonWidth = (BUTTON_WIDTH * 2.0f) + (MENU_MARGIN * 3.0f);
+    float totalTextWidth = textSize.x + (MENU_MARGIN * 2.0f);
+
+    printf("totalButtonWidth: %f", totalButtonWidth);
+    printf("textWidth: %f", textSize.x);
+    printf("totalTextWidth: %f", totalTextWidth);
+
+    if (totalButtonWidth > totalTextWidth) {
+        dialogBox->container.width = totalButtonWidth;
     } else {
-        dialogBox->container.width = textSize.x + (MENU_MARGIN + 2.0f);
+        dialogBox->container.width = totalTextWidth;
     }
 
     dialogBox->container.height = textSize.y + buttonHeight + (MENU_MARGIN * 3.0f);
@@ -290,8 +298,6 @@ void drawDialogBox(DialogBox* dialogBox) {
     if (!dialogBox->isVisible) return;
 
     Vector2 origin = {0,0};
-
-    const float DIALOG_BOX_FONT_SIZE = 16.0f;
 
     DrawRectanglePro(
         dialogBox->container,
