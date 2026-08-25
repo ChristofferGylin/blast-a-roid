@@ -4,6 +4,7 @@
 
 #include "colors.h"
 #include "constants.h"
+#include "gameContext.h"
 #include "raylib.h"
 #include "utils.h"
 #include "ui.h"
@@ -13,6 +14,7 @@ static const int CHECKBOX_FONT_SIZE = 18;
 static const int DROPDOWN_MENU_FONT_SIZE = 18;
 static const int DROPDOWN_MENU_DOWN_ARROW_SIZE = 18;
 static const int DROPDOWN_MENU_BUTTON_SIZE = 42;
+static const int DIALOG_BOX_FONT_SIZE = 18;
 
 void drawCheckbox(Checkbox* checkbox) {
     
@@ -81,6 +83,50 @@ void drawButton(Button* button) {
     DrawRectangleRoundedLinesEx(button->rect, roundness, MENU_ROUNDNESS_SEGMENTS, 2, primaryColor);
 
     DrawTextPro(GetFontDefault(), button->text, button->textPosition, (Vector2){0,0}, 0, button->fontSize, BUTTON_FONT_SPACING, primaryColor);
+}
+
+void drawDialogBox(DialogBox* dialogBox) {
+    if (!dialogBox->isVisible) return;
+
+    Vector2 origin = {0,0};
+    int segments = 10;
+    float roundnessRadius = 5.0f;
+
+    DrawRectangleRounded(
+        dialogBox->container,
+        getRoundness(dialogBox->container, roundnessRadius),
+        segments,
+        topColor
+    );
+
+    DrawRectangleRounded(
+        dialogBox->container,
+        getRoundness(dialogBox->container, roundnessRadius),
+        segments,
+        primaryColorDimmed15
+    );
+
+    DrawRectangleRoundedLinesEx(
+        dialogBox->container,
+        getRoundness(dialogBox->container, roundnessRadius),
+        segments,
+        2,
+        primaryColor
+    );
+
+    DrawTextPro(
+        GetFontDefault(),
+        dialogBox->text,
+        dialogBox->textPosition,
+        origin,
+        0,
+        DIALOG_BOX_FONT_SIZE,
+        MENU_FONT_SPACING,
+        primaryColor
+    );
+
+    drawButton(&dialogBox->cancelButton);
+    drawButton(&dialogBox->proceedButton);
 }
 
 void drawDropdownMenu(DropdownMenu* menu) {
@@ -211,6 +257,81 @@ void initCheckboxWithTitle(CheckboxWithTitle* option, Vector2 position, char* ti
     initCheckbox(&option->checkbox, state, checkBoxPosition, callback, userData);
     strcpy(option->title, title);
     option->titlePosition = titlePosition;
+}
+
+void initDialogBox(DialogBox* dialogBox, char* text, char* cancelButtonText, char* proceedButtonText, Callback callback, void* userData) {
+    
+    const float BUTTON_WIDTH = 200.0f;
+
+    dialogBox->isVisible = false;
+    
+    strcpy(dialogBox->text, text);
+
+    initButton(
+        &dialogBox->cancelButton,
+        (Rectangle){0, 0, BUTTON_WIDTH, 0},
+        BUTTON_FONT_SIZE,
+        "Cancel",
+        toggleBoolCallback,
+        &dialogBox->isVisible
+    );
+    
+    initButton(
+        &dialogBox->proceedButton,
+        (Rectangle){0, 0, BUTTON_WIDTH, 0},
+        BUTTON_FONT_SIZE,
+        "Erase",
+        callback,
+        userData
+    );
+
+    float buttonHeight = dialogBox->cancelButton.rect.height;
+
+    Vector2 textSize = MeasureTextEx(GetFontDefault(), dialogBox->text, DIALOG_BOX_FONT_SIZE, MENU_FONT_SPACING);
+    
+    float totalButtonWidth = (BUTTON_WIDTH * 2.0f) + (MENU_MARGIN * 3.0f);
+    float totalTextWidth = textSize.x + (MENU_MARGIN * 4.0f);
+
+    if (totalButtonWidth > totalTextWidth) {
+        dialogBox->container.width = totalButtonWidth;
+    } else {
+        dialogBox->container.width = totalTextWidth;
+    }
+
+    dialogBox->container.height = textSize.y + buttonHeight + (MENU_MARGIN * 5.0f);
+    dialogBox->container.x = (SCREEN_WIDTH / 2.0f) - (dialogBox->container.width / 2.0f);
+    dialogBox->container.y = (SCREEN_HEIGHT / 2.0f) - (dialogBox->container.height / 2.0f);
+
+    dialogBox->textPosition.x = dialogBox->container.x + (dialogBox->container.width / 2.0f) - (textSize.x / 2.0f);
+    dialogBox->textPosition.y = dialogBox->container.y + (MENU_MARGIN * 2.0f);
+
+    initButton(
+        &dialogBox->cancelButton,
+        (Rectangle){
+            dialogBox->container.x + (dialogBox->container.width / 2.0f) - (BUTTON_WIDTH + (MENU_MARGIN / 2.0f)),
+            dialogBox->container.y + dialogBox->container.height - MENU_MARGIN - buttonHeight,
+            BUTTON_WIDTH,
+            0
+        },
+        BUTTON_FONT_SIZE,
+        "Cancel",
+        toggleBoolCallback,
+        &dialogBox->isVisible
+    );
+    
+    initButton(
+        &dialogBox->proceedButton,
+        (Rectangle){
+            dialogBox->container.x + (dialogBox->container.width / 2.0f) + (MENU_MARGIN / 2.0f),
+            dialogBox->container.y + dialogBox->container.height - MENU_MARGIN - buttonHeight,
+            BUTTON_WIDTH,
+            0
+        },
+        BUTTON_FONT_SIZE,
+        "Erase",
+        callback,
+        userData
+    );
 }
 
 void drawDownArrow(Vector2 position, float width, Color color) {
@@ -386,17 +507,23 @@ void onClickIncrease(void* userData) {
     }
 }
 
-void updateButton(Button* button) {
+bool updateButton(Button* button) {
+    
+    bool isClicked = false;
+
     if (CheckCollisionPointRec(getVirtualMousePosition(), button->rect)) {
         button->isHovered = true;
 
         if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
             button->onClick(button->userData);
+            isClicked = true;
         }
 
     } else {
         button->isHovered = false;
     }
+
+    return isClicked;
 }
 
 bool updateCheckbox(Checkbox* checkbox) {
@@ -415,6 +542,23 @@ bool updateCheckbox(Checkbox* checkbox) {
                 checkbox->callback(checkbox->userData);
             }
         }
+    }
+
+    return isHovered;
+}
+
+bool updateDialogBox(DialogBox* dialogBox) {
+    bool isHovered = false;
+    
+    updateButton(&dialogBox->cancelButton);
+    bool isProcessed = updateButton(&dialogBox->proceedButton);
+
+    if (dialogBox->cancelButton.isHovered || dialogBox->proceedButton.isHovered) {
+        isHovered = true;
+    }
+
+    if (isProcessed) {
+        dialogBox->isVisible = false;
     }
 
     return isHovered;

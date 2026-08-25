@@ -42,6 +42,7 @@ void knockbackPoolball(Vector2 targetPosition, Vector2* targetVelocity, Vector2 
 void knockbackByImpact(Vector2 targetPosition, Vector2* targetVelocity, Vector2 forcePosition, Vector2 forceVelocity);
 void playSoundPositioned(Sound sound, float positionX);
 void shake(Vector2* position , double startTime, float duration);
+void toggleBoolCallback(void* userData);
 void updatePosition(Vector2* position, Vector2 velocity);
 void updateRotation(float* rotation, float rotationSpeed);
 

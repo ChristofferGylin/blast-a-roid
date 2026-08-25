@@ -85,15 +85,7 @@ void initHighScores(Highscores* highscores) {
 
         printf("Error: Could not load highscores from file, recreating file...\n");
 
-        for (int i = 0; i < NUMBER_OF_HIGHSCORES; i++) {
-            Highscore* entry = &highscores->scores[i];
-
-            entry->level = 0;
-            entry->score = 0;
-            entry->name[0] = '\0';
-        }
-
-        saveHighscores(highscores->scores);
+        resetHighscores(highscores);
     }
 }
 
@@ -117,6 +109,18 @@ void loadHighscores(Highscore highscores[NUMBER_OF_HIGHSCORES]) {
     }
 
     UnloadFileData((unsigned char *)scoresFromFile);
+}
+
+void resetHighscores(Highscores* highscores) {
+    for (int i = 0; i < NUMBER_OF_HIGHSCORES; i++) {
+        Highscore* entry = &highscores->scores[i];
+
+        entry->level = 0;
+        entry->score = 0;
+        entry->name[0] = '\0';
+    }
+
+    saveHighscores(highscores->scores);
 }
 
 void resetLastHighscore(Highscores* highscores) {

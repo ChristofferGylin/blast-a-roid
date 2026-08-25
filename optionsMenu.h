@@ -1,10 +1,11 @@
 #ifndef OPTIONSMENU_H
 #define OPTIONSMENU_H
 
+#include "score.h"
 #include "ui.h"
 #include "utils.h"
 
-#define NUMBER_OF_OPTIONS_TABS 3
+#define NUMBER_OF_OPTIONS_TABS 4
 #define NUMBER_OF_VIDEO_OPTIONS 3
 #define MONITOR_NAME_MAX_LENGTH 64
 #define MAX_NUMBER_OF_MONITORS 10
@@ -17,6 +18,11 @@ typedef struct AudioTabData {
 typedef struct ControlsTabData {
     
 }ControlsTabData;
+
+typedef struct HighscoresTabData {
+    Button eraseHighScoresButton;
+    DialogBox confirmDialogBox;
+}HighscoresTabData;
 
 typedef struct MonitorSelect {
     char heading[17];
@@ -48,8 +54,9 @@ typedef struct OptionsMenu {
     OptionsMenuTab tabs[NUMBER_OF_OPTIONS_TABS];
     AudioTabData audioTabData;
     ControlsTabData controlsTabData;
+    HighscoresTabData highscoresTabData;
     VideoTabData videoTabData;
-    int selectecTab;
+    int selectedTab;
     bool exit;
 }OptionsMenu;
 

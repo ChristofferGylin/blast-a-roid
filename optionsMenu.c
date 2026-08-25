@@ -8,6 +8,7 @@
 #include "gameContext.h"
 #include "optionsMenu.h"
 #include "raylib.h"
+#include "score.h"
 #include "ui.h"
 #include "uiSizes.h"
 
@@ -15,16 +16,20 @@ void drawOptionsMenu(GameContext* ctx, OptionsMenu* menu);
 void drawOptionsMenuTab(OptionsMenu* menu);
 void initOptionsMenu(GameContext* ctx, OptionsMenu* menu);
 void initOptionsMenuTab(OptionsMenuTab* tab, Rectangle* parent, char* heading, Callback drawContent, Callback updateTab, void* userData);
+void initHighscoresTabData(GameContext* ctx, Rectangle* parent, HighscoresTabData* tabData);
 void initVideoTabData(GameContext* ctx, Rectangle* parent, VideoTabData* tabData);
 void drawVideoTab(void* userData);
 void drawControlsTab(void* userData);
 void drawAudioTab(void* userData);
+void drawHighscoresTab(void* userData);
+void resetHighscoresCallback(void* userData);
 void setFullscreenCallback(void* userData);
 void setMonitorCallback(int monitor, void* userData);
 void updateOptionsMenu(GameContext* ctx, OptionsMenu* menu);
 void updateOptionsMenuTab(OptionsMenu* menu);
 void updateAudioTab(void* userData);
 void updateControlsTab(void* userData);
+void updateHighscoresTab(void* userData);
 void updateVideoTab(void* userData);
 
 void updateAudioTab(void* userData) {};
@@ -33,11 +38,33 @@ void updateControlsTab(void* userData) {};
 void drawControlsTab(void* userData) {};
 void drawAudioTab(void* userData) {};
 
+void initHighscoresTabData(GameContext* ctx, Rectangle* parent, HighscoresTabData* tabData) {
+    Vector2 position = {parent->x, parent->y};
+    
+    initButton(
+        &tabData->eraseHighScoresButton,
+        (Rectangle){position.x, position.y, 0, 0},
+        BUTTON_FONT_SIZE,
+        "Erase highscores",
+        toggleBoolCallback,
+        &tabData->confirmDialogBox.isVisible
+    );
+    
+    initDialogBox(
+        &tabData->confirmDialogBox,
+        "Are you sure you want to erase the highscore list?",
+        "Cancel",
+        "Erase",
+        resetHighscoresCallback,
+        &ctx->highscores
+    );
+}
+
 void initOptionsMenu(GameContext* ctx, OptionsMenu* menu) {
     menu->exit = false;
     menu->onClickIncreaseArgs.max_Value = NUMBER_OF_OPTIONS_TABS -1;
-    menu->onClickIncreaseArgs.value = &menu->selectecTab;
-    menu->selectecTab = 0;
+    menu->onClickIncreaseArgs.value = &menu->selectedTab;
+    menu->selectedTab = 0;
 
     initBasicLayoutContainer(&menu->layout, (Rectangle){0, 0, SCREEN_WIDTH, SCREEN_HEIGHT}, "OPTIONS");
     initButton(
@@ -51,8 +78,10 @@ void initOptionsMenu(GameContext* ctx, OptionsMenu* menu) {
     initOptionsMenuTab(&menu->tabs[0], &menu->layout.contentArea, "VIDEO", drawVideoTab, updateVideoTab, &menu->videoTabData);
     initOptionsMenuTab(&menu->tabs[1], &menu->layout.contentArea, "AUDIO", drawAudioTab, updateAudioTab, &menu->audioTabData);
     initOptionsMenuTab(&menu->tabs[2], &menu->layout.contentArea, "CONTROLS", drawControlsTab, updateControlsTab, &menu->controlsTabData);
+    initOptionsMenuTab(&menu->tabs[3], &menu->layout.contentArea, "HIGHSCORES", drawHighscoresTab, updateHighscoresTab, &menu->highscoresTabData);
 
     initVideoTabData(ctx, &menu->tabs[0].layout.contentArea, &menu->videoTabData);
+    initHighscoresTabData(ctx, &menu->tabs[3].layout.contentArea, &menu->highscoresTabData);
 
     float largestHeadingSize = 0;
 
@@ -211,7 +240,7 @@ void drawOptionsMenu(GameContext* ctx, OptionsMenu* menu) {
 }
 
 void drawOptionsMenuTab(OptionsMenu* menu) {
-    LayoutSection* section = &menu->tabs[menu->selectecTab].layout;
+    LayoutSection* section = &menu->tabs[menu->selectedTab].layout;
 
     Vector2 origin = {0,0};
 
@@ -221,6 +250,13 @@ void drawOptionsMenuTab(OptionsMenu* menu) {
     DrawRectanglePro(section->divider, origin, 0, primaryColor);
 
     section->drawContent(section->userData);
+}
+
+void drawHighscoresTab(void* userData) {
+    HighscoresTabData* data = userData;
+
+    drawButton(&data->eraseHighScoresButton);
+    drawDialogBox(&data->confirmDialogBox);
 }
 
 void drawVideoTab(void* userData) {
@@ -289,6 +325,11 @@ bool optionsMenu(GameContext* ctx) {
     return applicationIsRunning;
 }
 
+void resetHighscoresCallback(void* userData) {
+    Highscores* highscores = userData;
+    resetHighscores(highscores);
+}
+
 void updateOptionsMenu(GameContext* ctx, OptionsMenu* menu) {
     updateButton(&menu->backButton);
     updateButton(&menu->prevTabButton);
@@ -298,9 +339,16 @@ void updateOptionsMenu(GameContext* ctx, OptionsMenu* menu) {
 }
 
 void updateOptionsMenuTab(OptionsMenu* menu) {
-    OptionsMenuTab* tab = &menu->tabs[menu->selectecTab];
+    OptionsMenuTab* tab = &menu->tabs[menu->selectedTab];
 
     tab->updateTab(tab->layout.userData);
+}
+
+void updateHighscoresTab(void* userData) {
+    HighscoresTabData* tabData = userData;
+
+    updateButton(&tabData->eraseHighScoresButton);
+    updateDialogBox(&tabData->confirmDialogBox);
 }
 
 void updateVideoTab(void* userData) {
