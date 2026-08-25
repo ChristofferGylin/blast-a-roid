@@ -252,6 +252,9 @@ void drawOptionsMenuTab(OptionsMenu* menu) {
 
 void drawHighscoresTab(void* userData) {
     HighscoresTabData* data = userData;
+
+    drawButton(&data->eraseHighScoresButton);
+    drawDialogBox(&data->confirmDialogBox);
 }
 
 void drawVideoTab(void* userData) {

@@ -102,6 +102,7 @@ void drawBasicLayoutContainer(BasicLayoutContainer* layout);
 void drawButton(Button* button);
 void drawCheckbox(Checkbox* checkbox);
 void drawCheckboxWithTitle(CheckboxWithTitle* option);
+void drawDialogBox(DialogBox* dialogBox);
 void drawDownArrow(Vector2 position, float width, Color color);
 void drawDropdownMenu(DropdownMenu* menu);
 void drawLayoutSection(LayoutSection* section);

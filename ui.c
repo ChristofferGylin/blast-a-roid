@@ -262,6 +262,46 @@ void initDialogBox(DialogBox* dialogBox, char* text, char* cancelButtonText, cha
     dialogBox->proceedButton.rect.y = dialogBox->container.y + dialogBox->container.height - MENU_MARGIN;
 }
 
+void drawDialogBox(DialogBox* dialogBox) {
+    if (!dialogBox->isVisible) return;
+
+    Vector2 origin = {0,0};
+
+    const float DIALOG_BOX_FONT_SIZE = 16.0f;
+
+    DrawRectanglePro(
+        dialogBox->container,
+        origin,
+        0,
+        WHITE
+    );
+
+    DrawRectangleGradientH(
+        dialogBox->container.x,
+        dialogBox->container.y,
+        dialogBox->container.width,
+        dialogBox->container.height,
+        topColorDimmed60,
+        bottomColorDimmed60
+    );
+
+    DrawRectangleLinesEx(dialogBox->container, 2.0f , primaryColorDimmed60);
+
+    DrawTextPro(
+        GetFontDefault(),
+        dialogBox->text,
+        dialogBox->textPosition,
+        origin,
+        0,
+        DIALOG_BOX_FONT_SIZE,
+        MENU_FONT_SPACING,
+        primaryColor
+    );
+
+    drawButton(&dialogBox->cancelButton);
+    drawButton(&dialogBox->proceedButton);
+}
+
 void drawDownArrow(Vector2 position, float width, Color color) {
     const int ARROW_LINE_THICKNESS = 2;
 
