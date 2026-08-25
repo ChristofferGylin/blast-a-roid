@@ -240,6 +240,8 @@ void initDialogBox(DialogBox* dialogBox, char* text, char* cancelButtonText, cha
         userData
     );
 
+    float buttonHeight = dialogBox->cancelButton.rect.height;
+
     Vector2 textSize = MeasureTextEx(GetFontDefault(), dialogBox->text, MENU_FONT_SIZE, MENU_FONT_SPACING);
     
     if (((BUTTON_WIDTH * 2.0f) + (MENU_MARGIN * 3.0f)) > (textSize.x + (MENU_MARGIN + 2.0f))) {
@@ -248,7 +250,7 @@ void initDialogBox(DialogBox* dialogBox, char* text, char* cancelButtonText, cha
         dialogBox->container.width = textSize.x + (MENU_MARGIN + 2.0f);
     }
 
-    dialogBox->container.height = textSize.y + dialogBox->cancelButton.rect.height + (MENU_MARGIN * 3.0f);
+    dialogBox->container.height = textSize.y + buttonHeight + (MENU_MARGIN * 3.0f);
     dialogBox->container.x = (SCREEN_WIDTH / 2.0f) - (dialogBox->container.width / 2.0f);
     dialogBox->container.y = (SCREEN_HEIGHT / 2.0f) - (dialogBox->container.height / 2.0f);
 
@@ -259,7 +261,7 @@ void initDialogBox(DialogBox* dialogBox, char* text, char* cancelButtonText, cha
         &dialogBox->cancelButton,
         (Rectangle){
             dialogBox->container.x + (dialogBox->container.width / 2.0f) - (BUTTON_WIDTH + (MENU_MARGIN / 2.0f)),
-            dialogBox->container.y + dialogBox->container.height - MENU_MARGIN,
+            dialogBox->container.y + dialogBox->container.height - MENU_MARGIN - buttonHeight,
             BUTTON_WIDTH,
             0
         },
@@ -273,7 +275,7 @@ void initDialogBox(DialogBox* dialogBox, char* text, char* cancelButtonText, cha
         &dialogBox->proceedButton,
         (Rectangle){
             dialogBox->container.x + (dialogBox->container.width / 2.0f) + (MENU_MARGIN / 2.0f),
-            dialogBox->container.y + dialogBox->container.height - MENU_MARGIN,
+            dialogBox->container.y + dialogBox->container.height - MENU_MARGIN - buttonHeight,
             BUTTON_WIDTH,
             0
         },
