@@ -216,7 +216,7 @@ void initCheckboxWithTitle(CheckboxWithTitle* option, Vector2 position, char* ti
 
 void initDialogBox(DialogBox* dialogBox, char* text, char* cancelButtonText, char* proceedButtonText, Callback callback, void* userData) {
     
-    const float BUTTON_WIDTH = 100.0f;
+    const float BUTTON_WIDTH = 200.0f;
 
     dialogBox->isVisible = false;
     
@@ -255,11 +255,33 @@ void initDialogBox(DialogBox* dialogBox, char* text, char* cancelButtonText, cha
     dialogBox->textPosition.x = dialogBox->container.x + MENU_MARGIN;
     dialogBox->textPosition.y = dialogBox->container.y + MENU_MARGIN;
 
-    dialogBox->cancelButton.rect.x = dialogBox->container.x + (dialogBox->container.width / 2.0f) - (BUTTON_WIDTH + (MENU_MARGIN / 2.0f));
-    dialogBox->cancelButton.rect.y = dialogBox->container.y + dialogBox->container.height - MENU_MARGIN;
+    initButton(
+        &dialogBox->cancelButton,
+        (Rectangle){
+            dialogBox->container.x + (dialogBox->container.width / 2.0f) - (BUTTON_WIDTH + (MENU_MARGIN / 2.0f)),
+            dialogBox->container.y + dialogBox->container.height - MENU_MARGIN,
+            BUTTON_WIDTH,
+            0
+        },
+        BUTTON_FONT_SIZE,
+        "Cancel",
+        toggleBoolCallback,
+        &dialogBox->isVisible
+    );
     
-    dialogBox->proceedButton.rect.x = dialogBox->container.x + (dialogBox->container.width / 2.0f) + (MENU_MARGIN / 2.0f);
-    dialogBox->proceedButton.rect.y = dialogBox->container.y + dialogBox->container.height - MENU_MARGIN;
+    initButton(
+        &dialogBox->proceedButton,
+        (Rectangle){
+            dialogBox->container.x + (dialogBox->container.width / 2.0f) + (MENU_MARGIN / 2.0f),
+            dialogBox->container.y + dialogBox->container.height - MENU_MARGIN,
+            BUTTON_WIDTH,
+            0
+        },
+        BUTTON_FONT_SIZE,
+        "Erase",
+        callback,
+        userData
+    );
 }
 
 void drawDialogBox(DialogBox* dialogBox) {
