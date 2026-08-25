@@ -1,6 +1,7 @@
 #ifndef OPTIONSMENU_H
 #define OPTIONSMENU_H
 
+#include "score.h"
 #include "ui.h"
 #include "utils.h"
 

@@ -475,17 +475,23 @@ void onClickIncrease(void* userData) {
     }
 }
 
-void updateButton(Button* button) {
+bool updateButton(Button* button) {
+    
+    bool isClicked = false;
+
     if (CheckCollisionPointRec(getVirtualMousePosition(), button->rect)) {
         button->isHovered = true;
 
         if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
             button->onClick(button->userData);
+            isClicked = true;
         }
 
     } else {
         button->isHovered = false;
     }
+
+    return isClicked;
 }
 
 bool updateCheckbox(Checkbox* checkbox) {
@@ -510,8 +516,20 @@ bool updateCheckbox(Checkbox* checkbox) {
 }
 
 bool updateDialogBox(DialogBox* dialogBox) {
+    bool isHovered = false;
+    
     updateButton(&dialogBox->cancelButton);
-    updateButton(&dialogBox->proceedButton);
+    bool isProcessed = updateButton(&dialogBox->proceedButton);
+
+    if (dialogBox->cancelButton.isHovered || dialogBox->proceedButton.isHovered) {
+        isHovered = true;
+    }
+
+    if (isProcessed) {
+        dialogBox->isVisible = false;
+    }
+
+    return isHovered;
 }
 
 bool updateDropdownMenu(DropdownMenu* menu) {

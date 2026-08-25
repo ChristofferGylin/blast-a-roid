@@ -117,7 +117,7 @@ void initLayoutSection(LayoutSection* section, Rectangle* parent, Rectangle cont
 void onClickBack(void* userData);
 void onClickDecrease(void* userData);
 void onClickIncrease(void* userData);
-void updateButton(Button* button);
+bool updateButton(Button* button);
 bool updateCheckbox(Checkbox* checkbox);
 bool updateDialogBox(DialogBox* dialogBox);
 bool updateDropdownMenu(DropdownMenu* menu);

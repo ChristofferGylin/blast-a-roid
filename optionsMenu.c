@@ -8,6 +8,7 @@
 #include "gameContext.h"
 #include "optionsMenu.h"
 #include "raylib.h"
+#include "score.h"
 #include "ui.h"
 #include "uiSizes.h"
 
