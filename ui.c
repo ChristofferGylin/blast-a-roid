@@ -14,7 +14,7 @@ static const int CHECKBOX_FONT_SIZE = 18;
 static const int DROPDOWN_MENU_FONT_SIZE = 18;
 static const int DROPDOWN_MENU_DOWN_ARROW_SIZE = 18;
 static const int DROPDOWN_MENU_BUTTON_SIZE = 42;
-static const float DIALOG_BOX_FONT_SIZE = 16.0f;
+static const int DIALOG_BOX_FONT_SIZE = 18;
 
 void drawCheckbox(Checkbox* checkbox) {
     
@@ -83,6 +83,50 @@ void drawButton(Button* button) {
     DrawRectangleRoundedLinesEx(button->rect, roundness, MENU_ROUNDNESS_SEGMENTS, 2, primaryColor);
 
     DrawTextPro(GetFontDefault(), button->text, button->textPosition, (Vector2){0,0}, 0, button->fontSize, BUTTON_FONT_SPACING, primaryColor);
+}
+
+void drawDialogBox(DialogBox* dialogBox) {
+    if (!dialogBox->isVisible) return;
+
+    Vector2 origin = {0,0};
+    int segments = 10;
+    float roundnessRadius = 5.0f;
+
+    DrawRectangleRounded(
+        dialogBox->container,
+        getRoundness(dialogBox->container, roundnessRadius),
+        segments,
+        topColor
+    );
+
+    DrawRectangleRounded(
+        dialogBox->container,
+        getRoundness(dialogBox->container, roundnessRadius),
+        segments,
+        primaryColorDimmed15
+    );
+
+    DrawRectangleRoundedLinesEx(
+        dialogBox->container,
+        getRoundness(dialogBox->container, roundnessRadius),
+        segments,
+        2,
+        primaryColor
+    );
+
+    DrawTextPro(
+        GetFontDefault(),
+        dialogBox->text,
+        dialogBox->textPosition,
+        origin,
+        0,
+        DIALOG_BOX_FONT_SIZE,
+        MENU_FONT_SPACING,
+        primaryColor
+    );
+
+    drawButton(&dialogBox->cancelButton);
+    drawButton(&dialogBox->proceedButton);
 }
 
 void drawDropdownMenu(DropdownMenu* menu) {
@@ -288,44 +332,6 @@ void initDialogBox(DialogBox* dialogBox, char* text, char* cancelButtonText, cha
         callback,
         userData
     );
-}
-
-void drawDialogBox(DialogBox* dialogBox) {
-    if (!dialogBox->isVisible) return;
-
-    Vector2 origin = {0,0};
-
-    DrawRectanglePro(
-        dialogBox->container,
-        origin,
-        0,
-        WHITE
-    );
-
-    DrawRectangleGradientH(
-        dialogBox->container.x,
-        dialogBox->container.y,
-        dialogBox->container.width,
-        dialogBox->container.height,
-        topColorDimmed60,
-        bottomColorDimmed60
-    );
-
-    DrawRectangleLinesEx(dialogBox->container, 2.0f , primaryColorDimmed60);
-
-    DrawTextPro(
-        GetFontDefault(),
-        dialogBox->text,
-        dialogBox->textPosition,
-        origin,
-        0,
-        DIALOG_BOX_FONT_SIZE,
-        MENU_FONT_SPACING,
-        primaryColor
-    );
-
-    drawButton(&dialogBox->cancelButton);
-    drawButton(&dialogBox->proceedButton);
 }
 
 void drawDownArrow(Vector2 position, float width, Color color) {
