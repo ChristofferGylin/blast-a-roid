@@ -10,6 +10,7 @@
 static const int ASTEROID_POINTS_1 = 50;
 static const int ASTEROID_POINTS_2 = 100;
 static const int ASTEROID_POINTS_3 = 300;
+static const int MAX_TIMEBONUS_MULTIPLIER = 5;
 static const int METAL_ASTEROID_POINTS = 1000;
 
 void loadHighscores(Highscore highscores[NUMBER_OF_HIGHSCORES]);
@@ -174,7 +175,7 @@ void updateLevelBonus(Player* player) {
 void updateTimeBonusMultiplier(Player* player) {
     player->timeBonusTimer = GetTime() * 1000.0;
 
-    if (player->timeBonusMultiplier < 10) {
+    if (player->timeBonusMultiplier < MAX_TIMEBONUS_MULTIPLIER) {
         player->timeBonusMultiplier++;
     }
 }
