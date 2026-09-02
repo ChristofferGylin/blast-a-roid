@@ -135,14 +135,14 @@ void handleShooting(GameContext* ctx) {
         int lifetime = ctx->player.powerups.longShot ? nowMillis + (SHOT_LIFE_TIME * 2) : nowMillis + SHOT_LIFE_TIME;
         int numberOfShots = ctx->player.powerups.trippleShot ? 3 : 1;
 
-        
+        Vector2 shotSpawnPosition = {
+                ship->position.x + (cosf(radians[0]) * (SHIP_SIZE / 2.0f)),
+                ship->position.y + (sinf(radians[0]) * (SHIP_SIZE / 2.0f))
+            };
 
         for (int i = 0; i < numberOfShots; i++) {
 
-            Vector2 shotSpawnPosition = {
-                ship->position.x + (cosf(radians[i]) * (SHIP_SIZE / 2.0f)),
-                ship->position.y + (sinf(radians[i]) * (SHIP_SIZE / 2.0f))
-            };
+            
 
             Shot newShot = {
                 PLAYER_SHOT,
