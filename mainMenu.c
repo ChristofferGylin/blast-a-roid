@@ -427,6 +427,11 @@ void mainMenu(GameContext* ctx) {
                     printf("Error: Invalid menu choice (%d) in main menu\n", menu.selected);
                 break;
             }
+
+            isFadeInComplete = false;
+            isFadeOutComplete = false;
+            fadeInValue = 1.0f;
+            fadeOutValue = 0.0f;
         }
         BeginTextureMode(ctx->rendering.renderTexture);
             ClearBackground(BLACK);
