@@ -1,6 +1,7 @@
 #ifndef OPTIONSMENU_H
 #define OPTIONSMENU_H
 
+#include "fader.h"
 #include "score.h"
 #include "ui.h"
 #include "utils.h"
@@ -46,6 +47,7 @@ typedef struct OptionsMenuTab {
 }OptionsMenuTab;
 
 typedef struct OptionsMenu {
+    Fader fader;
     BasicLayoutContainer layout;
     Button backButton;
     Button prevTabButton;

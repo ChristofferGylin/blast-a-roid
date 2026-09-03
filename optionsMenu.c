@@ -5,6 +5,7 @@
 #include "config.h"
 #include "constants.h"
 #include "drawing.h"
+#include "fader.h"
 #include "gameContext.h"
 #include "optionsMenu.h"
 #include "raylib.h"
@@ -65,6 +66,10 @@ void initOptionsMenu(GameContext* ctx, OptionsMenu* menu) {
     menu->onClickIncreaseArgs.max_Value = NUMBER_OF_OPTIONS_TABS -1;
     menu->onClickIncreaseArgs.value = &menu->selectedTab;
     menu->selectedTab = 0;
+    menu->fader.fadeInValue = 1.0f;
+    menu->fader.fadeOutValue = 0.0f;
+    menu->fader.isFadeInComplete = false;
+    menu->fader.isFadeOutComplete = false;
 
     initBasicLayoutContainer(&menu->layout, (Rectangle){0, 0, SCREEN_WIDTH, SCREEN_HEIGHT}, "OPTIONS");
     initButton(
@@ -228,12 +233,20 @@ void initVideoTabData(GameContext* ctx, Rectangle* parent, VideoTabData* tabData
 }
 
 void drawOptionsMenu(GameContext* ctx, OptionsMenu* menu) {
-    
+    Fader* fader = &menu->fader;
+
     BeginTextureMode(ctx->rendering.renderTexture);
         ClearBackground(BLACK);
         drawBasicLayoutContainer(&menu->layout);
         drawButton(&menu->backButton);
         drawOptionsMenuTab(menu);
+
+        if (!fader->isFadeInComplete) {
+            fader->isFadeInComplete = fadeIn(&fader->fadeInValue);
+        } else  if (menu->exit && !fader->isFadeOutComplete) {
+            fader->isFadeOutComplete = fadeOut(&fader->fadeOutValue);
+        }
+
     EndTextureMode();
 
     renderToScreen(&ctx->rendering);
@@ -309,7 +322,9 @@ bool optionsMenu(GameContext* ctx) {
         updateOptionsMenu(ctx, &menu);
         drawOptionsMenu(ctx, &menu);
 
-        if (menu.exit) break;
+        if (menu.exit && menu.fader.isFadeOutComplete) {
+            break;
+        }
     }
 
     if (WindowShouldClose()) {
