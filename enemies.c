@@ -547,9 +547,13 @@ void populateEnemySpawnPool(GameContext* ctx) {
         optionsPool[i].weight += i * currentLevel;
     }
     
-    
     int minNumberOfEnemies = (int)floor(currentLevel / 4.0f);
     int maxNumberOfEnemies = currentLevel > MAX_ENEMIES ? MAX_ENEMIES : currentLevel;
+    
+    if (minNumberOfEnemies > maxNumberOfEnemies) {
+        minNumberOfEnemies = maxNumberOfEnemies;
+    }
+    
     int availbleEnemyTypes = currentLevel > NUMBER_OF_ENEMY_TYPES ? NUMBER_OF_ENEMY_TYPES : currentLevel;
     int numberToPopulate = GetRandomValue(minNumberOfEnemies, maxNumberOfEnemies);
     
@@ -563,7 +567,7 @@ void populateEnemySpawnPool(GameContext* ctx) {
             sumOfWeight += optionsPool[j].weight;
         }
 
-        int randomSelect = GetRandomValue(0, sumOfWeight - 1);
+        int randomSelect = GetRandomValue(0, (int)sumOfWeight - 1);
 
         for (int j = 0; j < availbleEnemyTypes; j++) {
 
