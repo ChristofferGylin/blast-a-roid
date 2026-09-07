@@ -16,7 +16,6 @@
 void setTextureFilters(GameContext* ctx);
 
 void initSpawning(GameContext* ctx) {
-    setSpawnDelay(ctx);
 }
 
 void initGameContext(GameContext* ctx, bool debugActive) {
