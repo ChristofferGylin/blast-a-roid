@@ -60,55 +60,25 @@ typedef struct EnemyObjectPool {
     int activeCount;
 }EnemyObjectPool;
 
+typedef struct EnemySpawn {
+    EnemyType type;
+    double spawnTime;
+}EnemySpawn;
+
 typedef struct EnemySpawnOption {
     EnemyType type;
     float weight;
-    int count;
-    int maxCount;
 }EnemySpawnOption;
 
 typedef struct  EnemySpawnOptionPoolObject {
     bool active;
-    EnemySpawnOption option;
+    EnemySpawn option;
 }EnemySpawnOptionPoolObject;
 
 typedef struct EnemySpawnPool {
     EnemySpawnOptionPoolObject options[NUMBER_OF_ENEMY_TYPES];
     int activeCount;
 }EnemySpawnPool;
-
-static EnemySpawnOption levelsEnemyOptions[NUMBER_OF_LEVEL_ENEMY_OPTIONS][NUMBER_OF_ENEMY_TYPES] = {
-    {
-        {UFO_1, 100.0f, 0, 1},
-        {UFO_2, 100.0f, 0, 0},
-        {UFO_3, 100.0f, 0, 0},
-        {SPIKY_ASTEROID, 0.0f, 0, 0},
-    },
-    {
-        {UFO_1, 100.0f, 0, 1},
-        {UFO_2, 70.0f, 0, 1},
-        {UFO_3, 50.0f, 0, 0},
-        {SPIKY_ASTEROID, 50.0f, 0, 1},
-    },
-    {
-        {UFO_1, 50.0f, 0, 1},
-        {UFO_2, 70.0f, 0, 1},
-        {UFO_3, 70.0f, 0, 1},
-        {SPIKY_ASTEROID, 70.0f, 0, 1},
-    },
-    {
-        {UFO_1, 50.0f, 0, 1},
-        {UFO_2, 100.0f, 0, 2},
-        {UFO_3, 70.0f, 0, 1},
-        {SPIKY_ASTEROID, 70.0f, 0, 2},
-    },    
-    {
-        {UFO_1, 50.0f, 0, 1},
-        {UFO_2, 70.0f, 0, 2},
-        {UFO_3, 100.0f, 0, 2},
-        {SPIKY_ASTEROID, 100.0f, 0, 3},
-    },
-};
 
 bool addNewEnemy(GameContext* ctx, EnemyType type, bool atPosition, Vector2 position);
 void handleEnemiesCollisions(GameContext* ctx);
@@ -118,8 +88,6 @@ void initEnemyPool(EnemyObjectPool* pool);
 void initEnemySpawnPool(GameContext* ctx);
 void removeEnemy(EnemyObjectPool* pool, Enemy* enemy);
 void renderEnemies(EnemyObjectPool* pool);
-void setNextEnemySpawnTime(GameContext* ctx);
-void setSpawnDelay(GameContext* ctx);
 void spawnEnemy(GameContext* ctx);
 void updateEnemies(GameContext* ctx);
 

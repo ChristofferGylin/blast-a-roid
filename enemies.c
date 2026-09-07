@@ -10,6 +10,7 @@
 #include "raymath.h"
 #include <math.h>
 
+void addEnemyToSpawnPool(EnemySpawnPool* pool, EnemyType type, double spawnTime);
 void compactEnemyPool(EnemyObjectPool* pool);
 void compactEnemySpawnPool(EnemySpawnPool* pool);
 void initEnemy(GameContext* ctx, Enemy* enemy, EnemyType type);
@@ -19,12 +20,24 @@ void initUfo2(GameContext* ctx, Enemy* enemy);
 void initUfo3(GameContext* ctx, Enemy* enemy);
 void handleEnemyShooting(GameContext* ctx, Enemy* enemy);
 void handleUfoMovement(GameContext* ctx, Enemy* enemy);
+void populateEnemySpawnPool(GameContext* ctx);
 Vector2 predictiveAim(Vector2 targetPosition, Vector2 targetVelocity, Vector2 sourcePosition, float time);
 bool ufoGoOffScreen(GameContext* ctx, Enemy* enemy);
 void updateSpikyAsteroid(GameContext* ctx, Enemy* enemy);
 bool updateUfo1(GameContext* ctx, Enemy* enemy);
 bool updateUfo2(GameContext* ctx, Enemy* enemy);
 bool updateUfo3(GameContext* ctx, Enemy* enemy);
+
+void addEnemyToSpawnPool(EnemySpawnPool* pool, EnemyType type, double spawnTime) {
+    EnemySpawn newSpawn;
+
+    newSpawn.spawnTime = spawnTime;
+    newSpawn.type = type;
+
+    pool->options[pool->activeCount].option = newSpawn;
+    pool->options[pool->activeCount].active = true;
+    pool->activeCount++;
+}
 
 bool addNewEnemy(GameContext* ctx, EnemyType type, bool atPosition, Vector2 position) {
 
@@ -365,30 +378,7 @@ void initEnemySpawnPool(GameContext* ctx) {
 
     pool->activeCount = 0;
 
-    int index = 0;
-
-    if (ctx->player.level > NUMBER_OF_LEVEL_ENEMY_OPTIONS) {
-        index = NUMBER_OF_LEVEL_ENEMY_OPTIONS - 1;
-    } else {
-        index = ctx->player.level - 1;
-
-        if (index < 0) index = 0;
-    }
-
-    EnemySpawnOption* spawnOptions = levelsEnemyOptions[index];
-
-    int activeIndex = 0;
-
-    for (int i = 0; i < NUMBER_OF_ENEMY_TYPES; i++) {
-        
-        if (spawnOptions[i].maxCount > 0) {
-            pool->options[activeIndex].option = spawnOptions[i];
-            pool->options[activeIndex].active = true;
-            activeIndex++;
-        }
-    }
-
-    pool->activeCount = activeIndex;
+    populateEnemySpawnPool(ctx);
 }
 
 void initSpikyAsteroid(GameContext* ctx, Enemy* enemy) {
@@ -542,6 +532,59 @@ void initUfo3(GameContext* ctx, Enemy* enemy) {
     enemy->animation = instance;
 }
 
+void populateEnemySpawnPool(GameContext* ctx) {
+
+    int currentLevel = ctx->player.level;
+
+    EnemySpawnOption optionsPool[NUMBER_OF_ENEMY_TYPES] = {
+        {UFO_1, 20.0f},
+        {UFO_2, 10.0f},
+        {SPIKY_ASTEROID, 5.0f},
+        {UFO_3, 0.0f},
+    };
+
+    for (int i = 0; i < NUMBER_OF_ENEMY_TYPES; i++) {
+        optionsPool[i].weight += i * currentLevel;
+    }
+    
+    int minNumberOfEnemies = (int)floor(currentLevel / 4.0f);
+    int maxNumberOfEnemies = currentLevel > MAX_ENEMIES ? MAX_ENEMIES : currentLevel;
+    
+    if (minNumberOfEnemies > maxNumberOfEnemies) {
+        minNumberOfEnemies = maxNumberOfEnemies;
+    }
+    
+    int availbleEnemyTypes = currentLevel > NUMBER_OF_ENEMY_TYPES ? NUMBER_OF_ENEMY_TYPES : currentLevel;
+    int numberToPopulate = GetRandomValue(minNumberOfEnemies, maxNumberOfEnemies);
+    
+    double spawnTime = GetTime();
+
+    for (int i = 0; i < numberToPopulate; i++) {
+        
+        float sumOfWeight = 0;
+
+        for (int j = 0; j < availbleEnemyTypes; j++) {
+            sumOfWeight += optionsPool[j].weight;
+        }
+
+        int randomSelect = GetRandomValue(0, (int)sumOfWeight - 1);
+
+        for (int j = 0; j < availbleEnemyTypes; j++) {
+
+            EnemySpawnOption* option = &optionsPool[j];
+
+            if (randomSelect < option->weight) {
+                spawnTime += GetRandomValue(MIN_SPAWN_TIME, MAX_SPAWN_TIME);
+                addEnemyToSpawnPool(&ctx->objectPools.spawnableEnemies, option->type, spawnTime);
+                break;
+            }
+
+            randomSelect -= option->weight;
+        }
+    }
+
+}
+
 Vector2 predictiveAim(Vector2 targetPosition, Vector2 targetVelocity, Vector2 sourcePosition, float time) {
     Vector2 target = targetPosition;
 
@@ -589,67 +632,33 @@ void renderEnemies(EnemyObjectPool* pool) {
     }
 }
 
-void setNextEnemySpawnTime(GameContext* ctx) {
-    ctx->spawning.nextSpawn = GetTime() + GetRandomValue(ctx->spawning.spawnDelay.min, ctx->spawning.spawnDelay.max);
-}
-
-void setSpawnDelay(GameContext* ctx) {
-    FloatRange minDelay = {5, 10};
-    FloatRange maxDelay = {15, 30};
-    
-    float multiplier = (ctx->player.level * 5) / 100;
-
-    FloatRange spawnDelay = {
-        maxDelay.min - (maxDelay.min * multiplier),
-        maxDelay.max - (maxDelay.max * multiplier)
-    };
-
-    if (spawnDelay.min < minDelay.min) spawnDelay.min = minDelay.min;
-    if (spawnDelay.max < minDelay.max) spawnDelay.max = minDelay.max;
-
-    ctx->spawning.spawnDelay = spawnDelay;
-}
-
 void spawnEnemy(GameContext* ctx) {
     
     EnemySpawnPool* pool = &ctx->objectPools.spawnableEnemies;
-    
-    if (pool->activeCount == 0 || ctx->spawning.nextSpawn + ctx->pausTimer > GetTime()) return;
-    setNextEnemySpawnTime(ctx);
+    bool poolHasChanged = false;
 
-    float sumOfWeight = 0.0f;
+    if (pool->activeCount == 0) return;
 
-    for (int i = 0; i < pool->activeCount; i++) {
-        sumOfWeight += pool->options[i].option.weight;
-    }
-
-    int randomSelect = GetRandomValue(0, sumOfWeight);
+    double currentTime = GetTime();
 
     for (int i = 0; i < pool->activeCount; i++) {
+        if (!pool->options[i].active) continue;
 
-        EnemySpawnOption* option = &pool->options[i].option;
+        EnemySpawn* option = &pool->options[i].option;
 
-        if (randomSelect < option->weight) {
-
+        if (option->spawnTime + ctx->pausTimer <= currentTime) {
             bool addSuccess = addNewEnemy(ctx, option->type, false, (Vector2){0, 0});
 
             if (addSuccess) {
-
                 PlaySound(ctx->assets.samples.alarm);
-
-                option->count++;
-
-                if (option->count >= option->maxCount) {
-                    pool->options[i].active = false;
-
-                    compactEnemySpawnPool(pool);
-                }
+                pool->options[i].active = false;
+                poolHasChanged = true;
             }
-
-            return;
         }
+    }
 
-        randomSelect -= option->weight;
+    if (poolHasChanged) {
+        compactEnemySpawnPool(pool);
     }
 }
 
