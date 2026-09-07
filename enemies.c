@@ -19,6 +19,7 @@ void initUfo2(GameContext* ctx, Enemy* enemy);
 void initUfo3(GameContext* ctx, Enemy* enemy);
 void handleEnemyShooting(GameContext* ctx, Enemy* enemy);
 void handleUfoMovement(GameContext* ctx, Enemy* enemy);
+void populateEnemySpawnPool(GameContext* ctx);
 Vector2 predictiveAim(Vector2 targetPosition, Vector2 targetVelocity, Vector2 sourcePosition, float time);
 bool ufoGoOffScreen(GameContext* ctx, Enemy* enemy);
 void updateSpikyAsteroid(GameContext* ctx, Enemy* enemy);
