@@ -652,43 +652,31 @@ void setSpawnDelay(GameContext* ctx) {
 void spawnEnemy(GameContext* ctx) {
     
     EnemySpawnPool* pool = &ctx->objectPools.spawnableEnemies;
-    
-    if (pool->activeCount == 0 || ctx->spawning.nextSpawn + ctx->pausTimer > GetTime()) return;
-    setNextEnemySpawnTime(ctx);
+    bool poolHasChanged = false;
 
-    float sumOfWeight = 0.0f;
+    if (pool->activeCount == 0) return;
+    //setNextEnemySpawnTime(ctx);
 
-    for (int i = 0; i < pool->activeCount; i++) {
-        sumOfWeight += pool->options[i].option.weight;
-    }
-
-    int randomSelect = GetRandomValue(0, sumOfWeight);
+    double currentTime = GetTime();
 
     for (int i = 0; i < pool->activeCount; i++) {
+        if (!pool->options[i].active) continue;
 
-        EnemySpawnOption* option = &pool->options[i].option;
+        EnemySpawn* option = &pool->options[i].option;
 
-        if (randomSelect < option->weight) {
-
+        if (option->spawnTime + ctx->pausTimer <= currentTime) {
             bool addSuccess = addNewEnemy(ctx, option->type, false, (Vector2){0, 0});
 
             if (addSuccess) {
-
                 PlaySound(ctx->assets.samples.alarm);
-
-                option->count++;
-
-                if (option->count >= option->maxCount) {
-                    pool->options[i].active = false;
-
-                    compactEnemySpawnPool(pool);
-                }
+                pool->options[i].active = false;
+                poolHasChanged = true;
             }
-
-            return;
         }
+    }
 
-        randomSelect -= option->weight;
+    if (poolHasChanged) {
+        compactEnemySpawnPool(pool);
     }
 }
 
