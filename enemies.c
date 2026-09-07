@@ -628,10 +628,6 @@ void renderEnemies(EnemyObjectPool* pool) {
     }
 }
 
-void setNextEnemySpawnTime(GameContext* ctx) {
-    ctx->spawning.nextSpawn = GetTime() + GetRandomValue(ctx->spawning.spawnDelay.min, ctx->spawning.spawnDelay.max);
-}
-
 void setSpawnDelay(GameContext* ctx) {
     FloatRange minDelay = {5, 10};
     FloatRange maxDelay = {15, 30};
@@ -655,7 +651,6 @@ void spawnEnemy(GameContext* ctx) {
     bool poolHasChanged = false;
 
     if (pool->activeCount == 0) return;
-    //setNextEnemySpawnTime(ctx);
 
     double currentTime = GetTime();
 
