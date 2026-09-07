@@ -77,11 +77,6 @@ typedef struct ObjectPools {
     SpecialsSpawnPool specialsSpawn;
 }ObjectPools;
 
-typedef struct SpawningEnemies {
-    double nextSpawn;
-    FloatRange spawnDelay;
-}SpawningEnemies;
-
 typedef struct Supernova {
     bool detonated;
     double detonationTime;
@@ -94,7 +89,6 @@ typedef struct GameContext {
     ObjectPools objectPools;
     Player player;
     Ship ship;
-    SpawningEnemies spawning;
     double pausTimer;
     Supernova supernova;
     bool isBlackHoleActive;
