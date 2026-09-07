@@ -60,16 +60,19 @@ typedef struct EnemyObjectPool {
     int activeCount;
 }EnemyObjectPool;
 
+typedef struct EnemySpawn {
+    EnemyType type;
+    double spawnTime;
+}EnemySpawn;
+
 typedef struct EnemySpawnOption {
     EnemyType type;
     float weight;
-    int count;
-    int maxCount;
 }EnemySpawnOption;
 
 typedef struct  EnemySpawnOptionPoolObject {
     bool active;
-    EnemySpawnOption option;
+    EnemySpawn option;
 }EnemySpawnOptionPoolObject;
 
 typedef struct EnemySpawnPool {

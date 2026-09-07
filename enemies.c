@@ -542,6 +542,53 @@ void initUfo3(GameContext* ctx, Enemy* enemy) {
     enemy->animation = instance;
 }
 
+void populateEnemySpawnPool(GameContext* ctx) {
+
+    int currentLevel = ctx->player.level;
+
+    EnemySpawnOption optionsPool[NUMBER_OF_ENEMY_TYPES] = {
+        {UFO_1, 20.0f},
+        {UFO_2, 10.0f},
+        {SPIKY_ASTEROID, 5.0f},
+        {UFO_3, 0.0f},
+    };
+
+    for (int i = 0; i < NUMBER_OF_ENEMY_TYPES; i++) {
+        optionsPool[i].weight += i * currentLevel;
+    }
+    
+    EnemySpawnPool* spawnPool = &ctx->objectPools.spawnableEnemies;
+    
+    int minNumberOfEnemies = (int)floor(currentLevel / 4.0f);
+    int maxNumberOfEnemies = currentLevel > MAX_ENEMIES ? MAX_ENEMIES : currentLevel;
+    int availbleEnemyTypes = currentLevel > NUMBER_OF_ENEMY_TYPES ? NUMBER_OF_ENEMY_TYPES : currentLevel;
+    int numberToPopulate = GetRandomValue(minNumberOfEnemies, maxNumberOfEnemies);
+    
+    for (int i = 0; i < numberToPopulate; i++) {
+        
+        float sumOfWeight = 0;
+
+        for (int j = 0; j < availbleEnemyTypes; j++) {
+            sumOfWeight += optionsPool[j].weight;
+        }
+
+        int randomSelect = GetRandomValue(0, sumOfWeight - 1);
+
+        for (int j = 0; j < availbleEnemyTypes; j++) {
+
+            EnemySpawnOption* option = &optionsPool[j];
+
+            if (randomSelect < option->weight) {
+                addSpecialToSpawnPool(&ctx->objectPools.specialsSpawn, option->type);
+                break;
+            }
+
+            randomSelect -= option->weight;
+        }
+    }
+
+}
+
 Vector2 predictiveAim(Vector2 targetPosition, Vector2 targetVelocity, Vector2 sourcePosition, float time) {
     Vector2 target = targetPosition;
 
