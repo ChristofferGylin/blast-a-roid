@@ -48,7 +48,6 @@ GameResult gameLoop(GameContext* ctx) {
    
     initObjectPools(ctx);
     initAsteroids(ctx);
-    initSpawning(ctx);
     resetSupernova(&ctx->supernova);
     ctx->pausTimer = 0;
 

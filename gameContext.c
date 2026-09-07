@@ -15,15 +15,11 @@
 
 void setTextureFilters(GameContext* ctx);
 
-void initSpawning(GameContext* ctx) {
-}
-
 void initGameContext(GameContext* ctx, bool debugActive) {
     initPlayer(&ctx->player);
     initObjectPools(ctx);
     loadAssets(ctx);
     initShip(ctx, &ctx->ship);
-    initSpawning(ctx);
     initHighScores(&ctx->highscores);
     initDebug(&ctx->debug, debugActive);
     initRendering(&ctx->rendering);

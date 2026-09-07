@@ -106,7 +106,6 @@ typedef struct GameContext {
 
 void initGameContext(GameContext* ctx, bool debugActive);
 void initObjectPools(GameContext* ctx);
-void initSpawning(GameContext* ctx);
 void loadAssets(GameContext* ctx);
 void unloadAssets(GameContext* ctx);
 
