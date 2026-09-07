@@ -378,30 +378,7 @@ void initEnemySpawnPool(GameContext* ctx) {
 
     pool->activeCount = 0;
 
-    int index = 0;
-
-    if (ctx->player.level > NUMBER_OF_LEVEL_ENEMY_OPTIONS) {
-        index = NUMBER_OF_LEVEL_ENEMY_OPTIONS - 1;
-    } else {
-        index = ctx->player.level - 1;
-
-        if (index < 0) index = 0;
-    }
-
-    EnemySpawnOption* spawnOptions = levelsEnemyOptions[index];
-
-    int activeIndex = 0;
-
-    for (int i = 0; i < NUMBER_OF_ENEMY_TYPES; i++) {
-        
-        if (spawnOptions[i].maxCount > 0) {
-            pool->options[activeIndex].option = spawnOptions[i];
-            pool->options[activeIndex].active = true;
-            activeIndex++;
-        }
-    }
-
-    pool->activeCount = activeIndex;
+    populateEnemySpawnPool(ctx);
 }
 
 void initSpikyAsteroid(GameContext* ctx, Enemy* enemy) {
@@ -570,13 +547,14 @@ void populateEnemySpawnPool(GameContext* ctx) {
         optionsPool[i].weight += i * currentLevel;
     }
     
-    EnemySpawnPool* spawnPool = &ctx->objectPools.spawnableEnemies;
     
     int minNumberOfEnemies = (int)floor(currentLevel / 4.0f);
     int maxNumberOfEnemies = currentLevel > MAX_ENEMIES ? MAX_ENEMIES : currentLevel;
     int availbleEnemyTypes = currentLevel > NUMBER_OF_ENEMY_TYPES ? NUMBER_OF_ENEMY_TYPES : currentLevel;
     int numberToPopulate = GetRandomValue(minNumberOfEnemies, maxNumberOfEnemies);
     
+    double spawnTime = GetTime();
+
     for (int i = 0; i < numberToPopulate; i++) {
         
         float sumOfWeight = 0;
@@ -592,7 +570,8 @@ void populateEnemySpawnPool(GameContext* ctx) {
             EnemySpawnOption* option = &optionsPool[j];
 
             if (randomSelect < option->weight) {
-                addSpecialToSpawnPool(&ctx->objectPools.specialsSpawn, option->type);
+                spawnTime += GetRandomValue(MIN_SPAWN_TIME, MAX_SPAWN_TIME);
+                addEnemyToSpawnPool(&ctx->objectPools.spawnableEnemies, option->type, spawnTime);
                 break;
             }
 
