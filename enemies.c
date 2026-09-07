@@ -10,6 +10,7 @@
 #include "raymath.h"
 #include <math.h>
 
+void addEnemyToSpawnPool(EnemySpawnPool* pool, EnemyType type, double spawnTime);
 void compactEnemyPool(EnemyObjectPool* pool);
 void compactEnemySpawnPool(EnemySpawnPool* pool);
 void initEnemy(GameContext* ctx, Enemy* enemy, EnemyType type);
@@ -26,6 +27,17 @@ void updateSpikyAsteroid(GameContext* ctx, Enemy* enemy);
 bool updateUfo1(GameContext* ctx, Enemy* enemy);
 bool updateUfo2(GameContext* ctx, Enemy* enemy);
 bool updateUfo3(GameContext* ctx, Enemy* enemy);
+
+void addEnemyToSpawnPool(EnemySpawnPool* pool, EnemyType type, double spawnTime) {
+    EnemySpawn newSpawn;
+
+    newSpawn.spawnTime = spawnTime;
+    newSpawn.type = type;
+
+    pool->options[pool->activeCount].option = newSpawn;
+    pool->options[pool->activeCount].active = true;
+    pool->activeCount++;
+}
 
 bool addNewEnemy(GameContext* ctx, EnemyType type, bool atPosition, Vector2 position) {
 
