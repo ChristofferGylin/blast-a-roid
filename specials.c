@@ -410,7 +410,7 @@ void initSpecialsSpawnPool(GameContext* ctx) {
 void populateSpecialsSpawnPool(GameContext* ctx) {
     
     SpecialSpawnOption optionPool[NUMBER_OF_SPECIALS] = {
-        (SpecialSpawnOption){true, MULTIPLIER, 100},
+        (SpecialSpawnOption){true, MULTIPLIER, 200},
         (SpecialSpawnOption){true, COMET, 100},
         (SpecialSpawnOption){true, BLACK_HOLE, 30},
         (SpecialSpawnOption){true, SUPERNOVA, 20},
