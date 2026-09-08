@@ -14,7 +14,7 @@
 #include "utils.h"
 
 void addSpecialToPool(GameContext* ctx, SpecialType type);
-void addSpecialToSpawnPool(SpecialsSpawnPool* pool, SpecialType type);
+void addSpecialToSpawnPool(SpecialsSpawnPool* pool, SpecialType type, double spawnTime);
 void compactSpecialsPool(SpecialsPool* pool);
 void compactSpecialsSpawnPool(SpecialsSpawnPool* pool);
 void updateSpecialsAnimations(SpecialsPool* pool);
@@ -129,14 +129,11 @@ void addSpecialToPool(GameContext* ctx, SpecialType type) {
     pool->activeCount++;
 }
 
-void addSpecialToSpawnPool(SpecialsSpawnPool* pool, SpecialType type) {
+void addSpecialToSpawnPool(SpecialsSpawnPool* pool, SpecialType type, double spawnTime) {
     SpecialSpawn newSpecial;
 
-    const int minSpawnDelay = 5;
-    const int maxSpawnDelay = 30;
-
     newSpecial.type = type;
-    newSpecial.spawnTime = GetTime() + GetRandomValue(minSpawnDelay, maxSpawnDelay);
+    newSpecial.spawnTime = spawnTime;
 
     pool->specials[pool->activeCount].active = true;
     pool->specials[pool->activeCount].special = newSpecial;
