@@ -423,6 +423,8 @@ void populateSpecialsSpawnPool(GameContext* ctx) {
 
     if (maxNumberOfSpecials > NUMBER_OF_SPECIALS) maxNumberOfSpecials = NUMBER_OF_SPECIALS;
 
+    double spawnTime = GetTime();
+
     int numberToPopulate = GetRandomValue(minNumberOfSpecials, maxNumberOfSpecials);
 
     for (int i = 0; i < numberToPopulate; i++) {
@@ -444,7 +446,8 @@ void populateSpecialsSpawnPool(GameContext* ctx) {
             SpecialSpawnOption* option = &optionPool[j];
 
             if (randomSelect < option->weight) {
-                addSpecialToSpawnPool(&ctx->objectPools.specialsSpawn, option->type);
+                spawnTime += GetRandomValue(MIN_SPAWN_TIME, MAX_SPAWN_TIME);
+                addSpecialToSpawnPool(&ctx->objectPools.specialsSpawn, option->type, spawnTime);
                 option->active = false;
                 break;
             }
