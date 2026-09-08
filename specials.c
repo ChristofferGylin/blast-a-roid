@@ -1,6 +1,7 @@
 #include <math.h>
 #include <stdbool.h>
 #include <stdio.h>
+#include <string.h>
 
 #include "animation.h"
 #include "asteroid.h"
@@ -42,6 +43,8 @@ void addSpecialToPool(GameContext* ctx, SpecialType type) {
     float minDistanceToShip = SHIP_SIZE * 4;
     float radians = 0;
 
+    char typeName[11] = "\0";
+
     if (type == BLACK_HOLE || type == MULTIPLIER || type == SUPERNOVA) {
         newSpecial.position = (Vector2){0,0};
 
@@ -60,7 +63,7 @@ void addSpecialToPool(GameContext* ctx, SpecialType type) {
             newSpecial.size = (Vector2){MULTIPLIER_COLLISION_SIZE, MULTIPLIER_COLLISION_SIZE};
             initAnimtionInstance(&aniInstance, &ctx->assets.animations.multiplier, newSpecial.position, 0, 2.0f, false);
             playSoundPositioned(ctx->assets.samples.multiplier_spawn, newSpecial.position.x);
-            
+            strcpy(typeName, "MULTIPLIER");
             break;
     
         case COMET:
@@ -75,7 +78,7 @@ void addSpecialToPool(GameContext* ctx, SpecialType type) {
             initAnimtionInstance(&aniInstance, &ctx->assets.animations.comet, newSpecial.position, newSpecial.rotation, ctx->assets.animations.comet.fps, false);
             playSoundPositioned(ctx->assets.samples.multiplier_spawn, newSpecial.position.x);
             // TODO: Play unique sound
-            
+            strcpy(typeName, "COMET");
             break;
     
         case EXTRA_LIFE:
@@ -100,12 +103,14 @@ void addSpecialToPool(GameContext* ctx, SpecialType type) {
 
             playSoundPositioned(ctx->assets.samples.multiplier_spawn, newSpecial.position.x);
             // TODO: Play unique sound
+            strcpy(typeName, "EXTRA_LIFE");
             break;
     
         case SUPERNOVA:
             newSpecial.size = (Vector2){2,2};
             initAnimtionInstance(&aniInstance, &ctx->assets.animations.supernova, newSpecial.position, newSpecial.rotation, ctx->assets.animations.supernova.fps, false);
             playSoundPositioned(ctx->assets.samples.supernova, newSpecial.position.x);
+            strcpy(typeName, "SUPERNOVA");
             break;
     
         case BLACK_HOLE:
@@ -113,6 +118,7 @@ void addSpecialToPool(GameContext* ctx, SpecialType type) {
             ctx->isBlackHoleActive = true;
             initAnimtionInstance(&aniInstance, &ctx->assets.animations.blackHole, newSpecial.position, newSpecial.rotation, ctx->assets.animations.blackHole.fps, false);
             PlaySound(ctx->assets.samples.alarm);
+            strcpy(typeName, "BLACK_HOLE");
             break;
     
         default:
@@ -127,6 +133,11 @@ void addSpecialToPool(GameContext* ctx, SpecialType type) {
     pool->specials[pool->activeCount].special = newSpecial;
 
     pool->activeCount++;
+
+    printf("\n*** New special added ***\n");
+    printf("\nType: %s\n", typeName);
+    printf("\nPosX: %d\n", newSpecial.position.x);
+    printf("\nPosY: %d\n\n", newSpecial.position.y);
 }
 
 void addSpecialToSpawnPool(SpecialsSpawnPool* pool, SpecialType type, double spawnTime) {
