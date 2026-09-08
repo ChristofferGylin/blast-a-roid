@@ -1,6 +1,7 @@
 #include <math.h>
 #include <stdbool.h>
 #include <stdio.h>
+#include <string.h>
 
 #include "animation.h"
 #include "asteroid.h"
@@ -14,7 +15,7 @@
 #include "utils.h"
 
 void addSpecialToPool(GameContext* ctx, SpecialType type);
-void addSpecialToSpawnPool(SpecialsSpawnPool* pool, SpecialType type);
+void addSpecialToSpawnPool(SpecialsSpawnPool* pool, SpecialType type, double spawnTime);
 void compactSpecialsPool(SpecialsPool* pool);
 void compactSpecialsSpawnPool(SpecialsSpawnPool* pool);
 void updateSpecialsAnimations(SpecialsPool* pool);
@@ -100,12 +101,14 @@ void addSpecialToPool(GameContext* ctx, SpecialType type) {
 
             playSoundPositioned(ctx->assets.samples.multiplier_spawn, newSpecial.position.x);
             // TODO: Play unique sound
+            
             break;
     
         case SUPERNOVA:
             newSpecial.size = (Vector2){2,2};
             initAnimtionInstance(&aniInstance, &ctx->assets.animations.supernova, newSpecial.position, newSpecial.rotation, ctx->assets.animations.supernova.fps, false);
             playSoundPositioned(ctx->assets.samples.supernova, newSpecial.position.x);
+            
             break;
     
         case BLACK_HOLE:
@@ -113,6 +116,7 @@ void addSpecialToPool(GameContext* ctx, SpecialType type) {
             ctx->isBlackHoleActive = true;
             initAnimtionInstance(&aniInstance, &ctx->assets.animations.blackHole, newSpecial.position, newSpecial.rotation, ctx->assets.animations.blackHole.fps, false);
             PlaySound(ctx->assets.samples.alarm);
+            
             break;
     
         default:
@@ -129,14 +133,11 @@ void addSpecialToPool(GameContext* ctx, SpecialType type) {
     pool->activeCount++;
 }
 
-void addSpecialToSpawnPool(SpecialsSpawnPool* pool, SpecialType type) {
+void addSpecialToSpawnPool(SpecialsSpawnPool* pool, SpecialType type, double spawnTime) {
     SpecialSpawn newSpecial;
 
-    const int minSpawnDelay = 5;
-    const int maxSpawnDelay = 30;
-
     newSpecial.type = type;
-    newSpecial.spawnTime = GetTime() + GetRandomValue(minSpawnDelay, maxSpawnDelay);
+    newSpecial.spawnTime = spawnTime;
 
     pool->specials[pool->activeCount].active = true;
     pool->specials[pool->activeCount].special = newSpecial;
@@ -413,18 +414,22 @@ void initSpecialsSpawnPool(GameContext* ctx) {
 void populateSpecialsSpawnPool(GameContext* ctx) {
     
     SpecialSpawnOption optionPool[NUMBER_OF_SPECIALS] = {
-        (SpecialSpawnOption){true, MULTIPLIER, 100},
+        (SpecialSpawnOption){true, MULTIPLIER, 200},
         (SpecialSpawnOption){true, COMET, 100},
         (SpecialSpawnOption){true, BLACK_HOLE, 30},
         (SpecialSpawnOption){true, SUPERNOVA, 20},
         (SpecialSpawnOption){true, EXTRA_LIFE, 20},
     };
     SpecialsSpawnPool* spawnPool = &ctx->objectPools.specialsSpawn;
+
+    if (GetRandomValue(0, 100) > 80) return;
     
-    int minNumberOfSpecials = 0;
+    int minNumberOfSpecials = 1;
     int maxNumberOfSpecials = ceil((ctx->player.level / 2));
 
     if (maxNumberOfSpecials > NUMBER_OF_SPECIALS) maxNumberOfSpecials = NUMBER_OF_SPECIALS;
+
+    double spawnTime = GetTime();
 
     int numberToPopulate = GetRandomValue(minNumberOfSpecials, maxNumberOfSpecials);
 
@@ -447,7 +452,8 @@ void populateSpecialsSpawnPool(GameContext* ctx) {
             SpecialSpawnOption* option = &optionPool[j];
 
             if (randomSelect < option->weight) {
-                addSpecialToSpawnPool(&ctx->objectPools.specialsSpawn, option->type);
+                spawnTime += GetRandomValue(MIN_SPAWN_TIME, MAX_SPAWN_TIME);
+                addSpecialToSpawnPool(&ctx->objectPools.specialsSpawn, option->type, spawnTime);
                 option->active = false;
                 break;
             }
