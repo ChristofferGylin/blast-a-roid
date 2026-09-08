@@ -417,8 +417,10 @@ void populateSpecialsSpawnPool(GameContext* ctx) {
         (SpecialSpawnOption){true, EXTRA_LIFE, 20},
     };
     SpecialsSpawnPool* spawnPool = &ctx->objectPools.specialsSpawn;
+
+    if (GetRandomValue(0, 100) > 80) return;
     
-    int minNumberOfSpecials = 0;
+    int minNumberOfSpecials = 1;
     int maxNumberOfSpecials = ceil((ctx->player.level / 2));
 
     if (maxNumberOfSpecials > NUMBER_OF_SPECIALS) maxNumberOfSpecials = NUMBER_OF_SPECIALS;
