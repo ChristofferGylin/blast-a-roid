@@ -152,21 +152,22 @@ void updateAnimation(AnimationInstance* aniInst) {
         aniInst->frameTimer = 0.0f;
 
         if (aniInst->isReversed) {
-            aniInst->currentFrame--;
 
-            if ((aniInst->currentFrame <= 0) && !aniInst->animation->isLoop) {
-                aniInst->isFinished = true;
-            } else if ((aniInst->currentFrame <= 0) && aniInst->animation->isLoop) {
+            if (aniInst->currentFrame > 0) {
+                aniInst->currentFrame--;
+            } else if (aniInst->animation->isLoop) {
                 aniInst->currentFrame = aniInst->animation->frameCount - 1;
-            }
-
-        } else {
-            aniInst->currentFrame++;
-
-            if ((aniInst->currentFrame >= aniInst->animation->frameCount) && !aniInst->animation->isLoop) {
+            } else {
                 aniInst->isFinished = true;
-            } else if ((aniInst->currentFrame >= aniInst->animation->frameCount) && aniInst->animation->isLoop) {
+            }
+        } else {
+
+            if (aniInst->currentFrame < aniInst->animation->frameCount - 1) {
+                aniInst->currentFrame++;
+            } else  if (aniInst->animation->isLoop) {
                 aniInst->currentFrame = 0;
+            } else {
+                aniInst->isFinished = true;
             }
         }
     }
