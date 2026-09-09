@@ -7,12 +7,16 @@
 void addNewAnimation(AnimationPool* pool, Animation* animation, Vector2 position, float rotation) {
     
     if (pool->activeCount >= MAX_ANIMATIONS) {
-        printf("Error: Memory overflow in addNewAnimation\n");
+        printf("Error: Animation pool full: %d/%d\n", pool->activeCount, MAX_ANIMATIONS);
         return;        
     }
 
-    if (pool->animations[pool->activeCount].active) {
-        printf("Error: Could not add new animation, index already in use in addNewAnimation\n");
+    int index = pool->activeCount;
+
+    if (pool->animations[index].active) {
+        printf("Error: Animation pool corrupted "
+        "activeCount=%d but slot %d is active\n",
+        pool->activeCount, index);
         return;
     }
     
@@ -20,8 +24,8 @@ void addNewAnimation(AnimationPool* pool, Animation* animation, Vector2 position
 
     initAnimtionInstance(&aniInstance, animation, position, rotation, animation->fps, false);
 
-    pool->animations[pool->activeCount].aniInstance = aniInstance;
-    pool->animations[pool->activeCount].active = true;
+    pool->animations[index].aniInstance = aniInstance;
+    pool->animations[index].active = true;
     pool->activeCount++;
 }
 
