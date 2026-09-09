@@ -76,7 +76,7 @@ typedef struct  EnemySpawnOptionPoolObject {
 }EnemySpawnOptionPoolObject;
 
 typedef struct EnemySpawnPool {
-    EnemySpawnOptionPoolObject options[NUMBER_OF_ENEMY_TYPES];
+    EnemySpawnOptionPoolObject options[MAX_ENEMIES];
     int activeCount;
 }EnemySpawnPool;
 
