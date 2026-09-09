@@ -557,6 +557,10 @@ void updateSpecials(GameContext* ctx) {
 
             case MULTIPLIER:
             case COMET:
+                updateAnimation(&specialObj->special.animation);
+                specialObj->special.animation.position = specialObj->special.position;
+                break;
+
             case EXTRA_LIFE:
                 updateRotationAnimation(&specialObj->special.ship.animation, specialObj->special.ship.rotation);
                 specialObj->special.ship.animation.position = specialObj->special.ship.position;
