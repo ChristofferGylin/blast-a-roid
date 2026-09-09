@@ -125,8 +125,8 @@ GameResult gameLoop(GameContext* ctx) {
             handleAsteroidCollisions(ctx);
             handleDestroyedAsteroids(ctx);
             handleBonusesCollisions(ctx);
-            handleFinishedAnimations(&ctx->objectPools.explosions);
             updateAnimationPool(&ctx->objectPools.explosions);
+            handleFinishedAnimations(&ctx->objectPools.explosions);
             updateEnemies(ctx);
             updateBonuses(ctx);
             updateAsteroidsAnimations(ctx);
