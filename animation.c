@@ -152,8 +152,10 @@ void updateAnimation(AnimationInstance* aniInst) {
 
     aniInst->frameTimer += GetFrameTime();
 
-    if (aniInst->frameTimer >= (1.0f / aniInst->fps)) {
-        aniInst->frameTimer = 0.0f;
+    float frameDuration = 1.0f / aniInst->fps;
+
+    if (aniInst->frameTimer >= frameDuration) {
+        aniInst->frameTimer -= frameDuration;
 
         if (aniInst->isReversed) {
 
