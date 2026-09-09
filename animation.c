@@ -103,7 +103,7 @@ void initAnimation(Animation* animation, char* spritesheetPath, const char* json
 
 }
 
-void initAnimtionInstance(AnimationInstance* instance, Animation* animation, Vector2 position, float rotation, int fps, bool isReversed) {
+void initAnimtionInstance(AnimationInstance* instance, Animation* animation, Vector2 position, float rotation, float fps, bool isReversed) {
     instance->animation = animation;
     instance->currentFrame = isReversed ? animation->frameCount - 1 : 0;
     instance->fps = fps;
