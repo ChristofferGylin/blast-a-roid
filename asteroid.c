@@ -18,17 +18,21 @@
 void addNewAsteroid(AsteroidPool* pool, Asteroid ast) {
     
     if (pool->activeCount >= MAX_ASTEROIDS) {
-        printf("Error: Memory overflow in addNewAsteroid\n");
+        printf("Error: Asteroid pool full: %d/%d\n", pool->activeCount, MAX_ASTEROIDS);
+        return;
+    }
+    
+    int index = pool->activeCount;
+
+    if (pool->asteroids[index].active) {
+        printf("Error: Asteroid pool corrupted "
+        "activeCount=%d but slot %d is active\n",
+        pool->activeCount, index);
         return;
     }
 
-    if (pool->asteroids[pool->activeCount].active) {
-        printf("Error: Could not add new asteroid, index allready in use in addNewAsteroid\n");
-        return;
-    }
-
-    pool->asteroids[pool->activeCount].asteroid = ast;
-    pool->asteroids[pool->activeCount].active = true;
+    pool->asteroids[index].asteroid = ast;
+    pool->asteroids[index].active = true;
     pool->activeCount++;
 }
 
