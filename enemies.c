@@ -61,12 +61,16 @@ bool addNewEnemy(GameContext* ctx, EnemyType type, bool atPosition, Vector2 posi
     EnemyObjectPool* pool = &ctx->objectPools.enemies;
 
     if (pool->activeCount >= MAX_ENEMIES) {
-        printf("Error: Memory overflow in addNewEnemy\n");
-        return success;
+        printf("Error: Enemy spawn pool full: %d/%d\n", pool->activeCount, MAX_ENEMIES);
+        return success;        
     }
 
-    if (pool->enemies[pool->activeCount].active) {
-        printf("Error: Could not add new enemy, index allready in use in addNewEnemy\n");
+    int index = pool->activeCount;
+
+    if (pool->enemies[index].active) {
+        printf("Error: Enemy spawn pool corrupted "
+        "activeCount=%d but slot %d is active\n",
+        pool->activeCount, index);
         return success;
     }
 
@@ -80,8 +84,8 @@ bool addNewEnemy(GameContext* ctx, EnemyType type, bool atPosition, Vector2 posi
         newEnemy.position = position;
     }
 
-    pool->enemies[pool->activeCount].enemy = newEnemy;
-    pool->enemies[pool->activeCount].active = true;
+    pool->enemies[index].enemy = newEnemy;
+    pool->enemies[index].active = true;
     pool->activeCount++;
 
     return success;
