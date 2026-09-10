@@ -26,10 +26,22 @@ void addNewBonus(GameContext* ctx, Bonus bonus) {
     
     BonusObjectPool* pool = &ctx->objectPools.bonuses;
 
-    if (pool->activeCount >= MAX_BONUSES) return;
+    if (pool->activeCount >= MAX_BONUSES) {
+        printf("Error: Bonus pool full: %d/%d\n", pool->activeCount, MAX_BONUSES);
+        return; 
+    }
+
+    int index = pool->activeCount;
+
+    if (pool->bonuses[index].active) {
+        printf("Error: Bonus pool corrupted "
+        "activeCount=%d but slot %d is active\n",
+        pool->activeCount, index);
+        return;
+    }
     
-    pool->bonuses[pool->activeCount].bonus = bonus;
-    pool->bonuses[pool->activeCount].active = true;
+    pool->bonuses[index].bonus = bonus;
+    pool->bonuses[index].active = true;
     pool->activeCount++;
 }
 
