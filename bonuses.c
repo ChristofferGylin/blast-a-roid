@@ -35,6 +35,20 @@ void addNewBonus(GameContext* ctx, Bonus bonus) {
 
 void addNewBonusSpawnOption(BonusSpawnPool* pool, BonusType type) {
     
+    if (pool->activeCount >= NUMBER_OF_BONUS_TYPES) {
+        printf("Error: Bonus spawn pool full: %d/%d\n", pool->activeCount, NUMBER_OF_BONUS_TYPES);
+        return; 
+    }
+
+    int index = pool->activeCount;
+
+    if (pool->options[index].active) {
+        printf("Error: Bonus spawn pool corrupted "
+        "activeCount=%d but slot %d is active\n",
+        pool->activeCount, index);
+        return;
+    }
+
     BonusSpawnOption option;
     option.type = type;
 
@@ -73,8 +87,8 @@ void addNewBonusSpawnOption(BonusSpawnPool* pool, BonusType type) {
             break;
     }
     
-    pool->options[pool->activeCount].active = true;
-    pool->options[pool->activeCount].option = option;
+    pool->options[index].active = true;
+    pool->options[index].option = option;
 
     pool->activeCount++;
 }
