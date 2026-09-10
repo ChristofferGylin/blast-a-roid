@@ -29,13 +29,28 @@ bool updateUfo2(GameContext* ctx, Enemy* enemy);
 bool updateUfo3(GameContext* ctx, Enemy* enemy);
 
 void addEnemyToSpawnPool(EnemySpawnPool* pool, EnemyType type, double spawnTime) {
+    
+    if (pool->activeCount >= MAX_ENEMIES) {
+        printf("Error: Enemy spawn pool full: %d/%d\n", pool->activeCount, MAX_ENEMIES);
+        return;        
+    }
+
+    int index = pool->activeCount;
+
+    if (pool->options[index].active) {
+        printf("Error: Enemy spawn pool corrupted "
+        "activeCount=%d but slot %d is active\n",
+        pool->activeCount, index);
+        return;
+    }
+    
     EnemySpawn newSpawn;
 
     newSpawn.spawnTime = spawnTime;
     newSpawn.type = type;
 
-    pool->options[pool->activeCount].option = newSpawn;
-    pool->options[pool->activeCount].active = true;
+    pool->options[index].option = newSpawn;
+    pool->options[index].active = true;
     pool->activeCount++;
 }
 
