@@ -61,14 +61,14 @@ bool addNewEnemy(GameContext* ctx, EnemyType type, bool atPosition, Vector2 posi
     EnemyObjectPool* pool = &ctx->objectPools.enemies;
 
     if (pool->activeCount >= MAX_ENEMIES) {
-        printf("Error: Enemy spawn pool full: %d/%d\n", pool->activeCount, MAX_ENEMIES);
+        printf("Error: Enemy pool full: %d/%d\n", pool->activeCount, MAX_ENEMIES);
         return success;        
     }
 
     int index = pool->activeCount;
 
     if (pool->enemies[index].active) {
-        printf("Error: Enemy spawn pool corrupted "
+        printf("Error: Enemy pool corrupted "
         "activeCount=%d but slot %d is active\n",
         pool->activeCount, index);
         return success;
