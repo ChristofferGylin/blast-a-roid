@@ -103,7 +103,7 @@ void initAnimation(Animation* animation, char* spritesheetPath, const char* json
 
 }
 
-void initAnimtionInstance(AnimationInstance* instance, Animation* animation, Vector2 position, float rotation, int fps, bool isReversed) {
+void initAnimtionInstance(AnimationInstance* instance, Animation* animation, Vector2 position, float rotation, float fps, bool isReversed) {
     instance->animation = animation;
     instance->currentFrame = isReversed ? animation->frameCount - 1 : 0;
     instance->fps = fps;
@@ -152,8 +152,10 @@ void updateAnimation(AnimationInstance* aniInst) {
 
     aniInst->frameTimer += GetFrameTime();
 
-    if (aniInst->frameTimer >= (1.0f / aniInst->fps)) {
-        aniInst->frameTimer = 0.0f;
+    float frameDuration = 1.0f / aniInst->fps;
+
+    if (aniInst->frameTimer >= frameDuration) {
+        aniInst->frameTimer -= frameDuration;
 
         if (aniInst->isReversed) {
 
