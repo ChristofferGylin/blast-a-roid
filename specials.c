@@ -29,6 +29,20 @@ static const int EXTRA_LIFE_ROTATION_SPEED = 500;
 void addSpecialToPool(GameContext* ctx, SpecialType type) {
     
     SpecialsPool* pool = &ctx->objectPools.specials;
+
+    if (pool->activeCount >= NUMBER_OF_SPECIALS) {
+        printf("Error: Specials pool full: %d/%d\n", pool->activeCount, NUMBER_OF_SPECIALS);
+        return;        
+    }
+
+    int index = pool->activeCount;
+
+    if (pool->specials[index].active) {
+        printf("Error: Specials pool corrupted "
+        "activeCount=%d but slot %d is active\n",
+        pool->activeCount, index);
+        return;
+    }
     
     Special newSpecial;
     AnimationInstance aniInstance;
@@ -127,8 +141,8 @@ void addSpecialToPool(GameContext* ctx, SpecialType type) {
         newSpecial.animation = aniInstance;
     }
 
-    pool->specials[pool->activeCount].active = true;
-    pool->specials[pool->activeCount].special = newSpecial;
+    pool->specials[index].active = true;
+    pool->specials[index].special = newSpecial;
 
     pool->activeCount++;
 }
