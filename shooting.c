@@ -10,18 +10,24 @@ double lastShot = 0;
 double lastAutoShot = 0;
 
 void addNewShot(ShotObjectPool* pool, Shot shot) {
+
+
     if (pool->activeCount >= MAX_SHOTS) {
-        printf("Error: Memory overflow in addNewShot\n");
-        return;
+        printf("Error: Animation pool full: %d/%d\n", pool->activeCount, MAX_SHOTS);
+        return;        
     }
 
-    if (pool->shots[pool->activeCount].active) {
-        printf("Error: Could not add new shot, index allready in use in addNewShot\n");
+    int index = pool->activeCount;
+
+    if (pool->shots[index].active) {
+        printf("Error: Animation pool corrupted "
+        "activeCount=%d but slot %d is active\n",
+        pool->activeCount, index);
         return;
     }
     
-    pool->shots[pool->activeCount].shot = shot;
-    pool->shots[pool->activeCount].active = true;
+    pool->shots[index].shot = shot;
+    pool->shots[index].active = true;
     pool->activeCount++;
 }
 

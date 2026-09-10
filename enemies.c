@@ -29,13 +29,28 @@ bool updateUfo2(GameContext* ctx, Enemy* enemy);
 bool updateUfo3(GameContext* ctx, Enemy* enemy);
 
 void addEnemyToSpawnPool(EnemySpawnPool* pool, EnemyType type, double spawnTime) {
+    
+    if (pool->activeCount >= MAX_ENEMIES) {
+        printf("Error: Enemy spawn pool full: %d/%d\n", pool->activeCount, MAX_ENEMIES);
+        return;        
+    }
+
+    int index = pool->activeCount;
+
+    if (pool->options[index].active) {
+        printf("Error: Enemy spawn pool corrupted "
+        "activeCount=%d but slot %d is active\n",
+        pool->activeCount, index);
+        return;
+    }
+    
     EnemySpawn newSpawn;
 
     newSpawn.spawnTime = spawnTime;
     newSpawn.type = type;
 
-    pool->options[pool->activeCount].option = newSpawn;
-    pool->options[pool->activeCount].active = true;
+    pool->options[index].option = newSpawn;
+    pool->options[index].active = true;
     pool->activeCount++;
 }
 
@@ -46,12 +61,16 @@ bool addNewEnemy(GameContext* ctx, EnemyType type, bool atPosition, Vector2 posi
     EnemyObjectPool* pool = &ctx->objectPools.enemies;
 
     if (pool->activeCount >= MAX_ENEMIES) {
-        printf("Error: Memory overflow in addNewEnemy\n");
-        return success;
+        printf("Error: Enemy pool full: %d/%d\n", pool->activeCount, MAX_ENEMIES);
+        return success;        
     }
 
-    if (pool->enemies[pool->activeCount].active) {
-        printf("Error: Could not add new enemy, index allready in use in addNewEnemy\n");
+    int index = pool->activeCount;
+
+    if (pool->enemies[index].active) {
+        printf("Error: Enemy pool corrupted "
+        "activeCount=%d but slot %d is active\n",
+        pool->activeCount, index);
         return success;
     }
 
@@ -65,8 +84,8 @@ bool addNewEnemy(GameContext* ctx, EnemyType type, bool atPosition, Vector2 posi
         newEnemy.position = position;
     }
 
-    pool->enemies[pool->activeCount].enemy = newEnemy;
-    pool->enemies[pool->activeCount].active = true;
+    pool->enemies[index].enemy = newEnemy;
+    pool->enemies[index].active = true;
     pool->activeCount++;
 
     return success;

@@ -26,15 +26,41 @@ void addNewBonus(GameContext* ctx, Bonus bonus) {
     
     BonusObjectPool* pool = &ctx->objectPools.bonuses;
 
-    if (pool->activeCount >= MAX_BONUSES) return;
+    if (pool->activeCount >= MAX_BONUSES) {
+        printf("Error: Bonus pool full: %d/%d\n", pool->activeCount, MAX_BONUSES);
+        return; 
+    }
+
+    int index = pool->activeCount;
+
+    if (pool->bonuses[index].active) {
+        printf("Error: Bonus pool corrupted "
+        "activeCount=%d but slot %d is active\n",
+        pool->activeCount, index);
+        return;
+    }
     
-    pool->bonuses[pool->activeCount].bonus = bonus;
-    pool->bonuses[pool->activeCount].active = true;
+    pool->bonuses[index].bonus = bonus;
+    pool->bonuses[index].active = true;
     pool->activeCount++;
 }
 
 void addNewBonusSpawnOption(BonusSpawnPool* pool, BonusType type) {
     
+    if (pool->activeCount >= NUMBER_OF_BONUS_TYPES) {
+        printf("Error: Bonus spawn pool full: %d/%d\n", pool->activeCount, NUMBER_OF_BONUS_TYPES);
+        return; 
+    }
+
+    int index = pool->activeCount;
+
+    if (pool->options[index].active) {
+        printf("Error: Bonus spawn pool corrupted "
+        "activeCount=%d but slot %d is active\n",
+        pool->activeCount, index);
+        return;
+    }
+
     BonusSpawnOption option;
     option.type = type;
 
@@ -73,8 +99,8 @@ void addNewBonusSpawnOption(BonusSpawnPool* pool, BonusType type) {
             break;
     }
     
-    pool->options[pool->activeCount].active = true;
-    pool->options[pool->activeCount].option = option;
+    pool->options[index].active = true;
+    pool->options[index].option = option;
 
     pool->activeCount++;
 }
