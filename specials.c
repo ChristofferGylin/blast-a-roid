@@ -148,13 +148,28 @@ void addSpecialToPool(GameContext* ctx, SpecialType type) {
 }
 
 void addSpecialToSpawnPool(SpecialsSpawnPool* pool, SpecialType type, double spawnTime) {
+    
+    if (pool->activeCount >= NUMBER_OF_SPECIALS) {
+        printf("Error: Specials spawn pool full: %d/%d\n", pool->activeCount, NUMBER_OF_SPECIALS);
+        return;        
+    }
+
+    int index = pool->activeCount;
+
+    if (pool->specials[index].active) {
+        printf("Error: Specials spawn pool corrupted "
+        "activeCount=%d but slot %d is active\n",
+        pool->activeCount, index);
+        return;
+    }
+    
     SpecialSpawn newSpecial;
 
     newSpecial.type = type;
     newSpecial.spawnTime = spawnTime;
 
-    pool->specials[pool->activeCount].active = true;
-    pool->specials[pool->activeCount].special = newSpecial;
+    pool->specials[index].active = true;
+    pool->specials[index].special = newSpecial;
 
     pool->activeCount++;
 }
