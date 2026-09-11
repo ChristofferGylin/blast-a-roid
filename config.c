@@ -126,42 +126,48 @@ bool loadConfigFromFile(GameContext* ctx) {
 
         // Video
 
-        if (configFromFile->options.video.fullscreen == true || configFromFile->options.video.fullscreen == false) {
-            ctx->options.video.fullscreen = configFromFile->options.video.fullscreen;
+        VideoOptions* fileVideoOps = &configFromFile->options.video; 
+        VideoOptions* ctxVideoOps = &ctx->options.video; 
+
+        if (fileVideoOps->fullscreen == true || fileVideoOps->fullscreen == false) {
+            ctxVideoOps->fullscreen = fileVideoOps->fullscreen;
         } else {
-            ctx->options.video.fullscreen = FULLSCREEN_DEFAULT_VALUE;
+            ctxVideoOps->fullscreen = FULLSCREEN_DEFAULT_VALUE;
             hasInvalidValues = true;
         }
 
-        if (configFromFile->options.video.isMonitorSetByUser == true || configFromFile->options.video.isMonitorSetByUser == false) {
-            ctx->options.video.isMonitorSetByUser = configFromFile->options.video.isMonitorSetByUser;
+        if (fileVideoOps->isMonitorSetByUser == true || fileVideoOps->isMonitorSetByUser == false) {
+            ctxVideoOps->isMonitorSetByUser = fileVideoOps->isMonitorSetByUser;
         } else {
-            ctx->options.video.isMonitorSetByUser = IS_MONITOR_SET_BY_USER_DEFAULT_VALUE;
+            ctxVideoOps->isMonitorSetByUser = IS_MONITOR_SET_BY_USER_DEFAULT_VALUE;
             hasInvalidValues = true;
         }
 
-        if (configFromFile->options.video.selectecMonitor >= 0 || configFromFile->options.video.selectecMonitor < 99 ) {
-            ctx->options.video.selectecMonitor = configFromFile->options.video.selectecMonitor;
+        if (fileVideoOps->selectecMonitor >= 0 || fileVideoOps->selectecMonitor < 99 ) {
+            ctxVideoOps->selectecMonitor = fileVideoOps->selectecMonitor;
         } else {
-            ctx->options.video.selectecMonitor = SELECTED_MONITOR_DEFAULT_VALUE;
+            ctxVideoOps->selectecMonitor = SELECTED_MONITOR_DEFAULT_VALUE;
             hasInvalidValues = true;
         }
 
-        if (configFromFile->options.video.showFps == true || configFromFile->options.video.showFps == false) {
-            ctx->options.video.showFps = configFromFile->options.video.showFps;
+        if (fileVideoOps->showFps == true || fileVideoOps->showFps == false) {
+            ctxVideoOps->showFps = fileVideoOps->showFps;
         } else {
-            ctx->options.video.showFps = SHOW_FPS_DEFAULT_VALUE;
+            ctxVideoOps->showFps = SHOW_FPS_DEFAULT_VALUE;
             hasInvalidValues = true;
         }
         
-        if (configFromFile->options.video.vSync == true || configFromFile->options.video.vSync == false) {
-            ctx->options.video.vSync = configFromFile->options.video.vSync;
+        if (fileVideoOps->vSync == true || fileVideoOps->vSync == false) {
+            ctxVideoOps->vSync = fileVideoOps->vSync;
         } else {
-            ctx->options.video.vSync = IS_V_SYNC_ENABLED_DEFAULT_VALUE;
+            ctxVideoOps->vSync = IS_V_SYNC_ENABLED_DEFAULT_VALUE;
             hasInvalidValues = true;
         }
 
         // Debug
+
+        DebugConfig* fileDebug = &configFromFile->debug;
+        DebugConfig* ctxDebug = &ctx->debug;
         
         if (configFromFile->debug.onlyOutputOnChange == true ||configFromFile->debug.onlyOutputOnChange == false) {
             ctx->debug.onlyOutputOnChange = configFromFile->debug.onlyOutputOnChange;
