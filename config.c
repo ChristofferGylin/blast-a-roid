@@ -167,30 +167,30 @@ bool loadConfigFromFile(GameContext* ctx) {
         // Debug
 
         DebugConfig* fileDebug = &configFromFile->debug;
-        DebugConfig* ctxDebug = &ctx->debug;
+        Debug* ctxDebug = &ctx->debug;
         
-        if (configFromFile->debug.onlyOutputOnChange == true ||configFromFile->debug.onlyOutputOnChange == false) {
-            ctx->debug.onlyOutputOnChange = configFromFile->debug.onlyOutputOnChange;
+        if (fileDebug->onlyOutputOnChange == true ||fileDebug->onlyOutputOnChange == false) {
+            ctxDebug->onlyOutputOnChange = fileDebug->onlyOutputOnChange;
         } else {
-            ctx->debug.onlyOutputOnChange = true;
+            ctxDebug->onlyOutputOnChange = true;
             hasInvalidValues = true;
         }
         
-        if (configFromFile->debug.outputFrequency >= MIN_DEBUG_OUTPUT_FREQUENCY && configFromFile->debug.outputFrequency <= MAX_DEBUG_OUTPUT_FREQUENCY) {
-            ctx->debug.outputFrequency = configFromFile->debug.outputFrequency;
+        if (fileDebug->outputFrequency >= MIN_DEBUG_OUTPUT_FREQUENCY && fileDebug->outputFrequency <= MAX_DEBUG_OUTPUT_FREQUENCY) {
+            ctxDebug->outputFrequency = fileDebug->outputFrequency;
         } else {
-            ctx->debug.outputFrequency = DEFAULT_DEBUG_OUTPUT_FREQUENCY;
+            ctxDebug->outputFrequency = DEFAULT_DEBUG_OUTPUT_FREQUENCY;
             hasInvalidValues = true;
         }
 
-        #define OUTPUT(name)                                                                                            \
-            do {                                                                                                        \
-                if (configFromFile->debug.poolCount.name == true || configFromFile->debug.poolCount.name == false) {    \
-                    ctx->debug.poolCount.name.showInDebug = configFromFile->debug.poolCount.name;                       \
-                } else {                                                                                                \
-                    ctx->debug.poolCount.name.showInDebug = true;                                                       \
-                    hasInvalidValues = true;                                                                            \
-                }                                                                                                       \
+        #define OUTPUT(name)                                                                      \
+            do {                                                                                  \
+                if (fileDebug->poolCount.name == true || fileDebug->poolCount.name == false) {    \
+                    ctxDebug->poolCount.name.showInDebug = fileDebug->poolCount.name;             \
+                } else {                                                                          \
+                    ctxDebug->poolCount.name.showInDebug = true;                                  \
+                    hasInvalidValues = true;                                                      \
+                }                                                                                 \
             } while (0);                                                                                                
         
             POOL_COUNTS(OUTPUT)
