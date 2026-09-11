@@ -57,6 +57,16 @@ Config getConfig(GameContext* ctx) {
 
     Config config;
 
+    // Controls
+
+    config.options.controls.keys.fire = ctx->options.controls.keys.fire;
+    config.options.controls.keys.left = ctx->options.controls.keys.left;
+    config.options.controls.keys.right = ctx->options.controls.keys.right;
+    config.options.controls.keys.shield = ctx->options.controls.keys.shield;
+    config.options.controls.keys.thrust = ctx->options.controls.keys.thrust;
+
+    // Debug
+
     config.debug.onlyOutputOnChange = ctx->debug.onlyOutputOnChange;
     config.debug.outputFrequency = ctx->debug.outputFrequency;
     
@@ -67,6 +77,8 @@ Config getConfig(GameContext* ctx) {
     POOL_COUNTS(OUTPUT)
 
     #undef OUTPUT
+
+    // Video
 
     config.options.video.fullscreen = ctx->options.video.fullscreen;
     config.options.video.isMonitorSetByUser = ctx->options.video.isMonitorSetByUser;
