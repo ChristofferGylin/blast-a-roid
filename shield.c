@@ -20,7 +20,7 @@ void handleShield(GameContext* ctx) {
 
     if (GetTime() < (ctx->ship.timeSpawned + AUTO_SHIELD_DURATION)){
         ctx->ship.isShieldActive = true;
-    }  else if (IsKeyDown(KEY_SPACE)) {
+    }  else if (IsKeyDown(ctx->options.controls.keys.shield)) {
 
         ctx->player.shieldPower -= GetFrameTime() * SHIELD_DRAIN_RATE;
 
