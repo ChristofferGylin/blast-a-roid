@@ -14,7 +14,6 @@ void setUserRefreshRate() {
 }
 
 void resetControlsToDefault(ControlsOptions* controls) {
-    controls->isControlsSetByUser = false;
     controls->keys.fire = KEY_BIND_FIRE_DEFAULT_VALUE;
     controls->keys.left = KEY_BIND_LEFT_DEFAULT_VALUE;
     controls->keys.right = KEY_BIND_RIGHT_DEFAULT_VALUE;

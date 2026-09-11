@@ -27,7 +27,6 @@ typedef struct KeyBindings {
 }KeyBindings;
 
 typedef struct ControlsOptions {
-    bool isControlsSetByUser;
     KeyBindings keys;
 }ControlsOptions;
 
