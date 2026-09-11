@@ -12,22 +12,43 @@ bool compareConfig(Config* config1, Config* config2) {
 
     bool isIdentical = true;
 
-    if (config1->debug.onlyOutputOnChange != config2->debug.onlyOutputOnChange) isIdentical = false;
-    if (config1->debug.outputFrequency != config2->debug.outputFrequency) isIdentical = false;
+    // Controls
+
+    KeyBindings* keys1 = &config1->options.controls.keys;
+    KeyBindings* keys2 = &config2->options.controls.keys;
+
+    if (keys1->fire != keys2->fire) isIdentical = false;
+    if (keys1->left != keys2->left) isIdentical = false;
+    if (keys1->right != keys2->right) isIdentical = false;
+    if (keys1->shield != keys2->shield) isIdentical = false;
+    if (keys1->thrust != keys2->thrust) isIdentical = false;
+
+    // Debug
+
+    DebugConfig* debug1 = &config1->debug;
+    DebugConfig* debug2 = &config2->debug;
+
+    if (debug1->onlyOutputOnChange != debug2->onlyOutputOnChange) isIdentical = false;
+    if (debug1->outputFrequency != debug2->outputFrequency) isIdentical = false;
     
     #define OUTPUT(name)                                                                          \
     do {                                                                                          \
-        if (config1->debug.poolCount.name != config2->debug.poolCount.name) isIdentical = false;  \
+        if (debug1->poolCount.name != debug2->poolCount.name) isIdentical = false;  \
     } while (0);                                                                                            
     POOL_COUNTS(OUTPUT)
 
     #undef OUTPUT
 
-    if (config1->options.video.fullscreen != config2->options.video.fullscreen) isIdentical = false;
-    if (config1->options.video.isMonitorSetByUser != config2->options.video.isMonitorSetByUser) isIdentical = false;
-    if (config1->options.video.selectecMonitor != config2->options.video.selectecMonitor) isIdentical = false;
-    if (config1->options.video.showFps != config2->options.video.showFps) isIdentical = false;
-    if (config1->options.video.vSync != config2->options.video.vSync) isIdentical = false;
+    // Video
+
+    VideoOptions* video1 = &config1->options.video;
+    VideoOptions* video2 = &config2->options.video;
+
+    if (video1->fullscreen != video2->fullscreen) isIdentical = false;
+    if (video1->isMonitorSetByUser != video2->isMonitorSetByUser) isIdentical = false;
+    if (video1->selectecMonitor != video2->selectecMonitor) isIdentical = false;
+    if (video1->showFps != video2->showFps) isIdentical = false;
+    if (video1->vSync != video2->vSync) isIdentical = false;
 
     return isIdentical;
 }
