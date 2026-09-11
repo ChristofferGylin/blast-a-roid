@@ -13,6 +13,15 @@ void setUserRefreshRate() {
     
 }
 
+void resetControlsToDefault(ControlsOptions* controls) {
+    controls->isControlsSetByUser = false;
+    controls->keys.fire = KEY_BIND_FIRE_DEFAULT_VALUE;
+    controls->keys.left = KEY_BIND_LEFT_DEFAULT_VALUE;
+    controls->keys.right = KEY_BIND_RIGHT_DEFAULT_VALUE;
+    controls->keys.shield = KEY_BIND_SHIELD_DEFAULT_VALUE;
+    controls->keys.thrust = KEY_BIND_THRUST_DEFAULT_VALUE;
+}
+
 void resetOptionsToDefault(Options* options) {
     options->video.fullscreen = FULLSCREEN_DEFAULT_VALUE;
     options->video.isMonitorSetByUser = IS_MONITOR_SET_BY_USER_DEFAULT_VALUE;
