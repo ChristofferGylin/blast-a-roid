@@ -84,6 +84,48 @@ bool loadConfigFromFile(GameContext* ctx) {
 
     if (configFromFile && size == sizeof(Config)) {
 
+        // Controls
+
+        KeyBindings* fileKeys = &configFromFile->options.controls.keys;
+        KeyBindings* ctxKeys = &ctx->options.controls.keys;
+
+        if (fileKeys->fire > 0 && fileKeys->fire < INT32_MAX) {
+            ctxKeys->fire = fileKeys->fire;
+        } else {
+            ctxKeys->fire = KEY_BIND_FIRE_DEFAULT_VALUE;
+            hasInvalidValues = true;
+        }
+
+        if (fileKeys->left > 0 && fileKeys->left < INT32_MAX) {
+            ctxKeys->left = fileKeys->left;
+        } else {
+            ctxKeys->left = KEY_BIND_LEFT_DEFAULT_VALUE;
+            hasInvalidValues = true;
+        }
+
+        if (fileKeys->right > 0 && fileKeys->right < INT32_MAX) {
+            ctxKeys->right = fileKeys->right;
+        } else {
+            ctxKeys->right = KEY_BIND_RIGHT_DEFAULT_VALUE;
+            hasInvalidValues = true;
+        }
+
+        if (fileKeys->shield > 0 && fileKeys->shield < INT32_MAX) {
+            ctxKeys->shield = fileKeys->shield;
+        } else {
+            ctxKeys->shield = KEY_BIND_SHIELD_DEFAULT_VALUE;
+            hasInvalidValues = true;
+        }
+
+        if (fileKeys->thrust > 0 && fileKeys->thrust < INT32_MAX) {
+            ctxKeys->thrust = fileKeys->thrust;
+        } else {
+            ctxKeys->thrust = KEY_BIND_THRUST_DEFAULT_VALUE;
+            hasInvalidValues = true;
+        }
+
+        // Video
+
         if (configFromFile->options.video.fullscreen == true || configFromFile->options.video.fullscreen == false) {
             ctx->options.video.fullscreen = configFromFile->options.video.fullscreen;
         } else {
@@ -118,6 +160,8 @@ bool loadConfigFromFile(GameContext* ctx) {
             ctx->options.video.vSync = IS_V_SYNC_ENABLED_DEFAULT_VALUE;
             hasInvalidValues = true;
         }
+
+        // Debug
         
         if (configFromFile->debug.onlyOutputOnChange == true ||configFromFile->debug.onlyOutputOnChange == false) {
             ctx->debug.onlyOutputOnChange = configFromFile->debug.onlyOutputOnChange;
