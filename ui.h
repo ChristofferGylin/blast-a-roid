@@ -102,6 +102,7 @@ typedef struct OnClickIncreaseArgs {
 
 typedef struct Toggle {
     Rectangle rect;
+    float roundness;
     Vector2 title1Pos;
     Vector2 title2Pos;
     char title1[32];
@@ -117,6 +118,7 @@ void drawDialogBox(DialogBox* dialogBox);
 void drawDownArrow(Vector2 position, float width, Color color);
 void drawDropdownMenu(DropdownMenu* menu);
 void drawLayoutSection(LayoutSection* section);
+void drawToggle(Toggle* toggle);
 Vector2 getVirtualMousePosition();
 void initBasicLayoutContainer(BasicLayoutContainer* layout, Rectangle area, char* heading);
 void initButton(Button* button, Rectangle rect, int fontSize, char* text, ButtonCallback callback, void* userData);
