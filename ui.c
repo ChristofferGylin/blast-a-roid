@@ -665,3 +665,14 @@ bool updateDropdownMenu(DropdownMenu* menu) {
 
     return isHovered;
 }
+
+void updateToggle(Toggle* toggle) {
+    if (
+        IsMouseButtonPressed(MOUSE_BUTTON_LEFT) &&
+        CheckCollisionPointRec(GetMousePosition(), toggle->rect)
+    ) {
+     
+        toggle->value = !toggle->value;
+
+    }
+}

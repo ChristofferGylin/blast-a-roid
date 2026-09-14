@@ -135,5 +135,6 @@ bool updateButton(Button* button);
 bool updateCheckbox(Checkbox* checkbox);
 bool updateDialogBox(DialogBox* dialogBox);
 bool updateDropdownMenu(DropdownMenu* menu);
+void updateToggle(Toggle* toggle);
 
 #endif
