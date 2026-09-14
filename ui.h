@@ -98,6 +98,14 @@ typedef struct OnClickIncreaseArgs {
     int max_Value;
 }OnClickIncreaseArgs;
 
+typedef struct Toggle {
+    Rectangle rect;
+    char title1[32];
+    char title2[32];
+    bool titlesInside;
+    bool value;
+}Toggle;
+
 void drawBasicLayoutContainer(BasicLayoutContainer* layout);
 void drawButton(Button* button);
 void drawCheckbox(Checkbox* checkbox);
