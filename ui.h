@@ -9,6 +9,8 @@
 #define TITLE_MAX_LENGTH 32
 #define DROPDOWN_MAX_ITEMS 32
 #define DROPDOWN_MAX_LENGTH 64
+#define TOGGLE_FONT_SIZE 18
+#define TOGGLE_MARGIN 8
 
 typedef void (*DropDownCallback)(int selected, void* userData);
 typedef void (*ButtonCallback)(void* userData);
@@ -100,9 +102,10 @@ typedef struct OnClickIncreaseArgs {
 
 typedef struct Toggle {
     Rectangle rect;
+    Vector2 title1Pos;
+    Vector2 title2Pos;
     char title1[32];
     char title2[32];
-    bool titlesInside;
     bool value;
 }Toggle;
 
@@ -122,6 +125,7 @@ void initCheckboxWithTitle(CheckboxWithTitle* option, Vector2 position, char* ti
 void initDialogBox(DialogBox* dialogBox, char* text, char* cancelButtonText, char* proceedButtonText, Callback callback, void* userData);
 void initDropdownMenu(DropdownMenu* menu, DropDownTitles items, int itemsCount, int selected, Rectangle rect, DropDownCallback callback, void* userData);
 void initLayoutSection(LayoutSection* section, Rectangle* parent, Rectangle container, char* heading, DrawSectionContent drawContent, void* userData);
+void initToggle(Toggle* toggle, Vector2 position, char* title1, char* title2, bool value);
 void onClickBack(void* userData);
 void onClickDecrease(void* userData);
 void onClickIncrease(void* userData);

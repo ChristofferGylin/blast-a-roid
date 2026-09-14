@@ -479,6 +479,35 @@ void initLayoutSection(LayoutSection* section, Rectangle* parent, Rectangle cont
     strcpy(section->heading, heading);
 }
 
+void initToggle(Toggle* toggle, Vector2 position, char* title1, char* title2, bool value) {
+    strcpy(toggle->title1, title1); 
+    strcpy(toggle->title2, title2);
+
+    Vector2 title1Size = MeasureTextEx(GetFontDefault(), title1, TOGGLE_FONT_SIZE, MENU_FONT_SPACING);
+    Vector2 title2Size = MeasureTextEx(GetFontDefault(), title2, TOGGLE_FONT_SIZE, MENU_FONT_SPACING);
+
+    float width = 0.0f;
+
+    if (title1Size.x > title2Size.x) {
+        width = title1Size.x;
+    } else {
+        width = title2Size.x;
+    }
+
+    toggle->rect.height = title1Size.y + TOGGLE_MARGIN;
+    toggle->rect.width = width + (TOGGLE_MARGIN * 4);
+    toggle->rect.x = position.x;
+    toggle->rect.y = position.y;
+
+    toggle->value = value;
+
+    toggle->title1Pos.x = position.x + TOGGLE_MARGIN;
+    toggle->title1Pos.y = position.y + (toggle->rect.height / 2.0f) - (title1Size.y / 2.0f);
+    
+    toggle->title2Pos.x = position.x + (toggle->rect.width / 2.0f) + TOGGLE_MARGIN;
+    toggle->title2Pos.y = toggle->title1Pos.y;
+}
+
 void onClickBack(void* userData) {
     bool* exit = userData;
 
