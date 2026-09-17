@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <string.h>
 
 #include "config.h"
 #include "debug.h"
@@ -6,6 +7,7 @@
 #include "options.h"
 #include "raylib.h"
 
+void initControls(ControlsOptions* options);
 bool loadConfigFromFile(GameContext* ctx);
 
 bool compareConfig(Config* config1, Config* config2) {
@@ -92,6 +94,8 @@ Config getConfig(GameContext* ctx) {
 void initConfig(GameContext* ctx) {
     
     bool success = false;
+
+    initControls(&ctx->options.controls);
     
     if (FileExists("./config.dat")) {
         success = loadConfigFromFile(ctx);  
@@ -105,6 +109,20 @@ void initConfig(GameContext* ctx) {
         resetConfig(ctx);
         saveConfigToFile(ctx);
     }
+}
+
+void initControls(ControlsOptions* options) {
+    strcpy(options->keys.fire.name, "Fire");
+    strcpy(options->keys.left.name, "Turn left");
+    strcpy(options->keys.right.name, "Turn right");
+    strcpy(options->keys.shield.name, "Shield");
+    strcpy(options->keys.thrust.name, "Thrust");
+
+    options->keys.fire.key = 0;
+    options->keys.left.key = 0;
+    options->keys.right.key = 0;
+    options->keys.shield.key = 0;
+    options->keys.thrust.key = 0;
 }
 
 bool loadConfigFromFile(GameContext* ctx) {
