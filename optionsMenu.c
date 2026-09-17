@@ -13,6 +13,7 @@
 #include "ui.h"
 #include "uiSizes.h"
 
+void changeControlsCallback(void* userData);
 void drawOptionsMenu(GameContext* ctx, OptionsMenu* menu);
 void drawOptionsMenuTab(OptionsMenu* menu);
 void initControlsTabData(GameContext* ctx, Rectangle* parent, ControlsTabData* tabData);
@@ -40,7 +41,9 @@ void updateControlsTab(void* userData) {};
 void drawControlsTab(void* userData) {};
 void drawAudioTab(void* userData) {};
 
-void changeControlsCallback(void* userData);
+void changeControlsCallback(void* userData) {
+    
+};
 
 void initControlsTabData(GameContext* ctx, Rectangle* parent, ControlsTabData* tabData) {
     
@@ -58,22 +61,22 @@ void initControlsTabData(GameContext* ctx, Rectangle* parent, ControlsTabData* t
         if (nameSize.x > maxWidth) maxWidth = nameSize.x;
     }
 
-    char keys[NUMBER_OF_CONTROLS][32] = {
-        GetKeyName(controls->keys.left.key),
-        GetKeyName(controls->keys.right.key),
-        GetKeyName(controls->keys.thrust.key),
-        GetKeyName(controls->keys.fire.key),
-        GetKeyName(controls->keys.shield.key)
-    };
+    char keys[NUMBER_OF_CONTROLS][32];
 
-    char titles[NUMBER_OF_CONTROLS][32] = {
-        controls->keys.left.name,
-        controls->keys.right.name,
-        controls->keys.thrust.name,
-        controls->keys.fire.name,
-        controls->keys.shield.name
-    };
-    
+    strcpy(keys[0], GetKeyName(controls->keys.left.key));
+    strcpy(keys[1], GetKeyName(controls->keys.right.key));
+    strcpy(keys[2], GetKeyName(controls->keys.thrust.key));
+    strcpy(keys[3], GetKeyName(controls->keys.fire.key));
+    strcpy(keys[4], GetKeyName(controls->keys.shield.key));
+
+    char titles[NUMBER_OF_CONTROLS][32];
+
+    strcpy(titles[0], controls->keys.left.name);
+    strcpy(titles[1], controls->keys.right.name);
+    strcpy(titles[2], controls->keys.thrust.name);
+    strcpy(titles[3], controls->keys.fire.name);
+    strcpy(titles[4], controls->keys.shield.name);
+
     for (int i = 0; i < NUMBER_OF_CONTROLS; i++) {
         
         Button* button = &tabData->keys[i];
