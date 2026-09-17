@@ -17,7 +17,8 @@ typedef struct AudioTabData {
 }AudioTabData;
 
 typedef struct ControlsTabData {
-    
+    Button keys[NUMBER_OF_CONTROLS];
+    TitleWithPosition titles[NUMBER_OF_CONTROLS];
 }ControlsTabData;
 
 typedef struct HighscoresTabData {

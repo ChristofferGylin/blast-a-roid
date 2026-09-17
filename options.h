@@ -18,6 +18,8 @@ static const int KEY_BIND_THRUST_DEFAULT_VALUE = KEY_W;
 static const int KEY_BIND_FIRE_DEFAULT_VALUE = KEY_RIGHT_CONTROL;
 static const int KEY_BIND_SHIELD_DEFAULT_VALUE = KEY_SPACE;
 
+#define NUMBER_OF_CONTROLS 5
+
 typedef struct KeyBind {
     char name[32];
     int key;

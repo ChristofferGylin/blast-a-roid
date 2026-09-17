@@ -23,6 +23,11 @@ typedef struct PositionVelocity {
     Vector2 velocity;
 }PositionVelocity;
 
+typedef struct TitleWithPosition {
+    char title[32];
+    Vector2 position;
+}TitleWithPosition;
+
 typedef enum VisualType {
     VISUAL_SPRITE,
     VISUAL_ANIMATION
