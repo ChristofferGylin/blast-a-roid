@@ -17,11 +17,11 @@ bool compareConfig(Config* config1, Config* config2) {
     KeyBindings* keys1 = &config1->options.controls.keys;
     KeyBindings* keys2 = &config2->options.controls.keys;
 
-    if (keys1->fire != keys2->fire) isIdentical = false;
-    if (keys1->left != keys2->left) isIdentical = false;
-    if (keys1->right != keys2->right) isIdentical = false;
-    if (keys1->shield != keys2->shield) isIdentical = false;
-    if (keys1->thrust != keys2->thrust) isIdentical = false;
+    if (keys1->fire.key != keys2->fire.key) isIdentical = false;
+    if (keys1->left.key != keys2->left.key) isIdentical = false;
+    if (keys1->right.key != keys2->right.key) isIdentical = false;
+    if (keys1->shield.key != keys2->shield.key) isIdentical = false;
+    if (keys1->thrust.key != keys2->thrust.key) isIdentical = false;
 
     // Debug
 
