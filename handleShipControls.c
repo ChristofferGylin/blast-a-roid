@@ -50,20 +50,20 @@ void handleShipControls(GameContext* ctx)
 
     bool nudgeActive = NOW_MILLIS < ship->timeRotateActivated + NUDGE_DELAY;
 
-    if (IsKeyPressed(keys->left) || IsKeyPressed(keys->right)) {
+    if (IsKeyPressed(keys->left.key) || IsKeyPressed(keys->right.key)) {
         ship->isRotateActive = true;
         ship->timeRotateActivated = NOW_MILLIS;
     } else {
-        if (IsKeyDown(keys->left) && !nudgeActive) {
+        if (IsKeyDown(keys->left.key) && !nudgeActive) {
             ship->rotation -= GetFrameTime() * ROTATION_SPEED;
         }
 
-        if (IsKeyDown(keys->right) && !nudgeActive) {
+        if (IsKeyDown(keys->right.key) && !nudgeActive) {
             ship->rotation += GetFrameTime() * ROTATION_SPEED;
         }
     }
 
-    if (ship->isRotateActive && IsKeyReleased(keys->left)) {
+    if (ship->isRotateActive && IsKeyReleased(keys->left.key)) {
         ship->isRotateActive = false;
 
         if (nudgeActive) {
@@ -71,7 +71,7 @@ void handleShipControls(GameContext* ctx)
         }
     }
 
-    if (ship->isRotateActive && IsKeyReleased(keys->right)) {
+    if (ship->isRotateActive && IsKeyReleased(keys->right.key)) {
         ship->isRotateActive = false;
 
         if (nudgeActive) {
@@ -86,7 +86,7 @@ void handleShipControls(GameContext* ctx)
         ship->rotation += 360.0f;
     }
 
-    if (IsKeyDown(keys->thrust))
+    if (IsKeyDown(keys->thrust.key))
     {
         float radians = (ship->rotation - 90.0f) * (PI / 180.0f);
 
