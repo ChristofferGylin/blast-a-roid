@@ -5,6 +5,7 @@
 #include "score.h"
 #include "ui.h"
 #include "utils.h"
+#include "options.h"
 
 #define NUMBER_OF_OPTIONS_TABS 4
 #define NUMBER_OF_VIDEO_OPTIONS 3

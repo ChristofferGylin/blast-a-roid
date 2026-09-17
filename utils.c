@@ -5,6 +5,7 @@
 #include "constants.h"
 #include "stdio.h"
 #include <stdlib.h>
+#include <string.h>
 
 void applyGForce(Vector2 position, Vector2  destination, Vector2* velocity, float maxVelocity, float minAcceleration, float maxAcceleration, float maxDistance) {
     float distanceToDestination = Vector2DistanceSqr(position, destination);
