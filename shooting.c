@@ -119,9 +119,9 @@ void handleShooting(GameContext* ctx) {
 
     bool shoot = false;
 
-    if (IsKeyPressed(keys->fire)) {
+    if (IsKeyPressed(keys->fire.key)) {
         shoot = true;
-    } else  if (ctx->player.powerups.fullAuto && IsKeyDown(keys->fire)) {
+    } else  if (ctx->player.powerups.fullAuto && IsKeyDown(keys->fire.key)) {
         if (ctx->player.shotCount < MAX_SHOTS_BURST) {
             ctx->player.shotCount++;
             lastAutoShot = nowMillis;
