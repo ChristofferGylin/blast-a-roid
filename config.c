@@ -122,38 +122,38 @@ bool loadConfigFromFile(GameContext* ctx) {
         KeyBindings* fileKeys = &configFromFile->options.controls.keys;
         KeyBindings* ctxKeys = &ctx->options.controls.keys;
 
-        if (fileKeys->fire > 0 && fileKeys->fire < INT32_MAX) {
-            ctxKeys->fire = fileKeys->fire;
+        if (fileKeys->fire.key > 0 && fileKeys->fire.key < INT32_MAX) {
+            ctxKeys->fire.key = fileKeys->fire.key;
         } else {
-            ctxKeys->fire = KEY_BIND_FIRE_DEFAULT_VALUE;
+            ctxKeys->fire.key = KEY_BIND_FIRE_DEFAULT_VALUE;
             hasInvalidValues = true;
         }
 
-        if (fileKeys->left > 0 && fileKeys->left < INT32_MAX) {
-            ctxKeys->left = fileKeys->left;
+        if (fileKeys->left.key > 0 && fileKeys->left.key < INT32_MAX) {
+            ctxKeys->left.key = fileKeys->left.key;
         } else {
-            ctxKeys->left = KEY_BIND_LEFT_DEFAULT_VALUE;
+            ctxKeys->left.key = KEY_BIND_LEFT_DEFAULT_VALUE;
             hasInvalidValues = true;
         }
 
-        if (fileKeys->right > 0 && fileKeys->right < INT32_MAX) {
-            ctxKeys->right = fileKeys->right;
+        if (fileKeys->right.key > 0 && fileKeys->right.key < INT32_MAX) {
+            ctxKeys->right.key = fileKeys->right.key;
         } else {
-            ctxKeys->right = KEY_BIND_RIGHT_DEFAULT_VALUE;
+            ctxKeys->right.key = KEY_BIND_RIGHT_DEFAULT_VALUE;
             hasInvalidValues = true;
         }
 
-        if (fileKeys->shield > 0 && fileKeys->shield < INT32_MAX) {
-            ctxKeys->shield = fileKeys->shield;
+        if (fileKeys->shield.key > 0 && fileKeys->shield.key < INT32_MAX) {
+            ctxKeys->shield.key = fileKeys->shield.key;
         } else {
-            ctxKeys->shield = KEY_BIND_SHIELD_DEFAULT_VALUE;
+            ctxKeys->shield.key = KEY_BIND_SHIELD_DEFAULT_VALUE;
             hasInvalidValues = true;
         }
 
-        if (fileKeys->thrust > 0 && fileKeys->thrust < INT32_MAX) {
-            ctxKeys->thrust = fileKeys->thrust;
+        if (fileKeys->thrust.key > 0 && fileKeys->thrust.key < INT32_MAX) {
+            ctxKeys->thrust.key = fileKeys->thrust.key;
         } else {
-            ctxKeys->thrust = KEY_BIND_THRUST_DEFAULT_VALUE;
+            ctxKeys->thrust.key = KEY_BIND_THRUST_DEFAULT_VALUE;
             hasInvalidValues = true;
         }
 
