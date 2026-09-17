@@ -18,12 +18,17 @@ static const int KEY_BIND_THRUST_DEFAULT_VALUE = KEY_W;
 static const int KEY_BIND_FIRE_DEFAULT_VALUE = KEY_RIGHT_CONTROL;
 static const int KEY_BIND_SHIELD_DEFAULT_VALUE = KEY_SPACE;
 
+typedef struct KeyBind {
+    char name[32];
+    int key;
+}KeyBind;
+
 typedef struct KeyBindings {
-    int left;
-    int right;
-    int thrust;
-    int fire;
-    int shield;
+    KeyBind left;
+    KeyBind right;
+    KeyBind thrust;
+    KeyBind fire;
+    KeyBind shield;
 }KeyBindings;
 
 typedef struct ControlsOptions {
