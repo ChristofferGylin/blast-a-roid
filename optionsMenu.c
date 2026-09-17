@@ -15,6 +15,7 @@
 
 void drawOptionsMenu(GameContext* ctx, OptionsMenu* menu);
 void drawOptionsMenuTab(OptionsMenu* menu);
+void initControlsTabData(GameContext* ctx, Rectangle* parent, ControlsTabData* tabData);
 void initOptionsMenu(GameContext* ctx, OptionsMenu* menu);
 void initOptionsMenuTab(OptionsMenuTab* tab, Rectangle* parent, char* heading, Callback drawContent, Callback updateTab, void* userData);
 void initHighscoresTabData(GameContext* ctx, Rectangle* parent, HighscoresTabData* tabData);
@@ -38,6 +39,74 @@ void updateControlsTab(void* userData) {};
 
 void drawControlsTab(void* userData) {};
 void drawAudioTab(void* userData) {};
+
+void changeControlsCallback(void* userData);
+
+void initControlsTabData(GameContext* ctx, Rectangle* parent, ControlsTabData* tabData) {
+    
+    ControlsOptions* controls = &ctx->options.controls;
+    
+    Vector2 position = {parent->x, parent->y};
+
+    float maxWidth = 0.0f;
+
+    for (int i = 0; i < KEY_KB_MENU; i++) {
+        const char* name = GetKeyName(i);
+
+        Vector2 nameSize = MeasureTextEx(GetFontDefault(), name, BUTTON_FONT_SIZE, BUTTON_FONT_SPACING);
+        
+        if (nameSize.x > maxWidth) maxWidth = nameSize.x;
+    }
+
+    char keys[NUMBER_OF_CONTROLS][32] = {
+        GetKeyName(controls->keys.left.key),
+        GetKeyName(controls->keys.right.key),
+        GetKeyName(controls->keys.thrust.key),
+        GetKeyName(controls->keys.fire.key),
+        GetKeyName(controls->keys.shield.key)
+    };
+
+    char titles[NUMBER_OF_CONTROLS][32] = {
+        controls->keys.left.name,
+        controls->keys.right.name,
+        controls->keys.thrust.name,
+        controls->keys.fire.name,
+        controls->keys.shield.name
+    };
+    
+    for (int i = 0; i < NUMBER_OF_CONTROLS; i++) {
+        
+        Button* button = &tabData->keys[i];
+        
+        initButton(
+            button,
+            (Rectangle){
+                position.x,
+                position.y,
+                maxWidth + (BUTTON_PADDING * 2),
+                0
+            },
+            BUTTON_FONT_SIZE,
+            keys[i],
+            changeControlsCallback,
+            NULL
+        );
+
+        Vector2 titlePosition;
+
+        Vector2 titleSize = MeasureTextEx(GetFontDefault(), titles[i], 18, MENU_FONT_SPACING); 
+
+        titlePosition.x = button->rect.x + button->rect.width * MENU_MARGIN;
+        titlePosition.y = button->rect.y + (button->rect.height / 2.0f) - (titleSize.y / 2.0f);
+
+        initTitleWithPosition(
+            &tabData->titles[i],
+            titles[i],
+            titlePosition
+        );
+    }
+
+}
 
 void initHighscoresTabData(GameContext* ctx, Rectangle* parent, HighscoresTabData* tabData) {
     Vector2 position = {parent->x, parent->y};

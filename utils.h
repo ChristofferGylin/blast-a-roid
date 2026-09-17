@@ -42,6 +42,7 @@ Vector2 getRandomPositionOffScreen(int size);
 Vector2 getRandomVelocity(FloatRange range);
 float getRoundness(Rectangle rect, float radiusPx);
 void goToDestination(Vector2 position, Vector2  destination, Vector2* velocity, float maxVelocity, float acceleration);
+void initTitleWithPosition(TitleWithPosition* twp, char* title, Vector2 position);
 void knockback(Vector2* targetVelocity, Vector2 forceDirection, float force);
 void knockbackPoolball(Vector2 targetPosition, Vector2* targetVelocity, Vector2 forcePosition, int force);
 void knockbackByImpact(Vector2 targetPosition, Vector2* targetVelocity, Vector2 forcePosition, Vector2 forceVelocity);

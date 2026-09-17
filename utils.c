@@ -101,6 +101,11 @@ void goToDestination(Vector2 position, Vector2  destination, Vector2* velocity, 
     velocity->y += steering.y * GetFrameTime();
 }
 
+void initTitleWithPosition(TitleWithPosition* twp, char* title, Vector2 position) {
+    twp->position = position;
+    strcpy(twp->title, title);
+}
+
 void knockback(Vector2* targetVelocity, Vector2 forceDirection, float force) {
 
     forceDirection = Vector2Normalize(forceDirection);
