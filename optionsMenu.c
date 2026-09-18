@@ -158,7 +158,7 @@ void initOptionsMenu(GameContext* ctx, OptionsMenu* menu) {
     initOptionsMenuTab(&menu->tabs[3], &menu->layout.contentArea, "HIGHSCORES", drawHighscoresTab, updateHighscoresTab, &menu->highscoresTabData);
 
 
-    initControlsTabData(ctx, &menu->tabs[0].layout.contentArea, &menu->controlsTabData);
+    //initControlsTabData(ctx, &menu->tabs[0].layout.contentArea, &menu->controlsTabData);
     initVideoTabData(ctx, &menu->tabs[0].layout.contentArea, &menu->videoTabData);
     initHighscoresTabData(ctx, &menu->tabs[3].layout.contentArea, &menu->highscoresTabData);
 
