@@ -52,6 +52,7 @@ void initControlsTabData(GameContext* ctx, Rectangle* parent, ControlsTabData* t
     Vector2 position = {parent->x, parent->y};
 
     float maxWidth = 0.0f;
+    float maxHeight = 0.0f;
     int nameSize = 32;
     char name[nameSize];
 
@@ -62,6 +63,7 @@ void initControlsTabData(GameContext* ctx, Rectangle* parent, ControlsTabData* t
         Vector2 nameSize = MeasureTextEx(GetFontDefault(), name, BUTTON_FONT_SIZE, BUTTON_FONT_SPACING);
         
         if (nameSize.x > maxWidth) maxWidth = nameSize.x;
+        if (nameSize.y > maxHeight) maxHeight = nameSize.y;
     }
 
     char keys[NUMBER_OF_CONTROLS][32];
@@ -90,7 +92,7 @@ void initControlsTabData(GameContext* ctx, Rectangle* parent, ControlsTabData* t
                 position.x,
                 position.y,
                 maxWidth + (BUTTON_PADDING * 2),
-                0
+                maxHeight + BUTTON_PADDING
             },
             BUTTON_FONT_SIZE,
             keys[i],
@@ -110,6 +112,8 @@ void initControlsTabData(GameContext* ctx, Rectangle* parent, ControlsTabData* t
             titles[i],
             titlePosition
         );
+
+        position.y += button->rect.height + MENU_MARGIN;
     }
 }
 
