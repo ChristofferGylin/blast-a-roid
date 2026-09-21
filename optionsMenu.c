@@ -64,23 +64,13 @@ void initControlsTabData(GameContext* ctx, Rectangle* parent, ControlsTabData* t
         if (nameSize.x > maxWidth) maxWidth = nameSize.x;
     }
 
-    printf("Max width count done\n");
-    printf("maxWidth: %f\n", maxWidth);
-
     char keys[NUMBER_OF_CONTROLS][32];
-    getKeyName(controls->keys.left.key, name, nameSize);
-    strcpy(keys[0], getKeyName(controls->keys.left.key, name, nameSize));
-    printf("#0, no crash!\n");
-    strcpy(keys[1], getKeyName(controls->keys.right.key, name, nameSize));
-    printf("#1, no crash!\n");
-    strcpy(keys[2], getKeyName(controls->keys.thrust.key, name, nameSize));
-    printf("#2, no crash!\n");
-    strcpy(keys[3], getKeyName(controls->keys.fire.key, name, nameSize));
-    printf("#3, no crash!\n");
-    strcpy(keys[4], getKeyName(controls->keys.shield.key, name, nameSize));
-    printf("#4, no crash!\n");
 
-    printf("Strcpy keys done\n");
+    strcpy(keys[0], getKeyName(controls->keys.left.key, name, nameSize));
+    strcpy(keys[1], getKeyName(controls->keys.right.key, name, nameSize));
+    strcpy(keys[2], getKeyName(controls->keys.thrust.key, name, nameSize));
+    strcpy(keys[3], getKeyName(controls->keys.fire.key, name, nameSize));
+    strcpy(keys[4], getKeyName(controls->keys.shield.key, name, nameSize));
 
     char titles[NUMBER_OF_CONTROLS][32];
 
@@ -89,8 +79,6 @@ void initControlsTabData(GameContext* ctx, Rectangle* parent, ControlsTabData* t
     strcpy(titles[2], controls->keys.thrust.name);
     strcpy(titles[3], controls->keys.fire.name);
     strcpy(titles[4], controls->keys.shield.name);
-
-    printf("Strcpy keys done\n");
 
     for (int i = 0; i < NUMBER_OF_CONTROLS; i++) {
         
@@ -123,7 +111,6 @@ void initControlsTabData(GameContext* ctx, Rectangle* parent, ControlsTabData* t
             titlePosition
         );
     }
-    printf("Buttons done\n");
 }
 
 void initHighscoresTabData(GameContext* ctx, Rectangle* parent, HighscoresTabData* tabData) {
