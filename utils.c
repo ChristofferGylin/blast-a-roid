@@ -5,6 +5,7 @@
 #include "constants.h"
 #include "stdio.h"
 #include <stdlib.h>
+#include <stddef.h>
 #include <string.h>
 
 void applyGForce(Vector2 position, Vector2  destination, Vector2* velocity, float maxVelocity, float minAcceleration, float maxAcceleration, float maxDistance) {
@@ -18,13 +19,13 @@ float scaleFloat(float oldMin, float oldMax, float newMin, float newMax, float v
     return (value - oldMin) / (oldMax - oldMin) * (newMax - newMin) + newMin;
 }
 
-void getKeyName(int keyCode, char *name, size_t nameSize)
+char* getKeyName(int keyCode, char* name, size_t nameSize)
 {
     const char *raylibName = GetKeyName(keyCode);
 
     if (raylibName && raylibName[0] != '\0') {
         snprintf(name, nameSize, "%s", raylibName);
-        return;
+        return name;
     }
 
     switch (keyCode) {
@@ -150,6 +151,7 @@ void getKeyName(int keyCode, char *name, size_t nameSize)
             snprintf(name, nameSize, "UNKNOWN");
             break;
     }
+    return name;
 }
 
 int getNumberOfAsteroids(int gameLevel) {

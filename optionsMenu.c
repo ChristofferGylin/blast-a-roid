@@ -52,17 +52,12 @@ void initControlsTabData(GameContext* ctx, Rectangle* parent, ControlsTabData* t
     Vector2 position = {parent->x, parent->y};
 
     float maxWidth = 0.0f;
+    int nameSize = 32;
+    char name[nameSize];
 
     for (int i = 0; i < sizeof(availibleKeys) / sizeof(availibleKeys[0]); i++) {
         
-        const char* name = GetKeyName(availibleKeys[i]);
-
-        printf("#%d key %d -> %s\n",
-           i,
-           availibleKeys[i],
-           name ? name : "NULL");
-
-        if (!name) continue;
+        getKeyName(availibleKeys[i], name, nameSize);
 
         Vector2 nameSize = MeasureTextEx(GetFontDefault(), name, BUTTON_FONT_SIZE, BUTTON_FONT_SPACING);
         
@@ -73,22 +68,16 @@ void initControlsTabData(GameContext* ctx, Rectangle* parent, ControlsTabData* t
     printf("maxWidth: %f\n", maxWidth);
 
     char keys[NUMBER_OF_CONTROLS][32];
-
-    printf("left: %d\n", controls->keys.left.key);
-    printf("right: %d\n", controls->keys.right.key);
-    printf("thrust: %d\n", controls->keys.thrust.key);
-    printf("fire: %d\n", controls->keys.fire.key);
-    printf("shield: %d\n", controls->keys.shield.key);
-
-    strcpy(keys[0], GetKeyName(controls->keys.left.key));
+    getKeyName(controls->keys.left.key, name, nameSize);
+    strcpy(keys[0], getKeyName(controls->keys.left.key, name, nameSize));
     printf("#0, no crash!\n");
-    strcpy(keys[1], GetKeyName(controls->keys.right.key));
+    strcpy(keys[1], getKeyName(controls->keys.right.key, name, nameSize));
     printf("#1, no crash!\n");
-    strcpy(keys[2], GetKeyName(controls->keys.thrust.key));
+    strcpy(keys[2], getKeyName(controls->keys.thrust.key, name, nameSize));
     printf("#2, no crash!\n");
-    strcpy(keys[3], GetKeyName(controls->keys.fire.key));
+    strcpy(keys[3], getKeyName(controls->keys.fire.key, name, nameSize));
     printf("#3, no crash!\n");
-    strcpy(keys[4], GetKeyName(controls->keys.shield.key));
+    strcpy(keys[4], getKeyName(controls->keys.shield.key, name, nameSize));
     printf("#4, no crash!\n");
 
     printf("Strcpy keys done\n");
