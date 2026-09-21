@@ -35,6 +35,7 @@ typedef enum VisualType {
 
 void applyGForce(Vector2 position, Vector2  destination, Vector2* velocity, float maxVelocity, float minAcceleration, float maxAcceleration, float maxDistance);
 float scaleFloat(float oldMin, float oldMax, float newMin, float newMax, float value);
+void getKeyName(int keyCode, char *name, size_t nameSize);
 int getNumberOfAsteroids(int gameLevel);
 float getRandomFloat(float min, float max);
 Vector2 getRandomPosition();

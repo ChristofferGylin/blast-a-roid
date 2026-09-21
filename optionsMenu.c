@@ -53,21 +53,45 @@ void initControlsTabData(GameContext* ctx, Rectangle* parent, ControlsTabData* t
 
     float maxWidth = 0.0f;
 
-    for (int i = 0; i < KEY_KB_MENU; i++) {
-        const char* name = GetKeyName(i);
+    for (int i = 0; i < sizeof(availibleKeys) / sizeof(availibleKeys[0]); i++) {
+        
+        const char* name = GetKeyName(availibleKeys[i]);
+
+        printf("#%d key %d -> %s\n",
+           i,
+           availibleKeys[i],
+           name ? name : "NULL");
+
+        if (!name) continue;
 
         Vector2 nameSize = MeasureTextEx(GetFontDefault(), name, BUTTON_FONT_SIZE, BUTTON_FONT_SPACING);
         
         if (nameSize.x > maxWidth) maxWidth = nameSize.x;
     }
 
+    printf("Max width count done\n");
+    printf("maxWidth: %f\n", maxWidth);
+
     char keys[NUMBER_OF_CONTROLS][32];
 
+    printf("left: %d\n", controls->keys.left.key);
+    printf("right: %d\n", controls->keys.right.key);
+    printf("thrust: %d\n", controls->keys.thrust.key);
+    printf("fire: %d\n", controls->keys.fire.key);
+    printf("shield: %d\n", controls->keys.shield.key);
+
     strcpy(keys[0], GetKeyName(controls->keys.left.key));
+    printf("#0, no crash!\n");
     strcpy(keys[1], GetKeyName(controls->keys.right.key));
+    printf("#1, no crash!\n");
     strcpy(keys[2], GetKeyName(controls->keys.thrust.key));
+    printf("#2, no crash!\n");
     strcpy(keys[3], GetKeyName(controls->keys.fire.key));
+    printf("#3, no crash!\n");
     strcpy(keys[4], GetKeyName(controls->keys.shield.key));
+    printf("#4, no crash!\n");
+
+    printf("Strcpy keys done\n");
 
     char titles[NUMBER_OF_CONTROLS][32];
 
@@ -76,6 +100,8 @@ void initControlsTabData(GameContext* ctx, Rectangle* parent, ControlsTabData* t
     strcpy(titles[2], controls->keys.thrust.name);
     strcpy(titles[3], controls->keys.fire.name);
     strcpy(titles[4], controls->keys.shield.name);
+
+    printf("Strcpy keys done\n");
 
     for (int i = 0; i < NUMBER_OF_CONTROLS; i++) {
         
@@ -108,7 +134,7 @@ void initControlsTabData(GameContext* ctx, Rectangle* parent, ControlsTabData* t
             titlePosition
         );
     }
-
+    printf("Buttons done\n");
 }
 
 void initHighscoresTabData(GameContext* ctx, Rectangle* parent, HighscoresTabData* tabData) {
@@ -158,7 +184,7 @@ void initOptionsMenu(GameContext* ctx, OptionsMenu* menu) {
     initOptionsMenuTab(&menu->tabs[3], &menu->layout.contentArea, "HIGHSCORES", drawHighscoresTab, updateHighscoresTab, &menu->highscoresTabData);
 
 
-    //initControlsTabData(ctx, &menu->tabs[0].layout.contentArea, &menu->controlsTabData);
+    initControlsTabData(ctx, &menu->tabs[0].layout.contentArea, &menu->controlsTabData);
     initVideoTabData(ctx, &menu->tabs[0].layout.contentArea, &menu->videoTabData);
     initHighscoresTabData(ctx, &menu->tabs[3].layout.contentArea, &menu->highscoresTabData);
 
