@@ -17,6 +17,17 @@ typedef struct AudioTabData {
     
 }AudioTabData;
 
+typedef struct ControlChanger {
+    Rectangle container;
+    Button cancelButton;
+    Vector2 textPosition;
+    Vector2 timerPosition;
+    KeyBind* activeBind;
+    bool isActive;
+    float timer;
+    char text[22];
+}ControlChanger;
+
 
 typedef struct ChangeControlsCallbackArgs {
     KeyBind* keyBind;
@@ -27,6 +38,7 @@ typedef struct ControlsTabData {
     Button keys[NUMBER_OF_CONTROLS];
     TitleWithPosition titles[NUMBER_OF_CONTROLS];
     ChangeControlsCallbackArgs callbackArgs[NUMBER_OF_CONTROLS];
+    ControlChanger controlChanger;
 }ControlsTabData;
 
 typedef struct HighscoresTabData {
