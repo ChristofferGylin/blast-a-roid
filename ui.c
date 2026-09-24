@@ -10,12 +10,6 @@
 #include "ui.h"
 #include "uiSizes.h"
 
-static const int CHECKBOX_FONT_SIZE = 18;
-static const int DROPDOWN_MENU_FONT_SIZE = 18;
-static const int DROPDOWN_MENU_DOWN_ARROW_SIZE = 18;
-static const int DROPDOWN_MENU_BUTTON_SIZE = 42;
-static const int DIALOG_BOX_FONT_SIZE = 18;
-
 void drawCheckbox(Checkbox* checkbox) {
     
     const float lineThickness = 3.0f;

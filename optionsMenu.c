@@ -38,7 +38,21 @@ void updateVideoTab(void* userData);
 void updateAudioTab(void* userData) {};
 void updateControlsTab(void* userData) {};
 
-void drawControlsTab(void* userData) {};
+void drawControlsTab(void* userData) {
+    ControlsTabData* tabData = userData;
+
+    for (int i = 0; i < NUMBER_OF_CONTROLS; i++) {
+        drawButton(&tabData->keys[i]);
+        DrawTextEx(
+            GetFontDefault(),
+            tabData->titles[i].title,
+            tabData->titles[i].position,
+            CHECKBOX_FONT_SIZE,
+            MENU_FONT_SPACING,
+            primaryColor
+        );
+    }
+};
 void drawAudioTab(void* userData) {};
 
 void changeControlsCallback(void* userData) {
@@ -104,7 +118,7 @@ void initControlsTabData(GameContext* ctx, Rectangle* parent, ControlsTabData* t
 
         Vector2 titleSize = MeasureTextEx(GetFontDefault(), titles[i], 18, MENU_FONT_SPACING); 
 
-        titlePosition.x = button->rect.x + button->rect.width * MENU_MARGIN;
+        titlePosition.x = button->rect.x + button->rect.width + MENU_MARGIN;
         titlePosition.y = button->rect.y + (button->rect.height / 2.0f) - (titleSize.y / 2.0f);
 
         initTitleWithPosition(

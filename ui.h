@@ -12,6 +12,12 @@
 #define TOGGLE_FONT_SIZE 18
 #define TOGGLE_MARGIN 8
 
+static const int CHECKBOX_FONT_SIZE = 18;
+static const int DROPDOWN_MENU_FONT_SIZE = 18;
+static const int DROPDOWN_MENU_DOWN_ARROW_SIZE = 18;
+static const int DROPDOWN_MENU_BUTTON_SIZE = 42;
+static const int DIALOG_BOX_FONT_SIZE = 18;
+
 typedef void (*DropDownCallback)(int selected, void* userData);
 typedef void (*ButtonCallback)(void* userData);
 typedef void (*DrawSectionContent)(void* userData);
