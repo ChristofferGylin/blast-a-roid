@@ -36,7 +36,6 @@ void updateHighscoresTab(void* userData);
 void updateVideoTab(void* userData);
 
 void updateAudioTab(void* userData) {};
-void updateControlsTab(void* userData) {};
 
 void drawControlsTab(void* userData) {
     ControlsTabData* tabData = userData;
@@ -438,6 +437,15 @@ void resetHighscoresCallback(void* userData) {
     Highscores* highscores = userData;
     resetHighscores(highscores);
 }
+
+void updateControlsTab(void* userData) {
+    
+    ControlsTabData* tabData = userData;
+    
+    for (int i = 0; i < NUMBER_OF_CONTROLS; i++) {
+        updateButton(&tabData->keys[i]);
+    }
+};
 
 void updateOptionsMenu(GameContext* ctx, OptionsMenu* menu) {
     updateButton(&menu->backButton);
