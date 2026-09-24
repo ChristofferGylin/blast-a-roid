@@ -60,6 +60,10 @@ void initControlsTabData(GameContext* ctx, Rectangle* parent, ControlsTabData* t
         
         getKeyName(availibleKeys[i], name, nameSize);
 
+        
+        printf("%d: %s\n", availibleKeys[i], name);
+        
+
         Vector2 nameSize = MeasureTextEx(GetFontDefault(), name, BUTTON_FONT_SIZE, BUTTON_FONT_SPACING);
         
         if (nameSize.x > maxWidth) maxWidth = nameSize.x;

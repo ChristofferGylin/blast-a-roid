@@ -19,7 +19,7 @@ float scaleFloat(float oldMin, float oldMax, float newMin, float newMax, float v
     return (value - oldMin) / (oldMax - oldMin) * (newMax - newMin) + newMin;
 }
 
-char* getKeyName(int keyCode, char* name, size_t nameSize)
+char* getKeyName(int keyCode, char *name, size_t nameSize)
 {
     const char *raylibName = GetKeyName(keyCode);
 
@@ -29,55 +29,19 @@ char* getKeyName(int keyCode, char* name, size_t nameSize)
     }
 
     switch (keyCode) {
-        case KEY_APOSTROPHE:    snprintf(name, nameSize, "'"); break;
-        case KEY_COMMA:         snprintf(name, nameSize, ","); break;
-        case KEY_MINUS:         snprintf(name, nameSize, "-"); break;
-        case KEY_PERIOD:        snprintf(name, nameSize, "."); break;
-        case KEY_SLASH:         snprintf(name, nameSize, "/"); break;
-        case KEY_ZERO:          snprintf(name, nameSize, "0"); break;
-        case KEY_ONE:           snprintf(name, nameSize, "1"); break;
-        case KEY_TWO:           snprintf(name, nameSize, "2"); break;
-        case KEY_THREE:         snprintf(name, nameSize, "3"); break;
-        case KEY_FOUR:          snprintf(name, nameSize, "4"); break;
-        case KEY_FIVE:          snprintf(name, nameSize, "5"); break;
-        case KEY_SIX:           snprintf(name, nameSize, "6"); break;
-        case KEY_SEVEN:         snprintf(name, nameSize, "7"); break;
-        case KEY_EIGHT:         snprintf(name, nameSize, "8"); break;
-        case KEY_NINE:          snprintf(name, nameSize, "9"); break;
-        case KEY_SEMICOLON:     snprintf(name, nameSize, ";"); break;
-        case KEY_EQUAL:         snprintf(name, nameSize, "="); break;
+        case KEY_APOSTROPHE:    snprintf(name, nameSize, "APOSTROPHE"); break;
+        case KEY_COMMA:         snprintf(name, nameSize, "COMMA"); break;
+        case KEY_MINUS:         snprintf(name, nameSize, "MINUS"); break;
+        case KEY_PERIOD:        snprintf(name, nameSize, "PERIOD"); break;
+        case KEY_SLASH:         snprintf(name, nameSize, "SLASH"); break;
 
-        case KEY_A:             snprintf(name, nameSize, "A"); break;
-        case KEY_B:             snprintf(name, nameSize, "B"); break;
-        case KEY_C:             snprintf(name, nameSize, "C"); break;
-        case KEY_D:             snprintf(name, nameSize, "D"); break;
-        case KEY_E:             snprintf(name, nameSize, "E"); break;
-        case KEY_F:             snprintf(name, nameSize, "F"); break;
-        case KEY_G:             snprintf(name, nameSize, "G"); break;
-        case KEY_H:             snprintf(name, nameSize, "H"); break;
-        case KEY_I:             snprintf(name, nameSize, "I"); break;
-        case KEY_J:             snprintf(name, nameSize, "J"); break;
-        case KEY_K:             snprintf(name, nameSize, "K"); break;
-        case KEY_L:             snprintf(name, nameSize, "L"); break;
-        case KEY_M:             snprintf(name, nameSize, "M"); break;
-        case KEY_N:             snprintf(name, nameSize, "N"); break;
-        case KEY_O:             snprintf(name, nameSize, "O"); break;
-        case KEY_P:             snprintf(name, nameSize, "P"); break;
-        case KEY_Q:             snprintf(name, nameSize, "Q"); break;
-        case KEY_R:             snprintf(name, nameSize, "R"); break;
-        case KEY_S:             snprintf(name, nameSize, "S"); break;
-        case KEY_T:             snprintf(name, nameSize, "T"); break;
-        case KEY_U:             snprintf(name, nameSize, "U"); break;
-        case KEY_V:             snprintf(name, nameSize, "V"); break;
-        case KEY_W:             snprintf(name, nameSize, "W"); break;
-        case KEY_X:             snprintf(name, nameSize, "X"); break;
-        case KEY_Y:             snprintf(name, nameSize, "Y"); break;
-        case KEY_Z:             snprintf(name, nameSize, "Z"); break;
+        case KEY_SEMICOLON:     snprintf(name, nameSize, "SEMICOLON"); break;
+        case KEY_EQUAL:         snprintf(name, nameSize, "EQUAL"); break;
 
-        case KEY_LEFT_BRACKET:  snprintf(name, nameSize, "["); break;
-        case KEY_BACKSLASH:     snprintf(name, nameSize, "\\"); break;
-        case KEY_RIGHT_BRACKET: snprintf(name, nameSize, "]"); break;
-        case KEY_GRAVE:         snprintf(name, nameSize, "`"); break;
+        case KEY_LEFT_BRACKET:  snprintf(name, nameSize, "LEFT BRACKET"); break;
+        case KEY_BACKSLASH:     snprintf(name, nameSize, "BACKSLASH"); break;
+        case KEY_RIGHT_BRACKET: snprintf(name, nameSize, "RIGHT BRACKET"); break;
+        case KEY_GRAVE:         snprintf(name, nameSize, "GRAVE"); break;
 
         case KEY_SPACE:         snprintf(name, nameSize, "SPACE"); break;
         case KEY_ESCAPE:        snprintf(name, nameSize, "ESC"); break;
@@ -91,7 +55,6 @@ char* getKeyName(int keyCode, char* name, size_t nameSize)
         case KEY_LEFT:          snprintf(name, nameSize, "LEFT"); break;
         case KEY_DOWN:          snprintf(name, nameSize, "DOWN"); break;
         case KEY_UP:            snprintf(name, nameSize, "UP"); break;
-
         case KEY_PAGE_UP:       snprintf(name, nameSize, "PAGE UP"); break;
         case KEY_PAGE_DOWN:     snprintf(name, nameSize, "PAGE DOWN"); break;
         case KEY_HOME:          snprintf(name, nameSize, "HOME"); break;
@@ -120,12 +83,10 @@ char* getKeyName(int keyCode, char* name, size_t nameSize)
         case KEY_LEFT_CONTROL:  snprintf(name, nameSize, "LEFT CTRL"); break;
         case KEY_LEFT_ALT:      snprintf(name, nameSize, "LEFT ALT"); break;
         case KEY_LEFT_SUPER:    snprintf(name, nameSize, "LEFT SUPER"); break;
-
         case KEY_RIGHT_SHIFT:   snprintf(name, nameSize, "RIGHT SHIFT"); break;
         case KEY_RIGHT_CONTROL: snprintf(name, nameSize, "RIGHT CTRL"); break;
         case KEY_RIGHT_ALT:     snprintf(name, nameSize, "RIGHT ALT"); break;
         case KEY_RIGHT_SUPER:   snprintf(name, nameSize, "RIGHT SUPER"); break;
-
         case KEY_KB_MENU:       snprintf(name, nameSize, "MENU"); break;
 
         case KEY_KP_0:          snprintf(name, nameSize, "KP 0"); break;
@@ -138,19 +99,19 @@ char* getKeyName(int keyCode, char* name, size_t nameSize)
         case KEY_KP_7:          snprintf(name, nameSize, "KP 7"); break;
         case KEY_KP_8:          snprintf(name, nameSize, "KP 8"); break;
         case KEY_KP_9:          snprintf(name, nameSize, "KP 9"); break;
-
         case KEY_KP_DECIMAL:    snprintf(name, nameSize, "KP DECIMAL"); break;
-        case KEY_KP_DIVIDE:     snprintf(name, nameSize, "KP /"); break;
-        case KEY_KP_MULTIPLY:   snprintf(name, nameSize, "KP *"); break;
-        case KEY_KP_SUBTRACT:   snprintf(name, nameSize, "KP -"); break;
-        case KEY_KP_ADD:        snprintf(name, nameSize, "KP +"); break;
+        case KEY_KP_DIVIDE:     snprintf(name, nameSize, "KP DIVIDE"); break;
+        case KEY_KP_MULTIPLY:   snprintf(name, nameSize, "KP MULTIPLY"); break;
+        case KEY_KP_SUBTRACT:   snprintf(name, nameSize, "KP SUBTRACT"); break;
+        case KEY_KP_ADD:        snprintf(name, nameSize, "KP ADD"); break;
         case KEY_KP_ENTER:      snprintf(name, nameSize, "KP ENTER"); break;
-        case KEY_KP_EQUAL:      snprintf(name, nameSize, "KP ="); break;
+        case KEY_KP_EQUAL:      snprintf(name, nameSize, "KP EQUAL"); break;
 
         default:
             snprintf(name, nameSize, "UNKNOWN");
             break;
     }
+
     return name;
 }
 
