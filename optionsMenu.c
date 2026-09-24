@@ -79,26 +79,28 @@ void initControlsTabData(GameContext* ctx, Rectangle* parent, ControlsTabData* t
         if (nameSize.y > maxHeight) maxHeight = nameSize.y;
     }
 
-    char keys[NUMBER_OF_CONTROLS][32];
+    KeyBind* keyBinds[NUMBER_OF_CONTROLS];
 
-    strcpy(keys[0], getKeyName(controls->keys.left.key, name, nameSize));
-    strcpy(keys[1], getKeyName(controls->keys.right.key, name, nameSize));
-    strcpy(keys[2], getKeyName(controls->keys.thrust.key, name, nameSize));
-    strcpy(keys[3], getKeyName(controls->keys.fire.key, name, nameSize));
-    strcpy(keys[4], getKeyName(controls->keys.shield.key, name, nameSize));
-
-    char titles[NUMBER_OF_CONTROLS][32];
-
-    strcpy(titles[0], controls->keys.left.name);
-    strcpy(titles[1], controls->keys.right.name);
-    strcpy(titles[2], controls->keys.thrust.name);
-    strcpy(titles[3], controls->keys.fire.name);
-    strcpy(titles[4], controls->keys.shield.name);
+    keyBinds[0] = &controls->keys.left;
+    keyBinds[1] = &controls->keys.right;
+    keyBinds[2] = &controls->keys.thrust;
+    keyBinds[3] = &controls->keys.fire;
+    keyBinds[4] = &controls->keys.shield;
 
     for (int i = 0; i < NUMBER_OF_CONTROLS; i++) {
-        
+
         Button* button = &tabData->keys[i];
-        
+         
+        char buttonText[TITLE_MAX_LENGTH];
+        getKeyName(keyBinds[i]->key, buttonText, TITLE_MAX_LENGTH);
+
+        ChangeControlsCallbackArgs args = {
+            keyBinds[i],
+            button
+        };
+
+        tabData->callbackArgs[i] = args;
+
         initButton(
             button,
             (Rectangle){
@@ -108,21 +110,25 @@ void initControlsTabData(GameContext* ctx, Rectangle* parent, ControlsTabData* t
                 maxHeight + BUTTON_PADDING
             },
             BUTTON_FONT_SIZE,
-            keys[i],
+            buttonText,
             changeControlsCallback,
-            NULL
+            &tabData->callbackArgs[i]
         );
 
         Vector2 titlePosition;
 
-        Vector2 titleSize = MeasureTextEx(GetFontDefault(), titles[i], 18, MENU_FONT_SPACING); 
+        Vector2 titleSize = MeasureTextEx(GetFontDefault(), keyBinds[i]->name, 18, MENU_FONT_SPACING); 
 
         titlePosition.x = button->rect.x + button->rect.width + MENU_MARGIN;
         titlePosition.y = button->rect.y + (button->rect.height / 2.0f) - (titleSize.y / 2.0f);
 
+        char title[TITLE_MAX_LENGTH];
+
+        snprintf(title, TITLE_MAX_LENGTH, "- %s", keyBinds[i]->name);
+
         initTitleWithPosition(
             &tabData->titles[i],
-            titles[i],
+            title,
             titlePosition
         );
 

@@ -17,9 +17,16 @@ typedef struct AudioTabData {
     
 }AudioTabData;
 
+
+typedef struct ChangeControlsCallbackArgs {
+    KeyBind* keyBind;
+    Button* button;
+}ChangeControlsCallbackArgs;
+
 typedef struct ControlsTabData {
     Button keys[NUMBER_OF_CONTROLS];
     TitleWithPosition titles[NUMBER_OF_CONTROLS];
+    ChangeControlsCallbackArgs callbackArgs[NUMBER_OF_CONTROLS];
 }ControlsTabData;
 
 typedef struct HighscoresTabData {
