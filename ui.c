@@ -10,12 +10,6 @@
 #include "ui.h"
 #include "uiSizes.h"
 
-static const int CHECKBOX_FONT_SIZE = 18;
-static const int DROPDOWN_MENU_FONT_SIZE = 18;
-static const int DROPDOWN_MENU_DOWN_ARROW_SIZE = 18;
-static const int DROPDOWN_MENU_BUTTON_SIZE = 42;
-static const int DIALOG_BOX_FONT_SIZE = 18;
-
 void drawCheckbox(Checkbox* checkbox) {
     
     const float lineThickness = 3.0f;
@@ -479,6 +473,65 @@ void initLayoutSection(LayoutSection* section, Rectangle* parent, Rectangle cont
     strcpy(section->heading, heading);
 }
 
+void initToggle(Toggle* toggle, Vector2 position, char* title1, char* title2, bool value) {
+    strcpy(toggle->title1, title1); 
+    strcpy(toggle->title2, title2);
+
+    Vector2 title1Size = MeasureTextEx(GetFontDefault(), title1, TOGGLE_FONT_SIZE, MENU_FONT_SPACING);
+    Vector2 title2Size = MeasureTextEx(GetFontDefault(), title2, TOGGLE_FONT_SIZE, MENU_FONT_SPACING);
+
+    float width = 0.0f;
+
+    if (title1Size.x > title2Size.x) {
+        width = title1Size.x;
+    } else {
+        width = title2Size.x;
+    }
+
+    toggle->rect.height = title1Size.y + TOGGLE_MARGIN;
+    toggle->rect.width = width + (TOGGLE_MARGIN * 4);
+    toggle->rect.x = position.x;
+    toggle->rect.y = position.y;
+
+    toggle->value = value;
+
+    toggle->title1Pos.x = position.x + TOGGLE_MARGIN;
+    toggle->title1Pos.y = position.y + (toggle->rect.height / 2.0f) - (title1Size.y / 2.0f);
+    
+    toggle->title2Pos.x = position.x + (toggle->rect.width / 2.0f) + TOGGLE_MARGIN;
+    toggle->title2Pos.y = toggle->title1Pos.y;
+
+    toggle->roundness = getRoundness(toggle->rect, 12.0f);
+}
+
+void drawToggle(Toggle* toggle) {
+
+    Vector2 origin = {0,0};
+
+    float scissorX = 0.0f;
+
+    Color title1Color;
+    Color title2Color;
+
+    if (toggle->value) {
+        scissorX = toggle->rect.x + (toggle->rect.width / 2.0f);
+        title1Color = primaryColor;
+        title2Color = Fade(BLACK, 0.75f);
+    } else {
+        scissorX = toggle->rect.x;
+        title1Color = Fade(BLACK, 0.75f);
+        title2Color = primaryColor;
+    }
+
+    DrawRectangleRounded(toggle->rect, toggle->roundness, 10, primaryColorDimmed20);
+    BeginScissorMode(scissorX, toggle->rect.y, toggle->rect.width / 2.0f, toggle->rect.height);
+        DrawRectangleRounded(toggle->rect, toggle->roundness, 10, primaryColor);
+    EndScissorMode();
+    DrawTextPro(GetFontDefault(), toggle->title1, toggle->title1Pos, origin, 0.0f, TOGGLE_FONT_SIZE, MENU_FONT_SPACING, title1Color);
+    DrawTextPro(GetFontDefault(), toggle->title2, toggle->title2Pos, origin, 0.0f, TOGGLE_FONT_SIZE, MENU_FONT_SPACING, title2Color);
+    DrawRectangleRoundedLinesEx(toggle->rect, toggle->roundness, 10, 2.0f, primaryColor);
+}
+
 void onClickBack(void* userData) {
     bool* exit = userData;
 
@@ -605,4 +658,15 @@ bool updateDropdownMenu(DropdownMenu* menu) {
     }
 
     return isHovered;
+}
+
+void updateToggle(Toggle* toggle) {
+    if (
+        IsMouseButtonPressed(MOUSE_BUTTON_LEFT) &&
+        CheckCollisionPointRec(GetMousePosition(), toggle->rect)
+    ) {
+     
+        toggle->value = !toggle->value;
+
+    }
 }

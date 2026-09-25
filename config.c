@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <string.h>
 
 #include "config.h"
 #include "debug.h"
@@ -6,28 +7,50 @@
 #include "options.h"
 #include "raylib.h"
 
+void initControls(ControlsOptions* options);
 bool loadConfigFromFile(GameContext* ctx);
 
 bool compareConfig(Config* config1, Config* config2) {
 
     bool isIdentical = true;
 
-    if (config1->debug.onlyOutputOnChange != config2->debug.onlyOutputOnChange) isIdentical = false;
-    if (config1->debug.outputFrequency != config2->debug.outputFrequency) isIdentical = false;
+    // Controls
+
+    KeyBindings* keys1 = &config1->options.controls.keys;
+    KeyBindings* keys2 = &config2->options.controls.keys;
+
+    if (keys1->fire.key != keys2->fire.key) isIdentical = false;
+    if (keys1->left.key != keys2->left.key) isIdentical = false;
+    if (keys1->right.key != keys2->right.key) isIdentical = false;
+    if (keys1->shield.key != keys2->shield.key) isIdentical = false;
+    if (keys1->thrust.key != keys2->thrust.key) isIdentical = false;
+
+    // Debug
+
+    DebugConfig* debug1 = &config1->debug;
+    DebugConfig* debug2 = &config2->debug;
+
+    if (debug1->onlyOutputOnChange != debug2->onlyOutputOnChange) isIdentical = false;
+    if (debug1->outputFrequency != debug2->outputFrequency) isIdentical = false;
     
     #define OUTPUT(name)                                                                          \
     do {                                                                                          \
-        if (config1->debug.poolCount.name != config2->debug.poolCount.name) isIdentical = false;  \
+        if (debug1->poolCount.name != debug2->poolCount.name) isIdentical = false;  \
     } while (0);                                                                                            
     POOL_COUNTS(OUTPUT)
 
     #undef OUTPUT
 
-    if (config1->options.video.fullscreen != config2->options.video.fullscreen) isIdentical = false;
-    if (config1->options.video.isMonitorSetByUser != config2->options.video.isMonitorSetByUser) isIdentical = false;
-    if (config1->options.video.selectecMonitor != config2->options.video.selectecMonitor) isIdentical = false;
-    if (config1->options.video.showFps != config2->options.video.showFps) isIdentical = false;
-    if (config1->options.video.vSync != config2->options.video.vSync) isIdentical = false;
+    // Video
+
+    VideoOptions* video1 = &config1->options.video;
+    VideoOptions* video2 = &config2->options.video;
+
+    if (video1->fullscreen != video2->fullscreen) isIdentical = false;
+    if (video1->isMonitorSetByUser != video2->isMonitorSetByUser) isIdentical = false;
+    if (video1->selectecMonitor != video2->selectecMonitor) isIdentical = false;
+    if (video1->showFps != video2->showFps) isIdentical = false;
+    if (video1->vSync != video2->vSync) isIdentical = false;
 
     return isIdentical;
 }
@@ -35,6 +58,16 @@ bool compareConfig(Config* config1, Config* config2) {
 Config getConfig(GameContext* ctx) {
 
     Config config;
+
+    // Controls
+
+    config.options.controls.keys.fire = ctx->options.controls.keys.fire;
+    config.options.controls.keys.left = ctx->options.controls.keys.left;
+    config.options.controls.keys.right = ctx->options.controls.keys.right;
+    config.options.controls.keys.shield = ctx->options.controls.keys.shield;
+    config.options.controls.keys.thrust = ctx->options.controls.keys.thrust;
+
+    // Debug
 
     config.debug.onlyOutputOnChange = ctx->debug.onlyOutputOnChange;
     config.debug.outputFrequency = ctx->debug.outputFrequency;
@@ -46,6 +79,8 @@ Config getConfig(GameContext* ctx) {
     POOL_COUNTS(OUTPUT)
 
     #undef OUTPUT
+
+    // Video
 
     config.options.video.fullscreen = ctx->options.video.fullscreen;
     config.options.video.isMonitorSetByUser = ctx->options.video.isMonitorSetByUser;
@@ -59,6 +94,8 @@ Config getConfig(GameContext* ctx) {
 void initConfig(GameContext* ctx) {
     
     bool success = false;
+
+    initControls(&ctx->options.controls);
     
     if (FileExists("./config.dat")) {
         success = loadConfigFromFile(ctx);  
@@ -74,6 +111,20 @@ void initConfig(GameContext* ctx) {
     }
 }
 
+void initControls(ControlsOptions* options) {
+    strcpy(options->keys.fire.name, "Fire");
+    strcpy(options->keys.left.name, "Turn left");
+    strcpy(options->keys.right.name, "Turn right");
+    strcpy(options->keys.shield.name, "Shield");
+    strcpy(options->keys.thrust.name, "Thrust");
+
+    options->keys.fire.key = 0;
+    options->keys.left.key = 0;
+    options->keys.right.key = 0;
+    options->keys.shield.key = 0;
+    options->keys.thrust.key = 0;
+}
+
 bool loadConfigFromFile(GameContext* ctx) {
     int size;
     bool success = true;
@@ -84,63 +135,113 @@ bool loadConfigFromFile(GameContext* ctx) {
 
     if (configFromFile && size == sizeof(Config)) {
 
-        if (configFromFile->options.video.fullscreen == true || configFromFile->options.video.fullscreen == false) {
-            ctx->options.video.fullscreen = configFromFile->options.video.fullscreen;
+        // Controls
+
+        KeyBindings* fileKeys = &configFromFile->options.controls.keys;
+        KeyBindings* ctxKeys = &ctx->options.controls.keys;
+
+        if (fileKeys->fire.key > 0 && fileKeys->fire.key < INT32_MAX) {
+            ctxKeys->fire.key = fileKeys->fire.key;
         } else {
-            ctx->options.video.fullscreen = FULLSCREEN_DEFAULT_VALUE;
+            ctxKeys->fire.key = KEY_BIND_FIRE_DEFAULT_VALUE;
             hasInvalidValues = true;
         }
 
-        if (configFromFile->options.video.isMonitorSetByUser == true || configFromFile->options.video.isMonitorSetByUser == false) {
-            ctx->options.video.isMonitorSetByUser = configFromFile->options.video.isMonitorSetByUser;
+        if (fileKeys->left.key > 0 && fileKeys->left.key < INT32_MAX) {
+            ctxKeys->left.key = fileKeys->left.key;
         } else {
-            ctx->options.video.isMonitorSetByUser = IS_MONITOR_SET_BY_USER_DEFAULT_VALUE;
+            ctxKeys->left.key = KEY_BIND_LEFT_DEFAULT_VALUE;
             hasInvalidValues = true;
         }
 
-        if (configFromFile->options.video.selectecMonitor >= 0 || configFromFile->options.video.selectecMonitor < 99 ) {
-            ctx->options.video.selectecMonitor = configFromFile->options.video.selectecMonitor;
+        if (fileKeys->right.key > 0 && fileKeys->right.key < INT32_MAX) {
+            ctxKeys->right.key = fileKeys->right.key;
         } else {
-            ctx->options.video.selectecMonitor = SELECTED_MONITOR_DEFAULT_VALUE;
+            ctxKeys->right.key = KEY_BIND_RIGHT_DEFAULT_VALUE;
             hasInvalidValues = true;
         }
 
-        if (configFromFile->options.video.showFps == true || configFromFile->options.video.showFps == false) {
-            ctx->options.video.showFps = configFromFile->options.video.showFps;
+        if (fileKeys->shield.key > 0 && fileKeys->shield.key < INT32_MAX) {
+            ctxKeys->shield.key = fileKeys->shield.key;
         } else {
-            ctx->options.video.showFps = SHOW_FPS_DEFAULT_VALUE;
+            ctxKeys->shield.key = KEY_BIND_SHIELD_DEFAULT_VALUE;
+            hasInvalidValues = true;
+        }
+
+        if (fileKeys->thrust.key > 0 && fileKeys->thrust.key < INT32_MAX) {
+            ctxKeys->thrust.key = fileKeys->thrust.key;
+        } else {
+            ctxKeys->thrust.key = KEY_BIND_THRUST_DEFAULT_VALUE;
+            hasInvalidValues = true;
+        }
+
+        // Video
+
+        VideoOptions* fileVideoOps = &configFromFile->options.video; 
+        VideoOptions* ctxVideoOps = &ctx->options.video; 
+
+        if (fileVideoOps->fullscreen == true || fileVideoOps->fullscreen == false) {
+            ctxVideoOps->fullscreen = fileVideoOps->fullscreen;
+        } else {
+            ctxVideoOps->fullscreen = FULLSCREEN_DEFAULT_VALUE;
+            hasInvalidValues = true;
+        }
+
+        if (fileVideoOps->isMonitorSetByUser == true || fileVideoOps->isMonitorSetByUser == false) {
+            ctxVideoOps->isMonitorSetByUser = fileVideoOps->isMonitorSetByUser;
+        } else {
+            ctxVideoOps->isMonitorSetByUser = IS_MONITOR_SET_BY_USER_DEFAULT_VALUE;
+            hasInvalidValues = true;
+        }
+
+        if (fileVideoOps->selectecMonitor >= 0 || fileVideoOps->selectecMonitor < 99 ) {
+            ctxVideoOps->selectecMonitor = fileVideoOps->selectecMonitor;
+        } else {
+            ctxVideoOps->selectecMonitor = SELECTED_MONITOR_DEFAULT_VALUE;
+            hasInvalidValues = true;
+        }
+
+        if (fileVideoOps->showFps == true || fileVideoOps->showFps == false) {
+            ctxVideoOps->showFps = fileVideoOps->showFps;
+        } else {
+            ctxVideoOps->showFps = SHOW_FPS_DEFAULT_VALUE;
             hasInvalidValues = true;
         }
         
-        if (configFromFile->options.video.vSync == true || configFromFile->options.video.vSync == false) {
-            ctx->options.video.vSync = configFromFile->options.video.vSync;
+        if (fileVideoOps->vSync == true || fileVideoOps->vSync == false) {
+            ctxVideoOps->vSync = fileVideoOps->vSync;
         } else {
-            ctx->options.video.vSync = IS_V_SYNC_ENABLED_DEFAULT_VALUE;
-            hasInvalidValues = true;
-        }
-        
-        if (configFromFile->debug.onlyOutputOnChange == true ||configFromFile->debug.onlyOutputOnChange == false) {
-            ctx->debug.onlyOutputOnChange = configFromFile->debug.onlyOutputOnChange;
-        } else {
-            ctx->debug.onlyOutputOnChange = true;
-            hasInvalidValues = true;
-        }
-        
-        if (configFromFile->debug.outputFrequency >= MIN_DEBUG_OUTPUT_FREQUENCY && configFromFile->debug.outputFrequency <= MAX_DEBUG_OUTPUT_FREQUENCY) {
-            ctx->debug.outputFrequency = configFromFile->debug.outputFrequency;
-        } else {
-            ctx->debug.outputFrequency = DEFAULT_DEBUG_OUTPUT_FREQUENCY;
+            ctxVideoOps->vSync = IS_V_SYNC_ENABLED_DEFAULT_VALUE;
             hasInvalidValues = true;
         }
 
-        #define OUTPUT(name)                                                                                            \
-            do {                                                                                                        \
-                if (configFromFile->debug.poolCount.name == true || configFromFile->debug.poolCount.name == false) {    \
-                    ctx->debug.poolCount.name.showInDebug = configFromFile->debug.poolCount.name;                       \
-                } else {                                                                                                \
-                    ctx->debug.poolCount.name.showInDebug = true;                                                       \
-                    hasInvalidValues = true;                                                                            \
-                }                                                                                                       \
+        // Debug
+
+        DebugConfig* fileDebug = &configFromFile->debug;
+        Debug* ctxDebug = &ctx->debug;
+        
+        if (fileDebug->onlyOutputOnChange == true ||fileDebug->onlyOutputOnChange == false) {
+            ctxDebug->onlyOutputOnChange = fileDebug->onlyOutputOnChange;
+        } else {
+            ctxDebug->onlyOutputOnChange = true;
+            hasInvalidValues = true;
+        }
+        
+        if (fileDebug->outputFrequency >= MIN_DEBUG_OUTPUT_FREQUENCY && fileDebug->outputFrequency <= MAX_DEBUG_OUTPUT_FREQUENCY) {
+            ctxDebug->outputFrequency = fileDebug->outputFrequency;
+        } else {
+            ctxDebug->outputFrequency = DEFAULT_DEBUG_OUTPUT_FREQUENCY;
+            hasInvalidValues = true;
+        }
+
+        #define OUTPUT(name)                                                                      \
+            do {                                                                                  \
+                if (fileDebug->poolCount.name == true || fileDebug->poolCount.name == false) {    \
+                    ctxDebug->poolCount.name.showInDebug = fileDebug->poolCount.name;             \
+                } else {                                                                          \
+                    ctxDebug->poolCount.name.showInDebug = true;                                  \
+                    hasInvalidValues = true;                                                      \
+                }                                                                                 \
             } while (0);                                                                                                
         
             POOL_COUNTS(OUTPUT)

@@ -9,6 +9,14 @@
 #define TITLE_MAX_LENGTH 32
 #define DROPDOWN_MAX_ITEMS 32
 #define DROPDOWN_MAX_LENGTH 64
+#define TOGGLE_FONT_SIZE 18
+#define TOGGLE_MARGIN 8
+
+static const int CHECKBOX_FONT_SIZE = 18;
+static const int DROPDOWN_MENU_FONT_SIZE = 18;
+static const int DROPDOWN_MENU_DOWN_ARROW_SIZE = 18;
+static const int DROPDOWN_MENU_BUTTON_SIZE = 42;
+static const int DIALOG_BOX_FONT_SIZE = 18;
 
 typedef void (*DropDownCallback)(int selected, void* userData);
 typedef void (*ButtonCallback)(void* userData);
@@ -98,6 +106,16 @@ typedef struct OnClickIncreaseArgs {
     int max_Value;
 }OnClickIncreaseArgs;
 
+typedef struct Toggle {
+    Rectangle rect;
+    float roundness;
+    Vector2 title1Pos;
+    Vector2 title2Pos;
+    char title1[32];
+    char title2[32];
+    bool value;
+}Toggle;
+
 void drawBasicLayoutContainer(BasicLayoutContainer* layout);
 void drawButton(Button* button);
 void drawCheckbox(Checkbox* checkbox);
@@ -106,6 +124,7 @@ void drawDialogBox(DialogBox* dialogBox);
 void drawDownArrow(Vector2 position, float width, Color color);
 void drawDropdownMenu(DropdownMenu* menu);
 void drawLayoutSection(LayoutSection* section);
+void drawToggle(Toggle* toggle);
 Vector2 getVirtualMousePosition();
 void initBasicLayoutContainer(BasicLayoutContainer* layout, Rectangle area, char* heading);
 void initButton(Button* button, Rectangle rect, int fontSize, char* text, ButtonCallback callback, void* userData);
@@ -114,6 +133,7 @@ void initCheckboxWithTitle(CheckboxWithTitle* option, Vector2 position, char* ti
 void initDialogBox(DialogBox* dialogBox, char* text, char* cancelButtonText, char* proceedButtonText, Callback callback, void* userData);
 void initDropdownMenu(DropdownMenu* menu, DropDownTitles items, int itemsCount, int selected, Rectangle rect, DropDownCallback callback, void* userData);
 void initLayoutSection(LayoutSection* section, Rectangle* parent, Rectangle container, char* heading, DrawSectionContent drawContent, void* userData);
+void initToggle(Toggle* toggle, Vector2 position, char* title1, char* title2, bool value);
 void onClickBack(void* userData);
 void onClickDecrease(void* userData);
 void onClickIncrease(void* userData);
@@ -121,5 +141,6 @@ bool updateButton(Button* button);
 bool updateCheckbox(Checkbox* checkbox);
 bool updateDialogBox(DialogBox* dialogBox);
 bool updateDropdownMenu(DropdownMenu* menu);
+void updateToggle(Toggle* toggle);
 
 #endif

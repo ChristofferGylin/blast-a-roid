@@ -1,10 +1,13 @@
 #ifndef OPTIONSMENU_H
 #define OPTIONSMENU_H
 
+#include <stdbool.h>
+
 #include "fader.h"
 #include "score.h"
 #include "ui.h"
 #include "utils.h"
+#include "options.h"
 
 #define NUMBER_OF_OPTIONS_TABS 4
 #define NUMBER_OF_VIDEO_OPTIONS 3
@@ -16,8 +19,30 @@ typedef struct AudioTabData {
     
 }AudioTabData;
 
+typedef struct ControlChanger {
+    Rectangle container;
+    Button cancelButton;
+    Vector2 textPosition;
+    Vector2 timerPosition;
+    KeyBind* activeBind;
+    Button* activeButton;
+    bool isActive;
+    float timer;
+    char text[22];
+}ControlChanger;
+
+
+typedef struct ChangeControlsCallbackArgs {
+    KeyBind* keyBind;
+    Button* button;
+    ControlChanger* controlChanger;
+}ChangeControlsCallbackArgs;
+
 typedef struct ControlsTabData {
-    
+    Button keys[NUMBER_OF_CONTROLS];
+    TitleWithPosition titles[NUMBER_OF_CONTROLS];
+    ChangeControlsCallbackArgs callbackArgs[NUMBER_OF_CONTROLS];
+    ControlChanger controlChanger;
 }ControlsTabData;
 
 typedef struct HighscoresTabData {

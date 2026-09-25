@@ -1,6 +1,8 @@
 #ifndef UTILS_H
 #define UTILS_H
 
+#include <stddef.h>
+
 #include "raylib.h"
 
 typedef struct Rectangle Rectangle;
@@ -23,6 +25,11 @@ typedef struct PositionVelocity {
     Vector2 velocity;
 }PositionVelocity;
 
+typedef struct TitleWithPosition {
+    char title[32];
+    Vector2 position;
+}TitleWithPosition;
+
 typedef enum VisualType {
     VISUAL_SPRITE,
     VISUAL_ANIMATION
@@ -30,6 +37,7 @@ typedef enum VisualType {
 
 void applyGForce(Vector2 position, Vector2  destination, Vector2* velocity, float maxVelocity, float minAcceleration, float maxAcceleration, float maxDistance);
 float scaleFloat(float oldMin, float oldMax, float newMin, float newMax, float value);
+char* getKeyName(int keyCode, char *name, size_t nameSize);
 int getNumberOfAsteroids(int gameLevel);
 float getRandomFloat(float min, float max);
 Vector2 getRandomPosition();
@@ -37,6 +45,7 @@ Vector2 getRandomPositionOffScreen(int size);
 Vector2 getRandomVelocity(FloatRange range);
 float getRoundness(Rectangle rect, float radiusPx);
 void goToDestination(Vector2 position, Vector2  destination, Vector2* velocity, float maxVelocity, float acceleration);
+void initTitleWithPosition(TitleWithPosition* twp, char* title, Vector2 position);
 void knockback(Vector2* targetVelocity, Vector2 forceDirection, float force);
 void knockbackPoolball(Vector2 targetPosition, Vector2* targetVelocity, Vector2 forcePosition, int force);
 void knockbackByImpact(Vector2 targetPosition, Vector2* targetVelocity, Vector2 forcePosition, Vector2 forceVelocity);

@@ -1,3 +1,4 @@
+#include <math.h>
 #include <stdio.h>
 #include <string.h>
 
@@ -13,8 +14,12 @@
 #include "ui.h"
 #include "uiSizes.h"
 
+void changeControlsCallback(void* userData);
+void drawControlChanger(ControlChanger* cc);
 void drawOptionsMenu(GameContext* ctx, OptionsMenu* menu);
 void drawOptionsMenuTab(OptionsMenu* menu);
+void initControlChanger(ControlChanger* cc);
+void initControlsTabData(GameContext* ctx, Rectangle* parent, ControlsTabData* tabData);
 void initOptionsMenu(GameContext* ctx, OptionsMenu* menu);
 void initOptionsMenuTab(OptionsMenuTab* tab, Rectangle* parent, char* heading, Callback drawContent, Callback updateTab, void* userData);
 void initHighscoresTabData(GameContext* ctx, Rectangle* parent, HighscoresTabData* tabData);
@@ -26,6 +31,7 @@ void drawHighscoresTab(void* userData);
 void resetHighscoresCallback(void* userData);
 void setFullscreenCallback(void* userData);
 void setMonitorCallback(int monitor, void* userData);
+void updateControlChanger(ControlChanger* cc);
 void updateOptionsMenu(GameContext* ctx, OptionsMenu* menu);
 void updateOptionsMenuTab(OptionsMenu* menu);
 void updateAudioTab(void* userData);
@@ -33,11 +39,238 @@ void updateControlsTab(void* userData);
 void updateHighscoresTab(void* userData);
 void updateVideoTab(void* userData);
 
-void updateAudioTab(void* userData) {};
-void updateControlsTab(void* userData) {};
+static const int TIMER_FONT_SIZE = 12.0f;
 
-void drawControlsTab(void* userData) {};
+void updateAudioTab(void* userData) {};
+
+void drawControlChanger(ControlChanger* cc) {
+    if (!cc->isActive) return;
+
+    Vector2 origin = {0,0};
+    int segments = 10;
+    float roundnessRadius = 5.0f;
+
+    DrawRectangleRounded(
+        cc->container,
+        getRoundness(cc->container, roundnessRadius),
+        segments,
+        topColor
+    );
+
+    DrawRectangleRounded(
+        cc->container,
+        getRoundness(cc->container, roundnessRadius),
+        segments,
+        primaryColorDimmed15
+    );
+
+    DrawRectangleRoundedLinesEx(
+        cc->container,
+        getRoundness(cc->container, roundnessRadius),
+        segments,
+        2,
+        primaryColor
+    );
+
+    DrawTextPro(
+        GetFontDefault(),
+        cc->text,
+        cc->textPosition,
+        origin,
+        0,
+        DIALOG_BOX_FONT_SIZE,
+        MENU_FONT_SPACING,
+        primaryColor
+    );
+
+    const int  TIMER_SIZE = 3;
+
+    char timerText[TIMER_SIZE];
+
+    int timervalue = (int)ceil(cc->timer);
+
+    snprintf(timerText, TIMER_SIZE, "%d", timervalue);
+
+    DrawTextPro(
+        GetFontDefault(),
+        timerText,
+        cc->timerPosition,
+        origin,
+        0,
+        TIMER_FONT_SIZE,
+        MENU_FONT_SPACING,
+        primaryColor
+    );
+
+    drawButton(&cc->cancelButton);
+}
+
+void drawControlsTab(void* userData) {
+    ControlsTabData* tabData = userData;
+
+    for (int i = 0; i < NUMBER_OF_CONTROLS; i++) {
+        drawButton(&tabData->keys[i]);
+        DrawTextEx(
+            GetFontDefault(),
+            tabData->titles[i].title,
+            tabData->titles[i].position,
+            CHECKBOX_FONT_SIZE,
+            MENU_FONT_SPACING,
+            primaryColor
+        );
+    }
+
+    drawControlChanger(&tabData->controlChanger);
+};
+
 void drawAudioTab(void* userData) {};
+
+void changeControlsCallback(void* userData) {
+    ChangeControlsCallbackArgs* args = userData;
+    ControlChanger* cc = args->controlChanger;
+
+    if (cc->isActive) return;
+
+    cc->isActive = true;
+    cc->activeBind = args->keyBind;
+    cc->activeButton = args->button;
+    cc->timer = 30.0f;
+};
+
+void initControlChanger(ControlChanger* cc) {
+
+    const int TIMER_FONT_SIZE = 12.0f;
+
+    cc->activeBind = NULL;
+    cc->activeButton = NULL;
+    cc->isActive = false;
+    cc->timer = 30.0f;
+
+    strcpy(cc->text, "Press a key to assign");
+    
+    initButton(
+        &cc->cancelButton,
+        (Rectangle){0, 0, 0, 0},
+        BUTTON_FONT_SIZE,
+        "Cancel",
+        toggleBoolCallback,
+        &cc->isActive
+    );
+
+    Vector2 textSize = MeasureTextEx(GetFontDefault(), cc->text, DIALOG_BOX_FONT_SIZE, MENU_FONT_SPACING);
+    Vector2 timerSize = MeasureTextEx(GetFontDefault(), "30", TIMER_FONT_SIZE, MENU_FONT_SPACING);
+
+    if (textSize.x > cc->cancelButton.rect.width) {
+        cc->container.width = textSize.x + (MENU_MARGIN * 4.0f);
+    } else {
+        cc->cancelButton.rect.width = textSize.x + (MENU_MARGIN * 4.0f);
+    }
+
+    cc->container.height = cc->cancelButton.rect.height + textSize.y + (MENU_MARGIN * 3.0f);
+
+    cc->container.x = (SCREEN_WIDTH / 2.0f) - (cc->container.width / 2.0f);
+    cc->container.y = (SCREEN_HEIGHT / 2.0f) - (cc->container.height / 2.0f);
+
+    cc->textPosition.x = cc->container.x + (cc->container.width / 2.0f) - (textSize.x / 2.0f);
+    cc->textPosition.y = cc->container.y + MENU_MARGIN;
+
+    cc->timerPosition.x = cc->container.x + cc->container.width - timerSize.x - (MENU_MARGIN / 2.0f);
+    cc->timerPosition.y = cc->container.y + cc->container.height - timerSize.y - (MENU_MARGIN / 2.0f);
+
+    initButton(
+        &cc->cancelButton,
+        (Rectangle){
+            cc->container.x + (cc->container.width / 2.0f) - (cc->cancelButton.rect.width / 2.0f),
+            cc->textPosition.y + textSize.y + MENU_MARGIN,
+            0,
+            0},
+        BUTTON_FONT_SIZE,
+        "Cancel",
+        toggleBoolCallback,
+        &cc->isActive
+    );
+}
+
+void initControlsTabData(GameContext* ctx, Rectangle* parent, ControlsTabData* tabData) {
+    
+    ControlsOptions* controls = &ctx->options.controls;
+
+    initControlChanger(&tabData->controlChanger);
+    
+    Vector2 position = {parent->x, parent->y};
+
+    float maxWidth = 0.0f;
+    float maxHeight = 0.0f;
+    int nameSize = 32;
+    char name[nameSize];
+
+    for (int i = 0; i < sizeof(availibleKeys) / sizeof(availibleKeys[0]); i++) {
+        
+        getKeyName(availibleKeys[i], name, nameSize);
+
+        Vector2 nameSize = MeasureTextEx(GetFontDefault(), name, BUTTON_FONT_SIZE, BUTTON_FONT_SPACING);
+        
+        if (nameSize.x > maxWidth) maxWidth = nameSize.x;
+        if (nameSize.y > maxHeight) maxHeight = nameSize.y;
+    }
+
+    KeyBind* keyBinds[NUMBER_OF_CONTROLS];
+
+    keyBinds[0] = &controls->keys.left;
+    keyBinds[1] = &controls->keys.right;
+    keyBinds[2] = &controls->keys.thrust;
+    keyBinds[3] = &controls->keys.fire;
+    keyBinds[4] = &controls->keys.shield;
+
+    for (int i = 0; i < NUMBER_OF_CONTROLS; i++) {
+
+        Button* button = &tabData->keys[i];
+         
+        char buttonText[TITLE_MAX_LENGTH];
+        getKeyName(keyBinds[i]->key, buttonText, TITLE_MAX_LENGTH);
+
+        ChangeControlsCallbackArgs args = {
+            keyBinds[i],
+            button,
+            &tabData->controlChanger
+        };
+
+        tabData->callbackArgs[i] = args;
+
+        initButton(
+            button,
+            (Rectangle){
+                position.x,
+                position.y,
+                maxWidth + (BUTTON_PADDING * 2),
+                maxHeight + BUTTON_PADDING
+            },
+            BUTTON_FONT_SIZE,
+            buttonText,
+            changeControlsCallback,
+            &tabData->callbackArgs[i]
+        );
+
+        Vector2 titlePosition;
+
+        Vector2 titleSize = MeasureTextEx(GetFontDefault(), keyBinds[i]->name, 18, MENU_FONT_SPACING); 
+
+        titlePosition.x = button->rect.x + button->rect.width + MENU_MARGIN;
+        titlePosition.y = button->rect.y + (button->rect.height / 2.0f) - (titleSize.y / 2.0f);
+
+        char title[TITLE_MAX_LENGTH];
+
+        snprintf(title, TITLE_MAX_LENGTH, "- %s", keyBinds[i]->name);
+
+        initTitleWithPosition(
+            &tabData->titles[i],
+            title,
+            titlePosition
+        );
+
+        position.y += button->rect.height + MENU_MARGIN;
+    }
+}
 
 void initHighscoresTabData(GameContext* ctx, Rectangle* parent, HighscoresTabData* tabData) {
     Vector2 position = {parent->x, parent->y};
@@ -85,6 +318,8 @@ void initOptionsMenu(GameContext* ctx, OptionsMenu* menu) {
     initOptionsMenuTab(&menu->tabs[2], &menu->layout.contentArea, "CONTROLS", drawControlsTab, updateControlsTab, &menu->controlsTabData);
     initOptionsMenuTab(&menu->tabs[3], &menu->layout.contentArea, "HIGHSCORES", drawHighscoresTab, updateHighscoresTab, &menu->highscoresTabData);
 
+
+    initControlsTabData(ctx, &menu->tabs[0].layout.contentArea, &menu->controlsTabData);
     initVideoTabData(ctx, &menu->tabs[0].layout.contentArea, &menu->videoTabData);
     initHighscoresTabData(ctx, &menu->tabs[3].layout.contentArea, &menu->highscoresTabData);
 
@@ -344,6 +579,50 @@ void resetHighscoresCallback(void* userData) {
     Highscores* highscores = userData;
     resetHighscores(highscores);
 }
+
+void updateControlChanger(ControlChanger* cc) {
+    if (!cc->isActive) return;
+
+    updateButton(&cc->cancelButton);
+
+    cc->timer -= GetFrameTime();
+
+    if (cc->timer <= 0) {
+        cc->timer = 0;
+
+        cc->isActive = false;
+        return;
+    }
+
+    if (IsKeyPressed(KEY_ESCAPE)) {
+        cc->isActive = false;
+        return;
+    }
+
+    int keyPressed = GetKeyPressed();
+
+    if (keyPressed > 0) {
+        cc->activeBind->key = keyPressed;
+        getKeyName(keyPressed, cc->activeButton->text, sizeof(cc->activeButton->text));
+
+        Vector2 textSize = MeasureTextEx(GetFontDefault(), cc->activeButton->text, cc->activeButton->fontSize, BUTTON_FONT_SPACING);
+
+        cc->activeButton->textPosition.x = cc->activeButton->rect.x + (cc->activeButton->rect.width / 2.0f) - (textSize.x / 2.0f);
+        cc->activeButton->textPosition.y = cc->activeButton->rect.y + (cc->activeButton->rect.height / 2.0f) - (textSize.y / 2.0f);
+        cc->isActive = false;
+    }
+}
+
+void updateControlsTab(void* userData) {
+    
+    ControlsTabData* tabData = userData;
+    
+    for (int i = 0; i < NUMBER_OF_CONTROLS; i++) {
+        updateButton(&tabData->keys[i]);
+    }
+
+    updateControlChanger(&tabData->controlChanger);
+};
 
 void updateOptionsMenu(GameContext* ctx, OptionsMenu* menu) {
     updateButton(&menu->backButton);

@@ -115,11 +115,13 @@ void handleShooting(GameContext* ctx) {
     if (ctx->objectPools.shots.activeCount >= MAX_SHOTS) return;
     if (nowMillis <= lastShot + SHOT_COOLDOWN_TIME) return;
 
+    KeyBindings* keys = &ctx->options.controls.keys;
+
     bool shoot = false;
 
-    if (IsKeyPressed(KEY_RIGHT_CONTROL)) {
+    if (IsKeyPressed(keys->fire.key)) {
         shoot = true;
-    } else  if (ctx->player.powerups.fullAuto && IsKeyDown(KEY_RIGHT_CONTROL)) {
+    } else  if (ctx->player.powerups.fullAuto && IsKeyDown(keys->fire.key)) {
         if (ctx->player.shotCount < MAX_SHOTS_BURST) {
             ctx->player.shotCount++;
             lastAutoShot = nowMillis;

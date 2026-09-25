@@ -20,7 +20,7 @@ void handleShield(GameContext* ctx) {
 
     if (GetTime() < (ctx->ship.timeSpawned + AUTO_SHIELD_DURATION)){
         ctx->ship.isShieldActive = true;
-    }  else if (IsKeyDown(KEY_SPACE)) {
+    }  else if (IsKeyDown(ctx->options.controls.keys.shield.key)) {
 
         ctx->player.shieldPower -= GetFrameTime() * SHIELD_DRAIN_RATE;
 
@@ -51,7 +51,7 @@ void renderShield(Ship* ship) {
     Color inner = lerpColor(SHIELD_GRADIENT_COLOR_1, SHIELD_GRADIENT_COLOR_2, shieldLerpT);
     Color outer = lerpColor(SHIELD_GRADIENT_COLOR_2, SHIELD_GRADIENT_COLOR_1, shieldLerpT);
 
-    DrawCircleGradient(ship->position.x, ship->position.y, SHIELD_SIZE / 2, inner, outer);
+    DrawCircleGradient(ship->position, SHIELD_SIZE / 2, inner, outer);
     DrawCircleLinesV(ship->position, SHIELD_SIZE /2, outer);
 }
 
