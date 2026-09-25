@@ -122,7 +122,15 @@ void drawControlsTab(void* userData) {
 void drawAudioTab(void* userData) {};
 
 void changeControlsCallback(void* userData) {
-    
+    ChangeControlsCallbackArgs* args = userData;
+    ControlChanger* cc = args->controlChanger;
+
+    if (cc->isActive) return;
+
+    cc->isActive = true;
+    cc->activeBind = args->keyBind;
+    cc->activeButton = args->button;
+    cc->timer = 30.0f;
 };
 
 void initControlChanger(ControlChanger* cc) {
