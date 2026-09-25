@@ -93,7 +93,7 @@ void drawControlChanger(ControlChanger* cc) {
         cc->textPosition,
         origin,
         0,
-        DIALOG_BOX_FONT_SIZE,
+        TIMER_FONT_SIZE,
         MENU_FONT_SPACING,
         primaryColor
     );
