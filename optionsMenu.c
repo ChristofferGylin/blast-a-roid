@@ -14,6 +14,7 @@
 #include "uiSizes.h"
 
 void changeControlsCallback(void* userData);
+void drawControlChanger(ControlChanger* cc);
 void drawOptionsMenu(GameContext* ctx, OptionsMenu* menu);
 void drawOptionsMenuTab(OptionsMenu* menu);
 void initControlChanger(ControlChanger* cc);
@@ -36,7 +37,69 @@ void updateControlsTab(void* userData);
 void updateHighscoresTab(void* userData);
 void updateVideoTab(void* userData);
 
+static const int TIMER_FONT_SIZE = 12.0f;
+
 void updateAudioTab(void* userData) {};
+
+void drawControlChanger(ControlChanger* cc) {
+    if (!cc->isActive) return;
+
+    Vector2 origin = {0,0};
+    int segments = 10;
+    float roundnessRadius = 5.0f;
+
+    DrawRectangleRounded(
+        cc->container,
+        getRoundness(cc->container, roundnessRadius),
+        segments,
+        topColor
+    );
+
+    DrawRectangleRounded(
+        cc->container,
+        getRoundness(cc->container, roundnessRadius),
+        segments,
+        primaryColorDimmed15
+    );
+
+    DrawRecangleRoundedLinesEx(
+        cc->container,
+        getRoundness(cc->container, roundnessRadius),
+        segments,
+        2,
+        primaryColor
+    );
+
+    DrawTextPro(
+        GetFontDefault(),
+        cc->text,
+        cc->textPosition,
+        origin,
+        0,
+        DIALOG_BOX_FONT_SIZE,
+        MENU_FONT_SPACING,
+        primaryColor
+    );
+
+    const int  TIMER_SIZE = 3;
+
+    char timerText[TIMER_SIZE];
+
+    snprintf(timerText, TIMER_SIZE, "%f", cc->timer);
+
+    DrawTextPro(
+        GetFontDefault(),
+        timerText,
+        cc->textPosition,
+        origin,
+        0,
+        DIALOG_BOX_FONT_SIZE,
+        MENU_FONT_SPACING,
+        primaryColor
+    );
+
+    drawButton(&cc->cancelButton);
+}
 
 void drawControlsTab(void* userData) {
     ControlsTabData* tabData = userData;
@@ -52,7 +115,10 @@ void drawControlsTab(void* userData) {
             primaryColor
         );
     }
+
+    drawControlChanger(&tabData->controlChanger);
 };
+
 void drawAudioTab(void* userData) {};
 
 void changeControlsCallback(void* userData) {
