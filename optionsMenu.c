@@ -90,7 +90,7 @@ void drawControlChanger(ControlChanger* cc) {
     DrawTextPro(
         GetFontDefault(),
         timerText,
-        cc->textPosition,
+        cc->timerPosition,
         origin,
         0,
         TIMER_FONT_SIZE,
@@ -157,9 +157,9 @@ void initControlChanger(ControlChanger* cc) {
     Vector2 timerSize = MeasureTextEx(GetFontDefault(), "30", TIMER_FONT_SIZE, MENU_FONT_SPACING);
 
     if (textSize.x > cc->cancelButton.rect.width) {
-        cc->container.width = textSize.x + (MENU_MARGIN * 2.0f);
+        cc->container.width = textSize.x + (MENU_MARGIN * 4.0f);
     } else {
-        cc->cancelButton.rect.width = textSize.x + (MENU_MARGIN * 2.0f);
+        cc->cancelButton.rect.width = textSize.x + (MENU_MARGIN * 4.0f);
     }
 
     cc->container.height = cc->cancelButton.rect.height + textSize.y + (MENU_MARGIN * 3.0f);
@@ -170,11 +170,21 @@ void initControlChanger(ControlChanger* cc) {
     cc->textPosition.x = cc->container.x + (cc->container.width / 2.0f) - (textSize.x / 2.0f);
     cc->textPosition.y = cc->container.y + MENU_MARGIN;
 
-    cc->cancelButton.rect.x = cc->container.x + (cc->container.width / 2.0f) - (cc->cancelButton.rect.width / 2.0f);
-    cc->cancelButton.rect.y = cc->textPosition.y + textSize.y + MENU_MARGIN;
-
     cc->timerPosition.x = cc->container.x + cc->container.width - timerSize.x - (MENU_MARGIN / 2.0f);
-    cc->timerPosition.y = cc->container.y + timerSize.y + (MENU_MARGIN / 2.0f);
+    cc->timerPosition.y = cc->container.y + cc->container.height - timerSize.y - (MENU_MARGIN / 2.0f);
+
+    initButton(
+        &cc->cancelButton,
+        (Rectangle){
+            cc->container.x + (cc->container.width / 2.0f) - (cc->cancelButton.rect.width / 2.0f),
+            cc->textPosition.y + textSize.y + MENU_MARGIN,
+            0,
+            0},
+        BUTTON_FONT_SIZE,
+        "Cancel",
+        toggleBoolCallback,
+        &cc->isActive
+    );
 }
 
 void initControlsTabData(GameContext* ctx, Rectangle* parent, ControlsTabData* tabData) {
