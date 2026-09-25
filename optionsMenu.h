@@ -23,6 +23,7 @@ typedef struct ControlChanger {
     Vector2 textPosition;
     Vector2 timerPosition;
     KeyBind* activeBind;
+    Button* activeButton;
     bool isActive;
     float timer;
     char text[22];
