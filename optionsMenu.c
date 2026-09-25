@@ -1,3 +1,4 @@
+#include <math.h>
 #include <stdio.h>
 #include <string.h>
 
@@ -30,6 +31,7 @@ void drawHighscoresTab(void* userData);
 void resetHighscoresCallback(void* userData);
 void setFullscreenCallback(void* userData);
 void setMonitorCallback(int monitor, void* userData);
+void updateControlChanger(ControlChanger* cc);
 void updateOptionsMenu(GameContext* ctx, OptionsMenu* menu);
 void updateOptionsMenuTab(OptionsMenu* menu);
 void updateAudioTab(void* userData);
@@ -85,7 +87,9 @@ void drawControlChanger(ControlChanger* cc) {
 
     char timerText[TIMER_SIZE];
 
-    snprintf(timerText, TIMER_SIZE, "%f", cc->timer);
+    int timervalue = (int)ceil(cc->timer);
+
+    snprintf(timerText, TIMER_SIZE, "%d", timervalue);
 
     DrawTextPro(
         GetFontDefault(),
@@ -576,6 +580,39 @@ void resetHighscoresCallback(void* userData) {
     resetHighscores(highscores);
 }
 
+void updateControlChanger(ControlChanger* cc) {
+    if (!cc->isActive) return;
+
+    updateButton(&cc->cancelButton);
+
+    cc->timer -= GetFrameTime();
+
+    if (cc->timer <= 0) {
+        cc->timer = 0;
+
+        cc->isActive = false;
+        return;
+    }
+
+    if (IsKeyPressed(KEY_ESCAPE)) {
+        cc->isActive = false;
+        return;
+    }
+
+    int keyPressed = GetKeyPressed();
+
+    if (keyPressed > 0) {
+        cc->activeBind->key = keyPressed;
+        getKeyName(keyPressed, cc->activeButton->text, sizeof(cc->activeButton->text));
+
+        Vector2 textSize = MeasureTextEx(GetFontDefault(), cc->activeButton->text, cc->activeButton->fontSize, BUTTON_FONT_SPACING);
+
+        cc->activeButton->textPosition.x = cc->activeButton->rect.x + (cc->activeButton->rect.width / 2.0f) - (textSize.x / 2.0f);
+        cc->activeButton->textPosition.y = cc->activeButton->rect.y + (cc->activeButton->rect.height / 2.0f) - (textSize.y / 2.0f);
+        cc->isActive = false;
+    }
+}
+
 void updateControlsTab(void* userData) {
     
     ControlsTabData* tabData = userData;
@@ -583,6 +620,8 @@ void updateControlsTab(void* userData) {
     for (int i = 0; i < NUMBER_OF_CONTROLS; i++) {
         updateButton(&tabData->keys[i]);
     }
+
+    updateControlChanger(&tabData->controlChanger);
 };
 
 void updateOptionsMenu(GameContext* ctx, OptionsMenu* menu) {
