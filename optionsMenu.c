@@ -62,7 +62,7 @@ void drawControlChanger(ControlChanger* cc) {
         primaryColorDimmed15
     );
 
-    DrawRecangleRoundedLinesEx(
+    DrawRectangleRoundedLinesEx(
         cc->container,
         getRoundness(cc->container, roundnessRadius),
         segments,
