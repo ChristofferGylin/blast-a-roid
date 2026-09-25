@@ -35,6 +35,7 @@ typedef struct ControlChanger {
 typedef struct ChangeControlsCallbackArgs {
     KeyBind* keyBind;
     Button* button;
+    ControlChanger* controlChanger;
 }ChangeControlsCallbackArgs;
 
 typedef struct ControlsTabData {

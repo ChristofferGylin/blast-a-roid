@@ -209,7 +209,8 @@ void initControlsTabData(GameContext* ctx, Rectangle* parent, ControlsTabData* t
 
         ChangeControlsCallbackArgs args = {
             keyBinds[i],
-            button
+            button,
+            &tabData->controlChanger
         };
 
         tabData->callbackArgs[i] = args;
