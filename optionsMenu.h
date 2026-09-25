@@ -1,6 +1,8 @@
 #ifndef OPTIONSMENU_H
 #define OPTIONSMENU_H
 
+#include <stdbool.h>
+
 #include "fader.h"
 #include "score.h"
 #include "ui.h"

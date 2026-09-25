@@ -16,6 +16,7 @@
 void changeControlsCallback(void* userData);
 void drawOptionsMenu(GameContext* ctx, OptionsMenu* menu);
 void drawOptionsMenuTab(OptionsMenu* menu);
+void initControlChanger(ControlChanger* cc);
 void initControlsTabData(GameContext* ctx, Rectangle* parent, ControlsTabData* tabData);
 void initOptionsMenu(GameContext* ctx, OptionsMenu* menu);
 void initOptionsMenuTab(OptionsMenuTab* tab, Rectangle* parent, char* heading, Callback drawContent, Callback updateTab, void* userData);
@@ -58,9 +59,55 @@ void changeControlsCallback(void* userData) {
     
 };
 
+void initControlChanger(ControlChanger* cc) {
+
+    const int TIMER_FONT_SIZE = 12.0f;
+
+    cc->activeBind = NULL;
+    cc->activeButton = NULL;
+    cc->isActive = false;
+    cc->timer = 30.0f;
+
+    strcpy(cc->text, "Press a key to assign");
+    
+    initButton(
+        &cc->cancelButton,
+        (Rectangle){0, 0, 0, 0},
+        BUTTON_FONT_SIZE,
+        "Cancel",
+        toggleBoolCallback,
+        &cc->isActive
+    );
+
+    Vector2 textSize = MeasureTextEx(GetFontDefault(), cc->text, DIALOG_BOX_FONT_SIZE, MENU_FONT_SPACING);
+    Vector2 timerSize = MeasureTextEx(GetFontDefault(), "30", TIMER_FONT_SIZE, MENU_FONT_SPACING);
+
+    if (textSize.x > cc->cancelButton.rect.width) {
+        cc->container.width = textSize.x + (MENU_MARGIN * 2.0f);
+    } else {
+        cc->cancelButton.rect.width = textSize.x + (MENU_MARGIN * 2.0f);
+    }
+
+    cc->container.height = cc->cancelButton.rect.height + textSize.y + (MENU_MARGIN * 3.0f);
+
+    cc->container.x = (SCREEN_WIDTH / 2.0f) - (cc->container.width / 2.0f);
+    cc->container.y = (SCREEN_HEIGHT / 2.0f) - (cc->container.height / 2.0f);
+
+    cc->textPosition.x = cc->container.x + (cc->container.width / 2.0f) - (textSize.x / 2.0f);
+    cc->textPosition.y = cc->container.y + MENU_MARGIN;
+
+    cc->cancelButton.rect.x = cc->container.x + (cc->container.width / 2.0f) - (cc->cancelButton.rect.width / 2.0f);
+    cc->cancelButton.rect.y = cc->textPosition.y + textSize.y + MENU_MARGIN;
+
+    cc->timerPosition.x = cc->container.x + cc->container.width - timerSize.x - (MENU_MARGIN / 2.0f);
+    cc->timerPosition.y = cc->container.y + timerSize.y + (MENU_MARGIN / 2.0f);
+}
+
 void initControlsTabData(GameContext* ctx, Rectangle* parent, ControlsTabData* tabData) {
     
     ControlsOptions* controls = &ctx->options.controls;
+
+    initControlChanger(&tabData->controlChanger);
     
     Vector2 position = {parent->x, parent->y};
 
